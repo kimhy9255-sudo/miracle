@@ -289,76 +289,120 @@
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        /* ================= [3번 탭: 기적 바우처 디자인] ================= */
-        .voucher-container {
+        /* ================= [3번 탭: 기적 상점 디자인 및 그리드] ================= */
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
             max-width: 360px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            margin-bottom: 15px;
         }
-        .voucher-ticket {
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 360px;
+        }
+        .product-card {
             background: white;
             border-radius: 16px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
-            border-left: 6px solid #E74C3C;
-        }
-        .voucher-ticket.green { border-left-color: #2ECC71; }
-        .voucher-ticket.purple { border-left-color: #9B59B6; }
-        
-        .voucher-icon {
-            font-size: 30px;
-            padding: 20px;
-            background-color: #F9FAFA;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .voucher-info {
             padding: 15px;
-            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .voucher-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2C3E50;
-            margin-bottom: 4px;
-        }
-        .voucher-desc {
-            font-size: 12px;
-            color: #7F8C8D;
+        .product-emoji {
+            font-size: 40px;
             margin-bottom: 8px;
         }
-        .voucher-status {
-            font-size: 11px;
+        .product-name {
             font-weight: bold;
+            color: #2C3E50;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+        .product-price {
             color: #E74C3C;
-            background: rgba(231, 76, 60, 0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            display: inline-block;
+            font-weight: bold;
+            font-size: 14px;
         }
-        .voucher-ticket.green .voucher-status {
-            color: #2ECC71;
-            background: rgba(46, 204, 113, 0.1);
-        }
-        .voucher-ticket.purple .voucher-status {
-            color: #9B59B6;
-            background: rgba(155, 89, 182, 0.1);
-        }
-        .btn-use-voucher {
-            margin-right: 15px;
-            background-color: #2C3E50;
+        .btn-buy {
+            background: #27AE60;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        /* ================= [바코드 및 레이저 스캐너 팝업 레이어] ================= */
+        .barcode-overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .scanner-box {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 24px;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .barcode-graphic {
+            font-size: 32px;
+            font-family: monospace;
+            margin: 20px 0;
+            letter-spacing: 4px;
+            color: #2C3E50;
+            font-weight: bold;
+            user-select: none;
+        }
+        .laser-container {
+            width: 100%;
+            height: 60px;
+            position: relative;
+            margin: -50px 0 10px 0;
+            overflow: hidden;
+        }
+        .laser-line {
+            width: 100%;
+            height: 4px;
+            background: #E74C3C;
+            position: absolute;
+            top: 0;
+            box-shadow: 0 0 8px #E74C3C;
+        }
+        .scanning {
+            animation: scanLaser 1.5s infinite linear;
+        }
+        @keyframes scanLaser {
+            0% { top: 0px; }
+            50% { top: 60px; }
+            100% { top: 0px; }
+        }
+        .btn-close {
+            background-color: #7F8C8D;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             border-radius: 8px;
-            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 15px;
         }
 
         /* 하단 내비게이션 바 */
@@ -425,7 +469,7 @@
         <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
     </div>
 
-    <!-- 📺 대장님 아이디어 반영: 랜덤 로테이션 광고 팝업 레이어 -->
+    <!-- 📺 랜덤 로테이션 광고 팝업 레이어 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
             <div class="ad-badge">광고</div>
@@ -453,40 +497,31 @@
         </div>
     </div>
 
-    <!-- 🍱 3번 탭: 기적 바우처 화면 -->
+    <!-- 🛍️ 3번 탭: 기적 상점 화면 (기존 바우처에서 진화!) -->
     <div id="voucherTab" class="tab-content">
-        <div class="voucher-container">
-            <div style="font-size: 14px; color:#7F8C8D; margin-bottom: 5px; font-weight: bold;">나의 모바일 기적 바우처</div>
+        <div class="shop-header">
+            <h2 style="margin:0; font-size:18px; color:#2C3E50;">기적 상점</h2>
+            <div style="font-weight:bold; color:#357ABD; font-size:14px;">보유: <span id="shopPoints">18,485</span>p</div>
+        </div>
+        <div class="product-grid" id="productGrid">
+            <!-- 자바스크립트가 편의점 상품 리스트를 동적 생성합니다 -->
+        </div>
+    </div>
+
+    <!-- 🏪 편의점 바코드 레이저 스캐너 팝업 창 -->
+    <div class="barcode-overlay" id="barcodeOverlay">
+        <div class="scanner-box">
+            <h3 id="scanStatusText" style="margin:0 0 10px 0; color:#2980B9;">편의점 스캔 대기 중...</h3>
+            <p style="font-size:12px; color:#7F8C8D; margin:0 0 20px 0;">계산대 스캐너에 바코드를 대주세요.</p>
             
-            <div class="voucher-ticket">
-                <div class="voucher-icon">🍱</div>
-                <div class="voucher-info">
-                    <div class="voucher-name">기적의 행복 도시락권</div>
-                    <div class="voucher-desc">전국 지정 가맹점 및 편의점 사용 가능</div>
-                    <div class="voucher-status">보유: 3장</div>
-                </div>
-                <button class="btn-use-voucher" onclick="useVoucher('행복 도시락권')">사용</button>
+            <div class="barcode-graphic">|||||II|||I||</div>
+            <div id="barcodeSerialNumber" style="font-family:monospace; font-size:14px; color:#7F8C8D; margin-bottom:15px;">880123456789</div>
+            
+            <div class="laser-container">
+                <div id="laser" class="laser-line"></div>
             </div>
-
-            <div class="voucher-ticket green">
-                <div class="voucher-icon">🚌</div>
-                <div class="voucher-info">
-                    <div class="voucher-name">기적 프리패스 교통권</div>
-                    <div class="voucher-desc">시내버스 및 지하철 리워드 결제용</div>
-                    <div class="voucher-status">잔액: 12,500원</div>
-                </div>
-                <button class="btn-use-voucher" onclick="useVoucher('기적 교통권')">사용</button>
-            </div>
-
-            <div class="voucher-ticket purple">
-                <div class="voucher-icon">🏥</div>
-                <div class="voucher-info">
-                    <div class="voucher-name">든든 상생 의료 바우처</div>
-                    <div class="voucher-desc">지정 약국 및 동네 의원 본인부담금 차감</div>
-                    <div class="voucher-status">활성화 중</div>
-                </div>
-                <button class="btn-use-voucher" onclick="useVoucher('의료 바우처')">사용</button>
-            </div>
+            
+            <button class="btn-close" onclick="closeScanner()">닫기</button>
         </div>
     </div>
 
@@ -500,14 +535,14 @@
             <span>디파이 금고</span>
         </div>
         <div class="nav-item" id="navVoucher" onclick="location.href='?tab=voucher'">
-            <span class="nav-icon">🍱</span>
-            <span>기적 바우처</span>
+            <span class="nav-icon">🛍️</span>
+            <span>기적 상점</span>
         </div>
     </div>
 
     <script>
         if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1240450');
-        let amount = 18485;
+        let amount = 18485; // 홈화면 지원금(포인트 역할)
         let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
         let isRunning = false;
         let intervalId = null;
@@ -517,12 +552,23 @@
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
         const totalBalanceDisplay = document.getElementById('totalBalance');
+        const shopPointsDisplay = document.getElementById('shopPoints');
+
+        // 편의점 실물 기반 상품군 세팅
+        const cjProducts = [
+            { name: "바나나맛우유", price: 1800, emoji: "🍌" },
+            { name: "참치마요 삼각김밥", price: 1300, emoji: "🍙" },
+            { name: "얼큰한 컵라면", price: 1500, emoji: "🍜" },
+            { name: "가나 초콜릿", price: 1200, emoji: "🍫" }
+        ];
 
         function updateTotalBalance() {
             if(totalBalanceDisplay) {
                 let total = amount + vaultAsset;
                 totalBalanceDisplay.innerText = total.toLocaleString();
             }
+            if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
+            if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
         }
 
         if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
@@ -548,6 +594,7 @@
         } else if(currentTab === 'voucher') {
             document.getElementById('voucherTab').classList.add('active');
             document.getElementById('navVoucher').classList.add('active');
+            renderShopItems(); // 상점 진입 시 상품 로드
         } else {
             document.getElementById('homeTab').classList.add('active');
             document.getElementById('navHome').classList.add('active');
@@ -561,7 +608,6 @@
                 bird.classList.add('nodding');
                 intervalId = setInterval(() => {
                     amount += Math.floor(Math.random() * 10) + 1;
-                    amountDisplay.innerText = amount.toLocaleString();
                     updateTotalBalance();
                 }, 1000);
             } else {
@@ -573,7 +619,7 @@
             }
         });
 
-        /* 📺 대장님 지시 사항: 광고 DB 데이터 생성 */
+        /* 📺 광고 DB 데이터 생성 */
         const adDatabase = [
             {
                 emoji: "🌱",
@@ -599,24 +645,19 @@
         let adTimerId = null;
         let currentAdTitle = "";
 
-        // 랜덤 광고 팝업 띄우기
         function openRandomAdPopup() {
             adCountdown = 5;
-            
-            // 🎲 대장님 생각대로 랜덤 선택 로직 실행!
             const randomIndex = Math.floor(Math.random() * adDatabase.length);
             const selectedAd = adDatabase[randomIndex];
             
-            // 팝업 내용 변경
             document.getElementById('adEmoji').innerText = selectedAd.emoji;
             const titleEl = document.getElementById('adTitle');
             titleEl.innerText = selectedAd.title;
             titleEl.style.color = selectedAd.color;
             document.getElementById('adContent').innerHTML = selectedAd.content;
             
-            currentAdTitle = selectedAd.title; // 현재 광고주 이름 기억
+            currentAdTitle = selectedAd.title;
 
-            // 팝업 가시화 및 타이머 초기화
             document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             
@@ -642,13 +683,80 @@
 
         function finishAdReward() {
             const addedBonus = amount; 
-            amount = amount * 2; // 누를 때마다 계속 2배 증가!
-            
-            amountDisplay.innerText = amount.toLocaleString();
+            amount = amount * 2;
             updateTotalBalance();
-            
             document.getElementById('adOverlay').style.display = 'none';
             alert(`🎉 대장님!\n"${currentAdTitle}" 광고 시청 보상으로 지원금이 또 2배로 불어났습니다!\n(+${addedBonus.toLocaleString()}원 추가 완료)`);
+        }
+
+        /* 🛍️ 기적 상점 상품 리스트 화면 출력 함수 */
+        function renderShopItems() {
+            const grid = document.getElementById('productGrid');
+            if(!grid) return;
+            grid.innerHTML = cjProducts.map((prod, index) => `
+                <div class="product-card">
+                    <div class="product-emoji">${prod.emoji}</div>
+                    <div class="product-name">${prod.name}</div>
+                    <div class="product-price">${prod.price.toLocaleString()}p</div>
+                    <button class="btn-buy" onclick="triggerPurchase(${index})">교환하기</button>
+                </div>
+            `).join('');
+        }
+
+        // 상품 구매 및 삑! 스캐너 동작 시스템
+        function triggerPurchase(index) {
+            const selectedProduct = cjProducts[index];
+            
+            if(amount >= selectedProduct.price) {
+                amount -= selectedProduct.price;
+                updateTotalBalance();
+                
+                const randomBarcode = "880" + Math.floor(100000000 + Math.random() * 900000000);
+                document.getElementById('barcodeSerialNumber').innerText = randomBarcode;
+                
+                document.getElementById('barcodeOverlay').style.display = 'flex';
+                const laserTarget = document.getElementById('laser');
+                laserTarget.className = 'laser-line scanning';
+                laserTarget.style.background = '#E74C3C';
+                laserTarget.style.boxShadow = '0 0 8px #E74C3C';
+                document.getElementById('scanStatusText').innerText = "편의점 스캔 대기 중...";
+                document.getElementById('scanStatusText').style.color = '#2980B9';
+
+                // 2.2초 뒤 편의점 포스기 스캔 매칭 시뮬레이션
+                setTimeout(() => {
+                    laserTarget.className = 'laser-line';
+                    laserTarget.style.background = '#2ECC71'; 
+                    laserTarget.style.boxShadow = '0 0 8px #2ECC71';
+                    document.getElementById('scanStatusText').innerText = "삑! 🏪 결제 완료!";
+                    document.getElementById('scanStatusText').style.color = '#27AE60';
+                    
+                    playBeepSound();
+                }, 2200);
+
+            } else {
+                alert("기적 포인트가 부족합니다! 홈 화면에서 엔진이나 광고 보상으로 포인트를 더 모아주세요.");
+            }
+        }
+
+        function playBeepSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 2200; 
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.12);
+            } catch(e) {
+                console.log("오디오 재생 실패");
+            }
+        }
+
+        function closeScanner() {
+            document.getElementById('barcodeOverlay').style.display = 'none';
         }
 
         function handleDeposit() {
@@ -679,10 +787,6 @@
                     alert("잔액이 부족합니다.");
                 }
             }
-        }
-
-        function useVoucher(name) {
-            alert(`🎫 [${name}] 바우처 바코드가 활성화되었습니다. 가맹점에 제시해 주세요!`);
         }
     </script>
 </body>
