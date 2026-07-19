@@ -55,7 +55,7 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ [변경분] 애니메이션처럼 생동감 넘치게 변신한 기적이 영역 */
+        /* 🕊️ ✨ 완전히 새로워진 3D 애니메이션 입체 기적이 스타일 ✨ */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -64,156 +64,232 @@
             width: 100%; 
             max-width: 340px; 
             margin-bottom: 5px;
-            height: 130px;
+            height: 140px;
         }
         .bird-container { 
             width: 160px; 
-            height: 110px; 
+            height: 120px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             position: relative;
         }
+
+        /* 머리 위 깃털 디테일 */
+        .bird-hair {
+            position: absolute;
+            top: -2px;
+            width: 14px;
+            height: 24px;
+            background: #4FA3DF;
+            border-radius: 50% 50% 0 0;
+            transform: rotate(-15deg);
+            z-index: 1;
+            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1);
+            animation: hairWag 2s infinite ease-in-out;
+        }
+        .bird-hair::after {
+            content: '';
+            position: absolute;
+            left: 6px; top: -3px;
+            width: 10px; height: 20px;
+            background: #5dade2;
+            border-radius: 50% 50% 0 0;
+            transform: rotate(25deg);
+        }
         
-        /* 몸통: 숨 쉬듯 통통하게 늘어났다 줄어드는 애니메이션 (Squash & Stretch) */
+        /* 3D 털 묘사를 위한 방사형 그라데이션 및 다중 그림자 몸통 */
         .bird-body { 
-            width: 84px; 
-            height: 84px; 
-            background: linear-gradient(135deg, #4FA3DF, #2575A7); 
-            border-radius: 50%; 
+            width: 90px; 
+            height: 90px; 
+            background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
+            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; /* 보슬보슬한 비정형 타원 */
             position: relative; 
-            box-shadow: 0 6px 16px rgba(0,0,0,0.18); 
+            box-shadow: 
+                inset -6px -6px 12px rgba(0,0,0,0.3),
+                inset 6px 6px 12px rgba(255,255,255,0.4),
+                0 10px 20px rgba(0,0,0,0.2); 
             z-index: 2;
             display: flex;
             justify-content: center;
             animation: breathLiving 2s infinite ease-in-out;
         }
+
+        /* 보슬보슬한 배 털 표현 */
+        .bird-belly {
+            position: absolute;
+            bottom: 6px;
+            width: 50px;
+            height: 25px;
+            background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%);
+            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%;
+            opacity: 0.85;
+            box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
+        }
         
-        /* 부리: 몸통 움직임에 맞춰 자연스럽게 바운스 */
+        /* 입체감 있는 오픈형 오렌지빛 부리 */
         .bird-beak-wrap {
             position: absolute;
-            bottom: 20px;
-            z-index: 4;
+            bottom: 22px;
+            z-index: 5;
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: beakBounce 2s infinite ease-in-out;
+            transform: translateZ(10px);
         }
         .beak-top {
-            width: 22px;
-            height: 14px;
-            background: #F39C12;
+            width: 24px;
+            height: 16px;
+            background: linear-gradient(to bottom, #f39c12, #d35400);
             border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%;
-            border: 1px solid #D68910;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4);
         }
         .beak-bottom {
-            width: 16px;
-            height: 10px;
-            background: #D35400;
+            width: 18px;
+            height: 12px;
+            background: #ba4a00;
             border-radius: 0 0 50% 50% / 0 0 100% 100%;
-            margin-top: -3px;
-            border: 1px solid #BA4A00;
+            margin-top: -4px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
         }
 
-        /* 눈: 몸통과 같이 움직이되 시선 처리를 위한 컨테이너 */
+        /* 크고 입체적인 3D 그라데이션 눈망울 */
         .bird-eyes-container {
             position: absolute;
-            top: 14px;
+            top: 15px;
             display: flex;
-            gap: 4px;
-            z-index: 3;
-            animation: beakBounce 2s infinite ease-in-out;
+            gap: 2px;
+            z-index: 4;
         }
         .bird-eye { 
-            width: 28px; 
-            height: 32px; 
+            width: 32px; 
+            height: 38px; 
             background: white; 
-            border-radius: 50%; 
+            border-radius: 50% 50% 48% 48%; 
             position: relative;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.15),
+                inset -2px -2px 5px rgba(0,0,0,0.05),
+                inset 2px 2px 5px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
         
-        /* 검은 눈동자: 눈동자가 살아 움직이도록 디테일 추가 */
+        /* 초롱초롱 굴러가는 푸른빛 반사광의 검은 눈동자 */
         .eye-pupil {
-            width: 16px;
-            height: 20px;
-            background: #1A252F;
+            width: 20px;
+            height: 24px;
+            background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
             border-radius: 50%;
             position: relative;
+            border: 1.5px solid #2980b9; /* 푸른 눈빛 테두리 */
             animation: movePupil 4s infinite ease-in-out;
+            display: flex;
         }
-        /* 눈 속 반짝이는 하이라이트 흰점 */
+        /* 눈 속 큰 반짝임 흰점 */
         .eye-pupil::after { 
             content: '';
             position: absolute;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: white;
             border-radius: 50%;
-            top: 3px;
-            left: 3px;
+            top: 2px;
+            left: 2px;
+            box-shadow: 0 0 2px rgba(255,255,255,0.8);
+        }
+        /* 보조 작은 반짝임 흰점 */
+        .eye-pupil::before {
+            content: '';
+            position: absolute;
+            width: 3.5px;
+            height: 3.5px;
+            background: white;
+            border-radius: 50%;
+            bottom: 4px;
+            right: 3px;
+            opacity: 0.7;
         }
         
-        /* 날개: 실제 새처럼 부드럽고 유연하게 펄럭임 */
+        /* 디즈니 스타일의 부드러운 날개 */
         .bird-wing {
             position: absolute;
-            width: 42px;
-            height: 26px;
-            background: #4FA3DF;
-            top: 36px;
+            width: 44px;
+            height: 28px;
+            background: linear-gradient(to bottom, #5dade2, #2980b9);
+            top: 42px;
             z-index: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         .wing-left {
-            left: 6px;
-            border-radius: 24px 6px 6px 24px;
+            left: 4px;
+            border-radius: 30px 10px 10px 30px;
             transform-origin: right center;
-            animation: flapLeftFly 0.4s infinite alternate ease-in-out;
+            animation: flapLeftFly 0.5s infinite alternate ease-in-out;
         }
         .wing-right {
-            right: 6px;
-            border-radius: 6px 24px 24px 6px;
+            right: 4px;
+            border-radius: 10px 30px 30px 10px;
             transform-origin: left center;
-            animation: flapRightFly 0.4s infinite alternate ease-in-out;
+            animation: flapRightFly 0.5s infinite alternate ease-in-out;
         }
 
-        /* 🎬 생동감 애니메이션 키프레임 모음 */
+        /* 아래쪽 깜찍한 주황색 발 디테일 */
+        .bird-feet {
+            position: absolute;
+            bottom: -8px;
+            display: flex;
+            gap: 20px;
+            z-index: 1;
+            animation: feetMove 2s infinite ease-in-out;
+        }
+        .foot {
+            width: 14px;
+            height: 10px;
+            background: linear-gradient(to bottom, #f39c12, #e67e22);
+            border-radius: 6px 6px 4px 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 🎬 3D 애니메이션 키프레임 모음 */
         @keyframes breathLiving {
             0% { transform: translateY(0px) scale(1, 1); }
-            35% { transform: translateY(-6px) scale(0.98, 1.03); }
-            70% { transform: translateY(2px) scale(1.02, 0.97); }
+            35% { transform: translateY(-7px) scale(0.96, 1.04); }
+            70% { transform: translateY(3px) scale(1.03, 0.96); }
             100% { transform: translateY(0px) scale(1, 1); }
         }
-        @keyframes beakBounce {
-            0% { transform: translateY(0px); }
-            35% { transform: translateY(-1px); }
-            70% { transform: translateY(1px); }
-            100% { transform: translateY(0px); }
+        @keyframes hairWag {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(-8deg) scaleY(1.05); }
+        }
+        @keyframes feetMove {
+            0%, 100% { transform: translateY(0px); }
+            35% { transform: translateY(2px) scaleY(0.9); }
+            70% { transform: translateY(-1px); }
         }
         @keyframes movePupil {
             0%, 100% { transform: translate(0px, 0px); }
-            20%, 30% { transform: translate(-2px, 1px); }
-            50%, 60% { transform: translate(2px, -2px); }
-            75%, 85% { transform: translate(0px, -1px); }
+            20%, 30% { transform: translate(-3px, 2px); }
+            50%, 60% { transform: translate(3px, -2px); }
+            75%, 85% { transform: translate(0px, -2px); }
         }
         @keyframes flapLeftFly {
-            0% { transform: rotate(-35deg) translateY(-2px); }
-            100% { transform: rotate(20deg) translateY(2px); }
+            0% { transform: rotate(-30deg) translateY(-2px); }
+            100% { transform: rotate(15deg) translateY(2px); }
         }
         @keyframes flapRightFly {
-            0% { transform: rotate(35deg) translateY(-2px); }
-            100% { transform: rotate(-20deg) translateY(2px); }
+            0% { transform: rotate(30deg) translateY(-2px); }
+            100% { transform: rotate(-15deg) translateY(2px); }
         }
 
-        /* 엔진 가동 시 고속 펄럭임 */
+        /* 고속 펄럭임 */
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
         /* ---------------------------------------------------- */
-        /* ⬇️ 여기서부터 하단까지는 기존 화면 인터페이스 디자인 유지 */
+        /* 하단 인터페이스 및 기존 기능 구조 유지 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 28px; font-weight: bold; }
@@ -304,9 +380,12 @@
         <div id="homeTab" class="tab-content">
             <div class="bird-area">
                 <div class="bird-container">
+                    <!-- 머리 깃털 추가 -->
+                    <div class="bird-hair"></div>
+                    
                     <div class="bird-wing wing-left" id="leftWing"></div>
                     
-                    <!-- 💖 살아 숨 쉬는 기적이 구성 요소 -->
+                    <!-- 💖 3D 둥실둥실 기적이 몸통 구성 -->
                     <div class="bird-body" id="miracleBird">
                         <div class="bird-eyes-container">
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
@@ -316,9 +395,17 @@
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
                         </div>
+                        <!-- 부드러운 배 털 영역 -->
+                        <div class="bird-belly"></div>
                     </div>
                     
                     <div class="bird-wing wing-right" id="rightWing"></div>
+                    
+                    <!-- 깜찍한 아랫발 추가 -->
+                    <div class="bird-feet">
+                        <div class="foot"></div>
+                        <div class="foot"></div>
+                    </div>
                 </div>
             </div>
             
