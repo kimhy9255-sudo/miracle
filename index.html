@@ -11,7 +11,8 @@
             margin: 0; padding: 0;
             background-color: #F4F7F6;
             display: flex; flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden; /* 화면이 넘쳐서 스크롤되지 않도록 고정 */
         }
         
         /* 🔒 1단계: 로그인/회원가입 화면 */
@@ -38,22 +39,23 @@
         .auth-toggle-text { font-size: 13px; color: #7F8C8D; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
         /* 📱 2단계: 메인 서비스 화면 레이아웃 */
-        #mainAppLayout { display: none; flex-direction: column; min-height: 100vh; padding-bottom: 90px; }
+        #mainAppLayout { display: none; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
 
-        /* 상단 헤더 균형 정렬 */
-        .header { background-color: #FFF; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .header h1 { font-size: 18px; margin: 0; color: #2C3E50; font-weight: bold; }
+        /* 상단 헤더 */
+        .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .header h1 { font-size: 17px; margin: 0; color: #2C3E50; font-weight: bold; }
         
-        /* 등급별 뱃지 스타일 */
-        .user-welcome-info { font-size: 12px; font-weight: bold; color: white; background: #34495E; padding: 6px 14px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
+        /* 등급별 뱃지 */
+        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
         .tier-seed { background: #95A5A6; }
         .tier-vip { background: linear-gradient(135deg, #2ECC71, #27AE60); }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
 
-        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 25px 20px; }
+        /* 메인 컨텐츠 영역 축소 및 조절 */
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ 기적이(새) 영역 크기 및 배치 */
+        /* 🕊️ 기적이(새) 영역 크기 축소 (화면 확보) */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -61,12 +63,12 @@
             position: relative; 
             width: 100%; 
             max-width: 340px; 
-            margin-bottom: 15px;
-            height: 150px;
+            margin-bottom: 5px;
+            height: 105px;
         }
         .bird-container { 
-            width: 130px; 
-            height: 130px; 
+            width: 95px; 
+            height: 95px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -74,66 +76,66 @@
             animation: flyUpDown 1.6s infinite ease-in-out;
         }
         .bird-body { 
-            width: 85px; 
-            height: 85px; 
+            width: 70px; 
+            height: 70px; 
             background: linear-gradient(135deg, #5DADE2, #2980B9); 
             border-radius: 50%; 
             position: relative; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15); 
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15); 
         }
         .bird-beak { 
             width: 0; 
             height: 0; 
-            border-top: 9px solid transparent; 
-            border-bottom: 9px solid transparent; 
-            border-right: 16px solid #F39C12; 
+            border-top: 7px solid transparent; 
+            border-bottom: 7px solid transparent; 
+            border-right: 13px solid #F39C12; 
             position: absolute; 
-            left: -10px; 
-            top: 33px; 
+            left: -8px; 
+            top: 27px; 
             transform: rotate(165deg); 
         }
         .bird-eye { 
-            width: 22px; 
-            height: 22px; 
+            width: 18px; 
+            height: 18px; 
             background: #2C3E50; 
             border-radius: 50%; 
             position: absolute; 
-            left: 18px; 
-            top: 20px; 
+            left: 14px; 
+            top: 16px; 
         }
         .bird-eye::after { 
             content: '';
             position: absolute;
-            width: 7px;
-            height: 7px;
+            width: 5px;
+            height: 5px;
             background: white;
             border-radius: 50%;
-            top: 4px;
-            left: 4px;
+            top: 3px;
+            left: 3px;
         }
         
         .bird-wing {
             position: absolute;
-            width: 42px;
-            height: 28px;
+            width: 34px;
+            height: 22px;
             background: #5DADE2;
-            top: 32px;
+            top: 26px;
             transform-origin: bottom center;
         }
         .wing-left {
-            left: -22px;
+            left: -18px;
             border-radius: 50% 10px 10px 50%;
             animation: flapLeft 0.25s infinite alternate ease-in-out;
         }
         .wing-right {
-            right: -22px;
+            right: -18px;
             border-radius: 10px 50% 50% 10px;
             animation: flapRight 0.25s infinite alternate ease-in-out;
         }
 
         @keyframes flyUpDown {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
         @keyframes flapLeft {
@@ -145,78 +147,76 @@
             100% { transform: rotate(10deg) scaleY(1.2); }
         }
 
-        .nodding { 
-            animation-duration: 0.12s !important; 
-        }
+        .nodding { animation-duration: 0.12s !important; }
 
-        /* 📊 잔고 카드 디자인 구색 맞추기 */
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 24px; padding: 22px 20px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25); margin-bottom: 15px; }
-        .total-title { font-size: 13px; opacity: 0.9; margin-bottom: 8px; }
-        .total-value { font-size: 32px; font-weight: bold; }
+        /* 📊 잔고 카드 여백 감소 */
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
+        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+        .total-value { font-size: 28px; font-weight: bold; }
 
-        .card { background: white; border-radius: 24px; padding: 22px 20px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        .card-title { font-size: 13px; color: #7F8C8D; margin-bottom: 8px; }
-        .card-value { font-size: 26px; font-weight: bold; color: #2C3E50; }
+        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
+        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
+        .card-value { font-size: 24px; font-weight: bold; color: #2C3E50; }
         
-        /* 🎛️ 하단 조작계 배치 (버튼 왼쪽 그룹 + 우측 아이콘 세로 배열) */
+        /* 🎛️ 조작계 단단하게 밀착 배치 */
         .control-section {
             display: flex;
             width: 100%;
             max-width: 340px;
             align-items: center;
-            gap: 15px;
-            margin-top: 5px;
+            gap: 12px;
+            margin-top: 0px;
         }
         .action-button-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             flex: 1;
         }
         .side-icon-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
 
-        .btn-action { color: white; border: none; border-radius: 16px; padding: 14px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 12px rgba(53,122,189,0.3); }
-        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 12px rgba(230,126,34,0.3); }
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
+        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
 
-        /* 우측 기능 서브 원형 버튼 */
+        /* 우측 서브 동그라미 버튼 컴팩트화 */
         .btn-side-circle {
-            width: 46px; height: 46px; border-radius: 50%; border: none; 
+            width: 40px; height: 40px; border-radius: 50%; border: none; 
             display: flex; align-items: center; justify-content: center; 
-            font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
-        /* 🏦 디파이 금고 & 백엔드 메커니즘 전용 스타일 */
-        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 22px 20px; width: 100%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
-        .vault-balance-title { font-size: 13px; color: #BDC3C7; margin-bottom: 6px; }
-        .vault-balance-value { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
+        /* 🏦 디파이 금고 스타일 */
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
+        .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
+        .vault-balance-value { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
         
-        .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 14px; padding: 8px 12px; font-size: 12px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 8px; border: 1px dashed rgba(52, 231, 228, 0.4); }
-        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 16px; padding: 12px; width: 100%; max-width: 340px; margin-bottom: 15px; font-size: 12px; color: #856404; line-height: 1.5; text-align: left; }
+        .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
+        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
 
-        .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.3); border: none; border-radius: 14px; padding: 12px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 12px; margin-bottom: 15px; }
-        .btn-vault { flex: 1; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
+        .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
         /* 상점 */
-        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 340px; margin-top: 10px; }
-        .shop-item { background: white; border-radius: 20px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
-        .vip-badge { display: none; position: absolute; top: 8px; right: 8px; background: #2ECC71; color: white; font-size: 9px; padding: 2px 6px; border-radius: 8px; font-weight: bold; }
-        .item-emoji { font-size: 40px; margin-bottom: 8px; }
-        .item-name { font-size: 14px; font-weight: bold; color: #2C3E50; margin-bottom: 4px; }
-        .item-price { font-size: 13px; color: #E74C3C; font-weight: bold; margin-bottom: 12px; }
-        .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; width: 85%; }
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; }
+        .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
+        .vip-badge { display: none; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
+        .item-emoji { font-size: 36px; margin-bottom: 6px; }
+        .item-name { font-size: 13px; font-weight: bold; color: #2C3E50; margin-bottom: 3px; }
+        .item-price { font-size: 12px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
+        .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 광고 / 모달 */
+        /* 모달 시스템 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
@@ -224,11 +224,11 @@
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 바 */
-        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #EAEAEA; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
+        /* 하단 내비게이션 바 고정 크기 */
+        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
-        .nav-icon { font-size: 22px; margin-bottom: 4px; }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -255,7 +255,7 @@
     <!-- 📱 2단계: 메인 앱 레이아웃 -->
     <div id="mainAppLayout">
         
-        <!-- 상단 헤더 (가로 정렬 구색 완료) -->
+        <!-- 상단 헤더 -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
             <div id="userBadge" class="user-welcome-info tier-seed">
@@ -286,7 +286,7 @@
                 <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
             </div>
             
-            <!-- 조작 및 기능 연동 구역 (정리된 레이아웃 반영) -->
+            <!-- 조작 및 기능 연동 구역 (한 화면에 딱 들어오게 맞춤) -->
             <div class="control-section">
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
@@ -294,7 +294,7 @@
                 </div>
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
-                    <button class="btn-side-circle btn-logout-power" onclick="handleLogout()">⚙️</button>
+                    <button class="btn-side-circle btn-logout-power" onclick="handleLogout()">🚪</button>
                 </div>
             </div>
         </div>
@@ -317,7 +317,7 @@
             </button>
 
             <div id="vaultBenefitBanner" class="benefit-banner">
-                💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 <strong>[기적의 나무 VIP]</strong>가 되면 발생 이자의 50%를 직접 수령하고 상점 반값 할인을 누리실 수 있습니다!
+                💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 VIP가 되면 이자를 나누어 수령합니다.
             </div>
 
             <div class="vault-action-group">
@@ -330,8 +330,8 @@
         <!-- 🛍️ 탭 3: 기적 상점 화면 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
-                <h2 style="font-size: 18px; margin: 0; color: #2C3E50;">기적 상점</h2>
-                <span style="color: #357ABD; font-weight: bold; font-size: 14px;">보유: <span id="shopPoints">0</span>p</span>
+                <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
+                <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
             <div class="shop-grid">
                 <div class="shop-item">
@@ -369,7 +369,7 @@
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
-            <p style="font-size:13px; color:#7F8C8D; margin-bottom:20px;">내 통장에서 기적 재단 금고로 원화를 안전하게 송금합니다.</p>
+            <p style="font-size:13px; color:#7F8C8D; margin-bottom:20px;">기적 재단 금고로 안전하게 송금합니다.</p>
             <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;" placeholder="금액 입력(원)">
             
             <div style="display:flex; gap:10px; margin-bottom:20px;">
@@ -378,12 +378,12 @@
                 <button onclick="document.getElementById('payInputAmount').value=100000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px; cursor:pointer;">+10만</button>
             </div>
 
-            <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(255,235,0,0.4);">결제 및 예치 완료하기</button>
+            <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
             <div class="auth-toggle-text" onclick="closeKakaoModal()" style="margin-top:12px;">취소하고 돌아가기</div>
         </div>
     </div>
 
-    <!-- 광고 및 시스템 제어 모달 -->
+    <!-- 광고 및 제어 모달 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
             <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
@@ -504,28 +504,19 @@
 
             if (vaultAsset >= 100000) {
                 badge.classList.add('tier-whale'); icon.innerText = "🐳"; name.innerText = "기적의 고래 대장";
-                if(banner) {
-                    banner.style.background = "#E8F8F5"; banner.style.color = "#117A65"; banner.style.borderColor = "#A3E4D7";
-                    banner.innerHTML = "🎯 <strong>최상위 등급 달성!</strong> 이율 보상 및 기적 상점 모든 품목 50% 반값 적용 중입니다.";
-                }
+                if(banner) banner.innerHTML = "🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.";
                 if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
                 if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
             } 
             else if (vaultAsset >= 30000) {
                 badge.classList.add('tier-vip'); icon.innerText = "🌳"; name.innerText = "기적의 나무 VIP";
-                if(banner) {
-                    banner.style.background = "#D4EFDF"; banner.style.color = "#196F3D"; banner.style.borderColor = "#A9DFBF";
-                    banner.innerHTML = "✅ <strong>VIP 활성화!</strong> 이자 50% 본인 수령 및 기적 상점 <strong>50% 반값 할인권</strong>이 적용되었습니다.";
-                }
+                if(banner) banner.innerHTML = "✅ <strong>VIP 활성화!</strong> 이자 수령 및 상점 <strong>50% 반값 할인</strong> 적용 중";
                 if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
                 if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
             } 
             else {
                 badge.classList.add('tier-seed'); icon.innerText = "🌱"; name.innerText = "기적의 씨앗";
-                if(banner) {
-                    banner.style.background = "#FFF3CD"; banner.style.color = "#856404"; banner.style.borderColor = "#FFEBAA";
-                    banner.innerHTML = "💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 <strong>[기적의 나무 VIP]</strong>가 되면 발생 이자의 50%를 직접 수령하고 상점 반값 할인을 누리실 수 있습니다!";
-                }
+                if(banner) banner.innerHTML = "💡 <strong>안내:</strong> 3만 원 이상 예치 시 <strong>[VIP]</strong>가 되어 이자 수령 및 상점 할인 혜택을 받습니다.";
                 if(vipB1) { vipB1.style.display = "none"; vipB2.style.display = "none"; }
                 if(priceBanana) { priceBanana.innerHTML = "1,800p"; priceGimbap.innerHTML = "1,300p"; }
             }
@@ -556,11 +547,10 @@
 
             if(vaultAsset >= 30000) {
                 const myShare = Math.floor(totalDailyInterest * 0.5);
-                const charityShare = totalDailyInterest - myShare;
                 amount += myShare; updateTotalBalance();
-                alert(`🎁 [이자의 50% 본인 수령 완료]: +${myShare.toLocaleString()}원 💰`);
+                alert(`🎁 [이자의 50% 수령 완료]: +${myShare.toLocaleString()}원 💰`);
             } else {
-                alert(`🕊️ 발생한 이자 ${totalDailyInterest.toLocaleString()}원은 기부되었습니다! VIP 등급 달성 시 나누어 받을 수 있습니다.`);
+                alert(`🕊️ 발생한 이자는 기부되었습니다. 30,000원 이상 예치 시 직접 나누어 수령할 수 있습니다.`);
             }
         }
 
@@ -589,19 +579,15 @@
                 isRunning = true; 
                 btn.innerText = "☁️ 가동 중..."; 
                 btn.style.backgroundColor = "#E67E22"; 
-                
                 leftWing.classList.add('nodding');
                 rightWing.classList.add('nodding');
-                
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 10) + 1; updateTotalBalance(); }, 1000);
             } else {
                 isRunning = false; 
                 btn.innerText = "☁️ 엔진 가동하기"; 
                 btn.style.backgroundColor = "#357ABD"; 
-                
                 leftWing.classList.remove('nodding');
                 rightWing.classList.remove('nodding');
-                
                 clearInterval(intervalId);
             }
         });
