@@ -55,7 +55,7 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ 이미지처럼 엄청 크고 귀여워진 기적이 영역 */
+        /* 🕊️ [변경분] 애니메이션처럼 생동감 넘치게 변신한 기적이 영역 */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -64,7 +64,7 @@
             width: 100%; 
             max-width: 340px; 
             margin-bottom: 5px;
-            height: 120px;
+            height: 130px;
         }
         .bird-container { 
             width: 160px; 
@@ -73,9 +73,9 @@
             justify-content: center; 
             align-items: center; 
             position: relative;
-            animation: flyUpDown 1.6s infinite ease-in-out;
         }
-        /* 몸통 (동글동글한 메인 구체) */
+        
+        /* 몸통: 숨 쉬듯 통통하게 늘어났다 줄어드는 애니메이션 (Squash & Stretch) */
         .bird-body { 
             width: 84px; 
             height: 84px; 
@@ -86,9 +86,10 @@
             z-index: 2;
             display: flex;
             justify-content: center;
+            animation: breathLiving 2s infinite ease-in-out;
         }
         
-        /* 🧡 일러스트처럼 크고 귀엽게 벌린 노란 부리 */
+        /* 부리: 몸통 움직임에 맞춰 자연스럽게 바운스 */
         .bird-beak-wrap {
             position: absolute;
             bottom: 20px;
@@ -96,6 +97,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            animation: beakBounce 2s infinite ease-in-out;
         }
         .beak-top {
             width: 22px;
@@ -113,13 +115,14 @@
             border: 1px solid #BA4A00;
         }
 
-        /* 👀 이미지처럼 압도적으로 커진 초롱초롱한 눈 2개 */
+        /* 눈: 몸통과 같이 움직이되 시선 처리를 위한 컨테이너 */
         .bird-eyes-container {
             position: absolute;
             top: 14px;
             display: flex;
             gap: 4px;
             z-index: 3;
+            animation: beakBounce 2s infinite ease-in-out;
         }
         .bird-eye { 
             width: 28px; 
@@ -131,14 +134,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
-        /* 검은 눈동자 */
+        
+        /* 검은 눈동자: 눈동자가 살아 움직이도록 디테일 추가 */
         .eye-pupil {
             width: 16px;
             height: 20px;
             background: #1A252F;
             border-radius: 50%;
             position: relative;
+            animation: movePupil 4s infinite ease-in-out;
         }
         /* 눈 속 반짝이는 하이라이트 흰점 */
         .eye-pupil::after { 
@@ -152,47 +158,62 @@
             left: 3px;
         }
         
-        /* 힘차게 펄럭이는 날개 */
+        /* 날개: 실제 새처럼 부드럽고 유연하게 펄럭임 */
         .bird-wing {
             position: absolute;
-            width: 38px;
-            height: 24px;
+            width: 42px;
+            height: 26px;
             background: #4FA3DF;
-            top: 32px;
+            top: 36px;
             z-index: 1;
         }
-        /* 왼쪽 날개 */
         .wing-left {
-            left: 8px;
-            border-radius: 20px 5px 5px 20px;
+            left: 6px;
+            border-radius: 24px 6px 6px 24px;
             transform-origin: right center;
-            animation: flapLeft 0.25s infinite alternate ease-in-out;
+            animation: flapLeftFly 0.4s infinite alternate ease-in-out;
         }
-        /* 오른쪽 날개 */
         .wing-right {
-            right: 8px;
-            border-radius: 5px 20px 20px 5px;
+            right: 6px;
+            border-radius: 6px 24px 24px 6px;
             transform-origin: left center;
-            animation: flapRight 0.25s infinite alternate ease-in-out;
+            animation: flapRightFly 0.4s infinite alternate ease-in-out;
         }
 
-        @keyframes flyUpDown {
+        /* 🎬 생동감 애니메이션 키프레임 모음 */
+        @keyframes breathLiving {
+            0% { transform: translateY(0px) scale(1, 1); }
+            35% { transform: translateY(-6px) scale(0.98, 1.03); }
+            70% { transform: translateY(2px) scale(1.02, 0.97); }
+            100% { transform: translateY(0px) scale(1, 1); }
+        }
+        @keyframes beakBounce {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            35% { transform: translateY(-1px); }
+            70% { transform: translateY(1px); }
             100% { transform: translateY(0px); }
         }
-        @keyframes flapLeft {
-            0% { transform: rotate(-25deg); }
-            100% { transform: rotate(25deg); }
+        @keyframes movePupil {
+            0%, 100% { transform: translate(0px, 0px); }
+            20%, 30% { transform: translate(-2px, 1px); }
+            50%, 60% { transform: translate(2px, -2px); }
+            75%, 85% { transform: translate(0px, -1px); }
         }
-        @keyframes flapRight {
-            0% { transform: rotate(25deg); }
-            100% { transform: rotate(-25deg); }
+        @keyframes flapLeftFly {
+            0% { transform: rotate(-35deg) translateY(-2px); }
+            100% { transform: rotate(20deg) translateY(2px); }
+        }
+        @keyframes flapRightFly {
+            0% { transform: rotate(35deg) translateY(-2px); }
+            100% { transform: rotate(-20deg) translateY(2px); }
         }
 
-        .nodding { animation-duration: 0.12s !important; }
+        /* 엔진 가동 시 고속 펄럭임 */
+        .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
+        .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
-        /* 잔고 및 카드 레이아웃 */
+        /* ---------------------------------------------------- */
+        /* ⬇️ 여기서부터 하단까지는 기존 화면 인터페이스 디자인 유지 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 28px; font-weight: bold; }
@@ -201,41 +222,18 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 24px; font-weight: bold; color: #2C3E50; }
         
-        /* 조작계 */
-        .control-section {
-            display: flex;
-            width: 100%;
-            max-width: 340px;
-            align-items: center;
-            gap: 12px;
-            margin-top: 0px;
-        }
-        .action-button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-        }
-        .side-icon-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
+        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; margin-top: 0px; }
+        .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
         .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
 
-        .btn-side-circle {
-            width: 40px; height: 40px; border-radius: 50%; border: none; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
+        .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
-        /* 디파이 금고 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
@@ -249,7 +247,6 @@
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        /* 상점 */
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; }
         .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
         .vip-badge { display: none; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
@@ -258,7 +255,6 @@
         .item-price { font-size: 12px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 모달 시스템 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
@@ -266,7 +262,6 @@
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 내비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
@@ -311,14 +306,12 @@
                 <div class="bird-container">
                     <div class="bird-wing wing-left" id="leftWing"></div>
                     
-                    <!-- 💖 왕눈이 기적이 몸통 컴포넌트 -->
+                    <!-- 💖 살아 숨 쉬는 기적이 구성 요소 -->
                     <div class="bird-body" id="miracleBird">
-                        <!-- 초롱초롱한 왕눈이 눈망울 -->
                         <div class="bird-eyes-container">
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
-                        <!-- 귀엽게 벌린 부리 -->
                         <div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
