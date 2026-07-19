@@ -1,45 +1,257 @@
-</style>
-/* 기적이 몸통을 더 새처럼 다듬기 */
-.bird-body {
-    width: 120px;
-    height: 100px;
-    background: #4A90E2;
-    border-radius: 50% 50% 40% 40%; /* 새의 통통한 몸 */
-    position: relative;
-    margin: 20px auto;
-    transition: transform 0.3s;
-}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사각지대 없는 기적 재단</title>
+    <!-- PWA 설정을 위한 매니페스트 연결 -->
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* 기본 모바일 레이아웃 */
+        body {
+            font-family: 'Apple SD Gothic Neo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4F7F6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* 상단 바 */
+        .header {
+            background-color: #FFF;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .header h1 {
+            font-size: 18px;
+            margin: 0;
+            color: #2C3E50;
+        }
 
-/* 끄떡끄떡 애니메이션 */
-.nodding {
-    animation: nod 0.6s infinite alternate;
-}
+        /* 메인 화면 콘텐츠 영역 */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-@keyframes nod {
-    from { transform: rotate(-5deg); }
-    to { transform: rotate(5deg); }
-}
+        /* 🐦 환골탈태한 아기 새 '기적이' 캐릭터 영역 */
+        .bird-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-/* 훨씬 예뻐진 부리 */
-.bird-beak {
-    width: 0;
-    height: 0;
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent;
-    border-left: 30px solid #F5A623; /* 황금 바코드 색상 부리 */
-    position: absolute;
-    left: -20px; /* 몸통 왼쪽으로 돌출 */
-    top: 40px;
-}
+        /* 기적이 통통한 몸통 */
+        .bird-body {
+            width: 120px;
+            height: 100px;
+            background: #4A90E2;
+            border-radius: 50% 50% 43% 43%;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-/* 귀여운 눈 추가! */
-.bird-eye {
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 50%;
-    position: absolute;
-    right: 30px;
-    top: 25px;
-}
-</style>
+        /* 끄떡끄떡 애니메이션 효과 (엔진 가동 시 작동) */
+        .nodding {
+            animation: nod 0.6s infinite alternate ease-in-out;
+        }
+        @keyframes nod {
+            from { transform: rotate(-8deg); }
+            to { transform: rotate(8deg); }
+        }
+
+        /* 뾰족하고 예뻐진 황금색 부리 */
+        .bird-beak {
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 25px solid #F5A623; /* 황금 바코드 색상 부리 */
+            position: absolute;
+            left: -20px;
+            top: 38px;
+            transform: rotate(180deg); /* 왼쪽을 바라보도록 회전 */
+        }
+
+        /* 반짝이는 귀여운 눈구멍 */
+        .bird-eye {
+            width: 12px;
+            height: 12px;
+            background: #2C3E50;
+            border-radius: 50%;
+            position: absolute;
+            left: 25px;
+            top: 25px;
+            box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
+        }
+
+        /* 지원금 표시판 카드 */
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 20px;
+            width: 85%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .card-title {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 10px;
+        }
+        .card-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2C3E50;
+        }
+
+        /* 가동하기 버튼 */
+        .btn-engine {
+            background-color: #357ABD;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            width: 90%;
+            max-width: 360px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(53,122,189,0.3);
+            transition: background 0.2s;
+            margin-bottom: 40px;
+        }
+        .btn-engine:active {
+            background-color: #286094;
+        }
+
+        /* 하단 탭 바 메뉴 */
+        .nav-bar {
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #EAEAEA;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: #95A5A6;
+            text-decoration: none;
+        }
+        .nav-item.active {
+            color: #357ABD;
+            font-weight: bold;
+        }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 헤더 -->
+    <div class="header">
+        <h1>사각지대 없는 기적 재단</h1>
+        <span style="font-size:20px;">👑</span>
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="content">
+        <!-- 🐦 환골탈태한 아기 새 기적이 캐릭터 -->
+        <div class="bird-container">
+            <div class="bird-body" id="miracleBird">
+                <div class="bird-beak"></div>
+                <div class="bird-eye"></div>
+            </div>
+        </div>
+
+        <!-- 지원금 현황 카드 -->
+        <div class="card">
+            <div class="card-title">이번 달 기적 지원금</div>
+            <div class="card-value"><span id="subsidyAmount">18,450</span> 원</div>
+        </div>
+
+        <!-- 기적 엔진 가동 버튼 -->
+        <button class="btn-engine" id="engineBtn">기적 엔진 가동하기</button>
+    </div>
+
+    <!-- 하단 메뉴 네비게이션 -->
+    <div class="nav-bar">
+        <a href="#" class="nav-item active">
+            <span class="nav-icon">🕊️</span>
+            <span>홈(기적이)</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">🏦</span>
+            <span>디파이 금고</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon">🍱</span>
+            <span>기적 바우처</span>
+        </a>
+    </div>
+
+    <!-- 실시간 엔진 작동 및 애니메이션 자바스크립트 -->
+    <script>
+        let amount = 18450;
+        let isRunning = false;
+        let intervalId = null;
+        
+        const bird = document.getElementById('miracleBird');
+        const btn = document.getElementById('engineBtn');
+        const amountDisplay = document.getElementById('subsidyAmount');
+
+        btn.addEventListener('click', () => {
+            if (!isRunning) {
+                // 엔진 가동 시작
+                isRunning = true;
+                btn.innerText = "기적 엔진 작동 중...";
+                btn.style.backgroundColor = "#E67E22"; // 작동 중일 땐 주황색으로 변경
+                bird.classList.add('nodding'); // 끄떡끄떡 애니메이션 시작
+                
+                // 실시간 금액 상승 시뮬레이션
+                intervalId = setInterval(() => {
+                    amount += Math.floor(Math.random() * 10) + 1;
+                    amountDisplay.innerText = amount.toLocaleString();
+                }, 1000);
+            } else {
+                // 엔진 가동 정지
+                isRunning = false;
+                btn.innerText = "기적 엔진 가동하기";
+                btn.style.backgroundColor = "#357ABD";
+                bird.classList.remove('nodding'); // 애니메이션 정지
+                clearInterval(intervalId);
+            }
+        });
+
+        // PWA 서비스 워커 등록 코드
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
