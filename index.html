@@ -12,7 +12,7 @@
             background-color: #F4F7F6;
             display: flex; flex-direction: column;
             height: 100vh;
-            overflow: hidden; /* 화면이 넘쳐서 스크롤되지 않도록 고정 */
+            overflow: hidden;
         }
         
         /* 🔒 1단계: 로그인/회원가입 화면 */
@@ -51,11 +51,11 @@
         .tier-vip { background: linear-gradient(135deg, #2ECC71, #27AE60); }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
 
-        /* 메인 컨텐츠 영역 축소 및 조절 */
+        /* 메인 컨텐츠 영역 */
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ 기적이(새) 영역 크기 축소 (화면 확보) */
+        /* 🕊️ 완전히 수정된 기적이(새) 영역 */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -67,7 +67,7 @@
             height: 105px;
         }
         .bird-container { 
-            width: 95px; 
+            width: 140px; 
             height: 95px; 
             display: flex; 
             justify-content: center; 
@@ -75,6 +75,7 @@
             position: relative;
             animation: flyUpDown 1.6s infinite ease-in-out;
         }
+        /* 몸통 (정중앙) */
         .bird-body { 
             width: 70px; 
             height: 70px; 
@@ -82,54 +83,66 @@
             border-radius: 50%; 
             position: relative; 
             box-shadow: 0 5px 12px rgba(0,0,0,0.15); 
+            z-index: 2;
         }
+        /* 정상 배치된 노란 부리 */
         .bird-beak { 
             width: 0; 
             height: 0; 
-            border-top: 7px solid transparent; 
-            border-bottom: 7px solid transparent; 
-            border-right: 13px solid #F39C12; 
+            border-top: 8px solid transparent; 
+            border-bottom: 8px solid transparent; 
+            border-left: 14px solid #F39C12; 
             position: absolute; 
-            left: -8px; 
-            top: 27px; 
-            transform: rotate(165deg); 
+            right: -10px; 
+            top: 28px; 
+        }
+        /* 나란히 배치된 눈 2개 */
+        .bird-eyes-container {
+            position: absolute;
+            top: 20px;
+            right: 12px;
+            display: flex;
+            gap: 5px;
         }
         .bird-eye { 
-            width: 18px; 
-            height: 18px; 
+            width: 11px; 
+            height: 11px; 
             background: #2C3E50; 
             border-radius: 50%; 
-            position: absolute; 
-            left: 14px; 
-            top: 16px; 
+            position: relative;
         }
         .bird-eye::after { 
             content: '';
             position: absolute;
-            width: 5px;
-            height: 5px;
+            width: 3px;
+            height: 3px;
             background: white;
             border-radius: 50%;
-            top: 3px;
-            left: 3px;
+            top: 2px;
+            left: 2px;
         }
         
+        /* 밖으로 제대로 펄럭이는 날개 */
         .bird-wing {
             position: absolute;
-            width: 34px;
+            width: 35px;
             height: 22px;
             background: #5DADE2;
             top: 26px;
-            transform-origin: bottom center;
+            z-index: 1;
         }
+        /* 왼쪽 날개: 오른쪽(몸통쪽)을 축으로 회전 */
         .wing-left {
-            left: -18px;
-            border-radius: 50% 10px 10px 50%;
+            left: 6px;
+            border-radius: 20px 5px 5px 20px;
+            transform-origin: right center;
             animation: flapLeft 0.25s infinite alternate ease-in-out;
         }
+        /* 오른쪽 날개: 왼쪽(몸통쪽)을 축으로 회전 */
         .wing-right {
-            right: -18px;
-            border-radius: 10px 50% 50% 10px;
+            right: 6px;
+            border-radius: 5px 20px 20px 5px;
+            transform-origin: left center;
             animation: flapRight 0.25s infinite alternate ease-in-out;
         }
 
@@ -138,18 +151,19 @@
             50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
+        /* 안에서 바깥쪽 끝이 위아래로 움직이도록 수정 */
         @keyframes flapLeft {
-            0% { transform: rotate(30deg) scaleY(0.8); }
-            100% { transform: rotate(-10deg) scaleY(1.2); }
+            0% { transform: rotate(-25deg); }
+            100% { transform: rotate(25deg); }
         }
         @keyframes flapRight {
-            0% { transform: rotate(-30deg) scaleY(0.8); }
-            100% { transform: rotate(10deg) scaleY(1.2); }
+            0% { transform: rotate(25deg); }
+            100% { transform: rotate(-25deg); }
         }
 
         .nodding { animation-duration: 0.12s !important; }
 
-        /* 📊 잔고 카드 여백 감소 */
+        /* 잔고 및 카드 레이아웃 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 28px; font-weight: bold; }
@@ -158,7 +172,7 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 24px; font-weight: bold; color: #2C3E50; }
         
-        /* 🎛️ 조작계 단단하게 밀착 배치 */
+        /* 조작계 */
         .control-section {
             display: flex;
             width: 100%;
@@ -184,7 +198,6 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
 
-        /* 우측 서브 동그라미 버튼 컴팩트화 */
         .btn-side-circle {
             width: 40px; height: 40px; border-radius: 50%; border: none; 
             display: flex; align-items: center; justify-content: center; 
@@ -193,7 +206,7 @@
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
-        /* 🏦 디파이 금고 스타일 */
+        /* 디파이 금고 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
@@ -224,7 +237,7 @@
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 내비게이션 바 고정 크기 */
+        /* 하단 내비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
@@ -270,7 +283,10 @@
                     <div class="bird-wing wing-left" id="leftWing"></div>
                     <div class="bird-body" id="miracleBird">
                         <div class="bird-beak"></div>
-                        <div class="bird-eye"></div>
+                        <div class="bird-eyes-container">
+                            <div class="bird-eye"></div>
+                            <div class="bird-eye"></div>
+                        </div>
                     </div>
                     <div class="bird-wing wing-right" id="rightWing"></div>
                 </div>
@@ -286,7 +302,6 @@
                 <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
             </div>
             
-            <!-- 조작 및 기능 연동 구역 (한 화면에 딱 들어오게 맞춤) -->
             <div class="control-section">
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
@@ -593,7 +608,7 @@
         });
 
         function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; renderAdminPartners(); }
-        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.none; }
         function renderAdminPartners() {
             document.getElementById('partnerListContainer').innerHTML = adDatabase.map(ad => `
                 <div class="partner-row">
