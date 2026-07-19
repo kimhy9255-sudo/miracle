@@ -55,7 +55,7 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ 완전히 수정된 기적이(새) 영역 */
+        /* 🕊️ 이미지처럼 엄청 크고 귀여워진 기적이 영역 */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -64,83 +64,113 @@
             width: 100%; 
             max-width: 340px; 
             margin-bottom: 5px;
-            height: 105px;
+            height: 120px;
         }
         .bird-container { 
-            width: 140px; 
-            height: 95px; 
+            width: 160px; 
+            height: 110px; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             position: relative;
             animation: flyUpDown 1.6s infinite ease-in-out;
         }
-        /* 몸통 (정중앙) */
+        /* 몸통 (동글동글한 메인 구체) */
         .bird-body { 
-            width: 70px; 
-            height: 70px; 
-            background: linear-gradient(135deg, #5DADE2, #2980B9); 
+            width: 84px; 
+            height: 84px; 
+            background: linear-gradient(135deg, #4FA3DF, #2575A7); 
             border-radius: 50%; 
             position: relative; 
-            box-shadow: 0 5px 12px rgba(0,0,0,0.15); 
+            box-shadow: 0 6px 16px rgba(0,0,0,0.18); 
             z-index: 2;
-        }
-        /* 정상 배치된 노란 부리 */
-        .bird-beak { 
-            width: 0; 
-            height: 0; 
-            border-top: 8px solid transparent; 
-            border-bottom: 8px solid transparent; 
-            border-left: 14px solid #F39C12; 
-            position: absolute; 
-            right: -10px; 
-            top: 28px; 
-        }
-        /* 나란히 배치된 눈 2개 */
-        .bird-eyes-container {
-            position: absolute;
-            top: 20px;
-            right: 12px;
             display: flex;
-            gap: 5px;
-        }
-        .bird-eye { 
-            width: 11px; 
-            height: 11px; 
-            background: #2C3E50; 
-            border-radius: 50%; 
-            position: relative;
-        }
-        .bird-eye::after { 
-            content: '';
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
+            justify-content: center;
         }
         
-        /* 밖으로 제대로 펄럭이는 날개 */
+        /* 🧡 일러스트처럼 크고 귀엽게 벌린 노란 부리 */
+        .bird-beak-wrap {
+            position: absolute;
+            bottom: 20px;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .beak-top {
+            width: 22px;
+            height: 14px;
+            background: #F39C12;
+            border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%;
+            border: 1px solid #D68910;
+        }
+        .beak-bottom {
+            width: 16px;
+            height: 10px;
+            background: #D35400;
+            border-radius: 0 0 50% 50% / 0 0 100% 100%;
+            margin-top: -3px;
+            border: 1px solid #BA4A00;
+        }
+
+        /* 👀 이미지처럼 압도적으로 커진 초롱초롱한 눈 2개 */
+        .bird-eyes-container {
+            position: absolute;
+            top: 14px;
+            display: flex;
+            gap: 4px;
+            z-index: 3;
+        }
+        .bird-eye { 
+            width: 28px; 
+            height: 32px; 
+            background: white; 
+            border-radius: 50%; 
+            position: relative;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* 검은 눈동자 */
+        .eye-pupil {
+            width: 16px;
+            height: 20px;
+            background: #1A252F;
+            border-radius: 50%;
+            position: relative;
+        }
+        /* 눈 속 반짝이는 하이라이트 흰점 */
+        .eye-pupil::after { 
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+        }
+        
+        /* 힘차게 펄럭이는 날개 */
         .bird-wing {
             position: absolute;
-            width: 35px;
-            height: 22px;
-            background: #5DADE2;
-            top: 26px;
+            width: 38px;
+            height: 24px;
+            background: #4FA3DF;
+            top: 32px;
             z-index: 1;
         }
-        /* 왼쪽 날개: 오른쪽(몸통쪽)을 축으로 회전 */
+        /* 왼쪽 날개 */
         .wing-left {
-            left: 6px;
+            left: 8px;
             border-radius: 20px 5px 5px 20px;
             transform-origin: right center;
             animation: flapLeft 0.25s infinite alternate ease-in-out;
         }
-        /* 오른쪽 날개: 왼쪽(몸통쪽)을 축으로 회전 */
+        /* 오른쪽 날개 */
         .wing-right {
-            right: 6px;
+            right: 8px;
             border-radius: 5px 20px 20px 5px;
             transform-origin: left center;
             animation: flapRight 0.25s infinite alternate ease-in-out;
@@ -151,7 +181,6 @@
             50% { transform: translateY(-8px); }
             100% { transform: translateY(0px); }
         }
-        /* 안에서 바깥쪽 끝이 위아래로 움직이도록 수정 */
         @keyframes flapLeft {
             0% { transform: rotate(-25deg); }
             100% { transform: rotate(25deg); }
@@ -281,13 +310,21 @@
             <div class="bird-area">
                 <div class="bird-container">
                     <div class="bird-wing wing-left" id="leftWing"></div>
+                    
+                    <!-- 💖 왕눈이 기적이 몸통 컴포넌트 -->
                     <div class="bird-body" id="miracleBird">
-                        <div class="bird-beak"></div>
+                        <!-- 초롱초롱한 왕눈이 눈망울 -->
                         <div class="bird-eyes-container">
-                            <div class="bird-eye"></div>
-                            <div class="bird-eye"></div>
+                            <div class="bird-eye"><div class="eye-pupil"></div></div>
+                            <div class="bird-eye"><div class="eye-pupil"></div></div>
+                        </div>
+                        <!-- 귀엽게 벌린 부리 -->
+                        <div class="bird-beak-wrap">
+                            <div class="beak-top"></div>
+                            <div class="beak-bottom"></div>
                         </div>
                     </div>
+                    
                     <div class="bird-wing wing-right" id="rightWing"></div>
                 </div>
             </div>
@@ -608,7 +645,7 @@
         });
 
         function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; renderAdminPartners(); }
-        function closeAdminModal() { document.getElementById('adminModal').style.none; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
         function renderAdminPartners() {
             document.getElementById('partnerListContainer').innerHTML = adDatabase.map(ad => `
                 <div class="partner-row">
