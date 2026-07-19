@@ -45,17 +45,17 @@
 
         /* ================= [1번 홈 탭: 기적이 + 총잔고 시스템] ================= */
         .bird-container {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .bird-body {
-            width: 110px;
-            height: 90px;
+            width: 100px;
+            height: 80px;
             background: #4A90E2;
             border-radius: 50% 50% 43% 43%;
             position: relative;
@@ -71,26 +71,25 @@
         .bird-beak {
             width: 0;
             height: 0;
-            border-top: 11px solid transparent;
-            border-bottom: 11px solid transparent;
-            border-right: 22px solid #F5A623;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 20px solid #F5A623;
             position: absolute;
-            left: -18px;
-            top: 34px;
+            left: -16px;
+            top: 30px;
             transform: rotate(180deg);
         }
         .bird-eye {
-            width: 11px;
-            height: 11px;
+            width: 10px;
+            height: 10px;
             background: #2C3E50;
             border-radius: 50%;
             position: absolute;
-            left: 22px;
-            top: 22px;
+            left: 20px;
+            top: 20px;
             box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
         }
         
-        /* 대장님 피드백: 메인 총잔고 카드 (최상단 배치) */
         .total-balance-card {
             background: linear-gradient(135deg, #3498DB, #2980B9);
             color: white;
@@ -113,7 +112,6 @@
             font-weight: bold;
         }
 
-        /* 서브 지원금 카드 */
         .card {
             background: white;
             border-radius: 20px;
@@ -122,7 +120,7 @@
             max-width: 340px;
             text-align: center;
             box-shadow: 0 6px 15px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .card-title {
             font-size: 13px;
@@ -134,20 +132,96 @@
             font-weight: bold;
             color: #2C3E50;
         }
-        .btn-engine {
-            background-color: #357ABD;
+        
+        /* 버튼 공통 구조 */
+        .btn-action {
             color: white;
             border: none;
             border-radius: 16px;
-            padding: 16px;
+            padding: 14px;
             width: 90%;
             max-width: 360px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .btn-engine {
+            background-color: #357ABD;
             box-shadow: 0 4px 12px rgba(53,122,189,0.3);
-            transition: background 0.2s;
-            margin-bottom: 20px;
+        }
+        /* 대장님 픽: 광고 보상형 버튼 */
+        .btn-ad-reward {
+            background: linear-gradient(135deg, #E67E22, #D35400);
+            box-shadow: 0 4px 12px rgba(230,126,34,0.3);
+        }
+
+        /* ================= [신규: 모의 광고 팝업 레이어 디자인] ================= */
+        .ad-overlay {
+            display: none; /* 평소엔 숨김 */
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .ad-box {
+            background-color: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 340px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .ad-badge {
+            position: absolute;
+            top: 15px; left: 15px;
+            background: #7F8C8D;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .ad-timer {
+            position: absolute;
+            top: 15px; right: 15px;
+            color: #E74C3C;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .ad-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #27AE60;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .ad-content {
+            font-size: 14px;
+            color: #34495E;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .btn-ad-close {
+            background-color: #BDC3C7;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: not-allowed; /* 처음엔 클릭 불가 느낌 */
+        }
+        .btn-ad-close.ready {
+            background-color: #2ECC71;
+            cursor: pointer;
         }
 
         /* ================= [2번 탭: 디파이 금고 디자인] ================= */
@@ -325,7 +399,7 @@
         <span style="font-size:20px;">👑</span>
     </div>
 
-    <!-- 🕊️ 1번 탭: 홈 화면 (대장님 피드백 반영 버전) -->
+    <!-- 🕊️ 1번 탭: 홈 화면 -->
     <div id="homeTab" class="tab-content">
         <div class="bird-container">
             <div class="bird-body" id="miracleBird">
@@ -334,7 +408,6 @@
             </div>
         </div>
         
-        <!-- 대장님 아이디어: 실시간 합산 총잔고 카드 -->
         <div class="total-balance-card">
             <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
             <div class="total-value"><span id="totalBalance">0</span> 원</div>
@@ -345,7 +418,25 @@
             <div class="card-value"><span id="subsidyAmount">18,485</span> 원</div>
         </div>
         
-        <button class="btn-engine" id="engineBtn">기적 엔진 가동하기</button>
+        <button class="btn-action btn-engine" id="engineBtn">기적 엔진 가동하기</button>
+        <!-- ⚡ 대장님 지시 사항: 2배 보상형 광고 단추 탑재 -->
+        <button class="btn-action btn-ad-reward" onclick="openAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
+    </div>
+
+    <!-- 📺 대장님 표 '뇌리 각인형' 5초 컷 모의 광고 팝업 레이어 -->
+    <div id="adOverlay" class="ad-overlay">
+        <div class="ad-box">
+            <div class="ad-badge">공고</div>
+            <div class="ad-timer" id="adTimer">5s</div>
+            <div style="font-size: 40px; margin-top: 10px;">🌱</div>
+            <div class="ad-title">지구를 지키는 착한 기업</div>
+            <div class="ad-content">
+                "우리가 쓰는 텀블러 하나가<br>
+                내일의 푸른 숲을 만듭니다."<br><br>
+                <span style="font-size: 12px; color: #95A5A6;">환경을 생각하는 에코그린 캠페인</span>
+            </div>
+            <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
+        </div>
     </div>
 
     <!-- 🏦 2번 탭: 디파이 금고 화면 -->
@@ -426,7 +517,6 @@
         const vaultAssetDisplay = document.getElementById('vaultAsset');
         const totalBalanceDisplay = document.getElementById('totalBalance');
 
-        // 실시간 대장님 표 총잔고 계산 함수 (지원금 + 디파이자산)
         function updateTotalBalance() {
             if(totalBalanceDisplay) {
                 let total = amount + vaultAsset;
@@ -471,7 +561,7 @@
                 intervalId = setInterval(() => {
                     amount += Math.floor(Math.random() * 10) + 1;
                     amountDisplay.innerText = amount.toLocaleString();
-                    updateTotalBalance(); // 엔진이 돌 때도 총잔고 실시간 동시 상승!
+                    updateTotalBalance();
                 }, 1000);
             } else {
                 isRunning = false;
@@ -481,6 +571,49 @@
                 clearInterval(intervalId);
             }
         });
+
+        /* 📺 대장님 아이디어: 5초 보상형 광고 로직 */
+        let adCountdown = 5;
+        let adTimerId = null;
+
+        function openAdPopup() {
+            adCountdown = 5;
+            document.getElementById('adOverlay').style.display = 'flex';
+            document.getElementById('adTimer').innerText = adCountdown + 's';
+            
+            const closeBtn = document.getElementById('adCloseBtn');
+            closeBtn.innerText = "잠시 후 닫기";
+            closeBtn.disabled = true;
+            closeBtn.classList.remove('ready');
+
+            adTimerId = setInterval(() => {
+                adCountdown--;
+                document.getElementById('adTimer').innerText = adCountdown + 's';
+                
+                if(adCountdown <= 0) {
+                    clearInterval(adTimerId);
+                    document.getElementById('adTimer').innerText = '완료!';
+                    closeBtn.innerText = "기적 보상 받기";
+                    closeBtn.disabled = false;
+                    closeBtn.classList.add('ready');
+                    
+                    // 버튼 클릭 이벤트 바인딩
+                    closeBtn.onclick = finishAdReward;
+                }
+            }, 1000);
+        }
+
+        function finishAdReward() {
+            // 광고 완료 시 미예치 지원금을 2배로 뻥튀기!
+            const addedBonus = amount; // 원래 금액만큼 한 번 더 더해줌 (즉 2배)
+            amount = amount * 2;
+            
+            amountDisplay.innerText = amount.toLocaleString();
+            updateTotalBalance();
+            
+            document.getElementById('adOverlay').style.display = 'none';
+            alert(`🎉 대장님! "지구를 지키는 착한 기업" 광고 시청 보상으로 지원금이 2배로 불어났습니다!\n(+${addedBonus.toLocaleString()}원 추가 완료)`);
+        }
 
         function handleDeposit() {
             const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
