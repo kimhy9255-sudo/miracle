@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>사각지대 없는 기적 재단</title>
-    <!-- PWA 설정을 위한 매니페스트 연결 -->
     <link rel="manifest" href="manifest.json">
     <style>
-        /* 기본 모바일 레이아웃 */
         body {
             font-family: 'Apple SD Gothic Neo', sans-serif;
             margin: 0;
@@ -20,7 +18,6 @@
             padding-bottom: 90px; 
         }
         
-        /* 상단 바 */
         .header {
             background-color: #FFF;
             padding: 15px 20px;
@@ -35,32 +32,30 @@
             color: #2C3E50;
         }
 
-        /* 탭 화면 공통 스타일 */
         .tab-content {
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px;
+            padding: 25px 20px;
         }
-        /* 현재 활성화된 탭만 보여주기 */
         .tab-content.active {
             display: flex;
         }
 
-        /* ================= [1번 홈 탭: 기적이 디자인] ================= */
+        /* ================= [1번 홈 탭: 기적이 + 총잔고 시스템] ================= */
         .bird-container {
-            width: 150px;
-            height: 150px;
+            width: 130px;
+            height: 130px;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .bird-body {
-            width: 120px;
-            height: 100px;
+            width: 110px;
+            height: 90px;
             background: #4A90E2;
             border-radius: 50% 50% 43% 43%;
             position: relative;
@@ -76,41 +71,66 @@
         .bird-beak {
             width: 0;
             height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            border-right: 25px solid #F5A623;
+            border-top: 11px solid transparent;
+            border-bottom: 11px solid transparent;
+            border-right: 22px solid #F5A623;
             position: absolute;
-            left: -20px;
-            top: 38px;
+            left: -18px;
+            top: 34px;
             transform: rotate(180deg);
         }
         .bird-eye {
-            width: 12px;
-            height: 12px;
+            width: 11px;
+            height: 11px;
             background: #2C3E50;
             border-radius: 50%;
             position: absolute;
-            left: 25px;
-            top: 25px;
+            left: 22px;
+            top: 22px;
             box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
         }
-        .card {
-            background: white;
+        
+        /* 대장님 피드백: 메인 총잔고 카드 (최상단 배치) */
+        .total-balance-card {
+            background: linear-gradient(135deg, #3498DB, #2980B9);
+            color: white;
             border-radius: 24px;
-            padding: 25px 20px;
+            padding: 20px;
             width: 85%;
             max-width: 340px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25);
+            margin-bottom: 15px;
+        }
+        .total-title {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .total-value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* 서브 지원금 카드 */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 15px 20px;
+            width: 85%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
         }
         .card-title {
-            font-size: 14px;
+            font-size: 13px;
             color: #7F8C8D;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         .card-value {
-            font-size: 32px;
+            font-size: 22px;
             font-weight: bold;
             color: #2C3E50;
         }
@@ -207,7 +227,7 @@
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             overflow: hidden;
-            border-left: 6px solid #E74C3C; /* 쿠폰 강조선 */
+            border-left: 6px solid #E74C3C;
         }
         .voucher-ticket.green { border-left-color: #2ECC71; }
         .voucher-ticket.purple { border-left-color: #9B59B6; }
@@ -264,7 +284,7 @@
             cursor: pointer;
         }
 
-        /* 하단 안전 탭 바 메뉴 */
+        /* 하단 내비게이션 바 */
         .nav-bar {
             background-color: white;
             display: flex;
@@ -300,13 +320,12 @@
 </head>
 <body>
 
-    <!-- 상단 헤더 -->
     <div class="header">
         <h1>사각지대 없는 기적 재단</h1>
         <span style="font-size:20px;">👑</span>
     </div>
 
-    <!-- 🕊️ 1번 탭: 홈(기적이) 화면 -->
+    <!-- 🕊️ 1번 탭: 홈 화면 (대장님 피드백 반영 버전) -->
     <div id="homeTab" class="tab-content">
         <div class="bird-container">
             <div class="bird-body" id="miracleBird">
@@ -314,10 +333,18 @@
                 <div class="bird-eye"></div>
             </div>
         </div>
+        
+        <!-- 대장님 아이디어: 실시간 합산 총잔고 카드 -->
+        <div class="total-balance-card">
+            <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
+            <div class="total-value"><span id="totalBalance">0</span> 원</div>
+        </div>
+
         <div class="card">
-            <div class="card-title">이번 달 기적 지원금</div>
+            <div class="card-title">이번 달 기적 지원금 (미예치)</div>
             <div class="card-value"><span id="subsidyAmount">18,485</span> 원</div>
         </div>
+        
         <button class="btn-engine" id="engineBtn">기적 엔진 가동하기</button>
     </div>
 
@@ -325,7 +352,7 @@
     <div id="vaultTab" class="tab-content">
         <div class="vault-card">
             <div class="vault-balance-title">디파이 예치 총 자산</div>
-            <div class="vault-balance-value"><span id="vaultAsset">1,250,450</span> 원</div>
+            <div class="vault-balance-value"><span id="vaultAsset">1,240,450</span> 원</div>
             <div class="vault-profit-rate">실시간 연이율 🚀 +12.4% 상시 복리</div>
         </div>
         <div class="vault-action-group">
@@ -334,12 +361,11 @@
         </div>
     </div>
 
-    <!-- 🍱 3번 탭: 기적 바우처 화면 (신규 스케치!) -->
+    <!-- 🍱 3번 탭: 기적 바우처 화면 -->
     <div id="voucherTab" class="tab-content">
         <div class="voucher-container">
             <div style="font-size: 14px; color:#7F8C8D; margin-bottom: 5px; font-weight: bold;">나의 모바일 기적 바우처</div>
             
-            <!-- 쿠폰 1 -->
             <div class="voucher-ticket">
                 <div class="voucher-icon">🍱</div>
                 <div class="voucher-info">
@@ -350,7 +376,6 @@
                 <button class="btn-use-voucher" onclick="useVoucher('행복 도시락권')">사용</button>
             </div>
 
-            <!-- 쿠폰 2 -->
             <div class="voucher-ticket green">
                 <div class="voucher-icon">🚌</div>
                 <div class="voucher-info">
@@ -361,7 +386,6 @@
                 <button class="btn-use-voucher" onclick="useVoucher('기적 교통권')">사용</button>
             </div>
 
-            <!-- 쿠폰 3 -->
             <div class="voucher-ticket purple">
                 <div class="voucher-icon">🏥</div>
                 <div class="voucher-info">
@@ -374,7 +398,6 @@
         </div>
     </div>
 
-    <!-- 🛠️ 탭 강제 전환 시스템 링크 연동 메뉴 바 -->
     <div class="nav-bar">
         <div class="nav-item" id="navHome" onclick="location.href='?tab=home'">
             <span class="nav-icon">🕊️</span>
@@ -391,8 +414,7 @@
     </div>
 
     <script>
-        // 데이터 초기화 및 보관
-        if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1250450');
+        if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1240450');
         let amount = 18485;
         let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
         let isRunning = false;
@@ -402,14 +424,22 @@
         const btn = document.getElementById('engineBtn');
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
+        const totalBalanceDisplay = document.getElementById('totalBalance');
+
+        // 실시간 대장님 표 총잔고 계산 함수 (지원금 + 디파이자산)
+        function updateTotalBalance() {
+            if(totalBalanceDisplay) {
+                let total = amount + vaultAsset;
+                totalBalanceDisplay.innerText = total.toLocaleString();
+            }
+        }
 
         if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+        updateTotalBalance();
 
-        // 3단 탭 전환 파라미터 제어 시스템
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
 
-        // 모든 탭과 네비게이션 초기화 함수
         function resetTabs() {
             document.getElementById('homeTab').classList.remove('active');
             document.getElementById('vaultTab').classList.remove('active');
@@ -421,7 +451,6 @@
 
         resetTabs();
 
-        // 주소창 상태값(?tab=)에 따라 화면 강제 스케칭
         if(currentTab === 'vault') {
             document.getElementById('vaultTab').classList.add('active');
             document.getElementById('navVault').classList.add('active');
@@ -433,7 +462,6 @@
             document.getElementById('navHome').classList.add('active');
         }
 
-        // 홈 엔진 구동 스크립트
         btn.addEventListener('click', () => {
             if (!isRunning) {
                 isRunning = true;
@@ -443,6 +471,7 @@
                 intervalId = setInterval(() => {
                     amount += Math.floor(Math.random() * 10) + 1;
                     amountDisplay.innerText = amount.toLocaleString();
+                    updateTotalBalance(); // 엔진이 돌 때도 총잔고 실시간 동시 상승!
                 }, 1000);
             } else {
                 isRunning = false;
@@ -453,7 +482,6 @@
             }
         });
 
-        // 디파이 금융 스크립트
         function handleDeposit() {
             const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
             if (depositInput) {
@@ -461,7 +489,8 @@
                 if (!isNaN(depAmt) && depAmt > 0) {
                     vaultAsset += depAmt;
                     localStorage.setItem('vaultAsset', vaultAsset.toString());
-                    vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+                    if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+                    updateTotalBalance();
                     alert(`✨ 기적 재단 금고에 ${depAmt.toLocaleString()}원이 안전하게 예치되었습니다!`);
                 }
             }
@@ -474,7 +503,8 @@
                 if (!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) {
                     vaultAsset -= witAmt;
                     localStorage.setItem('vaultAsset', vaultAsset.toString());
-                    vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+                    if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+                    updateTotalBalance();
                     alert(`💸 금고에서 ${witAmt.toLocaleString()}원이 성공적으로 출금되었습니다.`);
                 } else if (witAmt > vaultAsset) {
                     alert("잔액이 부족합니다.");
@@ -482,7 +512,6 @@
             }
         }
 
-        // 바우처 사용 스크립트
         function useVoucher(name) {
             alert(`🎫 [${name}] 바우처 바코드가 활성화되었습니다. 가맹점에 제시해 주세요!`);
         }
