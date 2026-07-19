@@ -1,308 +1,43 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>사각지대 없는 기적 재단 (CGM7)</title>
-    <!-- PWA 설정을 위한 매니페스트 연동 -->
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#4A90E2">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            -webkit-user-select: none;
-        }
+/* 기적이 몸통을 더 새처럼 다듬기 */
+.bird-body {
+    width: 120px;
+    height: 100px;
+    background: #4A90E2;
+    border-radius: 50% 50% 40% 40%; /* 새의 통통한 몸 */
+    position: relative;
+    margin: 20px auto;
+    transition: transform 0.3s;
+}
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #f5f9fc;
-            overflow: hidden;
-        }
+/* 끄떡끄떡 애니메이션 */
+.nodding {
+    animation: nod 0.6s infinite alternate;
+}
 
-        .app-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
+@keyframes nod {
+    from { transform: rotate(-5deg); }
+    to { transform: rotate(5deg); }
+}
 
-        .app-header {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            z-index: 10;
-        }
+/* 훨씬 예뻐진 부리 */
+.bird-beak {
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 30px solid #F5A623; /* 황금 바코드 색상 부리 */
+    position: absolute;
+    left: -20px; /* 몸통 왼쪽으로 돌출 */
+    top: 40px;
+}
 
-        .brand-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #2c3e50;
-            letter-spacing: -0.5px;
-        }
-
-        .profile-btn {
-            width: 38px;
-            height: 38px;
-            background-color: #e8f2fc;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(180deg, #e3f2fd 0%, #f5f9fc 100%);
-            position: relative;
-        }
-
-        .character-zone {
-            width: 200px;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .bird-body {
-            width: 100px;
-            height: 100px;
-            background-color: #4a90e2;
-            border-radius: 50% 50% 50% 30%;
-            position: relative;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        .golden-barcode {
-            width: 45px;
-            height: 20px;
-            background: linear-gradient(90deg, #f1c40f 0%, #f39c12 100%);
-            position: absolute;
-            top: 40px;
-            left: -20px;
-            border-radius: 3px;
-            box-shadow: 0 0 10px rgba(241, 196, 15, 0.6);
-            animation: pulse 1.5s infinite;
-        }
-
-        .reward-board {
-            text-align: center;
-            background-color: #ffffff;
-            padding: 25px 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(74, 144, 226, 0.1);
-            width: 90%;
-            max-width: 340px;
-        }
-
-        .board-label {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        .board-price {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #2c3e50;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .action-zone {
-            width: 100%;
-            padding: 20px 25px;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .engine-btn {
-            width: 100%;
-            max-width: 340px;
-            height: 60px;
-            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 18px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .engine-btn:active {
-            transform: scale(0.97);
-        }
-
-        .nav-bar {
-            width: 100%;
-            height: 70px;
-            background-color: #ffffff;
-            border-top: 1px solid #e1e8f2;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: 5px;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #bdc3c7;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: #4a90e2;
-        }
-
-        .nav-icon {
-            font-size: 1.4rem;
-            margin-bottom: 4px;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(241, 196, 15, 0.6); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(241, 196, 15, 0.9); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(241, 196, 15, 0.6); }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        <header class="app-header">
-            <div class="brand-title">사각지대 없는 기적 재단</div>
-            <div class="profile-btn" onclick="alert('초대 이사장 대장님 환영합니다!')">👑</div>
-        </header>
-
-        <main class="main-content">
-            <div class="character-zone">
-                <div class="bird-body">
-                    <div class="golden-barcode"></div>
-                </div>
-            </div>
-
-            <div class="reward-board">
-                <span class="board-label">이번 달 기적 지원금</span>
-                <div class="board-price" id="rewardDisplay">0 원</div>
-            </div>
-        </main>
-
-        <section class="action-zone">
-            <button class="engine-btn" id="engineBtn" onclick="toggleEngine()">기적 엔진 가동하기</button>
-        </section>
-
-        <nav class="nav-bar">
-            <div class="nav-item active">
-                <div class="nav-icon">🕊️</div>
-                <div>홈(기적이)</div>
-            </div>
-            <div class="nav-item" onclick="alert('유니스왑 DeFi 연동 준비 중 (B단계)')">
-                <div class="nav-icon">🏦</div>
-                <div>디파이 금고</div>
-            </div>
-            <div class="nav-item" onclick="alert('편의점/생리대 바우처 모듈 준비 중')">
-                <div class="nav-icon">🍱</div>
-                <div>기적 바우처</div>
-            </div>
-        </nav>
-    </div>
-
-    <script>
-        // 1. 기존 프론트엔드 엔진 로직
-        let isRunning = false;
-        let currentAmount = 18450;
-        let intervalId = null;
-
-        function toggleEngine() {
-            const btn = document.getElementById('engineBtn');
-            const bird = document.querySelector('.bird-body');
-            
-            if(!isRunning) {
-                isRunning = true;
-                btn.innerText = "기적 엔진 일시정지";
-                btn.style.background = "linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)";
-                bird.style.animationDuration = "0.6s";
-                
-                intervalId = setInterval(() => {
-                    currentAmount += 1;
-                    document.getElementById('rewardDisplay').innerText = currentAmount.toLocaleString() + " 원";
-                }, 1000);
-            } else {
-                isRunning = false;
-                btn.innerText = "기적 엔진 가동하기";
-                btn.style.background = "linear-gradient(135deg, #4a90e2 0%, #357abd 100%)";
-                bird.style.animationDuration = "2s";
-                
-                clearInterval(intervalId);
-            }
-        }
-
-        document.getElementById('rewardDisplay').innerText = currentAmount.toLocaleString() + " 원";
-
-        // 2. [추가된 PWA 이식 코드] 서비스 워커 등록
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(reg => console.log('🚀 기적재단 PWA 서비스 워커 등록 성공!', reg.scope))
-                    .catch(err => console.error('🚨 서비스 워커 등록 실패:', err));
-            });
-        }
-
-        // 3. 바탕화면 자동 설치 유도 팝업
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            setTimeout(() => {
-                if (confirm("🕊️ 사각지대 없는 기적 재단을 바탕화면에 추가하고 '매달 3만 원'의 기적 지원금을 받으시겠습니까?")) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('👑 대장님! 유저가 바탕화면에 설치했습니다.');
-                        }
-                        deferredPrompt = null;
-                    });
-                }
-            }, 3000); // 사이트 접속 3초 뒤에 설치 팝업 창이 뜹니다.
-        });
-    </script>
-</body>
-</html>
+/* 귀여운 눈 추가! */
+.bird-eye {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    right: 30px;
+    top: 25px;
+}
