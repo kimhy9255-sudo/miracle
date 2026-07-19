@@ -15,26 +15,39 @@
             padding-bottom: 90px; 
         }
         
-        .header {
-            background-color: #FFF; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        /* ================= [신규: 로그인 및 회원가입 화면] ================= */
+        .auth-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background-color: #F4F7F6; z-index: 10000; padding: 30px;
         }
+        .auth-box {
+            background: white; border-radius: 24px; padding: 30px 20px;
+            width: 100%; max-width: 340px; box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .auth-input {
+            width: 100%; padding: 12px; margin-bottom: 10px;
+            border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none;
+        }
+        .btn-auth {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: bold; color: white; cursor: pointer; margin-top: 5px;
+        }
+        .btn-login { background-color: #357ABD; }
+        .btn-register-submit { background-color: #2ECC71; }
+        .auth-toggle-text { font-size: 13px; color: #7F8C8D; margin-top: 15px; cursor: pointer; text-decoration: underline; }
+
+        /* 기존 서비스 레이아웃 */
+        .header { background-color: #FFF; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .header h1 { font-size: 18px; margin: 0; color: #2C3E50; }
+        .user-welcome-info { font-size: 12px; color: #7F8C8D; background: #EAF2F8; padding: 4px 8px; border-radius: 8px; }
 
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 25px 20px; }
         .tab-content.active { display: flex; }
 
-        /* ================= [1번 홈 탭: 기적이 배치] ================= */
-        .bird-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 100%;
-            max-width: 340px;
-            margin-bottom: 12px;
-        }
+        /* 홈 탭 */
+        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 12px; }
         .bird-container { width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
         .bird-body { width: 100px; height: 80px; background: #4A90E2; border-radius: 50% 50% 43% 43%; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.1); will-change: transform; }
         .nodding { animation: nod 0.6s infinite alternate ease-in-out; }
@@ -42,30 +55,23 @@
         .bird-beak { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 20px solid #F5A623; position: absolute; left: -16px; top: 30px; transform: rotate(180deg); }
         .bird-eye { width: 10px; height: 10px; background: #2C3E50; border-radius: 50%; position: absolute; left: 20px; top: 20px; box-shadow: 1px 1px 0 rgba(255,255,255,0.6); }
         
-        /* 대장님이 표시해주신 빨간 동그라미 자리 (숨겨진 조그만 관리자 버튼) */
-        .admin-secret-btn {
-            background: none; border: none; font-size: 16px; color: #BDC3C7;
-            cursor: pointer; padding: 10px; opacity: 0.5; transition: opacity 0.2s;
-            position: absolute; right: 40px; top: 45px;
-        }
-        .admin-secret-btn:active { opacity: 1; color: #7F8C8D; }
+        .admin-secret-btn { background: none; border: none; font-size: 16px; color: #BDC3C7; cursor: pointer; padding: 10px; opacity: 0.5; position: absolute; right: 40px; top: 45px; }
 
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 24px; padding: 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25); margin-bottom: 15px; }
-        .total-title { font-size: 13px; opacity: 0.9; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .total-title { font-size: 13px; opacity: 0.9; margin-bottom: 5px; }
         .total-value { font-size: 30px; font-weight: bold; }
 
         .card { background: white; border-radius: 20px; padding: 15px 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.04); margin-bottom: 15px; }
         .card-title { font-size: 13px; color: #7F8C8D; margin-bottom: 6px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; }
         
-        .btn-action { color: white; border: none; border-radius: 16px; padding: 14px; width: 90%; max-width: 360px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; text-align: center; }
+        .btn-action { color: white; border: none; border-radius: 16px; padding: 14px; width: 90%; max-width: 360px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; text-align: center; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 12px rgba(53,122,189,0.3); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 12px rgba(230,126,34,0.3); }
 
-        /* ================= [2번 탭: 디파이 금고 디자인] ================= */
-        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 30px 20px; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; overflow: hidden; text-align: left; }
-        .vault-card::before { content: '🏦'; position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.08; }
-        .vault-balance-title { font-size: 13px; color: #BDC3C7; margin-bottom: 8px; letter-spacing: 0.5px; }
+        /* 디파이 금고 */
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 30px 20px; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; overflow: hidden; }
+        .vault-balance-title { font-size: 13px; color: #BDC3C7; margin-bottom: 8px; }
         .vault-balance-value { font-size: 28px; font-weight: bold; margin-bottom: 15px; }
         .vault-profit-rate { font-size: 13px; background: rgba(46, 204, 113, 0.2); color: #2ECC71; padding: 4px 10px; border-radius: 20px; display: inline-block; }
         .vault-action-group { display: flex; justify-content: space-between; width: 90%; max-width: 360px; gap: 12px; margin-bottom: 25px; }
@@ -73,7 +79,7 @@
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        /* ================= [3번 탭: 완벽 복원된 기적 상점 디자인] ================= */
+        /* 상점 */
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 360px; margin-top: 10px; }
         .shop-item { background: white; border-radius: 20px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; }
         .item-emoji { font-size: 40px; margin-bottom: 8px; }
@@ -81,16 +87,15 @@
         .item-price { font-size: 13px; color: #E74C3C; font-weight: bold; margin-bottom: 12px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* ================= [모달 및 팝업 스타일] ================= */
+        /* 팝업 및 모달 */
         .ad-overlay, .admin-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
-
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 내비게이션 바 (3버튼 체제 원상복구) */
+        /* 내비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #EAEAEA; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
@@ -99,9 +104,31 @@
 </head>
 <body>
 
+    <!-- 🔐 신규 추가: 로그인 / 회원가입 창 -->
+    <div id="authScreen" class="auth-container">
+        <!-- 로그인 폼 -->
+        <div id="loginBox" class="auth-box">
+            <h2 style="color:#2C3E50; margin-top:0; margin-bottom:20px;">🕊️ 기적 재단 로그인</h2>
+            <input type="text" id="loginId" class="auth-input" placeholder="아이디를 입력하세요">
+            <input type="password" id="loginPw" class="auth-input" placeholder="비밀번호를 입력하세요">
+            <button class="btn-auth btn-login" onclick="handleLogin()">로그인하기</button>
+            <div class="auth-toggle-text" onclick="toggleAuthForm(true)">아직 계정이 없으신가요? 회원가입</div>
+        </div>
+
+        <!-- 회원가입 폼 -->
+        <div id="registerBox" class="auth-box" style="display:none;">
+            <h2 style="color:#2ECC71; margin-top:0; margin-bottom:20px;">📝 기적 재단 회원가입</h2>
+            <input type="text" id="regId" class="auth-input" placeholder="새로운 아이디 생성">
+            <input type="password" id="regPw" class="auth-input" placeholder="비밀번호 설정">
+            <button class="btn-auth btn-register-submit" onclick="handleRegister()">가입 완료 및 로그인</button>
+            <div class="auth-toggle-text" onclick="toggleAuthForm(false)">이미 계정이 있으신가요? 로그인</div>
+        </div>
+    </div>
+
+    <!-- 💻 로그인 후 나타나는 메인 서비스 본문 -->
     <div class="header">
         <h1>사각지대 없는 기적 재단</h1>
-        <span style="font-size:20px;">👑</span>
+        <div class="user-welcome-info">👤 <span id="userIdDisplay">---</span> 대장님</div>
     </div>
 
     <!-- 🕊️ 1번 탭: 홈 화면 -->
@@ -113,7 +140,6 @@
                     <div class="bird-eye"></div>
                 </div>
             </div>
-            <!-- 대장님이 말씀하신 딱 그 빨간 동그라미 위치에 둔 비밀 설정 단추 -->
             <button class="admin-secret-btn" onclick="openAdminModal()">⚙️</button>
         </div>
         
@@ -124,18 +150,19 @@
 
         <div class="card">
             <div class="card-title">이번 달 기적 지원금 (미예치)</div>
-            <div class="card-value"><span id="subsidyAmount">18,485</span> 원</div>
+            <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
         </div>
         
         <button class="btn-action btn-engine" id="engineBtn">기적 엔진 가동하기</button>
         <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
+        <button class="btn-auth" style="background:#95A5A6; width:90%; max-width:360px; border-radius:16px;" onclick="handleLogout()">로그아웃</button>
     </div>
 
     <!-- 🏦 2번 탭: 디파이 금고 화면 -->
     <div id="vaultTab" class="tab-content">
         <div class="vault-card">
             <div class="vault-balance-title">디파이 예치 총 자산</div>
-            <div class="vault-balance-value"><span id="vaultAsset">1,240,450</span> 원</div>
+            <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
             <div class="vault-profit-rate">실시간 연이율 🚀 +12.4% 상시 복리</div>
         </div>
         <div class="vault-action-group">
@@ -144,11 +171,11 @@
         </div>
     </div>
 
-    <!-- 🛍️ 3번 탭: 완벽히 부활한 기적 상점 화면 -->
+    <!-- 🛍️ 3번 탭: 기적 상점 화면 -->
     <div id="shopTab" class="tab-content">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
             <h2 style="font-size: 18px; margin: 0; color: #2C3E50;">기적 상점</h2>
-            <span style="color: #357ABD; font-weight: bold; font-size: 14px;">보유: <span id="shopPoints">18,485</span>p</span>
+            <span style="color: #357ABD; font-weight: bold; font-size: 14px;">보유: <span id="shopPoints">0</span>p</span>
         </div>
         <div class="shop-grid">
             <div class="shop-item">
@@ -162,18 +189,6 @@
                 <div class="item-name">참치마요 삼각김밥</div>
                 <div class="item-price">1,300p</div>
                 <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 1300)">교환하기</button>
-            </div>
-            <div class="shop-item">
-                <div class="item-emoji">🍜</div>
-                <div class="item-name">얼큰한 컵라면</div>
-                <div class="item-price">1,500p</div>
-                <button class="btn-exchange" onclick="buyItem('얼큰한 컵라면', 1500)">교환하기</button>
-            </div>
-            <div class="shop-item">
-                <div class="item-emoji">🍫</div>
-                <div class="item-name">가나 초콜릿</div>
-                <div class="item-price">1,200p</div>
-                <button class="btn-exchange" onclick="buyItem('가나 초콜릿', 1200)">교환하기</button>
             </div>
         </div>
     </div>
@@ -199,28 +214,25 @@
         </div>
     </div>
 
-    <!-- 하단 내비게이션 바 (홈, 금고, 상점 완벽 부활) -->
+    <!-- 하단 내비게이션 바 -->
     <div class="nav-bar">
         <div class="nav-item" id="navHome" onclick="location.href='?tab=home'">
-            <span class="nav-icon">🕊️</span>
-            <span>홈(기적이)</span>
+            <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
         </div>
         <div class="nav-item" id="navVault" onclick="location.href='?tab=vault'">
-            <span class="nav-icon">🏦</span>
-            <span>디파이 금고</span>
+            <span class="nav-icon">🏦</span><span>디파이 금고</span>
         </div>
         <div class="nav-item" id="navShop" onclick="location.href='?tab=shop'">
-            <span class="nav-icon">🛍️</span>
-            <span>기적 상점</span>
+            <span class="nav-icon">🛍️</span><span>기적 상점</span>
         </div>
     </div>
 
     <script>
-        if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1240450');
-        let amount = 18485; 
-        let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
-        let isRunning = false;
-        let intervalId = null;
+        // 현재 유저의 임시 세션 보관 변수
+        let currentUser = localStorage.getItem('sessionUser') || null;
+        let amount = 0; 
+        let vaultAsset = 0;
+        let isRunning = false; let intervalId = null;
         
         const bird = document.getElementById('miracleBird');
         const btn = document.getElementById('engineBtn');
@@ -231,24 +243,99 @@
 
         let adDatabase = [
             { id: 0, connected: true, emoji: "🌱", title: "지구를 지키는 착한 기업", content: '"우리가 쓰는 텀블러 하나가<br>내일의 푸른 숲을 만듭니다."', color: "#27AE60" },
-            { id: 1, connected: true, emoji: "🍎", title: "복희네 상생 마켓", content: '"마진은 줄이고 정은 꽉 채웠습니다.<br>우리 동네 소상공인을 응원해 주세요!"', color: "#E67E22" },
-            { id: 2, connected: true, emoji: "👟", title: "발걸음 기부 챌린지", content: '"오늘 당신이 걸은 100걸음이<br>지구 반대편 아이들의 새 신발이 됩니다."', color: "#2980B9" }
+            { id: 1, connected: true, emoji: "🍎", title: "복희네 상생 마켓", content: '"마진은 줄이고 정은 꽉 채웠습니다."', color: "#E67E22" }
         ];
+
+        // 🔐 [회원가입 & 로그인 화면 제어]
+        function toggleAuthForm(showRegister) {
+            document.getElementById('loginBox').style.display = showRegister ? 'none' : 'block';
+            document.getElementById('registerBox').style.display = showRegister ? 'block' : 'none';
+        }
+
+        // 🛠️ 1. 백엔드 개발자가 연동할 진짜 API 호출 구조 샘플 (회원가입)
+        function handleRegister() {
+            const id = document.getElementById('regId').value;
+            const pw = document.getElementById('regPw').value;
+            if(!id || !pw) return alert("아이디와 비밀번호를 입력하세요.");
+
+            // [가상 로컬 작동 방식] 백엔드가 없을 땐 로컬브라우저에 임시 저장
+            localStorage.setItem(`user_${id}`, JSON.stringify({ id: id, pw: pw, amount: 18485, vault: 1240450 }));
+            
+            /* 🔗 [백엔드 개발자 연동 포인트] 실 서버 배포 시 주석 해제할 부분
+            fetch('https://api.miracle.com/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: id, userPw: pw })
+            }).then(res => res.json()).then(data => console.log("서버 가입 완료 완료"));
+            */
+
+            alert("🎉 가입을 축하합니다! 자동으로 로그인됩니다.");
+            doLoginSuccess(id);
+        }
+
+        // 🛠️ 2. 백엔드 개발자 로그인 API 연동 구조
+        function handleLogin() {
+            const id = document.getElementById('loginId').value;
+            const pw = document.getElementById('loginPw').value;
+            
+            const localData = localStorage.getItem(`user_${id}`);
+            if(localData) {
+                const user = JSON.parse(localData);
+                if(user.pw === pw) {
+                    doLoginSuccess(id);
+                } else { alert("❌ 비밀번호가 다릅니다."); }
+            } else {
+                alert("❌ 가입되지 않은 아이디입니다. 회원가입을 먼저 해주세요!");
+            }
+        }
+
+        function doLoginSuccess(id) {
+            localStorage.setItem('sessionUser', id);
+            currentUser = id;
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('userIdDisplay').innerText = id;
+            
+            // 유저별 데이터 로드
+            const userData = JSON.parse(localStorage.getItem(`user_${id}`));
+            amount = userData.amount || 0;
+            vaultAsset = userData.vault || 0;
+            
+            if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+            updateTotalBalance();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('sessionUser');
+            location.reload();
+        }
+
+        // 초기 앱 구동 시 로그인 체크
+        if(currentUser) {
+            doLoginSuccess(currentUser);
+        } else {
+            document.getElementById('authScreen').style.display = 'flex';
+        }
+
+        function saveUserData() {
+            if(currentUser) {
+                const data = JSON.parse(localStorage.getItem(`user_${currentUser}`));
+                data.amount = amount;
+                data.vault = vaultAsset;
+                localStorage.setItem(`user_${currentUser}`, JSON.stringify(data));
+            }
+        }
 
         function updateTotalBalance() {
             let total = amount + vaultAsset;
             if(totalBalanceDisplay) totalBalanceDisplay.innerText = total.toLocaleString();
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
+            saveUserData();
         }
 
-        if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-        updateTotalBalance();
-
-        // 3개 탭 제어 시스템 
+        // 탭 제어 시스템
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
-
         function resetTabs() {
             document.getElementById('homeTab').classList.remove('active');
             document.getElementById('vaultTab').classList.remove('active');
@@ -258,7 +345,6 @@
             document.getElementById('navShop').classList.remove('active');
         }
         resetTabs();
-
         if(currentTab === 'vault') {
             document.getElementById('vaultTab').classList.add('active');
             document.getElementById('navVault').classList.add('active');
@@ -273,116 +359,80 @@
         // 엔진 작동
         btn.addEventListener('click', () => {
             if (!isRunning) {
-                isRunning = true;
-                btn.innerText = "기적 엔진 작동 중...";
-                btn.style.backgroundColor = "#E67E22";
-                bird.classList.add('nodding');
-                intervalId = setInterval(() => {
-                    amount += Math.floor(Math.random() * 10) + 1;
-                    updateTotalBalance();
-                }, 1000);
+                isRunning = true; btn.innerText = "기적 엔진 작동 중..."; btn.style.backgroundColor = "#E67E22"; bird.classList.add('nodding');
+                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 10) + 1; updateTotalBalance(); }, 1000);
             } else {
-                isRunning = false;
-                btn.innerText = "기적 엔진 가동하기";
-                btn.style.backgroundColor = "#357ABD";
-                bird.classList.remove('nodding');
-                clearInterval(intervalId);
+                isRunning = false; btn.innerText = "기적 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; bird.classList.remove('nodding'); clearInterval(intervalId);
             }
         });
 
-        /* ⚙️ 광고주 관리 기능 (비밀 버튼과 연결) */
-        function openAdminModal() {
-            document.getElementById('adminModal').style.display = 'flex';
-            renderAdminPartners();
-        }
+        /* ⚙️ 관리자 기능 모달 */
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; renderAdminPartners(); }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
         function renderAdminPartners() {
             const container = document.getElementById('partnerListContainer');
             container.innerHTML = adDatabase.map(ad => `
                 <div class="partner-row">
                     <span>${ad.emoji} <strong>${ad.title}</strong></span>
-                    <button class="btn-toggle" style="background:${ad.connected ? '#E74C3C' : '#2ECC71'}" onclick="togglePartner(${ad.id})">
-                        ${ad.connected ? '중단하기' : '연결하기'}
-                    </button>
+                    <button class="btn-toggle" style="background:${ad.connected ? '#E74C3C' : '#2ECC71'}" onclick="togglePartner(${ad.id})">${ad.connected ? '중단하기' : '연결하기'}</button>
                 </div>
             `).join('');
         }
         function togglePartner(id) { adDatabase[id].connected = !adDatabase[id].connected; renderAdminPartners(); }
 
-        /* 📺 5초 팝업 로직 */
+        /* 📺 5초 광고 시청 완료 리워드 적립 API 구조 파트 */
         let adCountdown = 5; let adTimerId = null; let currentAdTitle = "";
         function openRandomAdPopup() {
             const activeAds = adDatabase.filter(ad => ad.connected);
-            if(activeAds.length === 0) {
-                alert("❌ 연결된 광고주가 없습니다!\n비밀 설정 아이콘(⚙️)을 눌러 광고주를 활성화해 주세요.");
-                return;
-            }
+            if(activeAds.length === 0) return alert("❌ 연결된 광고주가 없습니다.");
             adCountdown = 5;
-            const randomIndex = Math.floor(Math.random() * activeAds.length);
-            const selectedAd = activeAds[randomIndex];
-            
+            const selectedAd = activeAds[Math.floor(Math.random() * activeAds.length)];
             document.getElementById('adEmoji').innerText = selectedAd.emoji;
-            const titleEl = document.getElementById('adTitle');
-            titleEl.innerText = selectedAd.title; titleEl.style.color = selectedAd.color;
+            const titleEl = document.getElementById('adTitle'); titleEl.innerText = selectedAd.title; titleEl.style.color = selectedAd.color;
             document.getElementById('adContent').innerHTML = selectedAd.content;
-            
             currentAdTitle = selectedAd.title;
             document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
-            
-            const closeBtn = document.getElementById('adCloseBtn');
-            closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
+            const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
 
             adTimerId = setInterval(() => {
                 adCountdown--; document.getElementById('adTimer').innerText = adCountdown + 's';
                 if(adCountdown <= 0) {
                     clearInterval(adTimerId); document.getElementById('adTimer').innerText = '완료!';
-                    closeBtn.innerText = "기적 보상 받기"; closeBtn.disabled = false; closeBtn.classList.add('ready');
-                    closeBtn.onclick = finishAdReward;
+                    closeBtn.innerText = "기적 보상 받기"; closeBtn.disabled = false; closeBtn.classList.add('ready'); closeBtn.onclick = finishAdReward;
                 }
             }, 1000);
         }
+
+        // 🛠️ 3. 백엔드 개발자가 실제 광고 보상 포인트를 저장할 API 연동 포인트
         function finishAdReward() {
-            const addedBonus = amount; amount = amount * 2; updateTotalBalance();
+            const addedBonus = amount;
+            amount = amount * 2; 
+            updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none';
+
+            /* 🔗 [백엔드 개발자 연동 포인트] 광고 시청 완료 후 서버에 포인트 적립 신호 전송
+            fetch('https://api.miracle.com/user/reward', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser, rewardAmount: addedBonus, adTitle: currentAdTitle })
+            }).then(res => res.json()).then(data => console.log("서버에 영구 적립 완료"));
+            */
+
             alert(`🎉 광고 시청 완료 보상으로 지원금이 2배가 되었습니다!\n(+${addedBonus.toLocaleString()}원 추가)`);
         }
 
-        /* 🛍️ 상점 구매 시스템 복구 */
         function buyItem(itemName, price) {
-            if (amount >= price) {
-                amount -= price;
-                updateTotalBalance();
-                alert(`🎁 [${itemName}] 교환 완료!\n기프티콘 바코드가 전송되었습니다.`);
-            } else {
-                alert("❌ 포인트(미예치 지원금)가 부족합니다!\n엔진을 가동하거나 광고를 시청해 포인트를 모아보세요.");
-            }
+            if (amount >= price) { amount -= price; updateTotalBalance(); alert(`🎁 [${itemName}] 교환 완료!`); } 
+            else { alert("❌ 포인트가 부족합니다!"); }
         }
-
-        // 예치 및 출금 시스템
         function handleDeposit() {
-            const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
-            if (depositInput) {
-                const depAmt = parseInt(depositInput);
-                if (!isNaN(depAmt) && depAmt > 0) {
-                    vaultAsset += depAmt; localStorage.setItem('vaultAsset', vaultAsset.toString());
-                    if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-                    updateTotalBalance();
-                    alert(`✨ 금고에 ${depAmt.toLocaleString()}원이 안전하게 예치되었습니다!`);
-                }
-            }
+            const input = prompt("금고에 예치할 금액:", "50000");
+            if (input) { const depAmt = parseInt(input); if (!isNaN(depAmt) && depAmt > 0) { vaultAsset += depAmt; updateTotalBalance(); } }
         }
         function handleWithdraw() {
-            const withdrawInput = prompt("금고에서 출금할 금액을 입력하세요 (원):", "10000");
-            if (withdrawInput) {
-                const witAmt = parseInt(withdrawInput);
-                if (!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) {
-                    vaultAsset -= witAmt; localStorage.setItem('vaultAsset', vaultAsset.toString());
-                    if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-                    updateTotalBalance();
-                    alert(`💸 금고에서 ${witAmt.toLocaleString()}원이 성공적으로 출금되었습니다.`);
-                } else if (witAmt > vaultAsset) { alert("잔액이 부족합니다."); }
-            }
+            const input = prompt("금고에서 출금할 금액:", "10000");
+            if (input) { const witAmt = parseInt(input); if (!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; updateTotalBalance(); } }
         }
     </script>
 </body>
