@@ -7,106 +7,206 @@
     <style>
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; background-color: #F4F7F6; padding-bottom: 90px; }
         .header { background-color: #FFF; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .header h1 { font-size: 18px; margin: 0; color: #2C3E50; }
         .tab-content { display: none; padding: 25px 20px; flex-direction: column; align-items: center; }
         .tab-content.active { display: flex; }
         
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 24px; padding: 20px; width: 85%; max-width: 340px; text-align: center; margin-bottom: 20px; }
-        .btn-action { color: white; border: none; border-radius: 16px; padding: 14px; width: 90%; max-width: 360px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .btn-engine { background-color: #357ABD; }
-        .btn-ad { background: linear-gradient(135deg, #E67E22, #D35400); }
+        /* 홈 화면 잔고 디자인 */
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 24px; padding: 25px; width: 85%; max-width: 340px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 16px rgba(52,152,219,0.3); }
+        .btn-action { color: white; border: none; border-radius: 16px; padding: 15px; width: 90%; max-width: 360px; font-weight: bold; font-size: 16px; cursor: pointer; margin-bottom: 12px; transition: transform 0.1s; }
+        .btn-action:active { transform: scale(0.98); }
+        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 6px rgba(53,122,189,0.2); }
 
+        /* 상점 상품 배열 디자인 */
+        .shop-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-bottom: 20px; }
         .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 360px; }
-        .product-card { background: white; border-radius: 16px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .btn-buy { background: #27AE60; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .product-card { background: white; border-radius: 16px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
+        .product-emoji { font-size: 40px; margin-bottom: 8px; }
+        .product-name { font-weight: bold; color: #2C3E50; font-size: 15px; margin-bottom: 4px; }
+        .product-price { color: #E74C3C; font-weight: bold; font-size: 14px; }
+        .btn-buy { background: #27AE60; color: white; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 12px; font-weight: bold; }
 
-        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; width: 100%; padding: 15px 0; border-top: 1px solid #EAEAEA; z-index: 1000; }
-        .nav-item { cursor: pointer; font-weight: bold; color: #95A5A6; }
+        /* 고정 하단 탭 내비게이션 */
+        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; width: 100%; padding: 15px 0; border-top: 1px solid #EAEAEA; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.02); }
+        .nav-item { cursor: pointer; font-weight: bold; color: #95A5A6; font-size: 15px; transition: color 0.2s; }
         .nav-item.active { color: #357ABD; }
 
-        /* 스캐너 효과 */
-        .barcode-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
-        .scanner-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; }
-        #scannerLine { width: 100%; height: 5px; background: red; margin: 20px 0; opacity: 0; }
-        .scanning { animation: scan 1.5s infinite; opacity: 1 !important; }
-        @keyframes scan { 0% { transform: translateY(-10px); } 100% { transform: translateY(50px); } }
+        /* 바코드 및 무빙 레이저 스캐너 팝업 */
+        .barcode-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+        .scanner-box { background: white; padding: 35px 25px; border-radius: 24px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .barcode-graphic { font-size: 32px; font-family: monospace; margin: 20px 0; letter-spacing: 4px; color: #2C3E50; font-weight: bold; user-select: none; }
+        
+        /* 빨간색 무빙 레이저 선 */
+        .laser-container { width: 100%; height: 60px; position: relative; margin: -50px 0 10px 0; overflow: hidden; }
+        .laser-line { width: 100%; height: 4px; background: #E74C3C; position: absolute; top: 0; box-shadow: 0 0 8px #E74C3C; }
+        .scanning { animation: scanLaser 1.5s infinite linear; }
+        @keyframes scanLaser {
+            0% { top: 0px; }
+            50% { top: 60px; }
+            100% { top: 0px; }
+        }
+        
+        .btn-close { background-color: #7F8C8D; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h1>기적 재단 상점</h1></div>
+    <div class="header">
+        <h1>🕊️ 사각지대 없는 기적 재단</h1>
+    </div>
 
+    <!-- 1번 탭: 홈 화면 -->
     <div id="homeTab" class="tab-content active">
         <div class="total-balance-card">
-            <div>보유 포인트</div>
-            <div style="font-size:28px; font-weight:bold;"><span id="totalBalance">1,314,390</span>p</div>
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">나의 보유 포인트</div>
+            <div style="font-size:30px; font-weight:bold;"><span id="totalBalance">1,314,390</span> p</div>
         </div>
-        <button class="btn-action btn-engine" onclick="alert('엔진 가동!')">기적 엔진 가동</button>
+        <button class="btn-action btn-engine" onclick="alert('기적 엔진이 정상 가동 중입니다!')">🔄 기적 엔진 가동하기</button>
     </div>
 
+    <!-- 3번 탭: 기적 상점 화면 -->
     <div id="shopTab" class="tab-content">
-        <div class="product-grid" id="productGrid"></div>
+        <div class="shop-header">
+            <h2 style="margin:0; font-size:20px; color:#2C3E50;">기적 상점</h2>
+            <div style="font-weight:bold; color:#357ABD;">보유: <span id="shopPoints">1,314,390</span>p</div>
+        </div>
+        <div class="product-grid" id="productGrid">
+            <!-- 자바스크립트가 상품 목록을 여기에 생성합니다 -->
+        </div>
     </div>
 
-    <!-- 스캐너 팝업 -->
+    <!-- 스캐너 전용 모달 팝업 창 -->
     <div class="barcode-overlay" id="barcodeOverlay">
         <div class="scanner-box">
-            <h3 id="scanText">편의점 스캐너 대기 중...</h3>
-            <div id="barcodeValue" style="font-size:24px; font-weight:bold; letter-spacing:5px;">880123456789</div>
-            <div id="scannerLine"></div>
-            <button onclick="closeScanner()">종료</button>
+            <h3 id="scanStatusText" style="margin:0 0 10px 0; color:#2980B9;">편의점 스캔 대기 중...</h3>
+            <p style="font-size:12px; color:#7F8C8D; margin:0 0 20px 0;">계산대 스캐너에 바코드를 대주세요.</p>
+            
+            <!-- 바코드 그래픽 느낌 표현 -->
+            <div class="barcode-graphic">|||||II|||I||</div>
+            <div id="barcodeSerialNumber" style="font-family:monospace; font-size:14px; color:#7F8C8D; margin-bottom:15px;">880123456789</div>
+            
+            <!-- 레이저선 영역 -->
+            <div class="laser-container">
+                <div id="laser" class="laser-line"></div>
+            </div>
+            
+            <button class="btn-close" onclick="closeScanner()">닫기</button>
         </div>
     </div>
 
+    <!-- 하단 내비게이션 바 -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="showTab('home')">🕊️ 홈</div>
-        <div class="nav-item" onclick="showTab('shop')">🛍️ 상점</div>
+        <div id="navHome" class="nav-item active" onclick="showTab('home')">🕊️ 홈</div>
+        <div id="navShop" class="nav-item" onclick="showTab('shop')">🛍️ 상점</div>
     </div>
 
     <script>
-        let points = 1314390;
-        const products = [
-            { name: "바나나우유", price: 1500, emoji: "🍌" },
-            { name: "삼각김밥", price: 1200, emoji: "🍙" },
-            { name: "컵라면", price: 1800, emoji: "🍜" }
+        // 전역 잔고 상태 및 가상 편의점 상품 리스트 데이터 정의
+        let userPoints = 1314390;
+        const cjProducts = [
+            { name: "바나나맛우유", price: 1800, emoji: "🍌" },
+            { name: "참치마요 삼각김밥", price: 1300, emoji: "🍙" },
+            { name: "얼큰한 컵라면", price: 1500, emoji: "🍜" },
+            { name: "가나 초콜릿", price: 1200, emoji: "🍫" }
         ];
 
-        function renderShop() {
+        // 상점 화면에 실물 기반 상품 UI 렌더링
+        function renderShopItems() {
             const grid = document.getElementById('productGrid');
-            grid.innerHTML = products.map((p, i) => `
+            grid.innerHTML = cjProducts.map((prod, index) => `
                 <div class="product-card">
-                    <div style="font-size:30px">${p.emoji}</div>
-                    <div>${p.name}</div>
-                    <div style="color:red; font-weight:bold">${p.price}p</div>
-                    <button class="btn-buy" onclick="buy(${i})">구매</button>
+                    <div class="product-emoji">${prod.emoji}</div>
+                    <div class="product-name">${prod.name}</div>
+                    <div class="product-price">${prod.price.toLocaleString()}p</div>
+                    <button class="btn-buy" onclick="triggerPurchase(${index})">교환하기</button>
                 </div>
             `).join('');
         }
 
-        function buy(i) {
-            if(points >= products[i].price) {
-                points -= products[i].price;
-                document.getElementById('totalBalance').innerText = points.toLocaleString();
+        // 상품 교환하기 버튼 클릭 시 작동하는 구매 및 자동 스캔 모션 로직
+        function triggerPurchase(index) {
+            const selectedProduct = cjProducts[index];
+            
+            if(userPoints >= selectedProduct.price) {
+                // 1. 포인트 차감
+                userPoints -= selectedProduct.price;
+                
+                // 2. 연동된 모든 화면 잔고 텍스트 갱신
+                document.getElementById('totalBalance').innerText = userPoints.toLocaleString();
+                document.getElementById('shopPoints').innerText = userPoints.toLocaleString();
+                
+                // 3. 랜덤 바코드 일련번호 생성 후 팝업 오픈
+                const randomBarcode = "880" + Math.floor(100000000 + Math.random() * 900000000);
+                document.getElementById('barcodeSerialNumber').innerText = randomBarcode;
+                
+                // 4. 모달창 및 스캐너 움직이는 레이저 애니메이션 기동
                 document.getElementById('barcodeOverlay').style.display = 'flex';
-                document.getElementById('scannerLine').className = 'scanning';
+                const laserTarget = document.getElementById('laser');
+                laserTarget.className = 'laser-line scanning';
+                laserTarget.style.background = '#E74C3C';
+                laserTarget.style.boxShadow = '0 0 8px #E74C3C';
+                document.getElementById('scanStatusText').innerText = "편의점 스캔 대기 중...";
+                document.getElementById('scanStatusText').style.color = '#2980B9';
+
+                // 5. 2초 뒤 편의점 무인 포스기에서 스캔이 성공(삑!)한 상황을 연출
                 setTimeout(() => {
-                    document.getElementById('scannerLine').className = '';
-                    document.getElementById('scanText').innerText = "삑! 결제 완료!";
-                    document.getElementById('scannerLine').style.background = "green";
-                }, 2000);
-            } else { alert("포인트 부족!"); }
+                    laserTarget.className = 'laser-line'; // 무빙 애니메이션 중지
+                    laserTarget.style.background = '#2ECC71'; // 레이저선을 초록색 안전 모드로 변경
+                    laserTarget.style.boxShadow = '0 0 8px #2ECC71';
+                    document.getElementById('scanStatusText').innerText = "삑! 🏪 결제 완료!";
+                    document.getElementById('scanStatusText').style.color = '#27AE60';
+                    
+                    // 가상 비프음 사운드 효과 (Web Audio API 활용 브라우저 자체 주파수 재생)
+                    playBeepSound();
+                }, 2200);
+
+            } else {
+                alert("기적 포인트가 부족합니다! 홈 화면에서 미션을 수행해 주세요.");
+            }
         }
 
+        // 브라우저 내장 주파수를 이용해 삑 소리를 만드는 가상 비프음 스피커 함수
+        function playBeepSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 2200; // 편의점 스캐너 특유의 고주파 피치
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.12); // 짧고 경쾌하게 차단
+            } catch(e) {
+                console.log("오디오 플레이 지원 안 함");
+            }
+        }
+
+        // 스캐너 창 닫기 버튼
         function closeScanner() {
             document.getElementById('barcodeOverlay').style.display = 'none';
-            document.getElementById('scanText').innerText = "편의점 스캐너 대기 중...";
-            document.getElementById('scannerLine').style.background = "red";
         }
 
-        function showTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tab + 'Tab').classList.add('active');
+        // 하단 메뉴 탭 전환 처리 시스템
+        function showTab(tabName) {
+            // 모든 콘텐트 숨김 처리
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            // 모든 네비게이션 버튼 활성화 초기화
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            if(tabName === 'home') {
+                document.getElementById('homeTab').classList.add('active');
+                document.getElementById('navHome').classList.add('active');
+            } else if(tabName === 'shop') {
+                document.getElementById('shopTab').classList.add('active');
+                document.getElementById('navShop').classList.add('active');
+                renderShopItems(); // 상점 진입 시 상품 목록 리프레시 리로드
+            }
         }
-        renderShop();
+
+        // 최초 실행 시 기본 세팅
+        renderShopItems();
     </script>
 </body>
 </html>
