@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -52,14 +52,104 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 25px 20px; }
         .tab-content.active { display: flex; }
 
-        /* 홈 탭 */
-        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 12px; }
-        .bird-container { width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
-        .bird-body { width: 100px; height: 80px; background: #4A90E2; border-radius: 50% 50% 43% 43%; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.1); will-change: transform; }
-        .nodding { animation: nod 0.6s infinite alternate ease-in-out; }
-        @keyframes nod { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
-        .bird-beak { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 20px solid #F5A623; position: absolute; left: -16px; top: 30px; transform: rotate(180deg); }
-        .bird-eye { width: 10px; height: 10px; background: #2C3E50; border-radius: 50%; position: absolute; left: 20px; top: 20px; box-shadow: 1px 1px 0 rgba(255,255,255,0.6); }
+        /* 🕊️ 귀여운 기적이(새) 스타일 & 애니메이션 고도화 */
+        .bird-area { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            width: 100%; 
+            max-width: 340px; 
+            margin-bottom: 12px;
+            height: 160px; /* 비행 반경 공간 확보 */
+        }
+        .bird-container { 
+            width: 140px; 
+            height: 140px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+            animation: flyUpDown 1.6s infinite ease-in-out; /* 위아래 오르락내리락 */
+        }
+        .bird-body { 
+            width: 85px; 
+            height: 85px; 
+            background: linear-gradient(135deg, #5DADE2, #2980B9); 
+            border-radius: 50%; 
+            position: relative; 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15); 
+        }
+        .bird-beak { 
+            width: 0; 
+            height: 0; 
+            border-top: 9px solid transparent; 
+            border-bottom: 9px solid transparent; 
+            border-right: 16px solid #F39C12; 
+            position: absolute; 
+            left: -10px; 
+            top: 33px; 
+            transform: rotate(165deg); 
+        }
+        .bird-eye { 
+            width: 22px; 
+            height: 22px; 
+            background: #2C3E50; 
+            border-radius: 50%; 
+            position: absolute; 
+            left: 18px; 
+            top: 20px; 
+        }
+        .bird-eye::after { /* 눈동자 하이라이트 */
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 4px;
+        }
+        
+        /* 활기찬 양쪽 날개 */
+        .bird-wing {
+            position: absolute;
+            width: 42px;
+            height: 28px;
+            background: #5DADE2;
+            top: 32px;
+            transform-origin: bottom center;
+        }
+        .wing-left {
+            left: -22px;
+            border-radius: 50% 10px 10px 50%;
+            animation: flapLeft 0.25s infinite alternate ease-in-out;
+        }
+        .wing-right {
+            right: -22px;
+            border-radius: 10px 50% 50% 10px;
+            animation: flapRight 0.25s infinite alternate ease-in-out;
+        }
+
+        /* 🎬 새 애니메이션 프레임 정의 */
+        @keyframes flyUpDown {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes flapLeft {
+            0% { transform: rotate(30deg) scaleY(0.8); }
+            100% { transform: rotate(-10deg) scaleY(1.2); }
+        }
+        @keyframes flapRight {
+            0% { transform: rotate(-30deg) scaleY(0.8); }
+            100% { transform: rotate(10deg) scaleY(1.2); }
+        }
+
+        /* 기적 엔진 가동 시 날개짓 속도 부스터 */
+        .nodding { 
+            animation-duration: 0.12s !important; 
+        }
         
         .admin-secret-btn { background: none; border: none; font-size: 18px; color: #BDC3C7; cursor: pointer; padding: 10px; opacity: 0.6; position: absolute; right: 45px; top: 35px; }
         .btn-logout-small { position: absolute; right: 20px; top: 75px; background-color: #E74C3C; color: white; border: none; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(231,76,60,0.3); display: flex; align-items: center; gap: 4px; }
@@ -152,10 +242,13 @@
         <div id="homeTab" class="tab-content">
             <div class="bird-area">
                 <div class="bird-container">
+                    <!-- 업그레이드된 동글동글 입체 날개짓 새 구조 -->
+                    <div class="bird-wing wing-left" id="leftWing"></div>
                     <div class="bird-body" id="miracleBird">
                         <div class="bird-beak"></div>
                         <div class="bird-eye"></div>
                     </div>
+                    <div class="bird-wing wing-right" id="rightWing"></div>
                 </div>
                 <button class="admin-secret-btn" onclick="openAdminModal()">⚙️</button>
                 <button class="btn-logout-small" onclick="handleLogout()">🚪 나가기</button>
@@ -175,21 +268,19 @@
             <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
         </div>
 
-        <!-- 🏦 탭 2: 디파이 금고 화면 (카카오페이 & 백엔드 스마트 환전 엔진 탑재) -->
+        <!-- 🏦 탭 2: 디파이 금고 화면 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
                 
-                <!-- 🔄 막후 달러 전환(DeFi 프로토콜 실시간 매칭) 연동 시스템 시각화 -->
                 <div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span>
                     <span id="usdtValue">$0.00 USDT</span>
                 </div>
             </div>
 
-            <!-- 💛 카카오페이 3초 직통 예치 통로 신설 -->
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
@@ -287,7 +378,6 @@
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
         
-        const bird = document.getElementById('miracleBird');
         const btn = document.getElementById('engineBtn');
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
@@ -318,7 +408,6 @@
             const pw = document.getElementById('regPw').value;
             if(!id || !pw) return alert("아이디와 비밀번호를 입력하세요.");
 
-            // 웰컴 보상 15,000원 기본 셋팅
             localStorage.setItem(`user_${id}`, JSON.stringify({ id: id, pw: pw, amount: 15000, vault: 0 }));
             alert("🎉 가입 보상 15,000원이 지급되었습니다! 로그인됩니다.");
             doLoginSuccess(id);
@@ -353,7 +442,6 @@
             location.reload();
         }
 
-        // 💳 카카오페이 모달 제어 논리
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
@@ -361,15 +449,13 @@
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("올바른 금액을 입력하세요.");
             
-            // 카카오페이 결제 승인 시뮬레이션
             alert(`💛 카카오페이 인증 성공!\n[${payAmt.toLocaleString()}원]이 즉시 기적재단 디파이 금고로 다이렉트 예치됩니다.`);
             
-            vaultAsset += payAmt; // 유저 보유 한도를 쓰지 않고 계좌에서 다이렉트로 금고 예치 처리
+            vaultAsset += payAmt; 
             closeKakaoModal();
             updateTotalBalance();
         }
 
-        // 💎 등급 및 백엔드 달러(USDT) 실시간 리프레시 시스템
         function refreshUserTierAndBenefits() {
             const badge = document.getElementById('userBadge');
             const icon = document.getElementById('userTierIcon');
@@ -380,7 +466,6 @@
             const vipB1 = document.getElementById('vipBadge1'); const vipB2 = document.getElementById('vipBadge2');
             const priceBanana = document.getElementById('priceBanana'); const priceGimbap = document.getElementById('priceGimbap');
 
-            // 🔄 환율 1,350원 기준 백엔드 스테이블코인 가치 변환 시뮬레이션
             const usdtCalculated = (vaultAsset / 1350).toFixed(2);
             if(usdtDisplay) usdtDisplay.innerText = `$${parseFloat(usdtCalculated).toLocaleString()} USDT`;
 
@@ -448,7 +533,6 @@
             else { alert("❌ 보유 포인트가 부족합니다!"); }
         }
 
-        // 탭 제어 논리
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
         function resetTabs() {
@@ -460,12 +544,31 @@
         else if(currentTab === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
         else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
 
+        // 💎 귀여운 날개짓 전용 제어 스크립트 연동 완료!
         btn.addEventListener('click', () => {
+            const leftWing = document.getElementById('leftWing');
+            const rightWing = document.getElementById('rightWing');
+            
             if (!isRunning) {
-                isRunning = true; btn.innerText = "기적 엔진 작동 중..."; btn.style.backgroundColor = "#E67E22"; bird.classList.add('nodding');
+                isRunning = true; 
+                btn.innerText = "기적 엔진 작동 중..."; 
+                btn.style.backgroundColor = "#E67E22"; 
+                
+                // 엔진 가동 시 날개짓이 부스터 달린 것처럼 빨라집니다
+                leftWing.classList.add('nodding');
+                rightWing.classList.add('nodding');
+                
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 10) + 1; updateTotalBalance(); }, 1000);
             } else {
-                isRunning = false; btn.innerText = "기적 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; bird.classList.remove('nodding'); clearInterval(intervalId);
+                isRunning = false; 
+                btn.innerText = "기적 엔진 가동하기"; 
+                btn.style.backgroundColor = "#357ABD"; 
+                
+                // 가동 중지 시 원래의 다정한 비행 속도로 복귀
+                leftWing.classList.remove('nodding');
+                rightWing.classList.remove('nodding');
+                
+                clearInterval(intervalId);
             }
         });
 
@@ -529,3 +632,4 @@
     </script>
 </body>
 </html>
+     
