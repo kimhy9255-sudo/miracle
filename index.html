@@ -42,14 +42,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 20px;
+            padding: 30px 20px;
         }
         /* 현재 활성화된 탭만 보여주기 */
         .tab-content.active {
             display: flex;
         }
 
-        /* ================= [1번 홈 탭: 기적이] ================= */
+        /* ================= [1번 홈 탭: 기적이 디자인] ================= */
         .bird-container {
             width: 150px;
             height: 150px;
@@ -131,7 +131,7 @@
             margin-bottom: 20px;
         }
 
-        /* ================= [2번 탭: 디파이 금고 화면] ================= */
+        /* ================= [2번 탭: 디파이 금고 디자인] ================= */
         .vault-card {
             background: linear-gradient(135deg, #2C3E50, #34495E);
             color: white;
@@ -143,6 +143,7 @@
             margin-bottom: 20px;
             position: relative;
             overflow: hidden;
+            text-align: left;
         }
         .vault-card::before {
             content: '🏦';
@@ -251,89 +252,69 @@
 
     <!-- 🏦 2번 탭: 디파이 금고 화면 -->
     <div id="vaultTab" class="tab-content">
-        <!-- 메인 자산 현황판 카드 -->
         <div class="vault-card">
             <div class="vault-balance-title">디파이 예치 총 자산</div>
             <div class="vault-balance-value"><span id="vaultAsset">1,250,450</span> 원</div>
             <div class="vault-profit-rate">실시간 연이율 🚀 +12.4% 상시 복리</div>
         </div>
-        
-        <!-- 금융 액션 버튼들 -->
         <div class="vault-action-group">
             <button class="btn-vault btn-deposit" onclick="handleDeposit()">투자 예치하기</button>
             <button class="btn-vault btn-withdraw" onclick="handleWithdraw()">기적 출금하기</button>
         </div>
     </div>
 
-    <!-- 🛠️ 하단 안전 메뉴 네비게이션 -->
+    <!-- 🛠️ 주소 강제 리다이렉트 클릭 기능 탑재된 하단 메뉴 바 -->
     <div class="nav-bar">
-        <div class="nav-item active" id="navHome">
+        <div class="nav-item active" id="navHome" onclick="location.href='?tab=home'">
             <span class="nav-icon">🕊️</span>
             <span>홈(기적이)</span>
         </div>
-        <div class="nav-item" id="navVault">
+        <div class="nav-item" id="navVault" onclick="location.href='?tab=vault'">
             <span class="nav-icon">🏦</span>
             <span>디파이 금고</span>
         </div>
-        <div class="nav-item" id="navVoucher">
+        <div class="nav-item" id="navVoucher" onclick="alert('기적 바우처 서비스는 다음 빌드에서 오픈됩니다, 대장님!')">
             <span class="nav-icon">🍱</span>
             <span>기적 바우처</span>
         </div>
     </div>
 
     <script>
-        // 기본 데이터 상태
+        // 기본 데이터 상태 저장 (로컬 보관용)
+        if(!localStorage.getItem('vaultAsset')) {
+            localStorage.setItem('vaultAsset', '1250450');
+        }
         let amount = 18485;
-        let vaultAsset = 1250450;
+        let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
         let isRunning = false;
         let intervalId = null;
         
-        // 요소 가져오기
         const bird = document.getElementById('miracleBird');
         const btn = document.getElementById('engineBtn');
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
 
-        // 탭 화면 요소들
-        const homeTab = document.getElementById('homeTab');
-        const vaultTab = document.getElementById('vaultTab');
-
-        // 하단 메뉴 버튼들
-        const navHome = document.getElementById('navHome');
-        const navVault = document.getElementById('navVault');
-        const navVoucher = document.getElementById('navVoucher');
-
-        // ================= [기능 1: 메뉴 탭 전환 시스템] =================
-        navHome.addEventListener('click', () => {
-            switchTab('home');
-        });
-
-        navVault.addEventListener('click', () => {
-            switchTab('vault');
-        });
-
-        navVoucher.addEventListener('click', () => {
-            alert('기적 바우처 서비스는 다음 빌드에서 오픈됩니다, 대장님!');
-        });
-
-        function switchTab(tabName) {
-            // 메뉴 하이라이트 초기화
-            navHome.classList.remove('active');
-            navVault.classList.remove('active');
-            // 화면 숨기기 초기화
-            homeTab.classList.remove('active');
-            vaultTab.classList.remove('active');
-
-            if(tabName === 'home') {
-                navHome.classList.add('active');
-                homeTab.classList.add('active');
-            } else if(tabName === 'vault') {
-                navVault.classList.add('active');
-                vaultTab.classList.add('active');
-            }
+        if(vaultAssetDisplay) {
+            vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
         }
 
-        // ================= [기능 2: 홈 탭 엔진 구동] =================
+        // URL 파라미터를 읽어서 브라우저 기억을 무력화하고 강제로 탭 전환 시키기
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentTab = urlParams.get('tab') || 'home';
+
+        if(currentTab === 'vault') {
+            document.getElementById('homeTab').classList.remove('active');
+            document.getElementById('vaultTab').classList.add('active');
+            document.getElementById('navHome').classList.remove('active');
+            document.getElementById('navVault').classList.add('active');
+        } else {
+            document.getElementById('homeTab').classList.add('active');
+            document.getElementById('vaultTab').classList.remove('active');
+            document.getElementById('navHome').classList.add('active');
+            document.getElementById('navVault').classList.remove('active');
+        }
+
+        // 홈 탭 엔진 가동 스크립트
         btn.addEventListener('click', () => {
             if (!isRunning) {
                 isRunning = true;
@@ -354,13 +335,14 @@
             }
         });
 
-        // ================= [기능 3: 디파이 금고 뱅킹 시스템] =================
+        // 디파이 금고 금융 스크립트
         function handleDeposit() {
             const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
             if (depositInput) {
                 const depAmt = parseInt(depositInput);
                 if (!isNaN(depAmt) && depAmt > 0) {
                     vaultAsset += depAmt;
+                    localStorage.setItem('vaultAsset', vaultAsset.toString());
                     vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
                     alert(`✨ 기적 재단 금고에 ${depAmt.toLocaleString()}원이 안전하게 예치되었습니다!`);
                 } else {
@@ -376,6 +358,7 @@
                 if (!isNaN(witAmt) && witAmt > 0) {
                     if(witAmt <= vaultAsset) {
                         vaultAsset -= witAmt;
+                        localStorage.setItem('vaultAsset', vaultAsset.toString());
                         vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
                         alert(`💸 금고에서 ${witAmt.toLocaleString()}원이 성공적으로 출금되었습니다.`);
                     } else {
@@ -385,15 +368,6 @@
                     alert("올바른 금액을 입력해 주세요.");
                 }
             }
-        }
-
-        // PWA 서비스 워커 등록
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
         }
     </script>
 </body>
