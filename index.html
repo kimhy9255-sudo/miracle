@@ -4,439 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>사각지대 없는 기적 재단</title>
-    <link rel="manifest" href="manifest.json">
     <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body {
             font-family: 'Apple SD Gothic Neo', sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #F4F7F6;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             min-height: 100vh;
-            box-sizing: border-box;
             padding-bottom: 90px; 
         }
         
         .header {
-            background-color: #FFF;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #FFF; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .header h1 {
-            font-size: 18px;
-            margin: 0;
-            color: #2C3E50;
+        .header h1 { font-size: 18px; margin: 0; color: #2C3E50; }
+
+        /* 관리자 버튼 스타일 */
+        .admin-trigger {
+            background-color: #2C3E50; color: white; border: none;
+            padding: 8px 14px; border-radius: 12px; font-size: 11px;
+            font-weight: bold; cursor: pointer; margin-bottom: 15px;
+            align-self: flex-start;
         }
 
-        .tab-content {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 25px 20px;
-        }
-        .tab-content.active {
-            display: flex;
-        }
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 25px 20px; }
+        .tab-content.active { display: flex; }
 
-        /* ================= [1번 홈 탭: 기적이 + 총잔고 시스템] ================= */
-        .bird-container {
-            width: 120px;
-            height: 120px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .bird-body {
-            width: 100px;
-            height: 80px;
-            background: #4A90E2;
-            border-radius: 50% 50% 43% 43%;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .nodding {
-            animation: nod 0.6s infinite alternate ease-in-out;
-        }
-        @keyframes nod {
-            from { transform: rotate(-8deg); }
-            to { transform: rotate(8deg); }
-        }
-        .bird-beak {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 20px solid #F5A623;
-            position: absolute;
-            left: -16px;
-            top: 30px;
-            transform: rotate(180deg);
-        }
-        .bird-eye {
-            width: 10px;
-            height: 10px;
-            background: #2C3E50;
-            border-radius: 50%;
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            box-shadow: 1px 1px 0 rgba(255,255,255,0.6);
-        }
+        /* ================= [1번 홈 탭 디자인] ================= */
+        .bird-container { width: 120px; height: 120px; position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; }
+        .bird-body { width: 100px; height: 80px; background: #4A90E2; border-radius: 50% 50% 43% 43%; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.1); will-change: transform; }
+        .nodding { animation: nod 0.6s infinite alternate ease-in-out; }
+        @keyframes nod { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+        .bird-beak { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 20px solid #F5A623; position: absolute; left: -16px; top: 30px; transform: rotate(180deg); }
+        .bird-eye { width: 10px; height: 10px; background: #2C3E50; border-radius: 50%; position: absolute; left: 20px; top: 20px; box-shadow: 1px 1px 0 rgba(255,255,255,0.6); }
         
-        .total-balance-card {
-            background: linear-gradient(135deg, #3498DB, #2980B9);
-            color: white;
-            border-radius: 24px;
-            padding: 20px;
-            width: 85%;
-            max-width: 340px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25);
-            margin-bottom: 15px;
-        }
-        .total-title {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-        .total-value {
-            font-size: 30px;
-            font-weight: bold;
-        }
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 24px; padding: 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 8px 20px rgba(52, 152, 219, 0.25); margin-bottom: 15px; }
+        .total-title { font-size: 13px; opacity: 0.9; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .total-value { font-size: 30px; font-weight: bold; }
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 15px 20px;
-            width: 85%;
-            max-width: 340px;
-            text-align: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
-            margin-bottom: 15px;
-        }
-        .card-title {
-            font-size: 13px;
-            color: #7F8C8D;
-            margin-bottom: 6px;
-        }
-        .card-value {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2C3E50;
-        }
+        .card { background: white; border-radius: 20px; padding: 15px 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.04); margin-bottom: 15px; }
+        .card-title { font-size: 13px; color: #7F8C8D; margin-bottom: 6px; }
+        .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; }
         
-        .btn-action {
-            color: white;
-            border: none;
-            border-radius: 16px;
-            padding: 14px;
-            width: 90%;
-            max-width: 360px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .btn-engine {
-            background-color: #357ABD;
-            box-shadow: 0 4px 12px rgba(53,122,189,0.3);
-        }
-        .btn-ad-reward {
-            background: linear-gradient(135deg, #E67E22, #D35400);
-            box-shadow: 0 4px 12px rgba(230,126,34,0.3);
-        }
+        .btn-action { color: white; border: none; border-radius: 16px; padding: 14px; width: 90%; max-width: 360px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; text-align: center; }
+        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 12px rgba(53,122,189,0.3); }
+        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 12px rgba(230,126,34,0.3); }
 
-        /* ================= [모의 광고 팝업 레이어] ================= */
-        .ad-overlay {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .ad-box {
-            background-color: white;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 340px;
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .ad-badge {
-            position: absolute;
-            top: 15px; left: 15px;
-            background: #7F8C8D;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        .ad-timer {
-            position: absolute;
-            top: 15px; right: 15px;
-            color: #E74C3C;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .ad-emoji {
-            font-size: 45px;
-            margin-top: 10px;
-        }
-        .ad-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #27AE60;
-            margin-top: 12px;
-            margin-bottom: 10px;
-        }
-        .ad-content {
-            font-size: 14px;
-            color: #34495E;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            min-height: 70px;
-        }
-        .btn-ad-close {
-            background-color: #BDC3C7;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: not-allowed;
-        }
-        .btn-ad-close.ready {
-            background-color: #2ECC71;
-            cursor: pointer;
-        }
-
-        /* ================= [2번 탭: 디파이 금고 디자인] ================= */
-        .vault-card {
-            background: linear-gradient(135deg, #2C3E50, #34495E);
-            color: white;
-            border-radius: 24px;
-            padding: 30px 20px;
-            width: 85%;
-            max-width: 340px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            text-align: left;
-        }
-        .vault-card::before {
-            content: '🏦';
-            position: absolute;
-            right: -10px;
-            bottom: -10px;
-            font-size: 100px;
-            opacity: 0.08;
-        }
-        .vault-balance-title {
-            font-size: 13px;
-            color: #BDC3C7;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        .vault-balance-value {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .vault-profit-rate {
-            font-size: 13px;
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ECC71;
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        .vault-action-group {
-            display: flex;
-            justify-content: space-between;
-            width: 90%;
-            max-width: 360px;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        .btn-vault {
-            flex: 1;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+        /* ================= [2번 디파이 탭 디자인] ================= */
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 30px 20px; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; overflow: hidden; text-align: left; }
+        .vault-card::before { content: '🏦'; position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.08; }
+        .vault-balance-title { font-size: 13px; color: #BDC3C7; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .vault-balance-value { font-size: 28px; font-weight: bold; margin-bottom: 15px; }
+        .vault-profit-rate { font-size: 13px; background: rgba(46, 204, 113, 0.2); color: #2ECC71; padding: 4px 10px; border-radius: 20px; display: inline-block; }
+        .vault-action-group { display: flex; justify-content: space-between; width: 90%; max-width: 360px; gap: 12px; margin-bottom: 25px; }
+        .btn-vault { flex: 1; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        /* ================= [3번 탭: 기적 상점 디자인 및 그리드] ================= */
-        .shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 360px;
-            margin-bottom: 15px;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-            max-width: 360px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 16px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .product-emoji {
-            font-size: 40px;
-            margin-bottom: 8px;
-        }
-        .product-name {
-            font-weight: bold;
-            color: #2C3E50;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-        .product-price {
-            color: #E74C3C;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .btn-buy {
-            background: #27AE60;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 12px;
-            font-weight: bold;
-        }
+        /* ================= [광고 팝업 및 관리자 모달] ================= */
+        .ad-overlay, .admin-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box, .admin-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
+        .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
 
-        /* ================= [바코드 및 레이저 스캐너 팝업 레이어] ================= */
-        .barcode-overlay {
-            display: none;
-            position: fixed;
-            top:0; left:0; right:0; bottom:0;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .scanner-box {
-            background: white;
-            padding: 35px 25px;
-            border-radius: 24px;
-            text-align: center;
-            width: 80%;
-            max-width: 300px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .barcode-graphic {
-            font-size: 32px;
-            font-family: monospace;
-            margin: 20px 0;
-            letter-spacing: 4px;
-            color: #2C3E50;
-            font-weight: bold;
-            user-select: none;
-        }
-        .laser-container {
-            width: 100%;
-            height: 60px;
-            position: relative;
-            margin: -50px 0 10px 0;
-            overflow: hidden;
-        }
-        .laser-line {
-            width: 100%;
-            height: 4px;
-            background: #E74C3C;
-            position: absolute;
-            top: 0;
-            box-shadow: 0 0 8px #E74C3C;
-        }
-        .scanning {
-            animation: scanLaser 1.5s infinite linear;
-        }
-        @keyframes scanLaser {
-            0% { top: 0px; }
-            50% { top: 60px; }
-            100% { top: 0px; }
-        }
-        .btn-close {
-            background-color: #7F8C8D;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        }
+        .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
+        .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 내비게이션 바 */
-        .nav-bar {
-            background-color: white;
-            display: flex;
-            justify-content: space-around;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-            border-top: 1px solid #EAEAEA;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 12px;
-            color: #95A5A6;
-            text-decoration: none;
-            width: 33%;
-            cursor: pointer;
-        }
-        .nav-item.active {
-            color: #357ABD;
-            font-weight: bold;
-        }
-        .nav-icon {
-            font-size: 22px;
-            margin-bottom: 4px;
-        }
+        /* 내비게이션 바 */
+        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #EAEAEA; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 13px; color: #95A5A6; text-decoration: none; width: 50%; cursor: pointer; }
+        .nav-item.active { color: #357ABD; font-weight: bold; }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -448,6 +89,9 @@
 
     <!-- 🕊️ 1번 탭: 홈 화면 -->
     <div id="homeTab" class="tab-content">
+        <!-- 기존 감성에 관리 시스템을 자연스럽게 얹은 버튼 -->
+        <button class="admin-trigger" onclick="openAdminModal()">⚙️ 광고주 연결 시스템 (Admin)</button>
+
         <div class="bird-container">
             <div class="bird-body" id="miracleBird">
                 <div class="bird-beak"></div>
@@ -469,17 +113,14 @@
         <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
     </div>
 
-    <!-- 📺 랜덤 로테이션 광고 팝업 레이어 -->
+    <!-- 📺 원본 5초 팝업 광고 레이어 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
-            <div class="ad-badge">광고</div>
-            <div class="ad-timer" id="adTimer">5s</div>
-            <div class="ad-emoji" id="adEmoji">🌱</div>
-            <div class="ad-title" id="adTitle">지구를 지키는 착한 기업</div>
-            <div class="ad-content" id="adContent">
-                "우리가 쓰는 텀블러 하나가<br>
-                내일의 푸른 숲을 만듭니다."
-            </div>
+            <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
+            <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
+            <div style="font-size:45px; margin-top:10px;" id="adEmoji">🌱</div>
+            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px;" id="adTitle">지구를 지키는 착한 기업</div>
+            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px; min-height:70px;" id="adContent">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
             <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
         </div>
     </div>
@@ -497,34 +138,16 @@
         </div>
     </div>
 
-    <!-- 🛍️ 3번 탭: 기적 상점 화면 (기존 바우처에서 진화!) -->
-    <div id="voucherTab" class="tab-content">
-        <div class="shop-header">
-            <h2 style="margin:0; font-size:18px; color:#2C3E50;">기적 상점</h2>
-            <div style="font-weight:bold; color:#357ABD; font-size:14px;">보유: <span id="shopPoints">18,485</span>p</div>
-        </div>
-        <div class="product-grid" id="productGrid">
-            <!-- 자바스크립트가 편의점 상품 리스트를 동적 생성합니다 -->
+    <!-- ⚙️ 신규 추가: 광고주 관리 센터 모달 -->
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-box">
+            <h3 style="margin-top:0; color:#2C3E50; border-bottom:2px solid #357ABD; padding-bottom:10px;">광고주 제휴/연결 관리</h3>
+            <div id="partnerListContainer" style="margin: 15px 0; text-align: left;"></div>
+            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor:pointer;">설정 완료</button>
         </div>
     </div>
 
-    <!-- 🏪 편의점 바코드 레이저 스캐너 팝업 창 -->
-    <div class="barcode-overlay" id="barcodeOverlay">
-        <div class="scanner-box">
-            <h3 id="scanStatusText" style="margin:0 0 10px 0; color:#2980B9;">편의점 스캔 대기 중...</h3>
-            <p style="font-size:12px; color:#7F8C8D; margin:0 0 20px 0;">계산대 스캐너에 바코드를 대주세요.</p>
-            
-            <div class="barcode-graphic">|||||II|||I||</div>
-            <div id="barcodeSerialNumber" style="font-family:monospace; font-size:14px; color:#7F8C8D; margin-bottom:15px;">880123456789</div>
-            
-            <div class="laser-container">
-                <div id="laser" class="laser-line"></div>
-            </div>
-            
-            <button class="btn-close" onclick="closeScanner()">닫기</button>
-        </div>
-    </div>
-
+    <!-- 하단 내비게이션 바 -->
     <div class="nav-bar">
         <div class="nav-item" id="navHome" onclick="location.href='?tab=home'">
             <span class="nav-icon">🕊️</span>
@@ -534,15 +157,11 @@
             <span class="nav-icon">🏦</span>
             <span>디파이 금고</span>
         </div>
-        <div class="nav-item" id="navVoucher" onclick="location.href='?tab=voucher'">
-            <span class="nav-icon">🛍️</span>
-            <span>기적 상점</span>
-        </div>
     </div>
 
     <script>
         if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1240450');
-        let amount = 18485; // 홈화면 지원금(포인트 역할)
+        let amount = 18485; 
         let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
         let isRunning = false;
         let intervalId = null;
@@ -552,14 +171,12 @@
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
         const totalBalanceDisplay = document.getElementById('totalBalance');
-        const shopPointsDisplay = document.getElementById('shopPoints');
 
-        // 편의점 실물 기반 상품군 세팅
-        const cjProducts = [
-            { name: "바나나맛우유", price: 1800, emoji: "🍌" },
-            { name: "참치마요 삼각김밥", price: 1300, emoji: "🍙" },
-            { name: "얼큰한 컵라면", price: 1500, emoji: "🍜" },
-            { name: "가나 초콜릿", price: 1200, emoji: "🍫" }
+        // 광고주 데이터베이스 (연결 상태 관리 추가)
+        let adDatabase = [
+            { id: 0, connected: true, emoji: "🌱", title: "지구를 지키는 착한 기업", content: '"우리가 쓰는 텀블러 하나가<br>내일의 푸른 숲을 만듭니다."', color: "#27AE60" },
+            { id: 1, connected: true, emoji: "🍎", title: "복희네 상생 마켓", content: '"마진은 줄이고 정은 꽉 채웠습니다.<br>우리 동네 소상공인을 응원해 주세요!"', color: "#E67E22" },
+            { id: 2, connected: true, emoji: "👟", title: "발걸음 기부 챌린지", content: '"오늘 당신이 걸은 100걸음이<br>지구 반대편 아이들의 새 신발이 됩니다."', color: "#2980B9" }
         ];
 
         function updateTotalBalance() {
@@ -568,38 +185,32 @@
                 totalBalanceDisplay.innerText = total.toLocaleString();
             }
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
-            if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
         }
 
         if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
         updateTotalBalance();
 
+        // 탭 제어 시스템
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
 
         function resetTabs() {
             document.getElementById('homeTab').classList.remove('active');
             document.getElementById('vaultTab').classList.remove('active');
-            document.getElementById('voucherTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active');
             document.getElementById('navVault').classList.remove('active');
-            document.getElementById('navVoucher').classList.remove('active');
         }
-
         resetTabs();
 
         if(currentTab === 'vault') {
             document.getElementById('vaultTab').classList.add('active');
             document.getElementById('navVault').classList.add('active');
-        } else if(currentTab === 'voucher') {
-            document.getElementById('voucherTab').classList.add('active');
-            document.getElementById('navVoucher').classList.add('active');
-            renderShopItems(); // 상점 진입 시 상품 로드
         } else {
             document.getElementById('homeTab').classList.add('active');
             document.getElementById('navHome').classList.add('active');
         }
 
+        // 엔진 시스템
         btn.addEventListener('click', () => {
             if (!isRunning) {
                 isRunning = true;
@@ -619,36 +230,47 @@
             }
         });
 
-        /* 📺 광고 DB 데이터 생성 */
-        const adDatabase = [
-            {
-                emoji: "🌱",
-                title: "지구를 지키는 착한 기업",
-                content: '"우리가 쓰는 텀블러 하나가<br>내일의 푸른 숲을 만듭니다."<br><br><span style="font-size:11px;color:#95A5A6;">[에코그린 캠페인]</span>',
-                color: "#27AE60"
-            },
-            {
-                emoji: "🍎",
-                title: "복희네 상생 마켓",
-                content: '"마진은 줄이고 정은 꽉 채웠습니다.<br>우리 동네 소상공인을 응원해 주세요!"<br><br><span style="font-size:11px;color:#95A5A6;">[골목상권 살리기 프로젝트]</span>',
-                color: "#E67E22"
-            },
-            {
-                emoji: "👟",
-                title: "발걸음 기부 챌린지",
-                content: '"오늘 당신이 걸은 100걸음이<br>지구 반대편 아이들의 새 신발이 됩니다."<br><br><span style="font-size:11px;color:#95A5A6;">[함께 걷는 상생 재단]</span>',
-                color: "#2980B9"
-            }
-        ];
+        /* ⚙️ 광고주 관리 모달 시스템 */
+        function openAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+            renderAdminPartners();
+        }
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+        function renderAdminPartners() {
+            const container = document.getElementById('partnerListContainer');
+            container.innerHTML = adDatabase.map(ad => `
+                <div class="partner-row">
+                    <span>${ad.emoji} <strong>${ad.title}</strong></span>
+                    <button class="btn-toggle" style="background:${ad.connected ? '#E74C3C' : '#2ECC71'}" onclick="togglePartner(${ad.id})">
+                        ${ad.connected ? '중단하기' : '연결하기'}
+                    </button>
+                </div>
+            `).join('');
+        }
+        function togglePartner(id) {
+            adDatabase[id].connected = !adDatabase[id].connected;
+            renderAdminPartners();
+        }
 
+        /* 📺 5초 팝업 광고 로직 (연결된 광고주만 등장) */
         let adCountdown = 5;
         let adTimerId = null;
         let currentAdTitle = "";
 
         function openRandomAdPopup() {
+            // 연결(connected)된 광고주 필터링
+            const activeAds = adDatabase.filter(ad => ad.connected);
+            
+            if(activeAds.length === 0) {
+                alert("❌ 현재 연결된 광고주가 없습니다!\n[광고주 연결 시스템]에서 광고주를 연결해 주세요.");
+                return;
+            }
+
             adCountdown = 5;
-            const randomIndex = Math.floor(Math.random() * adDatabase.length);
-            const selectedAd = adDatabase[randomIndex];
+            const randomIndex = Math.floor(Math.random() * activeAds.length);
+            const selectedAd = activeAds[randomIndex];
             
             document.getElementById('adEmoji').innerText = selectedAd.emoji;
             const titleEl = document.getElementById('adTitle');
@@ -657,7 +279,6 @@
             document.getElementById('adContent').innerHTML = selectedAd.content;
             
             currentAdTitle = selectedAd.title;
-
             document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             
@@ -686,79 +307,10 @@
             amount = amount * 2;
             updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none';
-            alert(`🎉 대장님!\n"${currentAdTitle}" 광고 시청 보상으로 지원금이 또 2배로 불어났습니다!\n(+${addedBonus.toLocaleString()}원 추가 완료)`);
+            alert(`🎉 대장님!\n"${currentAdTitle}" 광고 시청 보상으로 지원금이 2배로 불어났습니다!\n(+${addedBonus.toLocaleString()}원 추가 완료)`);
         }
 
-        /* 🛍️ 기적 상점 상품 리스트 화면 출력 함수 */
-        function renderShopItems() {
-            const grid = document.getElementById('productGrid');
-            if(!grid) return;
-            grid.innerHTML = cjProducts.map((prod, index) => `
-                <div class="product-card">
-                    <div class="product-emoji">${prod.emoji}</div>
-                    <div class="product-name">${prod.name}</div>
-                    <div class="product-price">${prod.price.toLocaleString()}p</div>
-                    <button class="btn-buy" onclick="triggerPurchase(${index})">교환하기</button>
-                </div>
-            `).join('');
-        }
-
-        // 상품 구매 및 삑! 스캐너 동작 시스템
-        function triggerPurchase(index) {
-            const selectedProduct = cjProducts[index];
-            
-            if(amount >= selectedProduct.price) {
-                amount -= selectedProduct.price;
-                updateTotalBalance();
-                
-                const randomBarcode = "880" + Math.floor(100000000 + Math.random() * 900000000);
-                document.getElementById('barcodeSerialNumber').innerText = randomBarcode;
-                
-                document.getElementById('barcodeOverlay').style.display = 'flex';
-                const laserTarget = document.getElementById('laser');
-                laserTarget.className = 'laser-line scanning';
-                laserTarget.style.background = '#E74C3C';
-                laserTarget.style.boxShadow = '0 0 8px #E74C3C';
-                document.getElementById('scanStatusText').innerText = "편의점 스캔 대기 중...";
-                document.getElementById('scanStatusText').style.color = '#2980B9';
-
-                // 2.2초 뒤 편의점 포스기 스캔 매칭 시뮬레이션
-                setTimeout(() => {
-                    laserTarget.className = 'laser-line';
-                    laserTarget.style.background = '#2ECC71'; 
-                    laserTarget.style.boxShadow = '0 0 8px #2ECC71';
-                    document.getElementById('scanStatusText').innerText = "삑! 🏪 결제 완료!";
-                    document.getElementById('scanStatusText').style.color = '#27AE60';
-                    
-                    playBeepSound();
-                }, 2200);
-
-            } else {
-                alert("기적 포인트가 부족합니다! 홈 화면에서 엔진이나 광고 보상으로 포인트를 더 모아주세요.");
-            }
-        }
-
-        function playBeepSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                oscillator.type = 'sine';
-                oscillator.frequency.value = 2200; 
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.12);
-            } catch(e) {
-                console.log("오디오 재생 실패");
-            }
-        }
-
-        function closeScanner() {
-            document.getElementById('barcodeOverlay').style.display = 'none';
-        }
-
+        // 예치 및 출금 시스템
         function handleDeposit() {
             const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
             if (depositInput) {
