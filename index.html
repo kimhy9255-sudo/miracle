@@ -38,7 +38,6 @@
         /* 탭 화면 공통 스타일 */
         .tab-content {
             display: none; /* 기본적으로 숨김 */
-            flex-index: 1;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -193,6 +192,78 @@
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
+        /* ================= [3번 탭: 기적 바우처 디자인] ================= */
+        .voucher-container {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .voucher-ticket {
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-left: 6px solid #E74C3C; /* 쿠폰 강조선 */
+        }
+        .voucher-ticket.green { border-left-color: #2ECC71; }
+        .voucher-ticket.purple { border-left-color: #9B59B6; }
+        
+        .voucher-icon {
+            font-size: 30px;
+            padding: 20px;
+            background-color: #F9FAFA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .voucher-info {
+            padding: 15px;
+            flex: 1;
+        }
+        .voucher-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+        .voucher-desc {
+            font-size: 12px;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+        }
+        .voucher-status {
+            font-size: 11px;
+            font-weight: bold;
+            color: #E74C3C;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .voucher-ticket.green .voucher-status {
+            color: #2ECC71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+        .voucher-ticket.purple .voucher-status {
+            color: #9B59B6;
+            background: rgba(155, 89, 182, 0.1);
+        }
+        .btn-use-voucher {
+            margin-right: 15px;
+            background-color: #2C3E50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         /* 하단 안전 탭 바 메뉴 */
         .nav-bar {
             background-color: white;
@@ -236,7 +307,7 @@
     </div>
 
     <!-- 🕊️ 1번 탭: 홈(기적이) 화면 -->
-    <div id="homeTab" class="tab-content active">
+    <div id="homeTab" class="tab-content">
         <div class="bird-container">
             <div class="bird-body" id="miracleBird">
                 <div class="bird-beak"></div>
@@ -263,9 +334,49 @@
         </div>
     </div>
 
-    <!-- 🛠️ 주소 강제 리다이렉트 클릭 기능 탑재된 하단 메뉴 바 -->
+    <!-- 🍱 3번 탭: 기적 바우처 화면 (신규 스케치!) -->
+    <div id="voucherTab" class="tab-content">
+        <div class="voucher-container">
+            <div style="font-size: 14px; color:#7F8C8D; margin-bottom: 5px; font-weight: bold;">나의 모바일 기적 바우처</div>
+            
+            <!-- 쿠폰 1 -->
+            <div class="voucher-ticket">
+                <div class="voucher-icon">🍱</div>
+                <div class="voucher-info">
+                    <div class="voucher-name">기적의 행복 도시락권</div>
+                    <div class="voucher-desc">전국 지정 가맹점 및 편의점 사용 가능</div>
+                    <div class="voucher-status">보유: 3장</div>
+                </div>
+                <button class="btn-use-voucher" onclick="useVoucher('행복 도시락권')">사용</button>
+            </div>
+
+            <!-- 쿠폰 2 -->
+            <div class="voucher-ticket green">
+                <div class="voucher-icon">🚌</div>
+                <div class="voucher-info">
+                    <div class="voucher-name">기적 프리패스 교통권</div>
+                    <div class="voucher-desc">시내버스 및 지하철 리워드 결제용</div>
+                    <div class="voucher-status">잔액: 12,500원</div>
+                </div>
+                <button class="btn-use-voucher" onclick="useVoucher('기적 교통권')">사용</button>
+            </div>
+
+            <!-- 쿠폰 3 -->
+            <div class="voucher-ticket purple">
+                <div class="voucher-icon">🏥</div>
+                <div class="voucher-info">
+                    <div class="voucher-name">든든 상생 의료 바우처</div>
+                    <div class="voucher-desc">지정 약국 및 동네 의원 본인부담금 차감</div>
+                    <div class="voucher-status">활성화 중</div>
+                </div>
+                <button class="btn-use-voucher" onclick="useVoucher('의료 바우처')">사용</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🛠️ 탭 강제 전환 시스템 링크 연동 메뉴 바 -->
     <div class="nav-bar">
-        <div class="nav-item active" id="navHome" onclick="location.href='?tab=home'">
+        <div class="nav-item" id="navHome" onclick="location.href='?tab=home'">
             <span class="nav-icon">🕊️</span>
             <span>홈(기적이)</span>
         </div>
@@ -273,17 +384,15 @@
             <span class="nav-icon">🏦</span>
             <span>디파이 금고</span>
         </div>
-        <div class="nav-item" id="navVoucher" onclick="alert('기적 바우처 서비스는 다음 빌드에서 오픈됩니다, 대장님!')">
+        <div class="nav-item" id="navVoucher" onclick="location.href='?tab=voucher'">
             <span class="nav-icon">🍱</span>
             <span>기적 바우처</span>
         </div>
     </div>
 
     <script>
-        // 기본 데이터 상태 저장 (로컬 보관용)
-        if(!localStorage.getItem('vaultAsset')) {
-            localStorage.setItem('vaultAsset', '1250450');
-        }
+        // 데이터 초기화 및 보관
+        if(!localStorage.getItem('vaultAsset')) localStorage.setItem('vaultAsset', '1250450');
         let amount = 18485;
         let vaultAsset = parseInt(localStorage.getItem('vaultAsset'));
         let isRunning = false;
@@ -294,34 +403,43 @@
         const amountDisplay = document.getElementById('subsidyAmount');
         const vaultAssetDisplay = document.getElementById('vaultAsset');
 
-        if(vaultAssetDisplay) {
-            vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-        }
+        if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
 
-        // URL 파라미터를 읽어서 브라우저 기억을 무력화하고 강제로 탭 전환 시키기
+        // 3단 탭 전환 파라미터 제어 시스템
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
 
-        if(currentTab === 'vault') {
+        // 모든 탭과 네비게이션 초기화 함수
+        function resetTabs() {
             document.getElementById('homeTab').classList.remove('active');
-            document.getElementById('vaultTab').classList.add('active');
-            document.getElementById('navHome').classList.remove('active');
-            document.getElementById('navVault').classList.add('active');
-        } else {
-            document.getElementById('homeTab').classList.add('active');
             document.getElementById('vaultTab').classList.remove('active');
-            document.getElementById('navHome').classList.add('active');
+            document.getElementById('voucherTab').classList.remove('active');
+            document.getElementById('navHome').classList.remove('active');
             document.getElementById('navVault').classList.remove('active');
+            document.getElementById('navVoucher').classList.remove('active');
         }
 
-        // 홈 탭 엔진 가동 스크립트
+        resetTabs();
+
+        // 주소창 상태값(?tab=)에 따라 화면 강제 스케칭
+        if(currentTab === 'vault') {
+            document.getElementById('vaultTab').classList.add('active');
+            document.getElementById('navVault').classList.add('active');
+        } else if(currentTab === 'voucher') {
+            document.getElementById('voucherTab').classList.add('active');
+            document.getElementById('navVoucher').classList.add('active');
+        } else {
+            document.getElementById('homeTab').classList.add('active');
+            document.getElementById('navHome').classList.add('active');
+        }
+
+        // 홈 엔진 구동 스크립트
         btn.addEventListener('click', () => {
             if (!isRunning) {
                 isRunning = true;
                 btn.innerText = "기적 엔진 작동 중...";
                 btn.style.backgroundColor = "#E67E22";
                 bird.classList.add('nodding');
-                
                 intervalId = setInterval(() => {
                     amount += Math.floor(Math.random() * 10) + 1;
                     amountDisplay.innerText = amount.toLocaleString();
@@ -335,7 +453,7 @@
             }
         });
 
-        // 디파이 금고 금융 스크립트
+        // 디파이 금융 스크립트
         function handleDeposit() {
             const depositInput = prompt("금고에 예치할 금액을 입력하세요 (원):", "50000");
             if (depositInput) {
@@ -345,8 +463,6 @@
                     localStorage.setItem('vaultAsset', vaultAsset.toString());
                     vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
                     alert(`✨ 기적 재단 금고에 ${depAmt.toLocaleString()}원이 안전하게 예치되었습니다!`);
-                } else {
-                    alert("올바른 금액을 입력해 주세요.");
                 }
             }
         }
@@ -355,19 +471,20 @@
             const withdrawInput = prompt("금고에서 출금할 금액을 입력하세요 (원):", "10000");
             if (withdrawInput) {
                 const witAmt = parseInt(withdrawInput);
-                if (!isNaN(witAmt) && witAmt > 0) {
-                    if(witAmt <= vaultAsset) {
-                        vaultAsset -= witAmt;
-                        localStorage.setItem('vaultAsset', vaultAsset.toString());
-                        vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-                        alert(`💸 금고에서 ${witAmt.toLocaleString()}원이 성공적으로 출금되었습니다.`);
-                    } else {
-                        alert("금고에 잔액이 부족합니다, 대장님!");
-                    }
-                } else {
-                    alert("올바른 금액을 입력해 주세요.");
+                if (!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) {
+                    vaultAsset -= witAmt;
+                    localStorage.setItem('vaultAsset', vaultAsset.toString());
+                    vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+                    alert(`💸 금고에서 ${witAmt.toLocaleString()}원이 성공적으로 출금되었습니다.`);
+                } else if (witAmt > vaultAsset) {
+                    alert("잔액이 부족합니다.");
                 }
             }
+        }
+
+        // 바우처 사용 스크립트
+        function useVoucher(name) {
+            alert(`🎫 [${name}] 바우처 바코드가 활성화되었습니다. 가맹점에 제시해 주세요!`);
         }
     </script>
 </body>
