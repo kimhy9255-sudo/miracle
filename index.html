@@ -14,7 +14,7 @@
             min-height: 100vh;
         }
         
-        /* 🔒 1단계: 로그인/회원가입 화면 (기본 상태는 block으로 무조건 먼저 보이게 강제) */
+        /* 🔒 1단계: 로그인/회원가입 화면 */
         .auth-container {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -37,12 +37,17 @@
         .btn-register-submit { background-color: #2ECC71; }
         .auth-toggle-text { font-size: 13px; color: #7F8C8D; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
-        /* 📱 2단계: 메인 서비스 화면 레이아웃 (기본 상태는 무조건 철저히 숨김 'none') */
+        /* 📱 2단계: 메인 서비스 화면 레이아웃 */
         #mainAppLayout { display: none; flex-direction: column; min-height: 100vh; padding-bottom: 90px; }
 
         .header { background-color: #FFF; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .header h1 { font-size: 18px; margin: 0; color: #2C3E50; }
-        .user-welcome-info { font-size: 12px; color: #7F8C8D; background: #EAF2F8; padding: 4px 8px; border-radius: 8px; }
+        
+        /* 등급별 뱃지 스타일 */
+        .user-welcome-info { font-size: 12px; font-weight: bold; color: white; background: #34495E; padding: 5px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tier-seed { background: #95A5A6; }
+        .tier-vip { background: linear-gradient(135deg, #2ECC71, #27AE60); }
+        .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
 
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 25px 20px; }
         .tab-content.active { display: flex; }
@@ -56,10 +61,8 @@
         .bird-beak { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 20px solid #F5A623; position: absolute; left: -16px; top: 30px; transform: rotate(180deg); }
         .bird-eye { width: 10px; height: 10px; background: #2C3E50; border-radius: 50%; position: absolute; left: 20px; top: 20px; box-shadow: 1px 1px 0 rgba(255,255,255,0.6); }
         
-        /* 우측 상단 관리자용 설정 버튼 */
         .admin-secret-btn { background: none; border: none; font-size: 18px; color: #BDC3C7; cursor: pointer; padding: 10px; opacity: 0.6; position: absolute; right: 45px; top: 35px; }
         
-        /* 🔴 메인 화면에 들어왔을 때만 뜨는 세련된 나가기 버튼 */
         .btn-logout-small {
             position: absolute; right: 20px; top: 75px;
             background-color: #E74C3C; color: white; border: none;
@@ -80,22 +83,27 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 12px rgba(53,122,189,0.3); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 12px rgba(230,126,34,0.3); }
 
-        /* 디파이 금고 */
-        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 30px 20px; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 20px; position: relative; overflow: hidden; }
+        /* 디파이 금고 전용UI 및 메리트 배너 안내 */
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 24px; padding: 25px 20px; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); margin-bottom: 12px; position: relative; overflow: hidden; }
         .vault-balance-title { font-size: 13px; color: #BDC3C7; margin-bottom: 8px; }
-        .vault-balance-value { font-size: 28px; font-weight: bold; margin-bottom: 15px; }
-        .vault-profit-rate { font-size: 13px; background: rgba(46, 204, 113, 0.2); color: #2ECC71; padding: 4px 10px; border-radius: 20px; display: inline-block; }
+        .vault-balance-value { font-size: 28px; font-weight: bold; margin-bottom: 12px; }
+        .vault-profit-rate { font-size: 13px; background: rgba(46, 204, 113, 0.2); color: #2ECC71; padding: 4px 10px; border-radius: 20px; display: inline-block; font-weight: bold; }
+        
+        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 16px; padding: 12px; width: 85%; max-width: 340px; margin-bottom: 15px; font-size: 12px; color: #856404; line-height: 1.5; text-align: left; }
+
         .vault-action-group { display: flex; justify-content: space-between; width: 90%; max-width: 360px; gap: 12px; margin-bottom: 15px; }
         .btn-vault { flex: 1; padding: 14px; border-radius: 14px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        /* 상점 */
+        /* 상점 및 VIP 마크 */
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 360px; margin-top: 10px; }
-        .shop-item { background: white; border-radius: 20px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; }
+        .shop-item { background: white; border-radius: 20px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
+        .vip-badge { display: none; position: absolute; top: 8px; right: 8px; background: #2ECC71; color: white; font-size: 9px; padding: 2px 6px; border-radius: 8px; font-weight: bold; }
         .item-emoji { font-size: 40px; margin-bottom: 8px; }
         .item-name { font-size: 14px; font-weight: bold; color: #2C3E50; margin-bottom: 4px; }
         .item-price { font-size: 13px; color: #E74C3C; font-weight: bold; margin-bottom: 12px; }
+        .item-price del { color: #BDC3C7; font-size: 11px; margin-right: 4px; font-weight: normal; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer; width: 85%; }
 
         /* 광고 / 모달 */
@@ -115,10 +123,10 @@
 </head>
 <body>
 
-    <!-- 🔒 1단계: 무조건 첫 로딩 때 무조건 먼저 뜨는 로그인/회원가입 레이어 -->
+    <!-- 🔒 1단계: 로그인 / 회원가입 창 -->
     <div id="authScreen" class="auth-container">
         <div id="loginBox" class="auth-box">
-            <h2 style="color:#2C3E50; margin-top:0; margin-bottom:20px;">🕊️ 기적 재단 로그인</h2>
+            <h2 style="color:#2C3E50; margin-top:0; margin-bottom:20px;">🕊 Cort기적 재단 로그인</h2>
             <input type="text" id="loginId" class="auth-input" placeholder="아이디를 입력하세요">
             <input type="password" id="loginPw" class="auth-input" placeholder="비밀번호를 입력하세요">
             <button class="btn-auth btn-login" onclick="handleLogin()">로그인하기</button>
@@ -134,13 +142,15 @@
         </div>
     </div>
 
-    <!-- 📱 2단계: 로그인이 승인되어야만 스크립트로 열리는 메인 화면 -->
+    <!-- 📱 2단계: 메인 앱 레이아웃 -->
     <div id="mainAppLayout">
         
-        <!-- 상단 헤더 -->
+        <!-- 상단 헤더 (등급 연동 실시간 표기) -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
-            <div class="user-welcome-info">👤 <span id="userIdDisplay">---</span> 대장님</div>
+            <div id="userBadge" class="user-welcome-info tier-seed">
+                <span id="userTierIcon">🌱</span> <span id="userTierName">기적의 씨앗</span>
+            </div>
         </div>
 
         <!-- 🕊️ 탭 1: 홈 화면 -->
@@ -170,13 +180,19 @@
             <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 지원금 2배 받기</button>
         </div>
 
-        <!-- 🏦 탭 2: 디파이 금고 화면 -->
+        <!-- 🏦 탭 2: 디파이 금고 화면 (메리트 연동 완료) -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate" id="interestDisplay">🚀 연이율 12.4% 복리 적용 중</div>
             </div>
+
+            <!-- 대장님의 혜안: 예치 조건 달성 여부에 따라 변하는 다이내믹 메리트 배너 -->
+            <div id="vaultBenefitBanner" class="benefit-banner">
+                💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 <strong>[기적의 나무 VIP]</strong>가 되면 발생 이자의 50%를 본인 자산으로 직접 수령하고 상점 반값 할인을 누리실 수 있습니다!
+            </div>
+
             <div class="vault-action-group">
                 <button class="btn-vault btn-deposit" onclick="handleDeposit()">예치하기</button>
                 <button class="btn-vault btn-withdraw" onclick="handleWithdraw()">출금하기</button>
@@ -184,7 +200,7 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 85%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 🛍️ 탭 3: 기적 상점 화면 -->
+        <!-- 🛍️ 탭 3: 기적 상점 화면 (VIP 반값 할인 레이아웃 구축) -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 18px; margin: 0; color: #2C3E50;">기적 상점</h2>
@@ -192,15 +208,17 @@
             </div>
             <div class="shop-grid">
                 <div class="shop-item">
+                    <div id="vipBadge1" class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🍌</div>
                     <div class="item-name">바나나맛우유</div>
-                    <div class="item-price">1,800p</div>
+                    <div class="item-price" id="priceBanana"><span id="rawPriceBanana">1,800</span>p</div>
                     <button class="btn-exchange" onclick="buyItem('바나나맛우유', 1800)">교환하기</button>
                 </div>
                 <div class="shop-item">
+                    <div id="vipBadge2" class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🍙</div>
                     <div class="item-name">참치마요 삼각김밥</div>
-                    <div class="item-price">1,300p</div>
+                    <div class="item-price" id="priceGimbap"><span id="rawPriceGimbap">1,300</span>p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 1300)">교환하기</button>
                 </div>
             </div>
@@ -220,7 +238,7 @@
         </div>
     </div>
 
-    <!-- 광고 팝업 및 기타 모달 생략 불가 필수 요소들 -->
+    <!-- 5초 광고 및 설정 모달 생략 불가 필수 요소들 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
             <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
@@ -241,7 +259,6 @@
     </div>
 
     <script>
-        // 초기 세션 점검 논리 전면 수정
         let currentUser = localStorage.getItem('sessionUser') || null;
         let amount = 0; 
         let vaultAsset = 0;
@@ -259,7 +276,6 @@
             { id: 1, connected: true, emoji: "🍎", title: "복희네 상생 마켓", content: '"마진은 줄이고 정은 꽉 채웠습니다."', color: "#E67E22" }
         ];
 
-        // 🚨 중요: 로그인 상태가 확인되지 않으면 무조건 메인 레이아웃을 숨기고 초기화 차단함
         function checkSessionInit() {
             if(currentUser) {
                 doLoginSuccess(currentUser);
@@ -279,7 +295,8 @@
             const pw = document.getElementById('regPw').value;
             if(!id || !pw) return alert("아이디와 비밀번호를 입력하세요.");
 
-            localStorage.setItem(`user_${id}`, JSON.stringify({ id: id, pw: pw, amount: 18485, vault: 1240450 }));
+            // 첫 가입 테스터들을 위한 초기 자산 세팅
+            localStorage.setItem(`user_${id}`, JSON.stringify({ id: id, pw: pw, amount: 15000, vault: 0 }));
             alert("🎉 가입을 축하합니다! 자동으로 로그인됩니다.");
             doLoginSuccess(id);
         }
@@ -303,11 +320,8 @@
             localStorage.setItem('sessionUser', id);
             currentUser = id;
             
-            // 승인 후 완벽 전환
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainAppLayout').style.display = 'flex';
-            
-            document.getElementById('userIdDisplay').innerText = id;
             
             const userData = JSON.parse(localStorage.getItem(`user_${id}`));
             amount = userData.amount || 0;
@@ -324,15 +338,55 @@
             location.reload();
         }
 
-        // 구동 즉시 검사 실행
-        checkSessionInit();
+        // 💎 핵심 시스템: 예치금에 따라 유저 등급, 이자 혜택 및 상점 반값 할인을 계산하는 함수
+        function refreshUserTierAndBenefits() {
+            const badge = document.getElementById('userBadge');
+            const icon = document.getElementById('userTierIcon');
+            const name = document.getElementById('userTierName');
+            const banner = document.getElementById('vaultBenefitBanner');
+            
+            // 상점 단가 요소들
+            const vipB1 = document.getElementById('vipBadge1');
+            const vipB2 = document.getElementById('vipBadge2');
+            const priceBanana = document.getElementById('priceBanana');
+            const priceGimbap = document.getElementById('priceGimbap');
+
+            badge.className = "user-welcome-info"; // 리셋
+
+            if (vaultAsset >= 100000) {
+                // 🐳 고래 등급
+                badge.classList.add('tier-whale'); icon.innerText = "🐳"; name.innerText = "기적의 고래 대장";
+                banner.className = "benefit-banner"; banner.style.background = "#E8F8F5"; banner.style.color = "#117A65"; banner.style.borderColor = "#A3E4D7";
+                banner.innerHTML = "🎯 <strong>최상위 등급 달성!</strong> 현재 연이율 12.4% 전체 중 <strong>절반인 6.2%를 본인 지갑으로 전액 직수령</strong> 중이며, 기적 상점 모든 품목 50% 반값 적용 중입니다.";
+                
+                vipB1.style.display = "block"; vipB2.style.display = "block";
+                priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p";
+            } 
+            else if (vaultAsset >= 30000) {
+                // 🌳 VIP 등급 (대장님이 원하신 메리트 실현 조건!)
+                badge.classList.add('tier-vip'); icon.innerText = "🌳"; name.innerText = "기적의 나무 VIP";
+                banner.className = "benefit-banner"; banner.style.background = "#D4EFDF"; banner.style.color = "#196F3D"; banner.style.borderColor = "#A9DFBF";
+                banner.innerHTML = "✅ <strong>VIP 메리트 활성화!</strong> 시드머니 3만 원 이상 예치로 이자 50% 본인 수령 및 기적 상점 전 품목 <strong>50% 파격 반값 할인권</strong>이 적용되었습니다.";
+                
+                vipB1.style.display = "block"; vipB2.style.display = "block";
+                priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p";
+            } 
+            else {
+                // 🌱 기본 등급
+                badge.classList.add('tier-seed'); icon.innerText = "🌱"; name.innerText = "기적의 씨앗";
+                banner.className = "benefit-banner"; banner.style.background = "#FFF3CD"; banner.style.color = "#856404"; banner.style.borderColor = "#FFEBAA";
+                banner.innerHTML = "💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 <strong>[기적의 나무 VIP]</strong>가 되면 발생 이자의 50%를 직접 수령하고 상점 반값 할인을 누리실 수 있습니다!";
+                
+                vipB1.style.display = "none"; vipB2.style.display = "none";
+                priceBanana.innerHTML = "1,800p"; priceGimbap.innerHTML = "1,300p";
+            }
+        }
 
         function saveUserData() {
             if(currentUser) {
                 const data = JSON.parse(localStorage.getItem(`user_${currentUser}`));
                 if(data) {
-                    data.amount = amount;
-                    data.vault = vaultAsset;
+                    data.amount = amount; data.vault = vaultAsset;
                     localStorage.setItem(`user_${currentUser}`, JSON.stringify(data));
                 }
             }
@@ -343,9 +397,53 @@
             if(totalBalanceDisplay) totalBalanceDisplay.innerText = total.toLocaleString();
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
+            
+            refreshUserTierAndBenefits(); // 자산 변동될 때 등급 및 이득 메리트 실시간 갱신
             saveUserData();
         }
 
+        // 이자 수령 시스템 전면 개편 (3만 원 메리트 논리 도입)
+        function handleClaimInterest() {
+            if(vaultAsset <= 0) return alert("❌ 이자를 받을 예치금이 금고에 없습니다.");
+            
+            // 하루 단위 가상 이자 계산
+            const totalDailyInterest = Math.floor(vaultAsset * 0.00034);
+            
+            if(totalDailyInterest < 1) {
+                return alert("이자가 너무 소액입니다. 조금 더 기다리시거나 원금을 더 늘려보세요!");
+            }
+
+            if(vaultAsset >= 30000) {
+                // 3만 원 이상일 때: 절반은 내가 먹고 절반은 기부!
+                const myShare = Math.floor(totalDailyInterest * 0.5);
+                const charityShare = totalDailyInterest - myShare;
+                
+                amount += myShare; // 본인 계정으로 지급
+                updateTotalBalance();
+                alert(`🎁 [VIP 혜택 이자 수령 완료]\n총 이자 ${totalDailyInterest.toLocaleString()}원 중\n- 본인 수령: +${myShare.toLocaleString()}원 💰\n- 취약계층 자동 기부: ${charityShare.toLocaleString()}원 🕊️`);
+            } else {
+                // 3만 원 미만일 때: 국물도 없고 전액 강제 기부 처리됨
+                alert(`🕊️ [기적의 씨앗 등급 알림]\n발생한 이자 ${totalDailyInterest.toLocaleString()}원은 전액 어려운 아이들에게 기부되었습니다!\n\n💡 내가 이자를 나누어 받고 싶다면 금고 예치금을 30,000원 이상으로 맞춰서 VIP로 승급하세요!`);
+            }
+        }
+
+        // VIP 조건에 따른 상점 물품 구매 가격 할인 반영
+        function buyItem(itemName, originalPrice) {
+            let finalPrice = originalPrice;
+            if(vaultAsset >= 30000) {
+                finalPrice = originalPrice * 0.5; // 반값 할인
+            }
+
+            if (amount >= finalPrice) { 
+                amount -= finalPrice; 
+                updateTotalBalance(); 
+                alert(`🎁 [${itemName}] 교환 완료! 사은품 바코드가 발송되었습니다.`); 
+            } else { 
+                alert("❌ 보유 포인트(지원금)가 부족합니다!"); 
+            }
+        }
+
+        // 탭 이동 제어
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
         function resetTabs() {
@@ -358,14 +456,11 @@
         }
         resetTabs();
         if(currentTab === 'vault') {
-            document.getElementById('vaultTab').classList.add('active');
-            document.getElementById('navVault').classList.add('active');
+            document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active');
         } else if(currentTab === 'shop') {
-            document.getElementById('shopTab').classList.add('active');
-            document.getElementById('navShop').classList.add('active');
+            document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active');
         } else {
-            document.getElementById('homeTab').classList.add('active');
-            document.getElementById('navHome').classList.add('active');
+            document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active');
         }
 
         btn.addEventListener('click', () => {
@@ -421,11 +516,6 @@
             alert(`🎉 광고 시청 완료 보상으로 지원금이 2배가 되었습니다!\n(+${addedBonus.toLocaleString()}원 추가)`);
         }
 
-        function buyItem(itemName, price) {
-            if (amount >= price) { amount -= price; updateTotalBalance(); alert(`🎁 [${itemName}] 교환 완료!`); } 
-            else { alert("❌ 포인트가 부족합니다!"); }
-        }
-
         function handleDeposit() {
             if(amount <= 0) return alert("예치할 지원금이 없습니다!");
             const input = prompt(`예치할 금액을 입력하세요 (보유: ${amount.toLocaleString()}원)`, amount);
@@ -444,15 +534,7 @@
             } else { alert("금액을 다시 확인해주세요."); }
         }
 
-        function handleClaimInterest() {
-            if(vaultAsset <= 0) return alert("이자를 받을 예치금이 없습니다.");
-            const dailyInterest = Math.floor(vaultAsset * 0.00034);
-            if(dailyInterest < 1) {
-                alert("이자가 너무 적어서 아직은 받을 수 없습니다. (금액을 더 예치해 보세요!)");
-            } else {
-                vaultAsset += dailyInterest; updateTotalBalance(); alert(`🎉 기적 이자 ${dailyInterest.toLocaleString()}원이 입금되었습니다!`);
-            }
-        }
+        checkSessionInit();
     </script>
 </body>
 </html>
