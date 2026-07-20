@@ -127,16 +127,19 @@
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
+        
+        /* 🚪 전원 나가기 버튼 전용 스타일 */
+        .btn-logout-power { background: #FF2E54; color: white; font-weight: bold; }
 
         /* 🎮 기적 게임 창 레이아웃 */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
+        /* 카드 짝맞추기 게임 보드 */
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         
-        /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
@@ -150,6 +153,7 @@
         .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
+
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
@@ -162,9 +166,9 @@
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 모달 및 팝업 */
-        .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        /* 모달 및 팝업 일체 */
+        .ad-overlay, .admin-modal, .pay-modal, .login-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box, .admin-box, .pay-box, .login-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
@@ -229,6 +233,7 @@
                 </div>
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
+                    <button class="btn-side-circle btn-logout-power" onclick="openLoginModal()">🚪</button>
                 </div>
             </div>
         </div>
@@ -291,7 +296,6 @@
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
             <div class="shop-grid">
-                <!-- 1. 기존 품목 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🍌</div>
@@ -306,8 +310,6 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
-
-                <!-- 2. 신규 대형 자산 품목 추가 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -356,7 +358,19 @@
         </div>
     </div>
 
-    <!-- 모달 창 구조체 -->
+    <!-- 🔑 신규: 로그인/패스워드 입력 모달 창 -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-box" style="border-top: 8px solid #FF2E54;">
+            <h3 style="margin-top:5px; color:#2C3E50; font-weight:bold;">시스템 인증 로그인</h3>
+            <p style="font-size:12px; color:#7F8C8D; margin-bottom:15px;">안전한 계정 전환을 위해 정보를 입력하세요.</p>
+            <input type="text" id="loginIdField" class="auth-input" placeholder="사용자 ID 입력">
+            <input type="password" id="loginPwField" class="auth-input" placeholder="비밀번호 입력">
+            <button onclick="executeLoginAuth()" style="width:100%; padding:13px; background-color:#FF2E54; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer; margin-top:5px;">인증 및 로그인</button>
+            <div style="font-size:13px; color:#95A5A6; margin-top:14px; cursor:pointer;" onclick="closeLoginModal()">닫기</div>
+        </div>
+    </div>
+
+    <!-- 모달 창 구조체들 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
@@ -412,6 +426,17 @@
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
+        /* 🔓 로그인 모달 제어 시스템 추가 */
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function executeLoginAuth() {
+            const idVal = document.getElementById('loginIdField').value.trim();
+            const pwVal = document.getElementById('loginPwField').value.trim();
+            if(!idVal || !pwVal) { return alert("ID와 패스워드를 모두 입력해 주세요."); }
+            alert("🔑 인증 시스템 요청 성공!\n[" + idVal + "] 계정으로 동기화 프로세스를 수행합니다.");
+            closeLoginModal();
+        }
+
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
@@ -525,6 +550,7 @@
             drawBrickGame();
         }
         function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
+
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
         gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
         function drawBrickGame() {
