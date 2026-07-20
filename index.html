@@ -162,6 +162,11 @@
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; }
         
+        /* 스네이크 패널 전용 패드 조작 버튼 */
+        .snake-pad { display: grid; grid-template-columns: repeat(3, 1fr); width: 140px; margin: 12px auto 0 auto; gap: 6px; }
+        .btn-pad { background: #34495E; color: white; border: none; border-radius: 10px; padding: 10px 0; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-pad:active { background: #3498DB; }
+
         /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
@@ -282,23 +287,28 @@
         <!-- 🎮 탭 2: 독립된 기적 게임 전용 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
-                <button id="btnSelectBrick" class="btn-game-select active" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
-                <button id="btnSelectGalaga" class="btn-game-select" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
+                <button id="btnSelectSnake" class="btn-game-select" onclick="switchMiniGame('snake')">🐍 스네이크</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
-            <!-- 벽돌깨기 패널 -->
-            <div id="brickGameArea" class="game-display-panel">
-                <canvas id="gameCanvas" width="300" height="260"></canvas>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 벽돌깨기 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">발판 조작: 화면 터치 및 드래그 (벽돌당 +100원)</p>
+            <!-- 갤러그 게임 패널 (메인으로 배치) -->
+            <div id="galagaGameArea" class="game-display-panel">
+                <canvas id="galagaCanvas" width="300" height="260"></canvas>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%; background-color:#3498DB;" onclick="startGalagaGameEngine()">🚀 갤러그 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">조작: 화면 터치 후 좌우 드래그 (격추당 +50원)</p>
             </div>
 
-            <!-- 갤러그 게임 패널 (🚀 새로 추가됨) -->
-            <div id="galagaGameArea" class="game-display-panel" style="display:none;">
-                <canvas id="galagaCanvas" width="300" height="260"></canvas>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%; background-color:#9B59B6;" onclick="startGalagaGameEngine()">🚀 갤러그 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">조작: 화면 터치 후 좌우 드래그 (격추당 +50원)</p>
+            <!-- 🐍 스네이크 게임 패널 (새로 연동된 시스템) -->
+            <div id="snakeGameArea" class="game-display-panel" style="display:none;">
+                <canvas id="snakeCanvas" width="300" height="200"></canvas>
+                <div class="snake-pad">
+                    <div></div><button class="btn-pad" onclick="setSnakeDirection('UP')">▲</button><div></div>
+                    <button class="btn-pad" onclick="setSnakeDirection('LEFT')">◀</button><div></div><button class="btn-pad" onclick="setSnakeDirection('RIGHT')">▶</button>
+                    <div></div><button class="btn-pad" onclick="setSnakeDirection('DOWN')">▼</button><div></div>
+                </div>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%; background-color:#2ECC71;" onclick="startSnakeGameEngine()">🐍 게임 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">빨간 먹이를 드세요! (먹이당 +100원)</p>
             </div>
 
             <!-- 카드 짝맞추기 패널 -->
@@ -538,7 +548,7 @@
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
         }
         resetTabs();
-        if(currentTab === 'game') { document.getElementById('gameTab').classList.add('active'); document.getElementById('navGame').classList.add('active'); }
+        if(currentTab === 'game') { document.getElementById('gameTab').classList.add('active'); document.getElementById('navGame').classList.add('active'); if(typeof startGalagaGameEngine === 'function') startGalagaGameEngine(); }
         else if(currentTab === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
         else if(currentTab === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
         else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
@@ -609,23 +619,24 @@
         /* 🎮 🕹️ 게임 허브 시스템 관리 */
         let gameAnimationId = null;
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active');
             document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectSnake').classList.remove('active');
             document.getElementById('btnSelectMemory').classList.remove('active');
             
-            document.getElementById('brickGameArea').style.display = 'none';
             document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('snakeGameArea').style.display = 'none';
             document.getElementById('memoryGameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId);
 
-            if(gameType === 'brick') {
-                document.getElementById('btnSelectBrick').classList.add('active');
-                document.getElementById('brickGameArea').style.display = 'block';
-            } else if(gameType === 'galaga') {
+            if(gameType === 'galaga') {
                 document.getElementById('btnSelectGalaga').classList.add('active');
                 document.getElementById('galagaGameArea').style.display = 'block';
                 startGalagaGameEngine();
+            } else if(gameType === 'snake') {
+                document.getElementById('btnSelectSnake').classList.add('active');
+                document.getElementById('snakeGameArea').style.display = 'block';
+                startSnakeGameEngine();
             } else {
                 document.getElementById('btnSelectMemory').classList.add('active');
                 document.getElementById('memoryGameArea').style.display = 'block';
@@ -633,68 +644,7 @@
             }
         }
 
-        /* 1번 게임: 벽돌깨기 엔진 */
-        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let ballRadius = 4, ballX, ballY, dx, dy;
-        let paddleHeight = 16, paddleWidth = 56, paddleX;
-        let brickRowCount = 3, brickColumnCount = 6, brickWidth = 42, brickHeight = 10, brickPadding = 5, brickOffsetTop = 15, brickOffsetLeft = 12;
-        let bricks = [];
-
-        function startBrickGameEngine() {
-            cancelAnimationFrame(gameAnimationId);
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            for (let c = 0; c < brickColumnCount; c++) { bricks[c] = []; for (let r = 0; r < brickRowCount; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
-            drawBrickGame();
-        }
-
-        gameCanvas.addEventListener("touchmove", (e) => {
-            let relativeX = e.touches[0].clientX - gameCanvas.getBoundingClientRect().left;
-            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
-        });
-        gameCanvas.addEventListener("mousemove", (e) => {
-            let relativeX = e.clientX - gameCanvas.getBoundingClientRect().left;
-            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
-        });
-
-        function drawBrickGame() {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
-            
-            ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
-            
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    if (bricks[c][r].status === 1) {
-                        let brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-                        let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-                        bricks[c][r].x = brickX; bricks[c][r].y = brickY;
-                        ctx.beginPath(); ctx.rect(brickX, brickY, brickWidth, brickHeight); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
-                    }
-                }
-            }
-
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    let b = bricks[c][r];
-                    if (b.status === 1 && ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
-                        dy = -dy; b.status = 0; amount += 100; updateTotalBalance();
-                    }
-                }
-            }
-
-            if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
-            if (ballY + dy < ballRadius) dy = -dy;
-            else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
-                if (ballX > paddleX && ballX < paddleX + paddleWidth) {
-                    dy = -dy;
-                } else if (ballY + dy > gameCanvas.height - ballRadius) {
-                    cancelAnimationFrame(gameAnimationId); return;
-                }
-            }
-            ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
-        }
-
-        /* 🚀 2번 게임: 갤러그 엔진 (새로 연동된 슈팅 시스템) */
+        /* 🚀 1번 게임: 갤러그 엔진 */
         let gCanvas = document.getElementById("galagaCanvas"); let gCtx = gCanvas.getContext("2d");
         let playerX, playerY, playerWidth = 24, playerHeight = 16;
         let bullets = []; let enemies = []; let lastShotTime = 0;
@@ -705,7 +655,6 @@
             playerY = gCanvas.height - 35; 
             bullets = []; enemies = []; lastShotTime = 0;
             
-            // 초기 적 배치 (외계인 군단)
             for (let i = 0; i < 4; i++) {
                 for (let j = 0; j < 3; j++) {
                     enemies.push({ x: i * 55 + 40, y: j * 25 + 20, width: 18, height: 12, speedX: 0.6 });
@@ -726,7 +675,6 @@
         function drawGalagaGame() {
             gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
 
-            // 1. 플레이어 그리기 (우주비행선 모양)
             gCtx.fillStyle = "#3498DB";
             gCtx.beginPath();
             gCtx.moveTo(playerX + playerWidth / 2, playerY);
@@ -734,14 +682,12 @@
             gCtx.lineTo(playerX + playerWidth, playerY + playerHeight);
             gCtx.fill();
 
-            // 자동 총알 발사 간격 제어
             let now = Date.now();
             if (now - lastShotTime > 350) {
                 bullets.push({ x: playerX + playerWidth / 2 - 1.5, y: playerY, width: 3, height: 8 });
                 lastShotTime = now;
             }
 
-            // 2. 총알 이동 및 그리기
             gCtx.fillStyle = "#FFFF00";
             for (let i = bullets.length - 1; i >= 0; i--) {
                 let b = bullets[i];
@@ -750,22 +696,19 @@
                 if (b.y < 0) bullets.splice(i, 1);
             }
 
-            // 3. 적 이동 및 그리기
             let reverseDirection = false;
             for (let i = 0; i < enemies.length; i++) {
                 let e = enemies[i];
                 e.x += e.speedX;
-                e.y += 0.05; // 조금씩 하강
+                e.y += 0.05;
 
                 gCtx.fillStyle = "#E74C3C";
                 gCtx.fillRect(e.x, e.y, e.width, e.height);
 
-                // 벽 충돌 체크용 플래그
                 if (e.x + e.speedX > gCanvas.width - e.width || e.x + e.speedX < 0) {
                     reverseDirection = true;
                 }
 
-                // 플레이어와 충돌 시 리셋
                 if (e.y + e.height >= playerY && e.x + e.width >= playerX && e.x <= playerX + playerWidth) {
                     cancelAnimationFrame(gameAnimationId);
                     alert("💥 기체가 파손되었습니다! 다시 시작합니다.");
@@ -774,12 +717,10 @@
                 }
             }
 
-            // 방향 반전 처리
             if (reverseDirection) {
                 enemies.forEach(e => { e.speedX = -e.speedX; e.y += 5; });
             }
 
-            // 4. 충돌 판정 (총알 -> 적)
             for (let bIdx = bullets.length - 1; bIdx >= 0; bIdx--) {
                 let b = bullets[bIdx];
                 for (let eIdx = enemies.length - 1; eIdx >= 0; eIdx--) {
@@ -787,14 +728,13 @@
                     if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
                         bullets.splice(bIdx, 1);
                         enemies.splice(eIdx, 1);
-                        amount += 50; // 격추당 50원 보상
+                        amount += 50;
                         updateTotalBalance();
                         break;
                     }
                 }
             }
 
-            // 적을 전부 소탕하면 자동으로 한 판 더 리스폰
             if (enemies.length === 0) {
                 cancelAnimationFrame(gameAnimationId);
                 alert("👑 외계인 군단 격퇴 성공! 보너스 보상이 이어집니다.");
@@ -805,7 +745,94 @@
             gameAnimationId = requestAnimationFrame(drawGalagaGame);
         }
 
-        /* 3번 게임: 카드 짝맞추기 엔진 */
+        /* 🐍 2번 게임: 스네이크(뱀꼬리 잡기) 엔진 */
+        let sCanvas = document.getElementById("snakeCanvas"); let sCtx = sCanvas.getContext("2d");
+        let snake = []; let food = { x: 0, y: 0 }; let snakeDir = 'RIGHT'; let nextDir = 'RIGHT';
+        let gridSize = 10; let lastUpdateTime = 0;
+
+        function startSnakeGameEngine() {
+            cancelAnimationFrame(gameAnimationId);
+            snake = [
+                { x: 50, y: 100 },
+                { x: 40, y: 100 },
+                { x: 30, y: 100 }
+            ];
+            snakeDir = 'RIGHT'; nextDir = 'RIGHT';
+            spawnSnakeFood();
+            lastUpdateTime = Date.now();
+            drawSnakeGame();
+        }
+
+        function spawnSnakeFood() {
+            food.x = Math.floor(Math.random() * (sCanvas.width / gridSize)) * gridSize;
+            food.y = Math.floor(Math.random() * (sCanvas.height / gridSize)) * gridSize;
+        }
+
+        function setSnakeDirection(dir) {
+            if (dir === 'UP' && snakeDir !== 'DOWN') nextDir = 'UP';
+            if (dir === 'DOWN' && snakeDir !== 'UP') nextDir = 'DOWN';
+            if (dir === 'LEFT' && snakeDir !== 'RIGHT') nextDir = 'LEFT';
+            if (dir === 'RIGHT' && snakeDir !== 'LEFT') nextDir = 'RIGHT';
+        }
+
+        function drawSnakeGame() {
+            let now = Date.now();
+            // 프레임 이동 속도 제어 (약 120ms 당 1칸 이동)
+            if (now - lastUpdateTime > 120) {
+                snakeDir = nextDir;
+                let head = { x: snake[0].x, y: snake[0].y };
+
+                if (snakeDir === 'UP') head.y -= gridSize;
+                if (snakeDir === 'DOWN') head.y += gridSize;
+                if (snakeDir === 'LEFT') head.x -= gridSize;
+                if (snakeDir === 'RIGHT') head.x += gridSize;
+
+                // 벽 충돌 체크
+                if (head.x < 0 || head.x >= sCanvas.width || head.y < 0 || head.y >= sCanvas.height) {
+                    alert("💥 벽에 부딪혔습니다! 다시 시작합니다.");
+                    startSnakeGameEngine();
+                    return;
+                }
+
+                // 자기 몸 충돌 체크
+                for (let i = 0; i < snake.length; i++) {
+                    if (snake[i].x === head.x && snake[i].y === head.y) {
+                        alert("💥 꼬리를 물었습니다! 다시 시작합니다.");
+                        startSnakeGameEngine();
+                        return;
+                    }
+                }
+
+                snake.unshift(head);
+
+                // 먹이 먹기 체크
+                if (head.x === food.x && head.y === food.y) {
+                    amount += 100;
+                    updateTotalBalance();
+                    spawnSnakeFood();
+                } else {
+                    snake.pop();
+                }
+                lastUpdateTime = now;
+            }
+
+            // 그래픽 렌더링
+            sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+            
+            // 먹이 그리기
+            sCtx.fillStyle = "#E74C3C";
+            sCtx.fillRect(food.x, food.y, gridSize - 1, gridSize - 1);
+
+            // 뱀 몸통 그리기
+            snake.forEach((part, index) => {
+                sCtx.fillStyle = index === 0 ? "#27AE60" : "#2ECC71";
+                sCtx.fillRect(part.x, part.y, gridSize - 1, gridSize - 1);
+            });
+
+            gameAnimationId = requestAnimationFrame(drawSnakeGame);
+        }
+
+        /* 🃏 3번 게임: 카드 짝맞추기 엔진 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐'];
         let flippedCards = []; let matchedPairs = 0;
 
