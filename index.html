@@ -127,19 +127,16 @@
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
-        
-        /* 🚪 전원 나가기 버튼 전용 스타일 */
-        .btn-logout-power { background: #FF2E54; color: white; font-weight: bold; }
 
         /* 🎮 기적 게임 창 레이아웃 */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
-        /* 카드 짝맞추기 게임 보드 */
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         
+        /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
@@ -166,9 +163,9 @@
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 모달 및 팝업 일체 */
-        .ad-overlay, .admin-modal, .pay-modal, .login-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .ad-box, .admin-box, .pay-box, .login-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        /* 모달 및 팝업 */
+        .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
@@ -179,7 +176,6 @@
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
         
         .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
-        .login-btn-group { display: flex; gap: 8px; width: 100%; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -188,8 +184,9 @@
         <!-- 상단 헤더 -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
+            <!-- 💡 아이디 표시를 위해 내부 구조에 id="userBadgeText" 추가 -->
             <div id="userBadge" class="user-welcome-info tier-whale">
-                <span>🐳</span> <span id="headerUserId">기적의 고래 대장</span>
+                <span>🐳</span> <span id="userBadgeText">기적의 고래 대장</span>
             </div>
         </div>
 
@@ -204,6 +201,7 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
+
                         <div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
@@ -220,11 +218,11 @@
             
             <div class="total-balance-card">
                 <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
-                <div class="total-value"><span id="totalBalance">176,790,732,110,861</span> 원</div>
+                <div class="total-value"><span id="totalBalance">0</span> 원</div>
             </div>
             <div class="card">
                 <div class="card-title">이번 달 기적 지원금 (미예치)</div>
-                <div class="card-value"><span id="subsidyAmount">176,790,730,849,400</span> 원</div>
+                <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
             </div>
             
             <div class="control-section">
@@ -234,7 +232,6 @@
                 </div>
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
-                    <button class="btn-side-circle btn-logout-power" onclick="openLoginModal()">🚪</button>
                 </div>
             </div>
         </div>
@@ -271,8 +268,9 @@
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
-                <div class="vault-balance-value"><span id="vaultAsset">1261461</span> 원</div>
+                <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
+
                 <div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
@@ -297,6 +295,7 @@
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
             <div class="shop-grid">
+                <!-- 1. 기존 품목 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🍌</div>
@@ -311,6 +310,8 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
+
+                <!-- 2. 신규 대형 자산 품목 추가 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -359,23 +360,7 @@
         </div>
     </div>
 
-    <!-- 🔑 로그인 / 회원가입 겸용 통합 인증창 -->
-    <div id="loginModal" class="login-modal">
-        <div class="login-box" style="border-top: 8px solid #FF2E54;">
-            <h3 style="margin-top:5px; color:#2C3E50; font-weight:bold;">기적 재단 멤버십 인증</h3>
-            <p style="font-size:12px; color:#7F8C8D; margin-bottom:15px;">등록된 아이디로 로그인하거나 신규 가입하세요.</p>
-            <input type="text" id="loginIdField" class="auth-input" placeholder="아이디 입력">
-            <input type="password" id="loginPwField" class="auth-input" placeholder="비밀번호 입력">
-            
-            <div class="login-btn-group">
-                <button onclick="executeLoginAuth('LOGIN')" style="flex:1; padding:13px; background-color:#357ABD; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer;">로그인</button>
-                <button onclick="executeLoginAuth('REGISTER')" style="flex:1; padding:13px; background-color:#FF2E54; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer;">회원가입</button>
-            </div>
-            <div style="font-size:13px; color:#95A5A6; margin-top:14px; cursor:pointer;" onclick="closeLoginModal()">취소</div>
-        </div>
-    </div>
-
-    <!-- 모달 창 구조체들 -->
+    <!-- 모달 창 구조체 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
@@ -398,17 +383,30 @@
 
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
-            <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정</h3>
-            <p style="font-size:14px; color:#34495E;">기적 재단 서비스가 정상 작동 중입니다.</p>
-            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold;">닫기</button>
+            <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
+            
+            <!-- 💡 통합된 테스트 가입 / 로그인 폼 영역 -->
+            <div style="text-align: left; margin: 15px 0; padding: 12px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
+                <label style="font-weight: bold; color: #2C3E50;">아이디</label>
+                <input type="text" id="authIdInput" class="auth-input" style="padding: 8px; margin-bottom: 8px; margin-top: 4px;" placeholder="아이디 입력">
+                <label style="font-weight: bold; color: #2C3E50;">비밀번호</label>
+                <input type="password" id="authPwInput" class="auth-input" style="padding: 8px; margin-bottom: 12px; margin-top: 4px;" placeholder="비밀번호 입력">
+                
+                <div style="display: flex; gap: 6px;">
+                    <button onclick="handleRegister()" style="flex: 1; padding: 10px; border: none; background: #3498DB; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">신규 회원가입</button>
+                    <button onclick="handleLogin()" style="flex: 1; padding: 10px; border: none; background: #2ECC71; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">로그인</button>
+                </div>
+                <button onclick="handleLogout()" style="width: 100%; margin-top: 6px; padding: 8px; border: none; background: #E74C3C; color: white; border-radius: 8px; font-size: 12px; cursor: pointer;">로그아웃</button>
+            </div>
+
+            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor: pointer;">닫기</button>
         </div>
     </div>
 
     <script>
-        // 기본 로그인 세션 변수
-        let currentUserId = "기적의 고래 대장";
-        let amount = 176790730849400; 
-        let vaultAsset = 1261461;
+        // 💡 [수정] 고정 수천억 대신 유저 세션별 관리를 위해 기본값 0 세팅
+        let amount = 0; 
+        let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
         
         const btn = document.getElementById('engineBtn');
@@ -416,84 +414,113 @@
         const vaultAssetDisplay = document.getElementById('vaultAsset');
         const totalBalanceDisplay = document.getElementById('totalBalance');
         const shopPointsDisplay = document.getElementById('shopPoints');
-        const headerUserId = document.getElementById('headerUserId');
+        const userBadgeText = document.getElementById('userBadgeText');
 
-        // 다중 사용자 로드 함수 
+        // 💡 [수정] 로그인 여부를 감안하여 데이터를 로드하는 통합 시스템
         function loadSavedData() {
-            // 현재 로그인된 사용자가 있으면 세션에서 ID를 가져옴
-            if(sessionStorage.getItem('current_miracle_user')) {
-                currentUserId = sessionStorage.getItem('current_miracle_user');
-            }
-            headerUserId.innerText = currentUserId;
-
-            // 해당 사용자만의 전용 키로 자산 데이터 로드
-            let savedAmount = localStorage.getItem('miracle_amount_' + currentUserId);
-            let savedVault = localStorage.getItem('miracle_vault_' + currentUserId);
-
-            if(savedAmount !== null && savedVault !== null) {
-                amount = parseInt(savedAmount);
-                vaultAsset = parseInt(savedVault);
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            
+            if (loggedInUser) {
+                // 로그인된 회원 데이터 로드
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
+                if (userData) {
+                    amount = parseInt(userData.totalBalance) || 0;
+                    vaultAsset = parseInt(userData.vaultAsset) || 0;
+                    if (userBadgeText) userBadgeText.innerText = loggedInUser + " 대장님";
+                }
             } else {
-                // 저장데이터가 없으면 초기 지급 기본 데이터 세팅
-                amount = 176790730849400;
-                vaultAsset = 1261461;
+                // 비회원 전용 로컬 스토리지 데이터 백업용 (기존 호환성 유지)
+                if(localStorage.getItem('miracle_amount')) {
+                    amount = parseInt(localStorage.getItem('miracle_amount'));
+                    vaultAsset = parseInt(localStorage.getItem('miracle_vault'));
+                } else {
+                    // 완전히 처음 들어온 비회원 초기값
+                    amount = 0;
+                    vaultAsset = 0;
+                }
+                if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
             }
-            updateTotalBalance();
+            updateTotalBalance(false); // 로드 시점에는 무조건 자동저장 방지(루프 최소화)
         }
 
-        // 현재 유저 전용 키로 데이터 저장
+        // 💡 [수정] 현재 잔고를 본인의 로컬 계정에 정확히 실시간 동기화하여 저장하는 로직
         function saveCurrentData() {
-            localStorage.setItem('miracle_amount_' + currentUserId, amount);
-            localStorage.setItem('miracle_vault_' + currentUserId, vaultAsset);
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (loggedInUser) {
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || {};
+                userData.totalBalance = amount;
+                userData.vaultAsset = vaultAsset;
+                localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+            } else {
+                localStorage.setItem('miracle_amount', amount);
+                localStorage.setItem('miracle_vault', vaultAsset);
+            }
+        }
+
+        // 💡 [추가] 신규 회원가입 로직 (가입 즉시 천만 원 적립)
+        function handleRegister() {
+            const id = document.getElementById("authIdInput").value.trim();
+            const pw = document.getElementById("authPwInput").value.trim();
+
+            if (!id || !pw) {
+                alert("아이디와 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            if (localStorage.getItem(`user_${id}`)) {
+                alert("이미 존재하는 아이디입니다.");
+                return;
+            }
+
+            // 신규 가입 시 초기 자산 1,000만 원 보너스 지급 세팅!
+            const newUser = {
+                username: id,
+                password: pw,
+                totalBalance: 10000000, 
+                vaultAsset: 0
+            };
+
+            localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
+            alert(`🎉 회원가입 완료! \n[${id}]님께 초기 자산 10,000,000원이 지급되었습니다.`);
+        }
+
+        // 💡 [추가] 로그인 로직 (회원 잔고 정상 로드)
+        function handleLogin() {
+            const id = document.getElementById("authIdInput").value.trim();
+            const pw = document.getElementById("authPwInput").value.trim();
+
+            const storedData = localStorage.getItem(`user_${id}`);
+            if (!storedData) {
+                alert("존재하지 않는 회원 계정입니다.");
+                return;
+            }
+
+            const userData = JSON.parse(storedData);
+            if (userData.password !== pw) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            localStorage.setItem("loggedInUser", id);
+            alert(`🐳 환영합니다, ${id}님! \n자산 데이터를 안정적으로 동기화했습니다.`);
+            
+            document.getElementById("authIdInput").value = "";
+            document.getElementById("authPwInput").value = "";
+            closeAdminModal();
+            loadSavedData(); // 로그인된 정보 바탕으로 화면 리로드
+        }
+
+        // 💡 [추가] 로그아웃 로직
+        function handleLogout() {
+            localStorage.removeItem("loggedInUser");
+            alert("로그아웃 되었습니다. 비회원 기본 모드로 전환됩니다.");
+            closeAdminModal();
+            loadSavedData();
         }
 
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
-        /* 🔓 로그인 및 회원가입 인증 핵심 로직 */
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-        
-        function executeLoginAuth(type) {
-            const idVal = document.getElementById('loginIdField').value.trim();
-            const pwVal = document.getElementById('loginPwField').value.trim();
-            
-            if(!idVal || !pwVal) { return alert("아이디와 비밀번호를 모두 입력해 주세요."); }
-            
-            if (type === 'REGISTER') {
-                // 회원가입 프로세스
-                if(localStorage.getItem('miracle_pwd_' + idVal)) {
-                    return alert("❌ 이미 존재하는 아이디입니다. 로그인해 주세요.");
-                }
-                localStorage.setItem('miracle_pwd_' + idVal, pwVal);
-                alert("🎉 회원가입 성공!\n입력하신 정보로 계정이 생성되었습니다. 로그인을 진행해 주세요.");
-            } else {
-                // 로그인 프로세스
-                const savedPwd = localStorage.getItem('miracle_pwd_' + idVal);
-                
-                // 예외처리: 기본 계정은 프리패스 허용
-                if(idVal === "기적의 고래 대장") {
-                    currentUserId = idVal;
-                } else if(!savedPwd) {
-                    return alert("❌ 등록되지 않은 아이디입니다. 회원가입을 먼저 해주세요.");
-                } else if(savedPwd !== pwVal) {
-                    return alert("❌ 비밀번호가 올바르지 않습니다.");
-                } else {
-                    currentUserId = idVal;
-                }
-                
-                // 엔진 가동 중이었다면 정지
-                if(isRunning) btn.click();
-                
-                sessionStorage.setItem('current_miracle_user', currentUserId);
-                alert("🔑 [" + currentUserId + "]님 반갑습니다!\n기존 자산 정보를 안전하게 동기화했습니다.");
-                document.getElementById('loginIdField').value = "";
-                document.getElementById('loginPwField').value = "";
-                closeLoginModal();
-                loadSavedData();
-            }
-        }
-
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
@@ -501,13 +528,13 @@
             vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
         }
 
-        function updateTotalBalance() {
+        function updateTotalBalance(shouldSave = true) {
             let total = amount + vaultAsset;
             if(totalBalanceDisplay) totalBalanceDisplay.innerText = total.toLocaleString();
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
             if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-            saveCurrentData();
+            if(shouldSave) saveCurrentData();
         }
 
         function handleClaimInterest() {
