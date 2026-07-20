@@ -184,9 +184,8 @@
         <!-- 상단 헤더 -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
-            <!-- 💡 아이디 표시를 위해 내부 구조에 id="userBadgeText" 추가 -->
             <div id="userBadge" class="user-welcome-info tier-whale">
-                <span>🐳</span> <span id="userBadgeText">기적의 고래 대장</span>
+                <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
             </div>
         </div>
 
@@ -228,7 +227,7 @@
             <div class="control-section">
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
-                    <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 2배 받기</button>
+                    <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
                 </div>
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
@@ -248,7 +247,7 @@
             <div id="galagaGameArea" class="game-display-panel">
                 <canvas id="galagaCanvas" width="300" height="240"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10억 원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
             </div>
 
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
@@ -295,7 +294,6 @@
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
             <div class="shop-grid">
-                <!-- 1. 기존 품목 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🍌</div>
@@ -311,7 +309,6 @@
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
 
-                <!-- 2. 신규 대형 자산 품목 추가 -->
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -385,7 +382,6 @@
         <div class="admin-box">
             <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
             
-            <!-- 💡 통합된 테스트 가입 / 로그인 폼 영역 -->
             <div style="text-align: left; margin: 15px 0; padding: 12px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
                 <label style="font-weight: bold; color: #2C3E50;">아이디</label>
                 <input type="text" id="authIdInput" class="auth-input" style="padding: 8px; margin-bottom: 8px; margin-top: 4px;" placeholder="아이디 입력">
@@ -404,7 +400,6 @@
     </div>
 
     <script>
-        // 💡 [수정] 고정 수천억 대신 유저 세션별 관리를 위해 기본값 0 세팅
         let amount = 0; 
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
@@ -416,12 +411,10 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
-        // 💡 [수정] 로그인 여부를 감안하여 데이터를 로드하는 통합 시스템
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             
             if (loggedInUser) {
-                // 로그인된 회원 데이터 로드
                 const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
                 if (userData) {
                     amount = parseInt(userData.totalBalance) || 0;
@@ -429,21 +422,18 @@
                     if (userBadgeText) userBadgeText.innerText = loggedInUser + " 대장님";
                 }
             } else {
-                // 비회원 전용 로컬 스토리지 데이터 백업용 (기존 호환성 유지)
                 if(localStorage.getItem('miracle_amount')) {
                     amount = parseInt(localStorage.getItem('miracle_amount'));
                     vaultAsset = parseInt(localStorage.getItem('miracle_vault'));
                 } else {
-                    // 완전히 처음 들어온 비회원 초기값
                     amount = 0;
                     vaultAsset = 0;
                 }
                 if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
             }
-            updateTotalBalance(false); // 로드 시점에는 무조건 자동저장 방지(루프 최소화)
+            updateTotalBalance(false);
         }
 
-        // 💡 [수정] 현재 잔고를 본인의 로컬 계정에 정확히 실시간 동기화하여 저장하는 로직
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -457,7 +447,6 @@
             }
         }
 
-        // 💡 [추가] 신규 회원가입 로직 (가입 즉시 천만 원 적립)
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -472,7 +461,6 @@
                 return;
             }
 
-            // 신규 가입 시 초기 자산 1,000만 원 보너스 지급 세팅!
             const newUser = {
                 username: id,
                 password: pw,
@@ -481,10 +469,9 @@
             };
 
             localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
-            alert(`🎉 회원가입 완료! \n[${id}]님께 초기 자산 10,000,000원이 지급되었습니다.`);
+            alert(`🎉 회원가입 완료!\n[${id}]님께 초기 자산 10,000,000원이 지급되었습니다.`);
         }
 
-        // 💡 [추가] 로그인 로직 (회원 잔고 정상 로드)
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -502,15 +489,14 @@
             }
 
             localStorage.setItem("loggedInUser", id);
-            alert(`🐳 환영합니다, ${id}님! \n자산 데이터를 안정적으로 동기화했습니다.`);
+            alert(`🐳 환영합니다, ${id}님!\n자산 데이터를 안정적으로 동기화했습니다.`);
             
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
             closeAdminModal();
-            loadSavedData(); // 로그인된 정보 바탕으로 화면 리로드
+            loadSavedData();
         }
 
-        // 💡 [추가] 로그아웃 로직
         function handleLogout() {
             localStorage.removeItem("loggedInUser");
             alert("로그아웃 되었습니다. 비회원 기본 모드로 전환됩니다.");
@@ -566,12 +552,13 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
+        /* 💡 엔진 가동액 약 1/3로 축소 (15,000 ~ 50,000원) */
         btn.addEventListener('click', () => {
             const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
-                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 100000) + 50000; updateTotalBalance(); }, 1000);
+                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 35000) + 15000; updateTotalBalance(); }, 1000);
             } else {
                 isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
                 leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
@@ -582,7 +569,16 @@
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
         let adCountdown = 5; let adTimerId = null;
+        
+        /* 💡 비회원 광고 시청 제한 및 보상 하향(1/3 추가) */
         function openRandomAdPopup() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) {
+                alert("❌ 광고 보상은 로그인 후 이용 가능합니다.");
+                openAdminModal();
+                return;
+            }
+
             adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
@@ -596,9 +592,13 @@
             }, 1000);
         }
 
+        /* 💡 광고 보상: 2배가 아닌 1/3(약 +33%) 증가로 조정 */
         function finishAdReward() {
-            amount = amount * 2; updateTotalBalance();
-            document.getElementById('adOverlay').style.display = 'none'; alert("🎉 지원금이 2배가 되었습니다!");
+            const bonusAmount = Math.floor(amount / 3);
+            amount += bonusAmount; 
+            updateTotalBalance();
+            document.getElementById('adOverlay').style.display = 'none'; 
+            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
         }
 
         function handleDeposit() {
@@ -675,6 +675,7 @@
                 let c1 = flippedCards[0]; let c2 = flippedCards[1];
                 if (c1.dataset.emoji === c2.dataset.emoji) {
                     c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
+
                     if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
                 } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
@@ -755,7 +756,8 @@
                     if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
                         playerBullets.splice(bIdx, 1);
                         enemyShips.splice(eIdx, 1);
-                        amount += 1000000000; 
+                        /* 💡 갤러그 격추 보상: 10억 원 -> 10,000원으로 조정 */
+                        amount += 10000; 
                         updateTotalBalance();
                     }
                 });
