@@ -55,7 +55,7 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
 
-        /* 🕊️ ✨ 완전히 새로워진 3D 애니메이션 입체 기적이 스타일 ✨ */
+        /* 🕊️ 기적이 영역 */
         .bird-area { 
             display: flex; 
             align-items: center; 
@@ -98,7 +98,7 @@
             transform: rotate(25deg);
         }
         
-        /* 3D 털 묘사를 위한 방사형 그라데이션 및 다중 그림자 몸통 */
+        /* 3D 몸통 */
         .bird-body { 
             width: 90px; 
             height: 90px; 
@@ -115,7 +115,7 @@
             animation: breathLiving 2s infinite ease-in-out;
         }
 
-        /* 보슬보슬한 배 털 표현 */
+        /* 배 털 */
         .bird-belly {
             position: absolute;
             bottom: 6px;
@@ -127,7 +127,7 @@
             box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
         }
         
-        /* 입체감 있는 오픈형 오렌지빛 부리 */
+        /* 부리 */
         .bird-beak-wrap {
             position: absolute;
             bottom: 22px;
@@ -153,7 +153,7 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
         }
 
-        /* 크고 입체적인 3D 그라데이션 눈망울 */
+        /* 눈망울 */
         .bird-eyes-container {
             position: absolute;
             top: 15px;
@@ -177,7 +177,6 @@
             overflow: hidden;
         }
         
-        /* 초롱초롱 굴러가는 푸른빛 반사광의 검은 눈동자 */
         .eye-pupil {
             width: 20px;
             height: 24px;
@@ -207,37 +206,30 @@
             opacity: 0.7;
         }
         
-        /* 🕊️ [수정됨] 디즈니 스타일의 입체감 넘치는 부드러운 새 날개 디자인 */
+        /* 원본 버전 날개 복구 */
         .bird-wing {
             position: absolute;
-            width: 48px;
-            height: 34px;
-            /* 위는 밝고 아래는 깊이감 있는 3D 푸른빛 그라데이션 */
-            background: linear-gradient(to bottom, #7fb3d5, #2980b9, #1a5276);
-            top: 38px;
+            width: 44px;
+            height: 28px;
+            background: linear-gradient(to bottom, #5dade2, #2980b9);
+            top: 42px;
             z-index: 1;
-            /* 실제 부드러운 깃털 결을 살리는 다중 음영 효과 */
-            box-shadow: 
-                0 6px 12px rgba(0,0,0,0.16),
-                inset 2px 3px 5px rgba(255,255,255,0.4);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         .wing-left {
-            left: -2px;
-            /* 어깨 관절 위치를 기준으로 부드럽게 회전 조절 */
-            transform-origin: right top;
-            border-radius: 40px 15px 25px 35px;
-            animation: flapLeftLiving 2.5s infinite ease-in-out;
+            left: 4px;
+            border-radius: 30px 10px 10px 30px;
+            transform-origin: right center;
+            animation: flapLeftFly 0.5s infinite alternate ease-in-out;
         }
         .wing-right {
-            right: -2px;
-            /* 어깨 관절 위치를 기준으로 부드럽게 회전 조절 */
-            transform-origin: left top;
-            border-radius: 15px 40px 35px 25px;
-            animation: flapRightLiving 2.5s infinite ease-in-out;
+            right: 4px;
+            border-radius: 10px 30px 30px 10px;
+            transform-origin: left center;
+            animation: flapRightFly 0.5s infinite alternate ease-in-out;
         }
 
-        /* 아래쪽 깜찍한 주황색 발 디테일 */
+        /* 발 */
         .bird-feet {
             position: absolute;
             bottom: -8px;
@@ -254,7 +246,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* 🎬 3D 애니메이션 키프레임 모음 */
+        /* 애니메이션 키프레임 */
         @keyframes breathLiving {
             0% { transform: translateY(0px) scale(1, 1); }
             35% { transform: translateY(-7px) scale(0.96, 1.04); }
@@ -276,33 +268,19 @@
             50%, 60% { transform: translate(3px, -2px); }
             75%, 85% { transform: translate(0px, -2px); }
         }
-        
-        /* [수정됨] 숨 쉴 때 자연스럽게 율동하는 평상시 날개 애니메이션 */
-        @keyframes flapLeftLiving {
-            0%, 100% { transform: rotate(-15deg) scaleY(1); }
-            50% { transform: rotate(18deg) scaleY(0.9) skewX(-4deg); }
+        @keyframes flapLeftFly {
+            0% { transform: rotate(-30deg) translateY(-2px); }
+            100% { transform: rotate(15deg) translateY(2px); }
         }
-        @keyframes flapRightLiving {
-            0%, 100% { transform: rotate(15deg) scaleY(1); }
-            50% { transform: rotate(-18deg) scaleY(0.9) skewX(4deg); }
+        @keyframes flapRightFly {
+            0% { transform: rotate(30deg) translateY(-2px); }
+            100% { transform: rotate(-15deg) translateY(2px); }
         }
 
-        /* [수정됨] 고속 가동 엔진 무브먼트 애니메이션 */
-        @keyframes flapLeftFast {
-            0% { transform: rotate(-45deg) scaleY(0.8); }
-            100% { transform: rotate(35deg) scaleY(1.1); }
-        }
-        @keyframes flapRightFast {
-            0% { transform: rotate(45deg) scaleY(0.8); }
-            100% { transform: rotate(-35deg) scaleY(1.1); }
-        }
+        .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
+        .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
-        /* 고속 펄럭임 연결 */
-        .nodding.wing-left { animation: flapLeftFast 0.08s infinite alternate linear !important; }
-        .nodding.wing-right { animation: flapRightFast 0.08s infinite alternate linear !important; }
-
-        /* ---------------------------------------------------- */
-        /* 하단 인터페이스 및 기존 기능 구조 유지 */
+        /* 인터페이스 디자인 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 28px; font-weight: bold; }
@@ -323,6 +301,14 @@
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
+        /* 🎮 하단 방해 안 되는 미니 게임 콘텐트 스타일 */
+        .game-toggle-container { width: 100%; max-width: 340px; margin-top: 15px; text-align: center; }
+        .btn-game-toggle { background: #2C3E50; color: white; border: none; border-radius: 12px; padding: 8px; font-size: 12px; cursor: pointer; width: 100%; font-weight: bold; }
+        .game-box-wrapper { display: none; background: white; border-radius: 16px; padding: 10px; width: 100%; max-width: 340px; margin-top: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; }
+        #gameCanvas { background: #111; border-radius: 8px; display: block; margin: 0 auto; touch-action: none; }
+        .btn-game-start { background: #2ECC71; color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-top: 6px; cursor: pointer; }
+
+        /* 금고 및 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
@@ -346,7 +332,7 @@
 
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
-        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
+        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
@@ -394,9 +380,7 @@
             <div class="bird-area">
                 <div class="bird-container">
                     <div class="bird-hair"></div>
-                    
                     <div class="bird-wing wing-left" id="leftWing"></div>
-                    
                     <div class="bird-body" id="miracleBird">
                         <div class="bird-eyes-container">
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
@@ -408,9 +392,7 @@
                         </div>
                         <div class="bird-belly"></div>
                     </div>
-                    
                     <div class="bird-wing wing-right" id="rightWing"></div>
-                    
                     <div class="bird-feet">
                         <div class="foot"></div>
                         <div class="foot"></div>
@@ -436,6 +418,16 @@
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
                     <button class="btn-side-circle btn-logout-power" onclick="handleLogout()">🚪</button>
+                </div>
+            </div>
+
+            <!-- 🎮 하단을 방해하지 않는 미니 접이식 게임 창 슬롯 -->
+            <div class="game-toggle-container">
+                <button class="btn-game-toggle" onclick="toggleGameBox()">🎮 미니 벽돌깨기 게임 열기/접기</button>
+                <div id="gameBoxWrapper" class="game-box-wrapper">
+                    <canvas id="gameCanvas" width="300" height="150"></canvas>
+                    <button class="btn-game-start" onclick="initBrickGame()">🕹️ 게임 시작 / 리셋</button>
+                    <div style="font-size:10px; color:#7F8C8D; margin-top:4px;">화면 터치/드래그로 발판을 조작하세요! (벽돌당 +100원 수령)</div>
                 </div>
             </div>
         </div>
@@ -666,7 +658,7 @@
         function saveUserData() {
             if(currentUser) {
                 const data = JSON.parse(localStorage.getItem("user_" + currentUser));
-                if(data) { data.amount = amount; data.vault = vaultAsset; localStorage.setItem("user_" + currentUser(), JSON.stringify(data)); }
+                if(data) { data.amount = amount; data.vault = vaultAsset; localStorage.setItem("user_" + currentUser, JSON.stringify(data)); }
             }
         }
 
@@ -790,6 +782,94 @@
             const witAmt = parseInt(input);
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); alert("성공적으로 출금되었습니다!"); } 
             else { alert("금액을 다시 확인해주세요."); }
+        }
+
+        /* 🕹️ [추가됨] 미니 벽돌깨기 게임 엔진 */
+        let gameCanvas = document.getElementById("gameCanvas");
+        let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null;
+        let ballRadius = 4, ballX, ballY, dx, dy;
+        let paddleHeight = 6, paddleWidth = 50, paddleX;
+        let brickRowCount = 3, brickColumnCount = 6, brickWidth = 42, brickHeight = 10, brickPadding = 5, brickOffsetTop = 15, brickOffsetLeft = 12;
+        let bricks = [];
+
+        function toggleGameBox() {
+            let box = document.getElementById("gameBoxWrapper");
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+            if(box.style.display === "block") initBrickGame();
+            else cancelAnimationFrame(gameAnimationId);
+        }
+
+        function initBrickGame() {
+            cancelAnimationFrame(gameAnimationId);
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 20;
+            dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            
+            for (let c = 0; c < brickColumnCount; c++) {
+                bricks[c] = [];
+                for (let r = 0; r < brickRowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1 };
+                }
+            }
+            drawBrickGame();
+        }
+
+        // 터치 및 마우스 드래그 이벤트 연동
+        gameCanvas.addEventListener("touchmove", (e) => {
+            let relativeX = e.touches[0].clientX - gameCanvas.getBoundingClientRect().left;
+            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
+        });
+        gameCanvas.addEventListener("mousemove", (e) => {
+            let relativeX = e.clientX - gameCanvas.getBoundingClientRect().left;
+            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
+        });
+
+        function collisionDetection() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    let b = bricks[c][r];
+                    if (b.status === 1) {
+                        if (ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+                            dy = -dy; b.status = 0;
+                            amount += 100; // 벽돌당 100원 지급!
+                            updateTotalBalance();
+                        }
+                    }
+                }
+            }
+        }
+
+        function drawBrickGame() {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // 공 그리기
+            ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
+            // 패들 그리기
+            ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
+            
+            // 벽돌 그리기
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {
+                        let brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                        let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                        bricks[c][r].x = brickX; bricks[c][r].y = brickY;
+                        ctx.beginPath(); ctx.rect(brickX, brickY, brickWidth, brickHeight); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                    }
+                }
+            }
+
+            collisionDetection();
+
+            if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
+            if (ballY + dy < ballRadius) dy = -dy;
+            else if (ballY + dy > gameCanvas.height - ballRadius) {
+                if (ballX > paddleX && ballX < paddleX + paddleWidth) dy = -dy;
+                else { cancelAnimationFrame(gameAnimationId); return; }
+            }
+
+            ballX += dx; ballY += dy;
+            gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
         checkSessionInit();
