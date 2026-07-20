@@ -179,6 +179,7 @@
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
         
         .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
+        .login-btn-group { display: flex; gap: 8px; width: 100%; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -188,7 +189,7 @@
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
             <div id="userBadge" class="user-welcome-info tier-whale">
-                <span>🐳</span> <span>기적의 고래 대장</span>
+                <span>🐳</span> <span id="headerUserId">기적의 고래 대장</span>
             </div>
         </div>
 
@@ -358,15 +359,19 @@
         </div>
     </div>
 
-    <!-- 🔑 신규: 로그인/패스워드 입력 모달 창 -->
+    <!-- 🔑 로그인 / 회원가입 겸용 통합 인증창 -->
     <div id="loginModal" class="login-modal">
         <div class="login-box" style="border-top: 8px solid #FF2E54;">
-            <h3 style="margin-top:5px; color:#2C3E50; font-weight:bold;">시스템 인증 로그인</h3>
-            <p style="font-size:12px; color:#7F8C8D; margin-bottom:15px;">안전한 계정 전환을 위해 정보를 입력하세요.</p>
-            <input type="text" id="loginIdField" class="auth-input" placeholder="사용자 ID 입력">
+            <h3 style="margin-top:5px; color:#2C3E50; font-weight:bold;">기적 재단 멤버십 인증</h3>
+            <p style="font-size:12px; color:#7F8C8D; margin-bottom:15px;">등록된 아이디로 로그인하거나 신규 가입하세요.</p>
+            <input type="text" id="loginIdField" class="auth-input" placeholder="아이디 입력">
             <input type="password" id="loginPwField" class="auth-input" placeholder="비밀번호 입력">
-            <button onclick="executeLoginAuth()" style="width:100%; padding:13px; background-color:#FF2E54; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer; margin-top:5px;">인증 및 로그인</button>
-            <div style="font-size:13px; color:#95A5A6; margin-top:14px; cursor:pointer;" onclick="closeLoginModal()">닫기</div>
+            
+            <div class="login-btn-group">
+                <button onclick="executeLoginAuth('LOGIN')" style="flex:1; padding:13px; background-color:#357ABD; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer;">로그인</button>
+                <button onclick="executeLoginAuth('REGISTER')" style="flex:1; padding:13px; background-color:#FF2E54; color:white; border:none; border-radius:12px; font-size:14px; font-weight:bold; cursor:pointer;">회원가입</button>
+            </div>
+            <div style="font-size:13px; color:#95A5A6; margin-top:14px; cursor:pointer;" onclick="closeLoginModal()">취소</div>
         </div>
     </div>
 
@@ -400,6 +405,8 @@
     </div>
 
     <script>
+        // 기본 로그인 세션 변수
+        let currentUserId = "기적의 고래 대장";
         let amount = 176790730849400; 
         let vaultAsset = 1261461;
         let isRunning = false; let intervalId = null;
@@ -409,32 +416,82 @@
         const vaultAssetDisplay = document.getElementById('vaultAsset');
         const totalBalanceDisplay = document.getElementById('totalBalance');
         const shopPointsDisplay = document.getElementById('shopPoints');
+        const headerUserId = document.getElementById('headerUserId');
 
+        // 다중 사용자 로드 함수 
         function loadSavedData() {
-            if(localStorage.getItem('miracle_amount')) {
-                amount = parseInt(localStorage.getItem('miracle_amount'));
-                vaultAsset = parseInt(localStorage.getItem('miracle_vault'));
+            // 현재 로그인된 사용자가 있으면 세션에서 ID를 가져옴
+            if(sessionStorage.getItem('current_miracle_user')) {
+                currentUserId = sessionStorage.getItem('current_miracle_user');
+            }
+            headerUserId.innerText = currentUserId;
+
+            // 해당 사용자만의 전용 키로 자산 데이터 로드
+            let savedAmount = localStorage.getItem('miracle_amount_' + currentUserId);
+            let savedVault = localStorage.getItem('miracle_vault_' + currentUserId);
+
+            if(savedAmount !== null && savedVault !== null) {
+                amount = parseInt(savedAmount);
+                vaultAsset = parseInt(savedVault);
+            } else {
+                // 저장데이터가 없으면 초기 지급 기본 데이터 세팅
+                amount = 176790730849400;
+                vaultAsset = 1261461;
             }
             updateTotalBalance();
         }
 
+        // 현재 유저 전용 키로 데이터 저장
         function saveCurrentData() {
-            localStorage.setItem('miracle_amount', amount);
-            localStorage.setItem('miracle_vault', vaultAsset);
+            localStorage.setItem('miracle_amount_' + currentUserId, amount);
+            localStorage.setItem('miracle_vault_' + currentUserId, vaultAsset);
         }
 
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
-        /* 🔓 로그인 모달 제어 시스템 추가 */
+        /* 🔓 로그인 및 회원가입 인증 핵심 로직 */
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-        function executeLoginAuth() {
+        
+        function executeLoginAuth(type) {
             const idVal = document.getElementById('loginIdField').value.trim();
             const pwVal = document.getElementById('loginPwField').value.trim();
-            if(!idVal || !pwVal) { return alert("ID와 패스워드를 모두 입력해 주세요."); }
-            alert("🔑 인증 시스템 요청 성공!\n[" + idVal + "] 계정으로 동기화 프로세스를 수행합니다.");
-            closeLoginModal();
+            
+            if(!idVal || !pwVal) { return alert("아이디와 비밀번호를 모두 입력해 주세요."); }
+            
+            if (type === 'REGISTER') {
+                // 회원가입 프로세스
+                if(localStorage.getItem('miracle_pwd_' + idVal)) {
+                    return alert("❌ 이미 존재하는 아이디입니다. 로그인해 주세요.");
+                }
+                localStorage.setItem('miracle_pwd_' + idVal, pwVal);
+                alert("🎉 회원가입 성공!\n입력하신 정보로 계정이 생성되었습니다. 로그인을 진행해 주세요.");
+            } else {
+                // 로그인 프로세스
+                const savedPwd = localStorage.getItem('miracle_pwd_' + idVal);
+                
+                // 예외처리: 기본 계정은 프리패스 허용
+                if(idVal === "기적의 고래 대장") {
+                    currentUserId = idVal;
+                } else if(!savedPwd) {
+                    return alert("❌ 등록되지 않은 아이디입니다. 회원가입을 먼저 해주세요.");
+                } else if(savedPwd !== pwVal) {
+                    return alert("❌ 비밀번호가 올바르지 않습니다.");
+                } else {
+                    currentUserId = idVal;
+                }
+                
+                // 엔진 가동 중이었다면 정지
+                if(isRunning) btn.click();
+                
+                sessionStorage.setItem('current_miracle_user', currentUserId);
+                alert("🔑 [" + currentUserId + "]님 반갑습니다!\n기존 자산 정보를 안전하게 동기화했습니다.");
+                document.getElementById('loginIdField').value = "";
+                document.getElementById('loginPwField').value = "";
+                closeLoginModal();
+                loadSavedData();
+            }
         }
 
         function executeKakaoPay() {
