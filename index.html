@@ -411,6 +411,7 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
+        /* 💡 데이터 로드 수정: 첫 시작 및 비회원은 무조건 0원 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             
@@ -422,18 +423,15 @@
                     if (userBadgeText) userBadgeText.innerText = loggedInUser + " 대장님";
                 }
             } else {
-                if(localStorage.getItem('miracle_amount')) {
-                    amount = parseInt(localStorage.getItem('miracle_amount'));
-                    vaultAsset = parseInt(localStorage.getItem('miracle_vault'));
-                } else {
-                    amount = 0;
-                    vaultAsset = 0;
-                }
+                // 비회원 / 첫 접속 시 무조건 0원
+                amount = 0;
+                vaultAsset = 0;
                 if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
             }
             updateTotalBalance(false);
         }
 
+        /* 💡 데이터 저장 수정: 로그인 시 해당 ID의 자산 데이터에 개별 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -441,12 +439,10 @@
                 userData.totalBalance = amount;
                 userData.vaultAsset = vaultAsset;
                 localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
-            } else {
-                localStorage.setItem('miracle_amount', amount);
-                localStorage.setItem('miracle_vault', vaultAsset);
             }
         }
 
+        /* 💡 회원가입 시 1,000만 원 기본 지급 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -464,12 +460,12 @@
             const newUser = {
                 username: id,
                 password: pw,
-                totalBalance: 10000000, 
+                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
                 vaultAsset: 0
             };
 
             localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
-            alert(`🎉 회원가입 완료!\n[${id}]님께 초기 자산 10,000,000원이 지급되었습니다.`);
+            alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
         }
 
         function handleLogin() {
@@ -489,7 +485,7 @@
             }
 
             localStorage.setItem("loggedInUser", id);
-            alert(`🐳 환영합니다, ${id}님!\n자산 데이터를 안정적으로 동기화했습니다.`);
+            alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
             
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
@@ -499,7 +495,7 @@
 
         function handleLogout() {
             localStorage.removeItem("loggedInUser");
-            alert("로그아웃 되었습니다. 비회원 기본 모드로 전환됩니다.");
+            alert("로그아웃 되었습니다. 첫 화면(0원) 모드로 전환됩니다.");
             closeAdminModal();
             loadSavedData();
         }
@@ -526,7 +522,7 @@
         function handleClaimInterest() {
             const totalDailyInterest = Math.floor(vaultAsset * 0.00034);
             amount += totalDailyInterest; updateTotalBalance();
-            alert("🎁 고래 등급 복리 이자 수령 완료! +" + totalDailyInterest.toLocaleString() + "원 💰");
+            alert("🎁 복리 이자 수령 완료! +" + totalDailyInterest.toLocaleString() + "원 💰");
         }
 
         function buyItem(itemName, finalPrice) {
@@ -552,7 +548,7 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* 💡 엔진 가동액 약 1/3로 축소 (15,000 ~ 50,000원) */
+        /* ☁️ 엔진 가동 시 사용자가 '노력해서 버는 돈' 증가 */
         btn.addEventListener('click', () => {
             const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
@@ -570,7 +566,6 @@
 
         let adCountdown = 5; let adTimerId = null;
         
-        /* 💡 비회원 광고 시청 제한 및 보상 하향(1/3 추가) */
         function openRandomAdPopup() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -592,7 +587,6 @@
             }, 1000);
         }
 
-        /* 💡 광고 보상: 2배가 아닌 1/3(약 +33%) 증가로 조정 */
         function finishAdReward() {
             const bonusAmount = Math.floor(amount / 3);
             amount += bonusAmount; 
@@ -756,7 +750,6 @@
                     if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
                         playerBullets.splice(bIdx, 1);
                         enemyShips.splice(eIdx, 1);
-                        /* 💡 갤러그 격추 보상: 10억 원 -> 10,000원으로 조정 */
                         amount += 10000; 
                         updateTotalBalance();
                     }
