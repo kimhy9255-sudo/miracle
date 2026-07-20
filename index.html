@@ -75,212 +75,66 @@
             position: relative;
         }
 
-        /* 머리 위 깃털 디테일 */
+        /* 머리 위 깃털 */
         .bird-hair {
-            position: absolute;
-            top: -2px;
-            width: 14px;
-            height: 24px;
-            background: #4FA3DF;
-            border-radius: 50% 50% 0 0;
-            transform: rotate(-15deg);
-            z-index: 1;
-            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1);
-            animation: hairWag 2s infinite ease-in-out;
+            position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF;
+            border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1;
+            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out;
         }
         .bird-hair::after {
-            content: '';
-            position: absolute;
-            left: 6px; top: -3px;
-            width: 10px; height: 20px;
-            background: #5dade2;
-            border-radius: 50% 50% 0 0;
-            transform: rotate(25deg);
+            content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px;
+            background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg);
         }
         
-        /* 3D 몸통 */
+        /* 몸통 */
         .bird-body { 
-            width: 90px; 
-            height: 90px; 
-            background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
-            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; 
-            position: relative; 
-            box-shadow: 
-                inset -6px -6px 12px rgba(0,0,0,0.3),
-                inset 6px 6px 12px rgba(255,255,255,0.4),
-                0 10px 20px rgba(0,0,0,0.2); 
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            animation: breathLiving 2s infinite ease-in-out;
+            width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
+            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; 
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); 
+            z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out;
         }
 
-        /* 배 털 */
         .bird-belly {
-            position: absolute;
-            bottom: 6px;
-            width: 50px;
-            height: 25px;
+            position: absolute; bottom: 6px; width: 50px; height: 25px;
             background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%);
-            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%;
-            opacity: 0.85;
-            box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
+            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
         }
         
-        /* 부리 */
-        .bird-beak-wrap {
-            position: absolute;
-            bottom: 22px;
-            z-index: 5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform: translateZ(10px);
-        }
-        .beak-top {
-            width: 24px;
-            height: 16px;
-            background: linear-gradient(to bottom, #f39c12, #d35400);
-            border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4);
-        }
-        .beak-bottom {
-            width: 18px;
-            height: 12px;
-            background: #ba4a00;
-            border-radius: 0 0 50% 50% / 0 0 100% 100%;
-            margin-top: -4px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
-        }
+        .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
+        .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
+        .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
 
-        /* 눈망울 */
-        .bird-eyes-container {
-            position: absolute;
-            top: 15px;
-            display: flex;
-            gap: 2px;
-            z-index: 4;
-        }
+        .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
         .bird-eye { 
-            width: 32px; 
-            height: 38px; 
-            background: white; 
-            border-radius: 50% 50% 48% 48%; 
-            position: relative;
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.15),
-                inset -2px -2px 5px rgba(0,0,0,0.05),
-                inset 2px 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
         
         .eye-pupil {
-            width: 20px;
-            height: 24px;
-            background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
-            border-radius: 50%;
-            position: relative;
-            border: 1.5px solid #2980b9; 
-            animation: movePupil 4s infinite ease-in-out;
-            display: flex;
+            width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
+            border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex;
         }
-        .eye-pupil::after { 
-            content: '';
-            position: absolute;
-            width: 8px; height: 8px;
-            background: white;
-            border-radius: 50%;
-            top: 2px; left: 2px;
-            box-shadow: 0 0 2px rgba(255,255,255,0.8);
-        }
-        .eye-pupil::before {
-            content: '';
-            position: absolute;
-            width: 3.5px; height: 3.5px;
-            background: white;
-            border-radius: 50%;
-            bottom: 4px; right: 3px;
-            opacity: 0.7;
-        }
+        .eye-pupil::after { content: ''; position: absolute; width: 8px; height: 8px; background: white; border-radius: 50%; top: 2px; left: 2px; box-shadow: 0 0 2px rgba(255,255,255,0.8); }
         
-        /* 원본 버전 날개 복구 */
-        .bird-wing {
-            position: absolute;
-            width: 44px;
-            height: 28px;
-            background: linear-gradient(to bottom, #5dade2, #2980b9);
-            top: 42px;
-            z-index: 1;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-        .wing-left {
-            left: 4px;
-            border-radius: 30px 10px 10px 30px;
-            transform-origin: right center;
-            animation: flapLeftFly 0.5s infinite alternate ease-in-out;
-        }
-        .wing-right {
-            right: 4px;
-            border-radius: 10px 30px 30px 10px;
-            transform-origin: left center;
-            animation: flapRightFly 0.5s infinite alternate ease-in-out;
-        }
+        /* 원본 스타일 날개 */
+        .bird-wing { position: absolute; width: 44px; height: 28px; background: linear-gradient(to bottom, #5dade2, #2980b9); top: 42px; z-index: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .wing-left { left: 4px; border-radius: 30px 10px 10px 30px; transform-origin: right center; animation: flapLeftFly 0.5s infinite alternate ease-in-out; }
+        .wing-right { right: 4px; border-radius: 10px 30px 30px 10px; transform-origin: left center; animation: flapRightFly 0.5s infinite alternate ease-in-out; }
+        .bird-feet { position: absolute; bottom: -8px; display: flex; gap: 20px; z-index: 1; animation: feetMove 2s infinite ease-in-out; }
+        .foot { width: 14px; height: 10px; background: linear-gradient(to bottom, #f39c12, #e67e22); border-radius: 6px 6px 4px 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* 발 */
-        .bird-feet {
-            position: absolute;
-            bottom: -8px;
-            display: flex;
-            gap: 20px;
-            z-index: 1;
-            animation: feetMove 2s infinite ease-in-out;
-        }
-        .foot {
-            width: 14px;
-            height: 10px;
-            background: linear-gradient(to bottom, #f39c12, #e67e22);
-            border-radius: 6px 6px 4px 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* 애니메이션 키프레임 */
-        @keyframes breathLiving {
-            0% { transform: translateY(0px) scale(1, 1); }
-            35% { transform: translateY(-7px) scale(0.96, 1.04); }
-            70% { transform: translateY(3px) scale(1.03, 0.96); }
-            100% { transform: translateY(0px) scale(1, 1); }
-        }
-        @keyframes hairWag {
-            0%, 100% { transform: rotate(-15deg); }
-            50% { transform: rotate(-8deg) scaleY(1.05); }
-        }
-        @keyframes feetMove {
-            0%, 100% { transform: translateY(0px); }
-            35% { transform: translateY(2px) scaleY(0.9); }
-            70% { transform: translateY(-1px); }
-        }
-        @keyframes movePupil {
-            0%, 100% { transform: translate(0px, 0px); }
-            20%, 30% { transform: translate(-3px, 2px); }
-            50%, 60% { transform: translate(3px, -2px); }
-            75%, 85% { transform: translate(0px, -2px); }
-        }
-        @keyframes flapLeftFly {
-            0% { transform: rotate(-30deg) translateY(-2px); }
-            100% { transform: rotate(15deg) translateY(2px); }
-        }
-        @keyframes flapRightFly {
-            0% { transform: rotate(30deg) translateY(-2px); }
-            100% { transform: rotate(-15deg) translateY(2px); }
-        }
+        @keyframes breathLiving { 0%, 100% { transform: translateY(0px) scale(1, 1); } 35% { transform: translateY(-7px) scale(0.96, 1.04); } 70% { transform: translateY(3px) scale(1.03, 0.96); } }
+        @keyframes hairWag { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-8deg) scaleY(1.05); } }
+        @keyframes feetMove { 0%, 100% { transform: translateY(0px); } 35% { transform: translateY(2px) scaleY(0.9); } }
+        @keyframes movePupil { 0%, 100% { transform: translate(0px, 0px); } 20%, 30% { transform: translate(-3px, 2px); } 50%, 60% { transform: translate(3px, -2px); } }
+        @keyframes flapLeftFly { 0% { transform: rotate(-30deg); } 100% { transform: rotate(15deg); } }
+        @keyframes flapRightFly { 0% { transform: rotate(30deg); } 100% { transform: rotate(-15deg); } }
 
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
-        /* 인터페이스 디자인 */
+        /* 기본 레이아웃 카드 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 28px; font-weight: bold; }
@@ -289,33 +143,37 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 24px; font-weight: bold; color: #2C3E50; }
 
-        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; margin-top: 0px; }
+        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
         .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
-
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
-        /* 🎮 하단 방해 안 되는 미니 게임 콘텐트 스타일 */
-        .game-toggle-container { width: 100%; max-width: 340px; margin-top: 15px; text-align: center; }
-        .btn-game-toggle { background: #2C3E50; color: white; border: none; border-radius: 12px; padding: 8px; font-size: 12px; cursor: pointer; width: 100%; font-weight: bold; }
-        .game-box-wrapper { display: none; background: white; border-radius: 16px; padding: 10px; width: 100%; max-width: 340px; margin-top: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; }
-        #gameCanvas { background: #111; border-radius: 8px; display: block; margin: 0 auto; touch-action: none; }
-        .btn-game-start { background: #2ECC71; color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-top: 6px; cursor: pointer; }
+        /* 🎮 🕹️ [새로운 탭] 독립된 기적 게임 전용 창 내부 레이아웃 */
+        .game-menu-container { width: 100%; max-width: 340px; display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-game-select { flex: 1; padding: 10px; border-radius: 12px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 13px; cursor: pointer; }
+        .btn-game-select.active { background: #3498DB; }
+        
+        .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
+        #brickGameArea canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; }
+        
+        /* 카드 짝맞추기 게임 보드 디자인 */
+        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
+        .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
+        .memory-card.flipped { background: #ECF0F1; color: initial; }
+        .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 금고 및 상점 */
+        /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 26px; font-weight: bold; margin-bottom: 4px; }
-        
         .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
         .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
-
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
@@ -337,8 +195,9 @@
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 33.33%; cursor: pointer; }
+        /* 📱 🔒 [중요 수정] 하단 네 칸 균등 간격(각각 25% 폭)을 이루는 네비게이션 바 */
+        .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
     </style>
@@ -354,7 +213,6 @@
             <button class="btn-auth btn-login" onclick="handleLogin()">로그인하기</button>
             <div class="auth-toggle-text" onclick="toggleAuthForm(true)">아직 계정이 없으신가요? 회원가입</div>
         </div>
-
         <div id="registerBox" class="auth-box" style="display:none;">
             <h2 style="color:#2ECC71; margin-top:0; margin-bottom:20px;">📝 기적 재단 회원가입</h2>
             <input type="text" id="regId" class="auth-input" placeholder="새로운 아이디 생성">
@@ -404,7 +262,6 @@
                 <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
                 <div class="total-value"><span id="totalBalance">0</span> 원</div>
             </div>
-
             <div class="card">
                 <div class="card-title">이번 달 기적 지원금 (미예치)</div>
                 <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
@@ -420,39 +277,46 @@
                     <button class="btn-side-circle btn-logout-power" onclick="handleLogout()">🚪</button>
                 </div>
             </div>
+        </div>
 
-            <!-- 🎮 하단을 방해하지 않는 미니 접이식 게임 창 슬롯 -->
-            <div class="game-toggle-container">
-                <button class="btn-game-toggle" onclick="toggleGameBox()">🎮 미니 벽돌깨기 게임 열기/접기</button>
-                <div id="gameBoxWrapper" class="game-box-wrapper">
-                    <canvas id="gameCanvas" width="300" height="150"></canvas>
-                    <button class="btn-game-start" onclick="initBrickGame()">🕹️ 게임 시작 / 리셋</button>
-                    <div style="font-size:10px; color:#7F8C8D; margin-top:4px;">화면 터치/드래그로 발판을 조작하세요! (벽돌당 +100원 수령)</div>
-                </div>
+        <!-- 🎮 [추가됨] 탭 2: 독립된 기적 게임 전용 공간 -->
+        <div id="gameTab" class="tab-content">
+            <div class="game-menu-container">
+                <button id="btnSelectBrick" class="btn-game-select active" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
+                <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
+            </div>
+
+            <!-- 벽돌깨기 패널 -->
+            <div id="brickGameArea" class="game-display-panel">
+                <canvas id="gameCanvas" width="300" height="160"></canvas>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 벽돌깨기 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">발판 조작: 화면 터치 및 드래그 (벽돌당 +100원)</p>
+            </div>
+
+            <!-- 카드 짝맞추기 패널 -->
+            <div id="memoryGameArea" class="game-display-panel" style="display:none;">
+                <div id="cardBoard" class="card-grid"></div>
+                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 특별 지원금 <b>+1,000원</b> 보상!</p>
             </div>
         </div>
 
-        <!-- 🏦 탭 2: 디파이 금고 화면 -->
+        <!-- 🏦 탭 3: 디파이 금고 화면 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
-                
                 <div class="backend-usdt-box">
-                    <span>재단 마스터 풀:</span>
-                    <span id="usdtValue">$0.00 USDT</span>
+                    <span>재단 마스터 풀:</span><span id="usdtValue">$0.00 USDT</span>
                 </div>
             </div>
-
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
-
             <div id="vaultBenefitBanner" class="benefit-banner">
                 💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 VIP가 되면 이자를 나누어 수령합니다.
             </div>
-
             <div class="vault-action-group">
                 <button class="btn-vault btn-deposit" onclick="handleDeposit()">예치하기</button>
                 <button class="btn-vault btn-withdraw" onclick="handleWithdraw()">출금하기</button>
@@ -460,7 +324,7 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 🛍️ 탭 3: 기적 상점 화면 -->
+        <!-- 🛍️ 탭 4: 기적 상점 화면 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
@@ -484,10 +348,13 @@
             </div>
         </div>
 
-        <!-- 하단 탭 내비게이션 바 -->
+        <!-- 📱 [수정 완료] 하단 네 칸 균등 분할 내비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item" id="navHome" onclick="location.href='?tab=home'">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
+            </div>
+            <div class="nav-item" id="navGame" onclick="location.href='?tab=game'">
+                <span class="nav-icon">🎮</span><span>기적 게임</span>
             </div>
             <div class="nav-item" id="navVault" onclick="location.href='?tab=vault'">
                 <span class="nav-icon">🏦</span><span>디파이 금고</span>
@@ -498,32 +365,28 @@
         </div>
     </div>
 
-    <!-- 💛 카카오페이 모달 -->
+    <!-- 모달 창 구조체 생략 없이 전부 유지 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
-            <p style="font-size:13px; color:#7F8C8D; margin-bottom:20px;">기적 재단 금고로 안전하게 송금합니다.</p>
-            <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;" placeholder="금액 입력(원)">
-            
+            <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;">
             <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button onclick="document.getElementById('payInputAmount').value=30000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px; cursor:pointer;">+3만(VIP)</button>
-                <button onclick="document.getElementById('payInputAmount').value=50000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px; cursor:pointer;">+5만</button>
-                <button onclick="document.getElementById('payInputAmount').value=100000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px; cursor:pointer;">+10만</button>
+                <button onclick="document.getElementById('payInputAmount').value=30000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+3만(VIP)</button>
+                <button onclick="document.getElementById('payInputAmount').value=50000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+5만</button>
+                <button onclick="document.getElementById('payInputAmount').value=100000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+10만</button>
             </div>
-
             <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
             <div class="auth-toggle-text" onclick="closeKakaoModal()" style="margin-top:12px;">취소하고 돌아가기</div>
         </div>
     </div>
 
-    <!-- 광고 및 제어 모달 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
             <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
             <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
             <div style="font-size:45px; margin-top:10px;" id="adEmoji">🌱</div>
             <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px;" id="adTitle">지구를 지키는 착한 기업</div>
-            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px; min-height:70px;" id="adContent">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
+            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;" id="adContent">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
             <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
         </div>
     </div>
@@ -532,14 +395,13 @@
         <div class="admin-box">
             <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">광고주 제휴 관리</h3>
             <div id="partnerListContainer" style="margin: 15px 0; text-align: left;"></div>
-            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor:pointer;">설정 완료</button>
+            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold;">설정 완료</button>
         </div>
     </div>
 
     <script>
         let currentUser = localStorage.getItem('sessionUser') || null;
-        let amount = 0; 
-        let vaultAsset = 0;
+        let amount = 0; let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
         
         const btn = document.getElementById('engineBtn');
@@ -554,12 +416,8 @@
         ];
 
         function checkSessionInit() {
-            if(currentUser) {
-                doLoginSuccess(currentUser);
-            } else {
-                document.getElementById('authScreen').style.display = 'flex';
-                document.getElementById('mainAppLayout').style.display = 'none';
-            }
+            if(currentUser) { doLoginSuccess(currentUser); } 
+            else { document.getElementById('authScreen').style.display = 'flex'; document.getElementById('mainAppLayout').style.display = 'none'; }
         }
 
         function toggleAuthForm(showRegister) {
@@ -568,18 +426,14 @@
         }
 
         function handleRegister() {
-            const id = document.getElementById('regId').value;
-            const pw = document.getElementById('regPw').value;
+            const id = document.getElementById('regId').value; const pw = document.getElementById('regPw').value;
             if(!id || !pw) return alert("아이디와 비밀번호를 입력하세요.");
-
             localStorage.setItem("user_" + id, JSON.stringify({ id: id, pw: pw, amount: 15000, vault: 0 }));
-            alert("🎉 회원가입이 완료되었습니다!");
-            doLoginSuccess(id);
+            alert("🎉 회원가입이 완료되었습니다!"); doLoginSuccess(id);
         }
 
         function handleLogin() {
-            const id = document.getElementById('loginId').value;
-            const pw = document.getElementById('loginPw').value;
+            const id = document.getElementById('loginId').value; const pw = document.getElementById('loginPw').value;
             const localData = localStorage.getItem("user_" + id);
             if(localData) {
                 const user = JSON.parse(localData);
@@ -588,51 +442,34 @@
         }
 
         function doLoginSuccess(id) {
-            localStorage.setItem('sessionUser', id);
-            currentUser = id;
+            localStorage.setItem('sessionUser', id); currentUser = id;
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('mainAppLayout').style.display = 'flex';
-            
             const userData = JSON.parse(localStorage.getItem("user_" + id));
-            amount = userData.amount || 0;
-            vaultAsset = userData.vault || 0;
-            
+            amount = userData.amount || 0; vaultAsset = userData.vault || 0;
             updateTotalBalance();
         }
 
-        function handleLogout() {
-            localStorage.removeItem('sessionUser');
-            currentUser = null;
-            location.reload();
-        }
-
+        function handleLogout() { localStorage.removeItem('sessionUser'); currentUser = null; location.reload(); }
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("올바른 금액을 입력하세요.");
-            
             alert("💛 카카오페이 완료!\n[" + payAmt.toLocaleString() + "원]이 디파이 금고로 예치됩니다.");
-            
-            vaultAsset += payAmt; 
-            closeKakaoModal();
-            updateTotalBalance();
+            vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
         }
 
         function refreshUserTierAndBenefits() {
-            const badge = document.getElementById('userBadge');
-            const icon = document.getElementById('userTierIcon');
-            const name = document.getElementById('userTierName');
-            const banner = document.getElementById('vaultBenefitBanner');
+            const badge = document.getElementById('userBadge'); const icon = document.getElementById('userTierIcon');
+            const name = document.getElementById('userTierName'); const banner = document.getElementById('vaultBenefitBanner');
             const usdtDisplay = document.getElementById('usdtValue');
-            
             const vipB1 = document.getElementById('vipBadge1'); const vipB2 = document.getElementById('vipBadge2');
             const priceBanana = document.getElementById('priceBanana'); const priceGimbap = document.getElementById('priceGimbap');
 
             const usdtCalculated = (vaultAsset / 1350).toFixed(2);
             if(usdtDisplay) usdtDisplay.innerText = "$" + parseFloat(usdtCalculated).toLocaleString() + " USDT";
-
             badge.className = "user-welcome-info"; 
 
             if (vaultAsset >= 100000) {
@@ -640,14 +477,12 @@
                 if(banner) banner.innerHTML = "🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.";
                 if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
                 if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
-            } 
-            else if (vaultAsset >= 30000) {
+            } else if (vaultAsset >= 30000) {
                 badge.classList.add('tier-vip'); icon.innerText = "🌳"; name.innerText = "기적의 나무 VIP";
                 if(banner) banner.innerHTML = "✅ <strong>VIP 활성화!</strong> 이자 수령 및 상점 <strong>50% 반값 할인</strong> 적용 중";
                 if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
                 if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
-            } 
-            else {
+            } else {
                 badge.classList.add('tier-seed'); icon.innerText = "🌱"; name.innerText = "기적의 씨앗";
                 if(banner) banner.innerHTML = "💡 <strong>안내:</strong> 3만 원 이상 예치 시 <strong>[VIP]</strong>가 되어 이자 수령 및 상점 할인 혜택을 받습니다.";
                 if(vipB1) { vipB1.style.display = "none"; vipB2.style.display = "none"; }
@@ -668,23 +503,17 @@
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
             if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-            
-            refreshUserTierAndBenefits();
-            saveUserData();
+            refreshUserTierAndBenefits(); saveUserData();
         }
 
         function handleClaimInterest() {
             if(vaultAsset <= 0) return alert("❌ 예치금이 금고에 없습니다.");
             const totalDailyInterest = Math.floor(vaultAsset * 0.00034);
             if(totalDailyInterest < 1) return alert("이자가 아직 소액입니다.");
-
             if(vaultAsset >= 30000) {
-                const myShare = Math.floor(totalDailyInterest * 0.5);
-                amount += myShare; updateTotalBalance();
+                const myShare = Math.floor(totalDailyInterest * 0.5); amount += myShare; updateTotalBalance();
                 alert("🎁 [이자의 50% 수령 완료]: +" + myShare.toLocaleString() + "원 💰");
-            } else {
-                alert("🕊️ 발생한 이자는 기부되었습니다. 30,000원 이상 예치 시 직접 나누어 수령할 수 있습니다.");
-            }
+            } else { alert("🕊️ 발생한 이자는 기부되었습니다. 30,000원 이상 예치 시 직접 나누어 수령할 수 있습니다."); }
         }
 
         function buyItem(itemName, originalPrice) {
@@ -693,35 +522,28 @@
             else { alert("❌ 보유 포인트가 부족합니다!"); }
         }
 
+        /* 📱 탭 전환 라우팅 로직 관리 */
         const urlParams = new URLSearchParams(window.location.search);
         const currentTab = urlParams.get('tab') || 'home';
         function resetTabs() {
-            document.getElementById('homeTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
-            document.getElementById('navHome').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
+            document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
+            document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
         }
         resetTabs();
-        if(currentTab === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
+        if(currentTab === 'game') { document.getElementById('gameTab').classList.add('active'); document.getElementById('navGame').classList.add('active'); }
+        else if(currentTab === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
         else if(currentTab === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
         else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
 
         btn.addEventListener('click', () => {
-            const leftWing = document.getElementById('leftWing');
-            const rightWing = document.getElementById('rightWing');
-            
+            const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
-                isRunning = true; 
-                btn.innerText = "☁️ 가동 중..."; 
-                btn.style.backgroundColor = "#E67E22"; 
-                leftWing.classList.add('nodding');
-                rightWing.classList.add('nodding');
+                isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
+                leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 10) + 1; updateTotalBalance(); }, 1000);
             } else {
-                isRunning = false; 
-                btn.innerText = "☁️ 엔진 가동하기"; 
-                btn.style.backgroundColor = "#357ABD"; 
-                leftWing.classList.remove('nodding');
-                rightWing.classList.remove('nodding');
-                clearInterval(intervalId);
+                isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
+                leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
             }
         });
 
@@ -729,10 +551,8 @@
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
         function renderAdminPartners() {
             document.getElementById('partnerListContainer').innerHTML = adDatabase.map(ad => 
-                '<div class="partner-row">' +
-                    '<span>' + ad.emoji + ' <strong>' + ad.title + '</strong></span>' +
-                    '<button class="btn-toggle" style="background:' + (ad.connected ? '#E74C3C' : '#2ECC71') + '" onclick="togglePartner(' + ad.id + ')">' + (ad.connected ? '중단하기' : '연결하기') + '</button>' +
-                '</div>'
+                '<div class="partner-row"><span>' + ad.emoji + ' <strong>' + ad.title + '</strong></span>' +
+                '<button class="btn-toggle" style="background:' + (ad.connected ? '#E74C3C' : '#2ECC71') + '" onclick="togglePartner(' + ad.id + ')">' + (ad.connected ? '중단하기' : '연결하기') + '</button></div>'
             ).join('');
         }
         function togglePartner(id) { adDatabase[id].connected = !adDatabase[id].connected; renderAdminPartners(); }
@@ -741,13 +561,10 @@
         function openRandomAdPopup() {
             const activeAds = adDatabase.filter(ad => ad.connected);
             if(activeAds.length === 0) return alert("❌ 연결된 광고주가 없습니다.");
-            adCountdown = 5;
-            const selectedAd = activeAds[Math.floor(Math.random() * activeAds.length)];
+            adCountdown = 5; const selectedAd = activeAds[Math.floor(Math.random() * activeAds.length)];
             document.getElementById('adEmoji').innerText = selectedAd.emoji;
-
             const titleEl = document.getElementById('adTitle'); titleEl.innerText = selectedAd.title; titleEl.style.color = selectedAd.color;
-            document.getElementById('adContent').innerHTML = selectedAd.content;
-            document.getElementById('adOverlay').style.display = 'flex';
+            document.getElementById('adContent').innerHTML = selectedAd.content; document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
 
@@ -762,15 +579,13 @@
 
         function finishAdReward() {
             const addedBonus = amount; amount = amount * 2; updateTotalBalance();
-            document.getElementById('adOverlay').style.display = 'none';
-            alert("🎉 보상으로 지원금이 2배가 되었습니다!\n(+" + addedBonus.toLocaleString() + "원 추가)");
+            document.getElementById('adOverlay').style.display = 'none'; alert("🎉 보상으로 지원금이 2배가 되었습니다!\n(+" + addedBonus.toLocaleString() + "원 추가)");
         }
 
         function handleDeposit() {
             if(amount <= 0) return alert("예치할 금액이 없습니다!");
             const input = prompt("예치할 금액을 입력하세요 (보유: " + amount.toLocaleString() + "원)", amount);
-            if (!input) return;
-            const depAmt = parseInt(input);
+            if (!input) return; const depAmt = parseInt(input);
             if(!isNaN(depAmt) && depAmt > 0 && depAmt <= amount) { amount -= depAmt; vaultAsset += depAmt; updateTotalBalance(); alert("금고에 예치 완료되었습니다!"); } 
             else { alert("금액을 다시 확인해주세요."); }
         }
@@ -778,43 +593,43 @@
         function handleWithdraw() {
             if(vaultAsset <= 0) return alert("금고가 비어있습니다!");
             const input = prompt("출금할 금액을 입력하세요 (금고: " + vaultAsset.toLocaleString() + "원)", vaultAsset);
-            if (!input) return;
-            const witAmt = parseInt(input);
+            if (!input) return; const witAmt = parseInt(input);
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); alert("성공적으로 출금되었습니다!"); } 
             else { alert("금액을 다시 확인해주세요."); }
         }
 
-        /* 🕹️ [추가됨] 미니 벽돌깨기 게임 엔진 */
-        let gameCanvas = document.getElementById("gameCanvas");
-        let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null;
-        let ballRadius = 4, ballX, ballY, dx, dy;
+        /* 🎮 🕹️ [게임 허브 시스템 구축] */
+        function switchMiniGame(gameType) {
+            document.getElementById('btnSelectBrick').classList.remove('active');
+            document.getElementById('btnSelectMemory').classList.remove('active');
+            document.getElementById('brickGameArea').style.display = 'none';
+            document.getElementById('memoryGameArea').style.display = 'none';
+            cancelAnimationFrame(gameAnimationId);
+
+            if(gameType === 'brick') {
+                document.getElementById('btnSelectBrick').classList.add('active');
+                document.getElementById('brickGameArea').style.display = 'block';
+            } else {
+                document.getElementById('btnSelectMemory').classList.add('active');
+                document.getElementById('memoryGameArea').style.display = 'block';
+                startMemoryGameEngine();
+            }
+        }
+
+        /* 1번 게임: 벽돌깨기 엔진 */
+        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null; let ballRadius = 4, ballX, ballY, dx, dy;
         let paddleHeight = 6, paddleWidth = 50, paddleX;
         let brickRowCount = 3, brickColumnCount = 6, brickWidth = 42, brickHeight = 10, brickPadding = 5, brickOffsetTop = 15, brickOffsetLeft = 12;
         let bricks = [];
 
-        function toggleGameBox() {
-            let box = document.getElementById("gameBoxWrapper");
-            box.style.display = (box.style.display === "block") ? "none" : "block";
-            if(box.style.display === "block") initBrickGame();
-            else cancelAnimationFrame(gameAnimationId);
-        }
-
-        function initBrickGame() {
+        function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId);
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 20;
-            dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            
-            for (let c = 0; c < brickColumnCount; c++) {
-                bricks[c] = [];
-                for (let r = 0; r < brickRowCount; r++) {
-                    bricks[c][r] = { x: 0, y: 0, status: 1 };
-                }
-            }
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 20; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            for (let c = 0; c < brickColumnCount; c++) { bricks[c] = []; for (let r = 0; r < brickRowCount; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
             drawBrickGame();
         }
 
-        // 터치 및 마우스 드래그 이벤트 연동
         gameCanvas.addEventListener("touchmove", (e) => {
             let relativeX = e.touches[0].clientX - gameCanvas.getBoundingClientRect().left;
             if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
@@ -824,30 +639,11 @@
             if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
         });
 
-        function collisionDetection() {
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    let b = bricks[c][r];
-                    if (b.status === 1) {
-                        if (ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
-                            dy = -dy; b.status = 0;
-                            amount += 100; // 벽돌당 100원 지급!
-                            updateTotalBalance();
-                        }
-                    }
-                }
-            }
-        }
-
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            
-            // 공 그리기
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
-            // 패들 그리기
             ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
             
-            // 벽돌 그리기
             for (let c = 0; c < brickColumnCount; c++) {
                 for (let r = 0; r < brickRowCount; r++) {
                     if (bricks[c][r].status === 1) {
@@ -859,7 +655,14 @@
                 }
             }
 
-            collisionDetection();
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    let b = bricks[c][r];
+                    if (b.status === 1 && ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+                        dy = -dy; b.status = 0; amount += 100; updateTotalBalance();
+                    }
+                }
+            }
 
             if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
             if (ballY + dy < ballRadius) dy = -dy;
@@ -867,9 +670,46 @@
                 if (ballX > paddleX && ballX < paddleX + paddleWidth) dy = -dy;
                 else { cancelAnimationFrame(gameAnimationId); return; }
             }
+            ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
+        }
 
-            ballX += dx; ballY += dy;
-            gameAnimationId = requestAnimationFrame(drawBrickGame);
+        /* 2번 게임: 카드 짝맞추기 엔진 */
+        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐'];
+        let flippedCards = []; let matchedPairs = 0;
+
+        function startMemoryGameEngine() {
+            const board = document.getElementById('cardBoard'); board.innerHTML = '';
+            flippedCards = []; matchedPairs = 0;
+            let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
+            
+            shuffled.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card'); card.dataset.emoji = emoji; card.dataset.index = index;
+                card.innerText = emoji; card.onclick = handleCardClick;
+                board.appendChild(card);
+            });
+        }
+
+        function handleCardClick() {
+            if (flippedCards.length >= 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+            this.classList.add('flipped'); flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                let card1 = flippedCards[0]; let card2 = flippedCards[1];
+                if (card1.dataset.emoji === card2.dataset.emoji) {
+                    setTimeout(() => {
+                        card1.classList.add('matched'); card2.classList.add('matched');
+                        flippedCards = []; matchedPairs++;
+                        if (matchedPairs === cardEmojis.length / 2) {
+                            amount += 1000; updateTotalBalance(); alert("🎉 성공! 전부 맞춰 기적 지원금 +1,000원이 적립되었습니다!");
+                        }
+                    }, 400);
+                } else {
+                    setTimeout(() => {
+                        card1.classList.remove('flipped'); card2.classList.remove('flipped'); flippedCards = [];
+                    }, 800);
+                }
+            }
         }
 
         checkSessionInit();
