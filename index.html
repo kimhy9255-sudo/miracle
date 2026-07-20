@@ -155,12 +155,12 @@
         .btn-logout-power { background-color: #FF2E54; color: white; }
 
         /* 🎮 독립된 기적 게임 창 내부 레이아웃 */
-        .game-menu-container { width: 100%; max-width: 340px; display: flex; gap: 6px; margin-bottom: 10px; }
-        .btn-game-select { flex: 1; padding: 10px 5px; border-radius: 12px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .game-menu-container { width: 100%; max-width: 340px; display: flex; gap: 10px; margin-bottom: 10px; }
+        .btn-game-select { flex: 1; padding: 10px; border-radius: 12px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 13px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
-        .game-display-panel canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; }
+        #brickGameArea canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; }
         
         /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
@@ -283,22 +283,14 @@
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
                 <button id="btnSelectBrick" class="btn-game-select active" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
-                <button id="btnSelectGalaga" class="btn-game-select" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
-            <!-- 벽돌깨기 패널 -->
+            <!-- 벽돌깨기 패널 (📐 높이 260px로 화면 대폭 키움!) -->
             <div id="brickGameArea" class="game-display-panel">
                 <canvas id="gameCanvas" width="300" height="260"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 벽돌깨기 시작 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">발판 조작: 화면 터치 및 드래그 (벽돌당 +100원)</p>
-            </div>
-
-            <!-- 갤러그 게임 패널 (🚀 새로 추가됨) -->
-            <div id="galagaGameArea" class="game-display-panel" style="display:none;">
-                <canvas id="galagaCanvas" width="300" height="260"></canvas>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%; background-color:#9B59B6;" onclick="startGalagaGameEngine()">🚀 갤러그 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">조작: 화면 터치 후 좌우 드래그 (격추당 +50원)</p>
             </div>
 
             <!-- 카드 짝맞추기 패널 -->
@@ -607,25 +599,16 @@
         }
 
         /* 🎮 🕹️ 게임 허브 시스템 관리 */
-        let gameAnimationId = null;
         function switchMiniGame(gameType) {
             document.getElementById('btnSelectBrick').classList.remove('active');
-            document.getElementById('btnSelectGalaga').classList.remove('active');
             document.getElementById('btnSelectMemory').classList.remove('active');
-            
             document.getElementById('brickGameArea').style.display = 'none';
-            document.getElementById('galagaGameArea').style.display = 'none';
             document.getElementById('memoryGameArea').style.display = 'none';
-            
             cancelAnimationFrame(gameAnimationId);
 
             if(gameType === 'brick') {
                 document.getElementById('btnSelectBrick').classList.add('active');
                 document.getElementById('brickGameArea').style.display = 'block';
-            } else if(gameType === 'galaga') {
-                document.getElementById('btnSelectGalaga').classList.add('active');
-                document.getElementById('galagaGameArea').style.display = 'block';
-                startGalagaGameEngine();
             } else {
                 document.getElementById('btnSelectMemory').classList.add('active');
                 document.getElementById('memoryGameArea').style.display = 'block';
@@ -633,10 +616,10 @@
             }
         }
 
-        /* 1번 게임: 벽돌깨기 엔진 */
+        /* 1번 게임: 벽돌깨기 엔진 (⚙️ 패들 두께 대폭 두껍게 조정) */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let ballRadius = 4, ballX, ballY, dx, dy;
-        let paddleHeight = 16, paddleWidth = 56, paddleX;
+        let gameAnimationId = null; let ballRadius = 4, ballX, ballY, dx, dy;
+        let paddleHeight = 16, paddleWidth = 56, paddleX; // 🛠️ 손가락 가림 방지용 크기 업그레이드!
         let brickRowCount = 3, brickColumnCount = 6, brickWidth = 42, brickHeight = 10, brickPadding = 5, brickOffsetTop = 15, brickOffsetLeft = 12;
         let bricks = [];
 
@@ -660,6 +643,7 @@
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
             
+            // 🎨 두꺼워진 안전 받침판 그리기
             ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
             
             for (let c = 0; c < brickColumnCount; c++) {
@@ -694,118 +678,7 @@
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🚀 2번 게임: 갤러그 엔진 (새로 연동된 슈팅 시스템) */
-        let gCanvas = document.getElementById("galagaCanvas"); let gCtx = gCanvas.getContext("2d");
-        let playerX, playerY, playerWidth = 24, playerHeight = 16;
-        let bullets = []; let enemies = []; let lastShotTime = 0;
-
-        function startGalagaGameEngine() {
-            cancelAnimationFrame(gameAnimationId);
-            playerX = gCanvas.width / 2 - playerWidth / 2;
-            playerY = gCanvas.height - 35; 
-            bullets = []; enemies = []; lastShotTime = 0;
-            
-            // 초기 적 배치 (외계인 군단)
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 3; j++) {
-                    enemies.push({ x: i * 55 + 40, y: j * 25 + 20, width: 18, height: 12, speedX: 0.6 });
-                }
-            }
-            drawGalagaGame();
-        }
-
-        gCanvas.addEventListener("touchmove", (e) => {
-            let relX = e.touches[0].clientX - gCanvas.getBoundingClientRect().left;
-            if(relX > 0 && relX < gCanvas.width) playerX = relX - playerWidth / 2;
-        });
-        gCanvas.addEventListener("mousemove", (e) => {
-            let relX = e.clientX - gCanvas.getBoundingClientRect().left;
-            if(relX > 0 && relX < gCanvas.width) playerX = relX - playerWidth / 2;
-        });
-
-        function drawGalagaGame() {
-            gCtx.clearRect(0, 0, gCanvas.width, gCanvas.height);
-
-            // 1. 플레이어 그리기 (우주비행선 모양)
-            gCtx.fillStyle = "#3498DB";
-            gCtx.beginPath();
-            gCtx.moveTo(playerX + playerWidth / 2, playerY);
-            gCtx.lineTo(playerX, playerY + playerHeight);
-            gCtx.lineTo(playerX + playerWidth, playerY + playerHeight);
-            gCtx.fill();
-
-            // 자동 총알 발사 간격 제어
-            let now = Date.now();
-            if (now - lastShotTime > 350) {
-                bullets.push({ x: playerX + playerWidth / 2 - 1.5, y: playerY, width: 3, height: 8 });
-                lastShotTime = now;
-            }
-
-            // 2. 총알 이동 및 그리기
-            gCtx.fillStyle = "#FFFF00";
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                let b = bullets[i];
-                b.y -= 3.5;
-                gCtx.fillRect(b.x, b.y, b.width, b.height);
-                if (b.y < 0) bullets.splice(i, 1);
-            }
-
-            // 3. 적 이동 및 그리기
-            let reverseDirection = false;
-            for (let i = 0; i < enemies.length; i++) {
-                let e = enemies[i];
-                e.x += e.speedX;
-                e.y += 0.05; // 조금씩 하강
-
-                gCtx.fillStyle = "#E74C3C";
-                gCtx.fillRect(e.x, e.y, e.width, e.height);
-
-                // 벽 충돌 체크용 플래그
-                if (e.x + e.speedX > gCanvas.width - e.width || e.x + e.speedX < 0) {
-                    reverseDirection = true;
-                }
-
-                // 플레이어와 충돌 시 리셋
-                if (e.y + e.height >= playerY && e.x + e.width >= playerX && e.x <= playerX + playerWidth) {
-                    cancelAnimationFrame(gameAnimationId);
-                    alert("💥 기체가 파손되었습니다! 다시 시작합니다.");
-                    startGalagaGameEngine();
-                    return;
-                }
-            }
-
-            // 방향 반전 처리
-            if (reverseDirection) {
-                enemies.forEach(e => { e.speedX = -e.speedX; e.y += 5; });
-            }
-
-            // 4. 충돌 판정 (총알 -> 적)
-            for (let bIdx = bullets.length - 1; bIdx >= 0; bIdx--) {
-                let b = bullets[bIdx];
-                for (let eIdx = enemies.length - 1; eIdx >= 0; eIdx--) {
-                    let e = enemies[eIdx];
-                    if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
-                        bullets.splice(bIdx, 1);
-                        enemies.splice(eIdx, 1);
-                        amount += 50; // 격추당 50원 보상
-                        updateTotalBalance();
-                        break;
-                    }
-                }
-            }
-
-            // 적을 전부 소탕하면 자동으로 한 판 더 리스폰
-            if (enemies.length === 0) {
-                cancelAnimationFrame(gameAnimationId);
-                alert("👑 외계인 군단 격퇴 성공! 보너스 보상이 이어집니다.");
-                startGalagaGameEngine();
-                return;
-            }
-
-            gameAnimationId = requestAnimationFrame(drawGalagaGame);
-        }
-
-        /* 3번 게임: 카드 짝맞추기 엔진 */
+        /* 2번 게임: 카드 짝맞추기 엔진 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐'];
         let flippedCards = []; let matchedPairs = 0;
 
