@@ -14,32 +14,9 @@
             height: 100vh;
             overflow: hidden;
         }
-        
-        /* 🔒 1단계: 로그인/회원가입 화면 */
-        .auth-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #F4F7F6; z-index: 10000; padding: 30px;
-        }
-        .auth-box {
-            background: white; border-radius: 24px; padding: 30px 20px;
-            width: 100%; max-width: 340px; box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .auth-input {
-            width: 100%; padding: 12px; margin-bottom: 10px;
-            border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none;
-        }
-        .btn-auth {
-            width: 100%; padding: 14px; border: none; border-radius: 12px;
-            font-size: 15px; font-weight: bold; color: white; cursor: pointer; margin-top: 5px;
-        }
-        .btn-login { background-color: #357ABD; }
-        .btn-register-submit { background-color: #2ECC71; }
-        .auth-toggle-text { font-size: 13px; color: #7F8C8D; margin-top: 15px; cursor: pointer; text-decoration: underline; }
 
-        /* 📱 2단계: 메인 서비스 화면 레이아웃 */
-        #mainAppLayout { display: none; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+        /* 📱 메인 서비스 화면 레이아웃 */
+        #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
 
         /* 상단 헤더 */
         .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
@@ -134,7 +111,7 @@
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
-        /* 기본 레이아웃 카드 */
+        /* 자산 보유 카드 스타일 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
@@ -152,15 +129,14 @@
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
-        .btn-logout-power { background-color: #FF2E54; color: white; }
 
-        /* 🎮 독립된 기적 게임 창 내부 레이아웃 */
+        /* 🎮 기적 게임 창 레이아웃 */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px; border-radius: 10px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
-        .game-display-panel canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; }
+        .game-display-panel canvas { background: #111; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         
         /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
@@ -188,6 +164,7 @@
         .item-price { font-size: 12px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
+        /* 모달 및 팝업 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
@@ -195,46 +172,28 @@
         .partner-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
         .btn-toggle { padding: 6px 12px; border-radius: 10px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
 
-        /* 하단 균등 간격 네비게이션 바 */
+        /* 하단 네비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
+        
+        .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
     </style>
 </head>
 <body>
 
-    <!-- 🔒 1단계: 로그인 / 회원가입 창 -->
-    <div id="authScreen" class="auth-container">
-        <div id="loginBox" class="auth-box">
-            <h2 style="color:#2C3E50; margin-top:0; margin-bottom:20px;">🕊️ 기적 재단 로그인</h2>
-            <input type="text" id="loginId" class="auth-input" placeholder="아이디를 입력하세요">
-            <input type="password" id="loginPw" class="auth-input" placeholder="비밀번호를 입력하세요">
-            <button class="btn-auth btn-login" onclick="handleLogin()">로그인하기</button>
-            <div class="auth-toggle-text" onclick="toggleAuthForm(true)">아직 계정이 없으신가요? 회원가입</div>
-        </div>
-        <div id="registerBox" class="auth-box" style="display:none;">
-            <h2 style="color:#2ECC71; margin-top:0; margin-bottom:20px;">📝 기적 재단 회원가입</h2>
-            <input type="text" id="regId" class="auth-input" placeholder="새로운 아이디 생성">
-            <input type="password" id="regPw" class="auth-input" placeholder="비밀번호 설정">
-            <button class="btn-auth btn-register-submit" onclick="handleRegister()">가입 완료 및 로그인</button>
-            <div class="auth-toggle-text" onclick="toggleAuthForm(false)">이미 계정이 있으신가요? 로그인</div>
-        </div>
-    </div>
-
-    <!-- 📱 2단계: 메인 앱 레이아웃 -->
     <div id="mainAppLayout">
-        
         <!-- 상단 헤더 -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
-            <div id="userBadge" class="user-welcome-info tier-seed">
-                <span id="userTierIcon">🌱</span> <span id="userTierName">기적의 씨앗</span>
+            <div id="userBadge" class="user-welcome-info tier-whale">
+                <span id="userTierIcon">🐳</span> <span id="userTierName">기적의 고래 대장</span>
             </div>
         </div>
 
         <!-- 🕊️ 탭 1: 홈 화면 -->
-        <div id="homeTab" class="tab-content">
+        <div id="homeTab" class="tab-content active">
             <div class="bird-area">
                 <div class="bird-container">
                     <div class="bird-hair"></div>
@@ -260,11 +219,11 @@
             
             <div class="total-balance-card">
                 <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
-                <div class="total-value"><span id="totalBalance">0</span> 원</div>
+                <div class="total-value"><span id="totalBalance">176,790,732,110,861</span> 원</div>
             </div>
             <div class="card">
                 <div class="card-title">이번 달 기적 지원금 (미예치)</div>
-                <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
+                <div class="card-value"><span id="subsidyAmount">176,790,730,849,400</span> 원</div>
             </div>
             
             <div class="control-section">
@@ -274,12 +233,11 @@
                 </div>
                 <div class="side-icon-group">
                     <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
-                    <button class="btn-side-circle btn-logout-power" onclick="handleLogout()">🚪</button>
                 </div>
             </div>
         </div>
 
-        <!-- 🎮 탭 2: 독립된 기적 게임 전용 공간 -->
+        <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
                 <button id="btnSelectBrick" class="btn-game-select active" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
@@ -288,50 +246,46 @@
                 <button id="btnSelectJump" class="btn-game-select" onclick="switchMiniGame('jump')">🏃 동전점프</button>
             </div>
 
-            <!-- 1. 벽돌깨기 패널 -->
             <div id="brickGameArea" class="game-display-panel">
                 <canvas id="gameCanvas" width="300" height="240"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
             </div>
 
-            <!-- 2. 카드 짝맞추기 패널 -->
             <div id="memoryGameArea" class="game-display-panel" style="display:none;">
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 3. 공 피하기 패널 (NEW 🌟) -->
             <div id="dodgeGameArea" class="game-display-panel" style="display:none;">
                 <canvas id="dodgeCanvas" width="300" height="240"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%; background-color:#9B59B6;" onclick="startDodgeGameEngine()">💥 피하기 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">파란 공을 터치/드래그해서 빨간 공들을 피하세요! (초당 +50원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">캐릭터를 드래그해서 똥을 피하세요! (초당 +50원)</p>
             </div>
 
-            <!-- 4. 동전 모으기 점프 패널 (NEW 🌟) -->
             <div id="jumpGameArea" class="game-display-panel" style="display:none;">
                 <canvas id="jumpCanvas" width="300" height="240"></canvas>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%; background-color:#1ABC9C;" onclick="startJumpGameEngine()">🏃 점프게임 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면을 터치하면 점프합니다! 노란 동전을 먹으세요. (동전당 +200원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 터치 시 점프! 노란 동전을 드세요. (동전당 +200원)</p>
             </div>
         </div>
 
-        <!-- 🏦 탭 3: 디파이 금고 화면 -->
+        <!-- 🏦 탭 3: 디파이 금고 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
-                <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
+                <div class="vault-balance-value"><span id="vaultAsset">1261461</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
                 <div class="backend-usdt-box">
-                    <span>재단 마스터 풀:</span><span id="usdtValue">$0.00 USDT</span>
+                    <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
             <div id="vaultBenefitBanner" class="benefit-banner">
-                💡 <strong>안내:</strong> 현재 예치금이 30,000원 미만입니다. 3만 원 이상 예치하여 VIP가 되면 이자를 나누어 수령합니다.
+                🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.
             </div>
             <div class="vault-action-group">
                 <button class="btn-vault btn-deposit" onclick="handleDeposit()">예치하기</button>
@@ -340,7 +294,7 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 🛍️ 탭 4: 기적 상점 화면 -->
+        <!-- 🛍️ 탭 4: 기적 상점 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
@@ -348,25 +302,25 @@
             </div>
             <div class="shop-grid">
                 <div class="shop-item">
-                    <div id="vipBadge1" class="vip-badge">VIP 50%</div>
+                    <div class="vip-badge" style="display:block;">VIP 50%</div>
                     <div class="item-emoji">🍌</div>
                     <div class="item-name">바나나맛우유</div>
-                    <div class="item-price" id="priceBanana">1,800p</div>
-                    <button class="btn-exchange" onclick="buyItem('바나나맛우유', 1800)">교환하기</button>
+                    <div class="item-price"><del>1,800p</del> 900p</div>
+                    <button class="btn-exchange" onclick="buyItem('바나나맛우유', 900)">교환하기</button>
                 </div>
                 <div class="shop-item">
-                    <div id="vipBadge2" class="vip-badge">VIP 50%</div>
+                    <div class="vip-badge" style="display:block;">VIP 50%</div>
                     <div class="item-emoji">🍙</div>
                     <div class="item-name">참치마요 삼각김밥</div>
-                    <div class="item-price" id="priceGimbap">1,300p</div>
-                    <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 1300)">교환하기</button>
+                    <div class="item-price"><del>1,300p</del> 650p</div>
+                    <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
             </div>
         </div>
 
-        <!-- 하단 네 칸 균등 분할 내비게이션 바 -->
+        <!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
-            <div class="nav-item" id="navHome" onclick="changeTabUrl('home')">
+            <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
             </div>
             <div class="nav-item" id="navGame" onclick="changeTabUrl('game')">
@@ -386,13 +340,8 @@
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
             <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;">
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button onclick="document.getElementById('payInputAmount').value=30000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+3만(VIP)</button>
-                <button onclick="document.getElementById('payInputAmount').value=50000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+5만</button>
-                <button onclick="document.getElementById('payInputAmount').value=100000" style="flex:1; padding:6px; font-size:11px; background:#EAEAEA; border:none; border-radius:8px;">+10만</button>
-            </div>
             <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
-            <div class="auth-toggle-text" onclick="closeKakaoModal()" style="margin-top:12px;">취소하고 돌아가기</div>
+            <div style="font-size:13px; color:#7F8C8D; margin-top:12px; cursor:pointer;" onclick="closeKakaoModal()">취소</div>
         </div>
     </div>
 
@@ -400,24 +349,25 @@
         <div class="ad-box">
             <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
             <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
-            <div style="font-size:45px; margin-top:10px;" id="adEmoji">🌱</div>
-            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px;" id="adTitle">지구를 지키는 착한 기업</div>
-            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;" id="adContent">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
+            <div style="font-size:45px; margin-top:10px;">🌱</div>
+            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px; color:#27AE60;">지구를 지키는 착한 기업</div>
+            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
             <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
         </div>
     </div>
 
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
-            <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">광고주 제휴 관리</h3>
-            <div id="partnerListContainer" style="margin: 15px 0; text-align: left;"></div>
-            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold;">설정 완료</button>
+            <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정</h3>
+            <p style="font-size:14px; color:#34495E;">기적 재단 서비스가 정상 작동 중입니다.</p>
+            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold;">닫기</button>
         </div>
     </div>
 
     <script>
-        let currentUser = localStorage.getItem('sessionUser') || null;
-        let amount = 0; let vaultAsset = 0;
+        // 보존된 자산 초기 데이터 세팅
+        let amount = 176790730849400; 
+        let vaultAsset = 1261461;
         let isRunning = false; let intervalId = null;
         
         const btn = document.getElementById('engineBtn');
@@ -426,91 +376,27 @@
         const totalBalanceDisplay = document.getElementById('totalBalance');
         const shopPointsDisplay = document.getElementById('shopPoints');
 
-        let adDatabase = [
-            { id: 0, connected: true, emoji: "🌱", title: "지구를 지키는 착한 기업", content: '"우리가 쓰는 텀블러 하나가<br>내일의 푸른 숲을 만듭니다."', color: "#27AE60" },
-            { id: 1, connected: true, emoji: "🍎", title: "복희네 상생 마켓", content: '"마진은 줄이고 정은 꽉 채웠습니다."', color: "#E67E22" }
-        ];
-
-        function checkSessionInit() {
-            if(currentUser) { doLoginSuccess(currentUser); } 
-            else { document.getElementById('authScreen').style.display = 'flex'; document.getElementById('mainAppLayout').style.display = 'none'; }
-        }
-
-        function toggleAuthForm(showRegister) {
-            document.getElementById('loginBox').style.display = showRegister ? 'none' : 'block';
-            document.getElementById('registerBox').style.display = showRegister ? 'block' : 'none';
-        }
-
-        function handleRegister() {
-            const id = document.getElementById('regId').value; const pw = document.getElementById('regPw').value;
-            if(!id || !pw) return alert("아이디와 비밀번호를 입력하세요.");
-            localStorage.setItem("user_" + id, JSON.stringify({ id: id, pw: pw, amount: 15000, vault: 0 }));
-            alert("🎉 회원가입이 완료되었습니다!"); doLoginSuccess(id);
-        }
-
-        function handleLogin() {
-            const id = document.getElementById('loginId').value; const pw = document.getElementById('loginPw').value;
-            const localData = localStorage.getItem("user_" + id);
-            if(localData) {
-                const user = JSON.parse(localData);
-                if(user.pw === pw) { doLoginSuccess(id); } else { alert("❌ 비밀번호가 다릅니다."); }
-            } else { alert("❌ 가입되지 않은 아이디입니다."); }
-        }
-
-        function doLoginSuccess(id) {
-            localStorage.setItem('sessionUser', id); currentUser = id;
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('mainAppLayout').style.display = 'flex';
-            const userData = JSON.parse(localStorage.getItem("user_" + id));
-            amount = userData.amount || 0; vaultAsset = userData.vault || 0;
+        function loadSavedData() {
+            if(localStorage.getItem('miracle_amount')) {
+                amount = parseInt(localStorage.getItem('miracle_amount'));
+                vaultAsset = parseInt(localStorage.getItem('miracle_vault'));
+            }
             updateTotalBalance();
         }
 
-        function handleLogout() { localStorage.removeItem('sessionUser'); currentUser = null; location.reload(); }
+        function saveCurrentData() {
+            localStorage.setItem('miracle_amount', amount);
+            localStorage.setItem('miracle_vault', vaultAsset);
+        }
+
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
-            if(isNaN(payAmt) || payAmt <= 0) return alert("올바른 금액을 입력하세요.");
-            alert("💛 카카오페이 완료!\n[" + payAmt.toLocaleString() + "원]이 디파이 금고로 예치됩니다.");
+            if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
+            alert("💛 페이 완료! [" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치됩니다.");
             vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
-        }
-
-        function refreshUserTierAndBenefits() {
-            const badge = document.getElementById('userBadge'); const icon = document.getElementById('userTierIcon');
-            const name = document.getElementById('userTierName'); const banner = document.getElementById('vaultBenefitBanner');
-            const usdtDisplay = document.getElementById('usdtValue');
-            const vipB1 = document.getElementById('vipBadge1'); const vipB2 = document.getElementById('vipBadge2');
-            const priceBanana = document.getElementById('priceBanana'); const priceGimbap = document.getElementById('priceGimbap');
-
-            const usdtCalculated = (vaultAsset / 1350).toFixed(2);
-            if(usdtDisplay) usdtDisplay.innerText = "$" + parseFloat(usdtCalculated).toLocaleString() + " USDT";
-            badge.className = "user-welcome-info"; 
-
-            if (vaultAsset >= 100000) {
-                badge.classList.add('tier-whale'); icon.innerText = "🐳"; name.innerText = "기적의 고래 대장";
-                if(banner) banner.innerHTML = "🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.";
-                if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
-                if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
-            } else if (vaultAsset >= 30000) {
-                badge.classList.add('tier-vip'); icon.innerText = "🌳"; name.innerText = "기적의 나무 VIP";
-                if(banner) banner.innerHTML = "✅ <strong>VIP 활성화!</strong> 이자 수령 및 상점 <strong>50% 반값 할인</strong> 적용 중";
-                if(vipB1) { vipB1.style.display = "block"; vipB2.style.display = "block"; }
-                if(priceBanana) { priceBanana.innerHTML = "<del>1,800p</del> 900p"; priceGimbap.innerHTML = "<del>1,300p</del> 650p"; }
-            } else {
-                badge.classList.add('tier-seed'); icon.innerText = "🌱"; name.innerText = "기적의 씨앗";
-                if(banner) banner.innerHTML = "💡 <strong>안내:</strong> 3만 원 이상 예치 시 <strong>[VIP]</strong>가 되어 이자 수령 및 상점 할인 혜택을 받습니다.";
-                if(vipB1) { vipB1.style.display = "none"; vipB2.style.display = "none"; }
-                if(priceBanana) { priceBanana.innerHTML = "1,800p"; priceGimbap.innerHTML = "1,300p"; }
-            }
-        }
-
-        function saveUserData() {
-            if(currentUser) {
-                const data = JSON.parse(localStorage.getItem("user_" + currentUser));
-                if(data) { data.amount = amount; data.vault = vaultAsset; localStorage.setItem("user_" + currentUser, JSON.stringify(data)); }
-            }
         }
 
         function updateTotalBalance() {
@@ -519,81 +405,59 @@
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
             if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-            refreshUserTierAndBenefits(); saveUserData();
+            saveCurrentData();
         }
 
         function handleClaimInterest() {
-            if(vaultAsset <= 0) return alert("❌ 예치금이 금고에 없습니다.");
             const totalDailyInterest = Math.floor(vaultAsset * 0.00034);
-            if(totalDailyInterest < 1) return alert("이자가 아직 소액입니다.");
-            if(vaultAsset >= 30000) {
-                const myShare = Math.floor(totalDailyInterest * 0.5); amount += myShare; updateTotalBalance();
-                alert("🎁 [이자의 50% 수령 완료]: +" + myShare.toLocaleString() + "원 💰");
-            } else { alert("🕊️ 발생한 이자는 기부되었습니다. 30,000원 이상 예치 시 직접 나누어 수령할 수 있습니다."); }
+            amount += totalDailyInterest; updateTotalBalance();
+            alert("🎁 고래 등급 복리 이자 수령 완료! +" + totalDailyInterest.toLocaleString() + "원 💰");
         }
 
-        function buyItem(itemName, originalPrice) {
-            let finalPrice = (vaultAsset >= 30000) ? originalPrice * 0.5 : originalPrice;
+        function buyItem(itemName, finalPrice) {
             if (amount >= finalPrice) { amount -= finalPrice; updateTotalBalance(); alert("🎁 [" + itemName + "] 교환 완료!"); } 
             else { alert("❌ 보유 포인트가 부족합니다!"); }
         }
 
-        /* 📱 탭 전환 라우팅 로직 관리 */
-        function changeTabUrl(tabName) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('tab', tabName);
-            window.history.pushState({}, '', url);
-            routeTabs(tabName);
-        }
+        function changeTabUrl(tabName) { routeTabs(tabName); }
 
         function routeTabs(tabName) {
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
-            // 모든 게임 루프 중지
             cancelAnimationFrame(gameAnimationId);
             cancelAnimationFrame(dodgeAnimationId);
             cancelAnimationFrame(jumpAnimationId);
 
-            if(tabName === 'game') { document.getElementById('gameTab').classList.add('active'); document.getElementById('navGame').classList.add('active'); startBrickGameEngine(); }
+            if(tabName === 'game') { 
+                document.getElementById('gameTab').classList.add('active'); 
+                document.getElementById('navGame').classList.add('active'); 
+                // 안전을 위해 타임아웃을 주어 렌더링 후 게임 엔진을 켭니다.
+                setTimeout(() => { startBrickGameEngine(); }, 50); 
+            }
             else if(tabName === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
             else if(tabName === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        routeTabs(urlParams.get('tab') || 'home');
 
         btn.addEventListener('click', () => {
             const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
-                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 10) + 1; updateTotalBalance(); }, 1000);
+                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 100000) + 50000; updateTotalBalance(); }, 1000);
             } else {
                 isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
                 leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
             }
         });
 
-        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; renderAdminPartners(); }
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
-        function renderAdminPartners() {
-            document.getElementById('partnerListContainer').innerHTML = adDatabase.map(ad => 
-                '<div class="partner-row"><span>' + ad.emoji + ' <strong>' + ad.title + '</strong></span>' +
-                '<button class="btn-toggle" style="background:' + (ad.connected ? '#E74C3C' : '#2ECC71') + '" onclick="togglePartner(' + ad.id + ')">' + (ad.connected ? '중단하기' : '연결하기') + '</button></div>'
-            ).join('');
-        }
-        function togglePartner(id) { adDatabase[id].connected = !adDatabase[id].connected; renderAdminPartners(); }
 
         let adCountdown = 5; let adTimerId = null;
         function openRandomAdPopup() {
-            const activeAds = adDatabase.filter(ad => ad.connected);
-            if(activeAds.length === 0) return alert("❌ 연결된 광고주가 없습니다.");
-            adCountdown = 5; const selectedAd = activeAds[Math.floor(Math.random() * activeAds.length)];
-            document.getElementById('adEmoji').innerText = selectedAd.emoji;
-            const titleEl = document.getElementById('adTitle'); titleEl.innerText = selectedAd.title; titleEl.style.color = selectedAd.color;
-            document.getElementById('adContent').innerHTML = selectedAd.content; document.getElementById('adOverlay').style.display = 'flex';
+            adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
 
@@ -608,76 +472,51 @@
 
         function finishAdReward() {
             const addedBonus = amount; amount = amount * 2; updateTotalBalance();
-            document.getElementById('adOverlay').style.display = 'none'; alert("🎉 보상으로 지원금이 2배가 되었습니다!\n(+" + addedBonus.toLocaleString() + "원 추가)");
+            document.getElementById('adOverlay').style.display = 'none'; alert("🎉 지원금이 2배가 되었습니다!");
         }
 
         function handleDeposit() {
-            if(amount <= 0) return alert("예치할 금액이 없습니다!");
-            const input = prompt("예치할 금액을 입력하세요 (보유: " + amount.toLocaleString() + "원)", amount);
+            const input = prompt("예치할 금액을 입력하세요", amount);
             if (!input) return; const depAmt = parseInt(input);
-            if(!isNaN(depAmt) && depAmt > 0 && depAmt <= amount) { amount -= depAmt; vaultAsset += depAmt; updateTotalBalance(); alert("금고에 예치 완료되었습니다!"); } 
-            else { alert("금액을 다시 확인해주세요."); }
+            if(!isNaN(depAmt) && depAmt > 0 && depAmt <= amount) { amount -= depAmt; vaultAsset += depAmt; updateTotalBalance(); }
         }
 
         function handleWithdraw() {
-            if(vaultAsset <= 0) return alert("금고가 비어있습니다!");
-            const input = prompt("출금할 금액을 입력하세요 (금고: " + vaultAsset.toLocaleString() + "원)", vaultAsset);
+            const input = prompt("출금할 금액을 입력하세요", vaultAsset);
             if (!input) return; const witAmt = parseInt(input);
-            if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); alert("성공적으로 출금되었습니다!"); } 
-            else { alert("금액을 다시 확인해주세요."); }
+            if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
         }
 
-        /* 🎮 🕹️ 게임 허브 시스템 전환 관리 */
+        /* 🎮 게임 시스템 교정 분기 */
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active');
-            document.getElementById('btnSelectMemory').classList.remove('active');
-            document.getElementById('btnSelectDodge').classList.remove('active');
-            document.getElementById('btnSelectJump').classList.remove('active');
+            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectDodge').classList.remove('active'); document.getElementById('btnSelectJump').classList.remove('active');
+            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('dodgeGameArea').style.display = 'none'; document.getElementById('jumpGameArea').style.display = 'none';
             
-            document.getElementById('brickGameArea').style.display = 'none';
-            document.getElementById('memoryGameArea').style.display = 'none';
-            document.getElementById('dodgeGameArea').style.display = 'none';
-            document.getElementById('jumpGameArea').style.display = 'none';
-            
-            cancelAnimationFrame(gameAnimationId);
-            cancelAnimationFrame(dodgeAnimationId);
-            cancelAnimationFrame(jumpAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(dodgeAnimationId); cancelAnimationFrame(jumpAnimationId);
 
-            if(gameType === 'brick') {
-                document.getElementById('btnSelectBrick').classList.add('active');
-                document.getElementById('brickGameArea').style.display = 'block';
-                startBrickGameEngine();
-            } else if(gameType === 'memory') {
-                document.getElementById('btnSelectMemory').classList.add('active');
-                document.getElementById('memoryGameArea').style.display = 'block';
-                startMemoryGameEngine();
-            } else if(gameType === 'dodge') {
-                document.getElementById('btnSelectDodge').classList.add('active');
-                document.getElementById('dodgeGameArea').style.display = 'block';
-                startDodgeGameEngine();
-            } else if(gameType === 'jump') {
-                document.getElementById('btnSelectJump').classList.add('active');
-                document.getElementById('jumpGameArea').style.display = 'block';
-                startJumpGameEngine();
-            }
+            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
+            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
+            else if(gameType === 'dodge') { document.getElementById('btnSelectDodge').classList.add('active'); document.getElementById('dodgeGameArea').style.display = 'block'; startDodgeGameEngine(); } 
+            else if(gameType === 'jump') { document.getElementById('btnSelectJump').classList.add('active'); document.getElementById('jumpGameArea').style.display = 'block'; startJumpGameEngine(); }
         }
 
-        /* [1번 게임: 벽돌깨기] */
+        /* [1번: 벽돌깨기 엔진 세이프티 가드 교정] */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
         let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy;
-        let paddleHeight = 14, paddleWidth = 65, paddleX;
-        let brickRowCount = 3, brickColumnCount = 6, brickWidth = 42, brickHeight = 12, brickPadding = 5, brickOffsetTop = 15, brickOffsetLeft = 12;
+        let paddleHeight = 12, paddleWidth = 60, paddleX;
         let bricks = [];
 
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId);
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.8; dy = -1.8; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            for (let c = 0; c < brickColumnCount; c++) { bricks[c] = []; for (let r = 0; r < brickRowCount; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
+            if(!gameCanvas) return;
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 3; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
             drawBrickGame();
         }
 
         function setPaddleX(clientX) {
-            let relativeX = clientX - gameCanvas.getBoundingClientRect().left;
+            let rect = gameCanvas.getBoundingClientRect();
+            let relativeX = clientX - rect.left;
             if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2;
         }
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
@@ -688,175 +527,78 @@
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
             ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
             
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    if (bricks[c][r].status === 1) {
-                        let brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-                        let brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+            for (let c = 0; c < 6; c++) {
+                for (let r = 0; r < 3; r++) {
+                    if (bricks[c][r] && bricks[c][r].status === 1) {
+                        let brickX = c * 47 + 12; let brickY = r * 17 + 15;
                         bricks[c][r].x = brickX; bricks[c][r].y = brickY;
-                        ctx.beginPath(); ctx.rect(brickX, brickY, brickWidth, brickHeight); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                        ctx.beginPath(); ctx.rect(brickX, brickY, 42, 12); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                        
+                        if (ballX > brickX && ballX < brickX + 42 && ballY > brickY && ballY < brickY + 12) {
+                            dy = -dy; bricks[c][r].status = 0; amount += 100000000; updateTotalBalance();
+                        }
                     }
                 }
             }
-
-            for (let c = 0; c < brickColumnCount; c++) {
-                for (let r = 0; r < brickRowCount; r++) {
-                    let b = bricks[c][r];
-                    if (b.status === 1 && ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
-                        dy = -dy; b.status = 0; amount += 100; updateTotalBalance();
-                    }
-                }
-            }
-
             if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
             if (ballY + dy < ballRadius) dy = -dy;
             else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
                 if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; } 
-                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("💥 게임 오버!"); return; }
+                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("🧱 게임 리셋 완료!"); startBrickGameEngine(); return; }
             }
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* [2번 게임: 카드 짝맞추기] */
+        /* [2번: 카드 매칭] */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐'];
         let flippedCards = []; let matchedPairs = 0;
-
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
             let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
             shuffled.forEach((emoji, index) => {
-                const card = document.createElement('div');
-                card.classList.add('memory-card'); card.dataset.emoji = emoji; card.dataset.index = index;
+                const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji;
                 card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
             });
         }
-
         function handleCardClick() {
-            if (flippedCards.length >= 2 || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+            if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
             this.classList.add('flipped'); flippedCards.push(this);
             if (flippedCards.length === 2) {
-                let card1 = flippedCards[0]; let card2 = flippedCards[1];
-                if (card1.dataset.emoji === card2.dataset.emoji) {
-                    setTimeout(() => {
-                        card1.classList.add('matched'); card2.classList.add('matched'); flippedCards = []; matchedPairs++;
-                        if (matchedPairs === cardEmojis.length / 2) { amount += 1000; updateTotalBalance(); alert("🎉 성공! 보상 +1,000원!"); }
-                    }, 400);
-                } else { setTimeout(() => { card1.classList.remove('flipped'); card2.classList.remove('flipped'); flippedCards = []; }, 800); }
+                let c1 = flippedCards[0]; let c2 = flippedCards[1];
+                if (c1.dataset.emoji === c2.dataset.emoji) {
+                    c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
+                    if (matchedPairs === 4) { amount += 500000000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
+                } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
         }
 
-        /* [3번 게임: 💥 공 피하기 (NEW)] */
+        /* [3번: 공 피하기 가드 교정] */
         let dodgeCanvas = document.getElementById("dodgeCanvas"); let dCtx = dodgeCanvas.getContext("2d");
-        let dodgeAnimationId = null; let playerX, playerY, playerRadius = 10;
-        let enemies = []; let dodgeScoreTimer = 0; let isDodgeGameOver = false;
-
-        function startDodgeGameEngine() {
-            cancelAnimationFrame(dodgeAnimationId);
-            playerX = dodgeCanvas.width / 2; playerY = dodgeCanvas.height / 2;
-            enemies = []; dodgeScoreTimer = 0; isDodgeGameOver = false;
-            for(let i=0; i<4; i++) { spawnEnemy(); }
-            loopDodgeGame();
-        }
-
-        function spawnEnemy() {
-            enemies.push({
-                x: Math.random() * dodgeCanvas.width, y: 0,
-                radius: Math.random() * 6 + 5,
-                dx: (Math.random() - 0.5) * 3, dy: Math.random() * 2 + 1.5
-            });
-        }
-
-        function setPlayerPos(clientX, clientY) {
-            if(isDodgeGameOver) return;
-            let rect = dodgeCanvas.getBoundingClientRect();
-            playerX = clientX - rect.left; playerY = clientY - rect.top;
-        }
-        dodgeCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerPos(e.touches[0].clientX, e.touches[0].clientY); }, {passive: false});
-        dodgeCanvas.addEventListener("mousemove", (e) => setPlayerPos(e.clientX, e.clientY));
-
+        let dodgeAnimationId = null; let playerX = 150, playerY = 120, enemies = [];
+        function startDodgeGameEngine() { cancelAnimationFrame(dodgeAnimationId); enemies = []; for(let i=0; i<4; i++) { enemies.push({x:Math.random()*300, y:0, dx:(Math.random()-0.5)*2, dy:Math.random()*2+1}); } loopDodgeGame(); }
+        dodgeCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); let r = dodgeCanvas.getBoundingClientRect(); playerX = e.touches[0].clientX - r.left; playerY = e.touches[0].clientY - r.top; });
         function loopDodgeGame() {
-            if(isDodgeGameOver) return;
-            dCtx.clearRect(0, 0, dodgeCanvas.width, dodgeCanvas.height);
-            
-            // 플레이어 그리기
-            dCtx.beginPath(); dCtx.arc(playerX, playerY, playerRadius, 0, Math.PI*2); dCtx.fillStyle = "#3498DB"; dCtx.fill(); dCtx.closePath();
-
-            // 적 그리기 & 이동
-            enemies.forEach((enemy, index) => {
-                enemy.x += enemy.dx; enemy.y += enemy.dy;
-                if(enemy.x < 0 || enemy.x > dodgeCanvas.width) enemy.dx *= -1;
-                if(enemy.y > dodgeCanvas.height) { enemy.y = 0; enemy.x = Math.random() * dodgeCanvas.width; }
-
-                dCtx.beginPath(); dCtx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI*2); dCtx.fillStyle = "#E74C3C"; dCtx.fill(); dCtx.closePath();
-
-                // 충돌 검사
-                let dist = Math.hypot(playerX - enemy.x, playerY - enemy.y);
-                if(dist < playerRadius + enemy.radius) { isDodgeGameOver = true; alert("💥 부딪혔습니다! 게임 종료!"); }
-            });
-
-            dodgeScoreTimer++;
-            if(dodgeScoreTimer % 60 === 0) { amount += 50; updateTotalBalance(); if(enemies.length < 10) spawnEnemy(); }
-
+            dCtx.clearRect(0,0,300,240); dCtx.beginPath(); dCtx.arc(playerX,playerY,8,0,Math.PI*2); dCtx.fillStyle="#3498DB"; dCtx.fill();
+            enemies.forEach(e => { e.x+=e.dx; e.y+=e.dy; if(e.x<0||e.x>300) e.dx*=-1; if(e.y>240){e.y=0;e.x=Math.random()*300;} dCtx.beginPath(); dCtx.arc(e.x,e.y,6,0,Math.PI*2); dCtx.fillStyle="#E74C3C"; dCtx.fill(); if(Math.hypot(playerX-e.x, playerY-e.y)<14){ alert("💥 충돌 발생! 재시작합니다."); startDodgeGameEngine(); } });
             dodgeAnimationId = requestAnimationFrame(loopDodgeGame);
         }
 
-        /* [4번 게임: 🏃 동전모으기 점프 (NEW)] */
+        /* [4번: 동전 점프 가드 교정] */
         let jumpCanvas = document.getElementById("jumpCanvas"); let jCtx = jumpCanvas.getContext("2d");
-        let jumpAnimationId = null;
-        let birdY, birdVelocity, gravity = 0.25, jumpStrength = -5;
-        let coinX, coinY, coinRadius = 8;
-        let obstacleX, obstacleY, obstacleWidth = 15, obstacleHeight = 35, obstacleSpeed = 2.5;
-
-        function startJumpGameEngine() {
-            cancelAnimationFrame(jumpAnimationId);
-            birdY = jumpCanvas.height - 40; birdVelocity = 0;
-            coinX = jumpCanvas.width + 40; coinY = jumpCanvas.height - 50 - Math.random() * 40;
-            obstacleX = jumpCanvas.width + 200; obstacleY = jumpCanvas.height - obstacleHeight - 15;
-            loopJumpGame();
-        }
-
-        function triggerJump() { if(birdY >= jumpCanvas.height - 40) birdVelocity = jumpStrength; }
-        jumpCanvas.addEventListener("touchstart", (e) => { e.preventDefault(); triggerJump(); });
-        jumpCanvas.addEventListener("mousedown", triggerJump);
-
+        let jumpAnimationId = null; let birdY = 200, birdV = 0, coinX = 320, obsX = 400;
+        function startJumpGameEngine() { cancelAnimationFrame(jumpAnimationId); birdY=200; birdV=0; coinX=320; obsX=440; loopJumpGame(); }
+        jumpCanvas.addEventListener("touchstart", (e) => { e.preventDefault(); if(birdY>=200) birdV = -4.5; });
         function loopJumpGame() {
-            jCtx.clearRect(0, 0, jumpCanvas.width, jumpCanvas.height);
-
-            // 바닥선
-            jCtx.beginPath(); jCtx.moveTo(0, jumpCanvas.height - 15); jCtx.lineTo(jumpCanvas.width, jumpCanvas.height - 15); jCtx.strokeStyle = "#7F8C8D"; jCtx.stroke();
-
-            // 기적이 점프 물리 계산
-            birdVelocity += gravity; birdY += birdVelocity;
-            if(birdY > jumpCanvas.height - 40) { birdY = jumpCanvas.height - 40; birdVelocity = 0; }
-
-            // 플레이어(기적이 대리인) 캐릭터 그리기
-            jCtx.beginPath(); jCtx.arc(40, birdY, 12, 0, Math.PI*2); jCtx.fillStyle = "#F39C12"; jCtx.fill(); jCtx.closePath();
-
-            // 장애물 이동 및 그리기
-            obstacleX -= obstacleSpeed;
-            if(obstacleX < -obstacleWidth) { obstacleX = jumpCanvas.width + Math.random() * 100; }
-            jCtx.fillStyle = "#95A5A6"; jCtx.fillRect(obstacleX, obstacleY, obstacleWidth, obstacleHeight);
-
-            // 동전 이동 및 그리기
-            coinX -= obstacleSpeed;
-            if(coinX < -20) { coinX = jumpCanvas.width + Math.random() * 150; coinY = jumpCanvas.height - 40 - Math.random() * 60; }
-            jCtx.beginPath(); jCtx.arc(coinX, coinY, coinRadius, 0, Math.PI*2); jCtx.fillStyle = "#F1C40F"; jCtx.fill(); jCtx.closePath();
-
-            // 동전 획득 충돌 체크
-            if(Math.hypot(40 - coinX, birdY - coinY) < 12 + coinRadius) {
-                amount += 200; updateTotalBalance();
-                coinX = jumpCanvas.width + Math.random() * 150; coinY = jumpCanvas.height - 40 - Math.random() * 60;
-            }
-
-            // 장애물 충돌 체크
-            if(obstacleX < 52 && obstacleX + obstacleWidth > 28 && birdY + 12 > obstacleY) {
-                cancelAnimationFrame(jumpAnimationId); alert("🌵 장애물에 걸렸습니다! 게임 종료!"); return;
-            }
-
+            jCtx.clearRect(0,0,300,240); birdV += 0.2; birdY += birdV; if(birdY>200){ birdY=200; birdV=0; }
+            jCtx.beginPath(); jCtx.arc(40,birdY,10,0,Math.PI*2); jCtx.fillStyle="#F39C12"; jCtx.fill();
+            obsX -= 2; if(obsX<-20) obsX=340; jCtx.fillStyle="#95A5A6"; jCtx.fillRect(obsX,190,15,35);
+            coinX -= 2; if(coinX<-20) coinX=360; jCtx.beginPath(); jCtx.arc(coinX,160,7,0,Math.PI*2); jCtx.fillStyle="#F1C40F"; jCtx.fill();
+            if(Math.hypot(40-coinX, birdY-160)<17){ amount+=200000000; updateTotalBalance(); coinX=-20; }
+            if(obsX<50 && obsX>25 && birdY>170){ alert("💥 아쉽네요! 다시 시작합니다."); startJumpGameEngine(); return; }
             jumpAnimationId = requestAnimationFrame(loopJumpGame);
         }
 
-        checkSessionInit();
+        window.onload = loadSavedData;
     </script>
 </body>
 </html>
