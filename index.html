@@ -46,14 +46,15 @@
         .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
-        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
-        .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-        .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        
+        /* ⚙️ 컨트롤 섹션: 기어 아이콘 제거 후 100% 꽉 채우도록 변경 */
+        .control-section { display: flex; width: 100%; max-width: 340px; }
+        .action-button-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 13px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
-        .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
-        .btn-admin-gear { background-color: white; color: #5D6D7E; }
+        
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
@@ -143,9 +144,6 @@
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
                     <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
-                </div>
-                <div class="side-icon-group">
-                    <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
                 </div>
             </div>
         </div>
