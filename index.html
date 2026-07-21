@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>실수로도 부자 되는 곳</title>
+    <title>실수로도 부자되는 곳</title>
     <style>
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -95,9 +95,14 @@
 
     <div id="mainAppLayout">
         <div class="header">
-            <h1>실수로도 부자 되는 곳</h1>
-            <div id="userBadge" class="user-welcome-info tier-whale">
-                <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
+            <h1>실수로도 부자되는 곳</h1>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <div id="userBadge" class="user-welcome-info tier-whale">
+                    <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
+                </div>
+                <button onclick="openAdminModal()" style="background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                    🔑 로그인
+                </button>
             </div>
         </div>
 
@@ -154,7 +159,7 @@
 
             <div id="galagaGameArea" class="game-display-panel">
                 <canvas id="galagaCanvas" width="300" height="260"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine(1)">🚀 갤러그 출격 / 리셋</button>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 이동 (자동 연사! 격추당 +10,000원)</p>
             </div>
 
@@ -410,7 +415,7 @@
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
                 document.getElementById('navGame').classList.add('active'); 
-                setTimeout(() => { startGalagaGameEngine(1); }, 50); 
+                setTimeout(() => { startGalagaGameEngine(); }, 50); 
             }
             else if(tabName === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
             else if(tabName === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
@@ -479,7 +484,7 @@
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
             if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
-            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(1); }
+            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
         }
 
         /* 🧱 1. 벽돌깨기 */
@@ -537,27 +542,24 @@
             }
         }
 
-        /* 🛸 3. 난이도 3단계 갤러그 엔진 */
+        /* 🛸 3. 리얼 아케이드 정통 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         let playerShipX = 150; 
         let playerBullets = []; 
-        let enemyBullets = []; // 적 탄환 배열
         let enemyShips = []; 
         let particles = [];
         let galagaFrame = 0;
         let starfield = [];
-        let currentStage = 1; // 갤러그 난이도 1~3단계
 
         for(let i=0; i<30; i++) {
             starfield.push({ x: Math.random()*300, y: Math.random()*260, size: Math.random()*1.5, speed: Math.random()*1 + 0.2 });
         }
 
-        function startGalagaGameEngine(stage = 1) {
+        function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            currentStage = stage;
-            playerBullets = []; enemyBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 150;
+            playerBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 150;
 
             const rows = [
                 { type: 'boss', count: 4, y: 35, score: 40000 },
@@ -574,7 +576,7 @@
                         x: 150,
                         y: -30,
                         type: r.type,
-                        score: r.score * currentStage,
+                        score: r.score,
                         state: 'entering',
                         entryAngle: (i * 0.5),
                         swoopTimer: 0,
@@ -590,11 +592,9 @@
         function setPlayerX(clientX) {
             let rect = galagaCanvas.getBoundingClientRect();
             let relativeX = clientX - rect.left;
-            if(relativeX >= 0 && relativeX <= galagaCanvas.width) playerShipX = relativeX;
+            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) playerShipX = relativeX;
         }
-
-        galagaCanvas.addEventListener("touchstart", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); }, { passive: false });
-        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); }, { passive: false });
+        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
 
         function drawPixelSprite(ctx, type, x, y) {
@@ -633,7 +633,6 @@
             gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            // 1. 우주 배경
             starfield.forEach(s => {
                 s.y += s.speed;
                 if(s.y > 260) s.y = 0;
@@ -641,15 +640,8 @@
                 gCtx.fillRect(s.x, s.y, s.size, s.size);
             });
 
-            // Stage 표시
-            gCtx.fillStyle = "#FFCC00";
-            gCtx.font = "bold 11px sans-serif";
-            gCtx.fillText(`STAGE ${currentStage}`, 10, 18);
-
-            // 2. 플레이어
             drawPixelSprite(gCtx, 'player', playerShipX, 235);
 
-            // 3. 미사일 발사
             if(galagaFrame % 10 === 0) {
                 playerBullets.push({ x: playerShipX - 4, y: 225 });
                 playerBullets.push({ x: playerShipX + 4, y: 225 });
@@ -662,52 +654,28 @@
                 if(b.y < 0) playerBullets.splice(bIdx, 1);
             });
 
-            // 적 총알 (Stage 2부터 발사)
-            enemyBullets.forEach((eb, ebIdx) => {
-                eb.y += eb.speed;
-                gCtx.fillStyle = "#FF0055";
-                gCtx.fillRect(eb.x - 1, eb.y, 2, 5);
-
-                if(Math.abs(playerShipX - eb.x) < 8 && Math.abs(235 - eb.y) < 8) {
-                    createExplosion(playerShipX, 235);
-                    cancelAnimationFrame(galagaAnimationId);
-                    setTimeout(() => {
-                        alert(`🛸 [STAGE ${currentStage}] 적 피격! 기지를 재정비합니다.`);
-                        startGalagaGameEngine(currentStage);
-                    }, 100);
-                }
-
-                if(eb.y > 260) enemyBullets.splice(ebIdx, 1);
-            });
-
-            // 난이도별 속도/강하 가중치 적용
-            let speedMult = 1 + (currentStage - 1) * 0.45;
-            let swoopChance = 0.002 * currentStage;
-            let formationOffsetX = Math.sin(galagaFrame * 0.05 * speedMult) * 10;
-
+            let formationOffsetX = Math.sin(galagaFrame * 0.05) * 8;
+            
             enemyShips.forEach((enemy, eIdx) => {
                 if(enemy.state === 'entering') {
-                    enemy.entryAngle += 0.06 * speedMult;
-                    enemy.y += 2.2 * speedMult;
+                    enemy.entryAngle += 0.06;
+                    enemy.y += 2.2;
                     enemy.x = 150 + Math.sin(enemy.entryAngle) * 60;
-                    if(enemy.y >= enemy.targetY) enemy.state = 'formation';
+                    if(enemy.y >= enemy.targetY) {
+                        enemy.state = 'formation';
+                    }
                 } else if(enemy.state === 'formation') {
                     enemy.x = enemy.targetX + formationOffsetX;
                     enemy.y = enemy.targetY;
 
-                    if(Math.random() < swoopChance && galagaFrame > 80) {
+                    if(Math.random() < 0.002 && galagaFrame > 100) {
                         enemy.state = 'swooping';
                         enemy.swoopTimer = 0;
                     }
                 } else if(enemy.state === 'swooping') {
-                    enemy.swoopTimer += 0.04 * speedMult;
-                    enemy.y += 2.5 * speedMult;
+                    enemy.swoopTimer += 0.04;
+                    enemy.y += 2.5;
                     enemy.x += Math.cos(enemy.swoopTimer * 2) * 3;
-
-                    // Stage 2 이상일 때 다이빙 중 탄환 발사
-                    if(currentStage >= 2 && Math.random() < 0.03) {
-                        enemyBullets.push({ x: enemy.x, y: enemy.y, speed: 2.5 * speedMult });
-                    }
 
                     if(enemy.y > 270) {
                         enemy.y = -20;
@@ -731,8 +699,8 @@
                     createExplosion(playerShipX, 235);
                     cancelAnimationFrame(galagaAnimationId);
                     setTimeout(() => {
-                        alert(`🛸 [STAGE ${currentStage}] 적 기체와 충돌했습니다!`);
-                        startGalagaGameEngine(currentStage);
+                        alert("🛸 적 기체와 충돌했습니다! 기지를 재정비합니다.");
+                        startGalagaGameEngine();
                     }, 100);
                 }
             });
@@ -744,15 +712,9 @@
                 if(p.life <= 0) particles.splice(pIdx, 1);
             });
 
-            // Stage 진행 로직
             if(enemyShips.length === 0) {
-                if(currentStage < 3) {
-                    alert(`🎉 STAGE ${currentStage} 클리어! 다음 난이도(STAGE ${currentStage + 1})로 이동합니다! 🔥`);
-                    startGalagaGameEngine(currentStage + 1);
-                } else {
-                    alert("🏆 최종 3단계 클리어! 전설의 갤러그 대장으로 등극하셨습니다! 🎉");
-                    startGalagaGameEngine(1);
-                }
+                alert("🎉 웨이브 클리어! 적 편대를 전멸시켰습니다.");
+                startGalagaGameEngine();
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
