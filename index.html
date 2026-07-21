@@ -1,3 +1,4 @@
+Pan Do ra:
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -77,7 +78,8 @@
         
         .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
         .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
-        .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
+
+.beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
 
         .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
         .bird-eye { 
@@ -118,7 +120,7 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
 
-        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
+.control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
@@ -151,7 +153,7 @@
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
 
-        .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
+.btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
@@ -163,93 +165,6 @@
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 👟 만보기 탭 전용 스타일 */
-        .pedometer-card {
-            background: #FFFFFF;
-            border-radius: 20px;
-            padding: 15px 20px;
-            width: 100%;
-            max-width: 340px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .pedo-top-stats {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .pedo-stat-box { flex: 1; }
-        .pedo-stat-label { font-size: 12px; color: #8E8E93; margin-bottom: 4px; }
-        .pedo-stat-val { font-size: 20px; font-weight: bold; }
-        .val-cal { color: #E67E22; }
-        .val-time { color: #8EA604; }
-        .val-km { color: #3498DB; }
-
-        .pedo-dial-container {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .pedo-dial-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 220px;
-            height: 220px;
-        }
-
-        .pedo-dial-center {
-            text-align: center;
-            z-index: 2;
-        }
-
-        .pedo-today-title { font-size: 13px; color: #7F8C8D; margin-bottom: 2px; }
-        .pedo-steps-count { font-size: 34px; font-weight: 800; color: #2980B9; line-height: 1.1; }
-        .pedo-level-text { font-size: 11px; color: #BDC3C7; margin-top: 6px; }
-        .pedo-goal-text { font-size: 12px; color: #7F8C8D; font-weight: bold; margin-top: 2px; }
-
-        /* 하단 미니 차트 */
-        .pedo-chart-box {
-            width: 100%;
-            height: 60px;
-            border-top: 1px solid #ECEFF1;
-            padding-top: 10px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .pedo-chart-bar {
-            width: 6px;
-            background-color: #3498DB;
-            border-radius: 3px;
-            transition: height 0.3s ease;
-        }
-
-        /* 만보기 조작 버튼 그룹 */
-        .pedo-btn-group {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            max-width: 340px;
-            margin-top: 12px;
-        }
-
-        .btn-pedo-start { background: linear-gradient(135deg, #2ECC71, #27AE60); }
-        .btn-pedo-reset { background: linear-gradient(135deg, #E74C3C, #C0392B); }
-
         /* 모달 및 팝업 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
@@ -257,10 +172,10 @@
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
         /* 하단 네비게이션 바 */
-        .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #95A5A6; text-decoration: none; width: 20%; cursor: pointer; text-align: center; }
+        .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
-        .nav-icon { font-size: 18px; margin-bottom: 2px; }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
         
         .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
     </style>
@@ -288,7 +203,7 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
 
-                        <div class="bird-beak-wrap">
+<div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
                         </div>
@@ -322,50 +237,7 @@
             </div>
         </div>
 
-        <!-- 👟 탭 2: 만보기 화면 -->
-        <div id="pedometerTab" class="tab-content">
-            <div class="pedometer-card">
-                <div class="pedo-top-stats">
-                    <div class="pedo-stat-box">
-                        <div class="pedo-stat-label">칼로리</div>
-                        <div class="pedo-stat-val val-cal" id="pedoCal">0</div>
-                    </div>
-                    <div class="pedo-stat-box">
-                        <div class="pedo-stat-label">활동시간</div>
-                        <div class="pedo-stat-val val-time" id="pedoTime">0m</div>
-                    </div>
-                    <div class="pedo-stat-box">
-                        <div class="pedo-stat-label">Km</div>
-                        <div class="pedo-stat-val val-km" id="pedoKm">0.0</div>
-                    </div>
-                </div>
-
-                <div class="pedo-dial-container">
-                    <canvas id="pedoCanvas" class="pedo-dial-canvas" width="220" height="220"></canvas>
-                    <div class="pedo-dial-center">
-                        <div class="pedo-today-title">오늘의 걸음</div>
-                        <div class="pedo-steps-count" id="pedoSteps">0</div>
-                        <div class="pedo-level-text" id="pedoLevel">레벨: 준비중</div>
-                        <div class="pedo-goal-text" id="pedoGoalStatus">출발 대기</div>
-                    </div>
-                </div>
-
-                <div class="pedo-chart-box" id="pedoChartBox">
-                    <div class="pedo-chart-bar" style="height: 10px;"></div>
-                    <div class="pedo-chart-bar" style="height: 15px;"></div>
-                    <div class="pedo-chart-bar" style="height: 40px;"></div>
-                    <div class="pedo-chart-bar" style="height: 25px;"></div>
-                    <div class="pedo-chart-bar" style="height: 5px;"></div>
-                </div>
-            </div>
-
-            <div class="pedo-btn-group">
-                <button class="btn-action btn-pedo-start" id="btnPedoStart" onclick="togglePedometer()">🚀 출발하기</button>
-                <button class="btn-action btn-pedo-reset" onclick="resetPedometer()">🔄 리셋</button>
-            </div>
-        </div>
-
-        <!-- 🎮 탭 3: 기적 게임 공간 -->
+        <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
@@ -373,6 +245,7 @@
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
+            <!-- 🛸 정통 갤러그 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
                 <canvas id="galagaCanvas" width="300" height="240"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
@@ -392,14 +265,14 @@
             </div>
         </div>
 
-        <!-- 🏦 탭 4: 디파이 금고 -->
+        <!-- 🏦 탭 3: 디파이 금고 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
 
-                <div class="backend-usdt-box">
+<div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
@@ -416,7 +289,7 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 🛍️ 탭 5: 기적 상점 -->
+        <!-- 🛍️ 탭 4: 기적 상점 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
@@ -437,6 +310,7 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
+
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -468,13 +342,10 @@
             </div>
         </div>
 
-        <!-- 하단 네비게이션 바 -->
+<!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
-            </div>
-            <div class="nav-item" id="navPedometer" onclick="changeTabUrl('pedometer')">
-                <span class="nav-icon">👟</span><span>만보기</span>
             </div>
             <div class="nav-item" id="navGame" onclick="changeTabUrl('game')">
                 <span class="nav-icon">🎮</span><span>기적 게임</span>
@@ -530,7 +401,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         let amount = 0; 
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
@@ -542,11 +413,12 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
+        /* 💡 데이터 로드 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
+                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser}));
                 if (userData) {
                     amount = parseInt(userData.totalBalance) || 0;
                     vaultAsset = parseInt(userData.vaultAsset) || 0;
@@ -558,19 +430,20 @@
                 if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
             }
             updateTotalBalance(false);
-            renderPedometerDial();
         }
 
+        /* 💡 데이터 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || {};
+                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser})) || {};
                 userData.totalBalance = amount;
                 userData.vaultAsset = vaultAsset;
-                localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+                localStorage.setItem(user_${loggedInUser}, JSON.stringify(userData));
             }
         }
 
+        /* 💡 회원가입 시 1,000만 원 기본 지급 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -580,7 +453,7 @@
                 return;
             }
 
-            if (localStorage.getItem(`user_${id}`)) {
+            if (localStorage.getItem(user_${id})) {
                 alert("이미 존재하는 아이디입니다.");
                 return;
             }
@@ -588,19 +461,19 @@
             const newUser = {
                 username: id,
                 password: pw,
-                totalBalance: 10000000,
+                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
                 vaultAsset: 0
             };
 
-            localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
-            alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
+            localStorage.setItem(user_${id}, JSON.stringify(newUser));
+            alert(🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.);
         }
 
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
 
-            const storedData = localStorage.getItem(`user_${id}`);
+            const storedData = localStorage.getItem(user_${id});
             if (!storedData) {
                 alert("존재하지 않는 회원 계정입니다.");
                 return;
@@ -613,7 +486,7 @@
             }
 
             localStorage.setItem("loggedInUser", id);
-            alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
+            alert(🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.);
             
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
@@ -629,7 +502,8 @@
         }
 
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
-        function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
+
+function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
@@ -661,26 +535,12 @@
         function changeTabUrl(tabName) { routeTabs(tabName); }
 
         function routeTabs(tabName) {
-            document.getElementById('homeTab').classList.remove('active'); 
-            document.getElementById('pedometerTab').classList.remove('active');
-            document.getElementById('gameTab').classList.remove('active'); 
-            document.getElementById('vaultTab').classList.remove('active'); 
-            document.getElementById('shopTab').classList.remove('active');
-
-            document.getElementById('navHome').classList.remove('active'); 
-            document.getElementById('navPedometer').classList.remove('active');
-            document.getElementById('navGame').classList.remove('active'); 
-            document.getElementById('navVault').classList.remove('active'); 
-            document.getElementById('navShop').classList.remove('active');
+            document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
+            document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
-            if(tabName === 'pedometer') {
-                document.getElementById('pedometerTab').classList.add('active');
-                document.getElementById('navPedometer').classList.add('active');
-                renderPedometerDial();
-            }
-            else if(tabName === 'game') { 
+            if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
                 document.getElementById('navGame').classList.add('active'); 
                 setTimeout(() => { startGalagaGameEngine(); }, 50); 
@@ -690,6 +550,7 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
+        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -704,7 +565,7 @@
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 35000) + 15000; updateTotalBalance(); }, 1000);
 
-            } else {
+} else {
                 isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
                 leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
             }
@@ -741,7 +602,7 @@
             amount += bonusAmount; 
             updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none'; 
-            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
+            alert(🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원));
         }
 
         function handleDeposit() {
@@ -756,194 +617,6 @@
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
         }
 
-        /* 👟 만보기 로직 (모션 센서 감지 기반) */
-        let pedoSteps = 0;
-        let pedoActive = false;
-        let pedoSeconds = 0;
-        let pedoTimeInterval = null;
-        const TARGET_GOAL = 10000;
-
-        const MOTION_THRESHOLD = 15; 
-        let lastX = 0, lastY = 0, lastZ = 0;
-        let lastTime = 0;
-
-        function togglePedometer() {
-            if (!pedoActive) {
-                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                    DeviceMotionEvent.requestPermission()
-                        .then(permissionState => {
-                            if (permissionState === 'granted') {
-                                startPedometerTracking();
-                            } else {
-                                alert("모션 센서 접근 권한이 거부되었습니다.");
-                            }
-                        })
-                        .catch(console.error);
-                } else {
-                    startPedometerTracking();
-                }
-            } else {
-                stopPedometerTracking();
-            }
-        }
-
-        function startPedometerTracking() {
-            pedoActive = true;
-            const btn = document.getElementById('btnPedoStart');
-            btn.innerText = "⏸️ 일시정지";
-            btn.style.background = "linear-gradient(135deg, #F39C12, #D35400)";
-
-            window.addEventListener('devicemotion', handleMotion, false);
-
-            pedoTimeInterval = setInterval(() => {
-                pedoSeconds += 1;
-                updatePedometerUI();
-            }, 1000);
-        }
-
-        function stopPedometerTracking() {
-            pedoActive = false;
-            const btn = document.getElementById('btnPedoStart');
-            btn.innerText = "🚀 출발하기";
-            btn.style.background = "linear-gradient(135deg, #2ECC71, #27AE60)";
-
-            window.removeEventListener('devicemotion', handleMotion, false);
-            clearInterval(pedoTimeInterval);
-        }
-
-        function handleMotion(event) {
-            if (!pedoActive) return;
-
-            const current = event.accelerationIncludingGravity;
-            if (!current) return;
-
-            const currentTime = Date.now();
-            if ((currentTime - lastTime) > 150) {
-                lastTime = currentTime;
-
-                const deltaX = Math.abs(current.x - lastX);
-                const deltaY = Math.abs(current.y - lastY);
-                const deltaZ = Math.abs(current.z - lastZ);
-
-                if ((deltaX + deltaY + deltaZ) > MOTION_THRESHOLD) {
-                    pedoSteps += 1;
-                    updatePedometerUI();
-                }
-
-                lastX = current.x;
-                lastY = current.y;
-                lastZ = current.z;
-            }
-        }
-
-        function resetPedometer() {
-            stopPedometerTracking();
-            pedoSteps = 0;
-            pedoSeconds = 0;
-            lastX = 0; lastY = 0; lastZ = 0;
-            updatePedometerUI();
-        }
-
-        function updatePedometerUI() {
-            document.getElementById('pedoSteps').innerText = pedoSteps.toLocaleString();
-            
-            const cal = Math.floor(pedoSteps * 0.035);
-            document.getElementById('pedoCal').innerText = cal;
-            
-            const km = (pedoSteps * 0.0007).toFixed(1);
-            document.getElementById('pedoKm').innerText = km;
-            
-            const mins = Math.floor(pedoSeconds / 60);
-            const hrs = Math.floor(mins / 60);
-            const remMins = mins % 60;
-            let timeStr = `${mins}m`;
-            if (hrs > 0) timeStr = `${hrs}h ${remMins}m`;
-            document.getElementById('pedoTime').innerText = timeStr;
-            
-            const levelElem = document.getElementById('pedoLevel');
-            const goalElem = document.getElementById('pedoGoalStatus');
-            
-            if (pedoSteps === 0) {
-                levelElem.innerText = "레벨: 준비중";
-                goalElem.innerText = "출발 대기";
-            } else if (pedoSteps < 3000) {
-                levelElem.innerText = "레벨: 보통활동";
-                goalElem.innerText = "목표 진행중";
-            } else if (pedoSteps < 8000) {
-                levelElem.innerText = "레벨: 높은활동";
-                goalElem.innerText = "목표 임박";
-            } else {
-                levelElem.innerText = "레벨: 최고활동";
-                goalElem.innerText = "목표 완성";
-            }
-            
-            renderPedometerDial();
-            updatePedometerChart();
-        }
-
-        function renderPedometerDial() {
-            const canvas = document.getElementById("pedoCanvas");
-            if (!canvas) return;
-            const ctx = canvas.getContext("2d");
-            const width = canvas.width;
-            const height = canvas.height;
-            const cx = width / 2;
-            const cy = height / 2;
-            const radius = 90;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const totalTicks = 60;
-            const startAngle = Math.PI * 0.75;
-            const endAngle = Math.PI * 2.25;
-            const progressRatio = Math.min(pedoSteps / TARGET_GOAL, 1);
-            const activeTicks = Math.floor(totalTicks * progressRatio);
-
-            for (let i = 0; i <= totalTicks; i++) {
-                const angle = startAngle + (i / totalTicks) * (endAngle - startAngle);
-                const isPassed = i <= activeTicks;
-
-                const innerR = radius - 8;
-                const outerR = radius;
-
-                const x1 = cx + Math.cos(angle) * innerR;
-                const y1 = cy + Math.sin(angle) * innerR;
-                const x2 = cx + Math.cos(angle) * outerR;
-                const y2 = cy + Math.sin(angle) * outerR;
-
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.lineWidth = 2.5;
-                ctx.strokeStyle = isPassed ? "#E67E22" : "#D0D7DE";
-                ctx.lineCap = "round";
-                ctx.stroke();
-            }
-
-            if (activeTicks > 0) {
-                const currentAngle = startAngle + (activeTicks / totalTicks) * (endAngle - startAngle);
-                const pinX = cx + Math.cos(currentAngle) * (radius - 4);
-                const pinY = cy + Math.sin(currentAngle) * (radius - 4);
-
-                ctx.beginPath();
-                ctx.arc(pinX, pinY, 5, 0, Math.PI * 2);
-                ctx.fillStyle = "#D35400";
-                ctx.fill();
-            }
-        }
-
-        function updatePedometerChart() {
-            const chartBox = document.getElementById('pedoChartBox');
-            if (!chartBox) return;
-            const bars = chartBox.querySelectorAll('.pedo-chart-bar');
-            
-            if (bars.length > 0) {
-                const lastBar = bars[bars.length - 1];
-                const dynamicHeight = Math.min(Math.max((pedoSteps / 100) * 2, 5), 50);
-                lastBar.style.height = dynamicHeight + "px";
-            }
-        }
-
         function switchMiniGame(gameType) {
             document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
             document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
@@ -955,9 +628,10 @@
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
         }
 
-        /* 🧱 벽돌깨기 */
+        /* 🧱 1. 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+
+let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
             ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
@@ -990,7 +664,7 @@
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 카드 매칭 */
+        /* 🃏 2. 카드 매칭 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
@@ -1012,7 +686,7 @@
             }
         }
 
-        /* 🛸 갤러그 시스템 */
+/* 🛸 3. 정통 갤러그 시스템 */
         let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
