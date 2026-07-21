@@ -8,13 +8,21 @@
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
-        .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
-        .header h1 { font-size: 17px; margin: 0; color: #2C3E50; font-weight: bold; }
-        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
+        
+        /* 헤더 높이를 슬림하게 고정 */
+        .header { background-color: #FFF; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; height: 48px; }
+        .header h1 { font-size: 16px; margin: 0; color: #2C3E50; font-weight: bold; }
+        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
-        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
+        
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
-        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 5px; height: 140px; }
+        
+        /* 새 캐릭터 영역 및 내부 로그인 버튼 위치 배치 */
+        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
+        
+        .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
+
         .bird-container { width: 160px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; }
         .bird-hair { position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF; border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1; box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out; }
         .bird-hair::after { content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px; background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg); }
@@ -40,14 +48,14 @@
         @keyframes flapRightFly { 0% { transform: rotate(30deg); } 100% { transform: rotate(-15deg); } }
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
-        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
-        .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
-        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
-        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
-        .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
         
-        /* 컨트롤 섹션을 자산 상자 너비(340px)에 완벽 맞춤 */
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 8px; }
+        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 2px; }
+        .total-value { font-size: 22px; font-weight: bold; word-break: break-all; }
+        .card { background: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 10px; }
+        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 2px; }
+        .card-value { font-size: 20px; font-weight: bold; color: #2C3E50; word-break: break-all; }
+        
         .control-section { display: flex; width: 100%; max-width: 340px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
         
@@ -96,18 +104,17 @@
     <div id="mainAppLayout">
         <div class="header">
             <h1>실수로도 부자되는 곳</h1>
-            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                <div id="userBadge" class="user-welcome-info tier-whale">
-                    <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
-                </div>
-                <button onclick="openAdminModal()" style="background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                    🔑 로그인
-                </button>
+            <div id="userBadge" class="user-welcome-info tier-whale">
+                <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
             </div>
         </div>
 
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
+                <!-- 동그라미 친 위치로 옮긴 로그인 버튼 -->
+                <button class="inline-login-btn" onclick="openAdminModal()">
+                    🔑 로그인
+                </button>
                 <div class="bird-container">
                     <div class="bird-hair"></div>
                     <div class="bird-wing wing-left" id="leftWing"></div>
