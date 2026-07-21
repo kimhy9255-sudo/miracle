@@ -411,7 +411,7 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
-        /* 💡 데이터 로드 수정: 첫 시작 및 비회원은 무조건 0원 */
+        /* 💡 데이터 로드 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             
@@ -423,7 +423,6 @@
                     if (userBadgeText) userBadgeText.innerText = loggedInUser + " 대장님";
                 }
             } else {
-                // 비회원 / 첫 접속 시 무조건 0원
                 amount = 0;
                 vaultAsset = 0;
                 if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
@@ -431,7 +430,7 @@
             updateTotalBalance(false);
         }
 
-        /* 💡 데이터 저장 수정: 로그인 시 해당 ID의 자산 데이터에 개별 저장 */
+        /* 💡 데이터 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -548,8 +547,15 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* ☁️ 엔진 가동 시 사용자가 '노력해서 버는 돈' 증가 */
+        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
         btn.addEventListener('click', () => {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) {
+                alert("🔒 엔진 가동은 로그인/회원가입 후 이용 가능합니다!");
+                openAdminModal();
+                return;
+            }
+
             const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
