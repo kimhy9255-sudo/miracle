@@ -6,143 +6,63 @@
     <title>사각지대 없는 기적 재단</title>
     <style>
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        body {
-            font-family: 'Apple SD Gothic Neo', sans-serif;
-            margin: 0; padding: 0;
-            background-color: #F4F7F6;
-            display: flex; flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* 📱 메인 서비스 화면 레이아웃 */
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
-
-        /* 상단 헤더 */
         .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
         .header h1 { font-size: 17px; margin: 0; color: #2C3E50; font-weight: bold; }
-        
-        /* 등급별 뱃지 */
         .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
-
-        /* 메인 컨텐츠 영역 */
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
-
-        /* 🕊️ 기적이 영역 */
-        .bird-area { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            width: 100%; 
-            max-width: 340px; 
-            margin-bottom: 5px;
-            height: 140px;
-        }
-        .bird-container { 
-            width: 160px; 
-            height: 120px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            position: relative;
-        }
-
-        /* 머리 위 깃털 */
-        .bird-hair {
-            position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF;
-            border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1;
-            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out;
-        }
-        .bird-hair::after {
-            content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px;
-            background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg);
-        }
-        
-        /* 몸통 */
-        .bird-body { 
-            width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
-            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; 
-            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); 
-            z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out;
-        }
-
-        .bird-belly {
-            position: absolute; bottom: 6px; width: 50px; height: 25px;
-            background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%);
-            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
-        }
-        
+        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 5px; height: 140px; }
+        .bird-container { width: 160px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; }
+        .bird-hair { position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF; border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1; box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out; }
+        .bird-hair::after { content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px; background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg); }
+        .bird-body { width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out; }
+        .bird-belly { position: absolute; bottom: 6px; width: 50px; height: 25px; background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%); border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08); }
         .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
         .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
         .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
-
         .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
-        .bird-eye { 
-            width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1);
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        
-        .eye-pupil {
-            width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
-            border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex;
-        }
+        .bird-eye { width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .eye-pupil { width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%); border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex; }
         .eye-pupil::after { content: ''; position: absolute; width: 8px; height: 8px; background: white; border-radius: 50%; top: 2px; left: 2px; box-shadow: 0 0 2px rgba(255,255,255,0.8); }
-        
-        /* 날개 및 발 */
         .bird-wing { position: absolute; width: 44px; height: 28px; background: linear-gradient(to bottom, #5dade2, #2980b9); top: 42px; z-index: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .wing-left { left: 4px; border-radius: 30px 10px 10px 30px; transform-origin: right center; animation: flapLeftFly 0.5s infinite alternate ease-in-out; }
         .wing-right { right: 4px; border-radius: 10px 30px 30px 10px; transform-origin: left center; animation: flapRightFly 0.5s infinite alternate ease-in-out; }
         .bird-feet { position: absolute; bottom: -8px; display: flex; gap: 20px; z-index: 1; animation: feetMove 2s infinite ease-in-out; }
         .foot { width: 14px; height: 10px; background: linear-gradient(to bottom, #f39c12, #e67e22); border-radius: 6px 6px 4px 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-
         @keyframes breathLiving { 0%, 100% { transform: translateY(0px) scale(1, 1); } 35% { transform: translateY(-7px) scale(0.96, 1.04); } 70% { transform: translateY(3px) scale(1.03, 0.96); } }
         @keyframes hairWag { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-8deg) scaleY(1.05); } }
         @keyframes feetMove { 0%, 100% { transform: translateY(0px); } 35% { transform: translateY(2px) scaleY(0.9); } }
         @keyframes movePupil { 0%, 100% { transform: translate(0px, 0px); } 20%, 30% { transform: translate(-3px, 2px); } 50%, 60% { transform: translate(3px, -2px); } }
         @keyframes flapLeftFly { 0% { transform: rotate(-30deg); } 100% { transform: rotate(15deg); } }
         @keyframes flapRightFly { 0% { transform: rotate(30deg); } 100% { transform: rotate(-15deg); } }
-
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
-
-        /* 자산 보유 카드 스타일 */
         .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
-
         .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
-
         .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-
         .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
-
-        /* 🎮 기적 게임 창 레이아웃 */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
-        
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
-        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
-        
-        /* 카드 짝맞추기 게임 보드 */
+        .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
-
-        /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
@@ -150,11 +70,9 @@
         .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
-
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
-
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; padding-bottom: 20px; }
         .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
         .vip-badge { display: block; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
@@ -162,26 +80,20 @@
         .item-name { font-size: 13px; font-weight: bold; color: #2C3E50; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 90%; }
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
-
-        /* 모달 및 팝업 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
-        
-        /* 하단 네비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
-        
         .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
     </style>
 </head>
 <body>
 
     <div id="mainAppLayout">
-        <!-- 상단 헤더 -->
         <div class="header">
             <h1>사각지대 없는 기적 재단</h1>
             <div id="userBadge" class="user-welcome-info tier-whale">
@@ -189,7 +101,6 @@
             </div>
         </div>
 
-        <!-- 🕊️ 탭 1: 홈 화면 -->
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
                 <div class="bird-container">
@@ -200,7 +111,6 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
-
                         <div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
@@ -235,7 +145,6 @@
             </div>
         </div>
 
-        <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
@@ -243,11 +152,10 @@
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
-            <!-- 🛸 정통 갤러그 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
-                <canvas id="galagaCanvas" width="300" height="240"></canvas>
+                <canvas id="galagaCanvas" width="300" height="260"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 이동 (자동 연사! 격추당 +10,000원)</p>
             </div>
 
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
@@ -263,13 +171,11 @@
             </div>
         </div>
 
-        <!-- 🏦 탭 3: 디파이 금고 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
-
                 <div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
@@ -287,7 +193,6 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 🛍️ 탭 4: 기적 상점 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
@@ -308,7 +213,6 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
-
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -340,7 +244,6 @@
             </div>
         </div>
 
-        <!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
@@ -357,7 +260,6 @@
         </div>
     </div>
 
-    <!-- 모달 창 구조체 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
@@ -381,20 +283,17 @@
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
             <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
-            
             <div style="text-align: left; margin: 15px 0; padding: 12px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
                 <label style="font-weight: bold; color: #2C3E50;">아이디</label>
                 <input type="text" id="authIdInput" class="auth-input" style="padding: 8px; margin-bottom: 8px; margin-top: 4px;" placeholder="아이디 입력">
                 <label style="font-weight: bold; color: #2C3E50;">비밀번호</label>
                 <input type="password" id="authPwInput" class="auth-input" style="padding: 8px; margin-bottom: 12px; margin-top: 4px;" placeholder="비밀번호 입력">
-                
                 <div style="display: flex; gap: 6px;">
                     <button onclick="handleRegister()" style="flex: 1; padding: 10px; border: none; background: #3498DB; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">신규 회원가입</button>
                     <button onclick="handleLogin()" style="flex: 1; padding: 10px; border: none; background: #2ECC71; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">로그인</button>
                 </div>
                 <button onclick="handleLogout()" style="width: 100%; margin-top: 6px; padding: 8px; border: none; background: #E74C3C; color: white; border-radius: 8px; font-size: 12px; cursor: pointer;">로그아웃</button>
             </div>
-
             <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor: pointer;">닫기</button>
         </div>
     </div>
@@ -411,10 +310,8 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
-        /* 💡 데이터 로드 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
-            
             if (loggedInUser) {
                 const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
                 if (userData) {
@@ -430,7 +327,6 @@
             updateTotalBalance(false);
         }
 
-        /* 💡 데이터 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -441,28 +337,12 @@
             }
         }
 
-        /* 💡 회원가입 시 1,000만 원 기본 지급 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
-
-            if (!id || !pw) {
-                alert("아이디와 비밀번호를 입력해주세요.");
-                return;
-            }
-
-            if (localStorage.getItem(`user_${id}`)) {
-                alert("이미 존재하는 아이디입니다.");
-                return;
-            }
-
-            const newUser = {
-                username: id,
-                password: pw,
-                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
-                vaultAsset: 0
-            };
-
+            if (!id || !pw) { alert("아이디와 비밀번호를 입력해주세요."); return; }
+            if (localStorage.getItem(`user_${id}`)) { alert("이미 존재하는 아이디입니다."); return; }
+            const newUser = { username: id, password: pw, totalBalance: 10000000, vaultAsset: 0 };
             localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
             alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
         }
@@ -470,22 +350,12 @@
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
-
             const storedData = localStorage.getItem(`user_${id}`);
-            if (!storedData) {
-                alert("존재하지 않는 회원 계정입니다.");
-                return;
-            }
-
+            if (!storedData) { alert("존재하지 않는 회원 계정입니다."); return; }
             const userData = JSON.parse(storedData);
-            if (userData.password !== pw) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return;
-            }
-
+            if (userData.password !== pw) { alert("비밀번호가 일치하지 않습니다."); return; }
             localStorage.setItem("loggedInUser", id);
             alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
-            
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
             closeAdminModal();
@@ -547,7 +417,6 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -555,7 +424,6 @@
                 openAdminModal();
                 return;
             }
-
             const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
@@ -571,19 +439,12 @@
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
         let adCountdown = 5; let adTimerId = null;
-        
         function openRandomAdPopup() {
             const loggedInUser = localStorage.getItem("loggedInUser");
-            if (!loggedInUser) {
-                alert("❌ 광고 보상은 로그인 후 이용 가능합니다.");
-                openAdminModal();
-                return;
-            }
-
+            if (!loggedInUser) { alert("❌ 광고 보상은 로그인 후 이용 가능합니다."); openAdminModal(); return; }
             adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
             document.getElementById('adTimer').innerText = adCountdown + 's';
             const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
-
             adTimerId = setInterval(() => {
                 adCountdown--; document.getElementById('adTimer').innerText = adCountdown + 's';
                 if(adCountdown <= 0) {
@@ -595,8 +456,7 @@
 
         function finishAdReward() {
             const bonusAmount = Math.floor(amount / 3);
-            amount += bonusAmount; 
-            updateTotalBalance();
+            amount += bonusAmount; updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none'; 
             alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
         }
@@ -616,9 +476,7 @@
         function switchMiniGame(gameType) {
             document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
             document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
-            
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
-
             if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
@@ -634,7 +492,6 @@
             drawBrickGame();
         }
         function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
-
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
         gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
         function drawBrickGame() {
@@ -675,33 +532,57 @@
                 let c1 = flippedCards[0]; let c2 = flippedCards[1];
                 if (c1.dataset.emoji === c2.dataset.emoji) {
                     c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
-
                     if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
                 } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
         }
 
-        /* 🛸 3. 정통 갤러그 시스템 */
-        let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
+        /* 🛸 3. 리얼 아케이드 정통 갤러그 엔진 (완전 새로 작성) */
+        let galagaCanvas = document.getElementById("galagaCanvas"); 
+        let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
-        let enemyDirection = 1;
-        
+        let playerShipX = 150; 
+        let playerBullets = []; 
+        let enemyShips = []; 
+        let particles = [];
+        let galagaFrame = 0;
+        let starfield = [];
+
+        // 별빛 배경 초기화
+        for(let i=0; i<30; i++) {
+            starfield.push({ x: Math.random()*300, y: Math.random()*260, size: Math.random()*1.5, speed: Math.random()*1 + 0.2 });
+        }
+
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
-            for(let row = 0; row < 2; row++) {
-                for(let col = 0; col < 5; col++) {
+            playerBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 150;
+
+            // 오리지널 갤러그 진형 생성 (타입: boss, butterfly, bee)
+            const rows = [
+                { type: 'boss', count: 4, y: 35, score: 40000 },
+                { type: 'butterfly', count: 6, y: 55, score: 20000 },
+                { type: 'bee', count: 8, y: 75, score: 10000 }
+            ];
+
+            rows.forEach(r => {
+                const spacing = 220 / (r.count + 1);
+                for(let i=0; i<r.count; i++) {
                     enemyShips.push({
-                        x: col * 45 + 50,
-                        y: row * 25 + 30,
-                        baseX: col * 45 + 50,
-                        width: 18,
-                        height: 14,
-                        color: row === 0 ? "#E74C3C" : "#F1C40F"
+                        targetX: 40 + (i + 1) * spacing,
+                        targetY: r.y,
+                        x: 150, // 중앙에서 나선형으로 진입 시작
+                        y: -30,
+                        type: r.type,
+                        score: r.score,
+                        state: 'entering', // entering, formation, swooping
+                        entryAngle: (i * 0.5),
+                        swoopTimer: 0,
+                        width: 16,
+                        height: 14
                     });
                 }
-            }
+            });
+
             loopGalagaGame();
         }
 
@@ -713,63 +594,140 @@
         galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
 
+        // 🎨 픽셀 스프라이트 그리기 함수 (원작 스타일)
+        function drawPixelSprite(ctx, type, x, y) {
+            ctx.save();
+            ctx.translate(x, y);
+            if(type === 'player') {
+                // 원작 플레이어 전투기 (하얀색+주황 윙)
+                ctx.fillStyle = "#FFFFFF"; ctx.fillRect(-2, -7, 4, 14);
+                ctx.fillStyle = "#FF3300"; ctx.fillRect(-7, 2, 14, 4);
+                ctx.fillStyle = "#33CCFF"; ctx.fillRect(-1, -4, 2, 3);
+            } else if(type === 'boss') {
+                // 보스 기체 (초록/파랑)
+                ctx.fillStyle = "#00FF66"; ctx.fillRect(-6, -6, 12, 12);
+                ctx.fillStyle = "#0066FF"; ctx.fillRect(-8, -2, 16, 4);
+                ctx.fillStyle = "#FFCC00"; ctx.fillRect(-3, -3, 6, 6);
+            } else if(type === 'butterfly') {
+                // 나비 기체 (보라/주황)
+                ctx.fillStyle = "#CC33FF"; ctx.fillRect(-6, -5, 12, 10);
+                ctx.fillStyle = "#FF6600"; ctx.fillRect(-8, 0, 16, 3);
+            } else if(type === 'bee') {
+                // 벌 기체 (노랑/빨강)
+                ctx.fillStyle = "#FFFF00"; ctx.fillRect(-5, -5, 10, 10);
+                ctx.fillStyle = "#FF0000"; ctx.fillRect(-7, -1, 14, 3);
+            }
+            ctx.restore();
+        }
+
+        function createExplosion(x, y) {
+            for(let i=0; i<12; i++) {
+                particles.push({
+                    x: x, y: y,
+                    vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4,
+                    life: 15, color: Math.random() > 0.5 ? "#FF3300" : "#FFCC00"
+                });
+            }
+        }
+
         function loopGalagaGame() {
-            gCtx.clearRect(0, 0, galagaCanvas.width, galagaCanvas.height);
+            gCtx.fillStyle = "#000000";
+            gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            gCtx.beginPath();
-            gCtx.moveTo(playerShipX, 210);
-            gCtx.lineTo(playerShipX - 10, 228);
-            gCtx.lineTo(playerShipX + 10, 228);
-            gCtx.fillStyle = "#3498DB"; gCtx.fill(); gCtx.closePath();
-            
-            gCtx.fillStyle = "#FFF";
-            gCtx.fillRect(playerShipX - 2, 215, 4, 10);
+            // 1. 우주 배경 움직임
+            starfield.forEach(s => {
+                s.y += s.speed;
+                if(s.y > 260) s.y = 0;
+                gCtx.fillStyle = "#FFFFFF";
+                gCtx.fillRect(s.x, s.y, s.size, s.size);
+            });
 
-            if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
+            // 2. 플레이어 전투기 비행
+            drawPixelSprite(gCtx, 'player', playerShipX, 235);
+
+            // 3. 미사일 발사 (연사)
+            if(galagaFrame % 10 === 0) {
+                playerBullets.push({ x: playerShipX - 4, y: 225 });
+                playerBullets.push({ x: playerShipX + 4, y: 225 });
+            }
 
             playerBullets.forEach((b, bIdx) => {
-                b.y -= 4.5;
-                gCtx.fillStyle = "#2ECC71";
-                gCtx.fillRect(b.x - 1.5, b.y, 3, 7);
+                b.y -= 6;
+                gCtx.fillStyle = "#FFFF00";
+                gCtx.fillRect(b.x - 1, b.y, 2, 6);
                 if(b.y < 0) playerBullets.splice(bIdx, 1);
             });
 
-            let shiftDown = false;
-            enemyShips.forEach(enemy => {
-                enemy.x += enemyDirection * 0.5;
-                if(enemy.x > galagaCanvas.width - 25 || enemy.x < 10) { shiftDown = true; }
-            });
-
-            if(shiftDown) {
-                enemyDirection *= -1;
-                enemyShips.forEach(enemy => { enemy.y += 6; });
-            }
-
+            // 4. 적 비행단 나선 진입 및 곡선 공격 (원작 구현)
+            let formationOffsetX = Math.sin(galagaFrame * 0.05) * 8; // 대형 흔들림
+            
             enemyShips.forEach((enemy, eIdx) => {
-                gCtx.fillStyle = enemy.color;
-                gCtx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-                gCtx.fillStyle = "#FFF";
-                gCtx.fillRect(enemy.x + 7, enemy.y + 3, 4, 4);
+                if(enemy.state === 'entering') {
+                    // 나선형(S자)곡선으로 대형 진입
+                    enemy.entryAngle += 0.06;
+                    enemy.y += 2.2;
+                    enemy.x = 150 + Math.sin(enemy.entryAngle) * 60;
+                    if(enemy.y >= enemy.targetY) {
+                        enemy.state = 'formation';
+                    }
+                } else if(enemy.state === 'formation') {
+                    // 기본 대형 유지
+                    enemy.x = enemy.targetX + formationOffsetX;
+                    enemy.y = enemy.targetY;
 
+                    // 일정 확률로 독수리 다이빙(Swoop) 공격!
+                    if(Math.random() < 0.002 && galagaFrame > 100) {
+                        enemy.state = 'swooping';
+                        enemy.swoopTimer = 0;
+                    }
+                } else if(enemy.state === 'swooping') {
+                    // 곡선을 그리며 강하 공격
+                    enemy.swoopTimer += 0.04;
+                    enemy.y += 2.5;
+                    enemy.x += Math.cos(enemy.swoopTimer * 2) * 3;
+
+                    if(enemy.y > 270) { // 바닥으로 빠지면 다시 위에서 진입
+                        enemy.y = -20;
+                        enemy.state = 'entering';
+                    }
+                }
+
+                drawPixelSprite(gCtx, enemy.type, enemy.x, enemy.y);
+
+                // 충돌 처리 (미사일 vs 적)
                 playerBullets.forEach((b, bIdx) => {
-                    if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
+                    if(Math.abs(b.x - enemy.x) < 10 && Math.abs(b.y - enemy.y) < 10) {
+                        createExplosion(enemy.x, enemy.y);
                         playerBullets.splice(bIdx, 1);
-                        enemyShips.splice(eIdx, 1);
-                        amount += 10000; 
+                        amount += enemy.score;
                         updateTotalBalance();
+                        enemyShips.splice(eIdx, 1);
                     }
                 });
 
-                if(enemy.y > 195) {
+                // 플레이어 충돌
+                if(Math.abs(playerShipX - enemy.x) < 12 && Math.abs(235 - enemy.y) < 12) {
+                    createExplosion(playerShipX, 235);
                     cancelAnimationFrame(galagaAnimationId);
-                    alert("🛸 경보! 적 편대의 침공을 허용했습니다. 다시 방어 기지를 구축합니다.");
-                    startGalagaGameEngine();
+                    setTimeout(() => {
+                        alert("🛸 적 기체와 충돌했습니다! 기지를 재정비합니다.");
+                        startGalagaGameEngine();
+                    }, 100);
                 }
             });
 
+            // 5. 폭발 파편 애니메이션
+            particles.forEach((p, pIdx) => {
+                p.x += p.vx; p.y += p.vy; p.life--;
+                gCtx.fillStyle = p.color;
+                gCtx.fillRect(p.x, p.y, 2, 2);
+                if(p.life <= 0) particles.splice(pIdx, 1);
+            });
+
+            // 승리 체크
             if(enemyShips.length === 0) {
-                alert("🎉 웨이브 클리어! 적 군단이 더 빠른 속도로 재집결합니다.");
+                alert("🎉 웨이브 클리어! 적 편대를 전멸시켰습니다.");
                 startGalagaGameEngine();
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
