@@ -163,7 +163,7 @@
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-        /* 👟 만보기 탭 전용 스타일 (첨부한 이미지 기반 디자인) */
+        /* 👟 만보기 탭 전용 스타일 */
         .pedometer-card {
             background: #FFFFFF;
             border-radius: 20px;
@@ -256,7 +256,7 @@
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
-        /* 하단 네비게이션 바 (5개 항목 구성) */
+        /* 하단 네비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-around; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 10px; color: #95A5A6; text-decoration: none; width: 20%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
@@ -322,10 +322,9 @@
             </div>
         </div>
 
-        <!-- 👟 탭 2: 만보기 화면 (추가된 부분) -->
+        <!-- 👟 탭 2: 만보기 화면 -->
         <div id="pedometerTab" class="tab-content">
             <div class="pedometer-card">
-                <!-- 상단 요약 통계 -->
                 <div class="pedo-top-stats">
                     <div class="pedo-stat-box">
                         <div class="pedo-stat-label">칼로리</div>
@@ -341,7 +340,6 @@
                     </div>
                 </div>
 
-                <!-- 중앙 걸음 수 다이얼 게이지 -->
                 <div class="pedo-dial-container">
                     <canvas id="pedoCanvas" class="pedo-dial-canvas" width="220" height="220"></canvas>
                     <div class="pedo-dial-center">
@@ -352,7 +350,6 @@
                     </div>
                 </div>
 
-                <!-- 하단 걸음 수 히스토리 바 차트 -->
                 <div class="pedo-chart-box" id="pedoChartBox">
                     <div class="pedo-chart-bar" style="height: 10px;"></div>
                     <div class="pedo-chart-bar" style="height: 15px;"></div>
@@ -362,7 +359,6 @@
                 </div>
             </div>
 
-            <!-- 만보기 조작 버튼 (출발 & 리셋) -->
             <div class="pedo-btn-group">
                 <button class="btn-action btn-pedo-start" id="btnPedoStart" onclick="togglePedometer()">🚀 출발하기</button>
                 <button class="btn-action btn-pedo-reset" onclick="resetPedometer()">🔄 리셋</button>
@@ -377,7 +373,6 @@
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
-            <!-- 🛸 정통 갤러그 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
                 <canvas id="galagaCanvas" width="300" height="240"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
@@ -442,7 +437,6 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
-
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -548,7 +542,6 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
-        /* 💡 데이터 로드 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             
@@ -568,7 +561,6 @@
             renderPedometerDial();
         }
 
-        /* 💡 데이터 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -579,7 +571,6 @@
             }
         }
 
-        /* 💡 회원가입 시 1,000만 원 기본 지급 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -597,7 +588,7 @@
             const newUser = {
                 username: id,
                 password: pw,
-                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
+                totalBalance: 10000000,
                 vaultAsset: 0
             };
 
@@ -699,7 +690,6 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -766,58 +756,103 @@
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
         }
 
-        /* 👟 만보기 로직 (추가된 스크립트) */
+        /* 👟 만보기 로직 (모션 센서 감지 기반) */
         let pedoSteps = 0;
         let pedoActive = false;
-        let pedoTimer = null;
         let pedoSeconds = 0;
+        let pedoTimeInterval = null;
         const TARGET_GOAL = 10000;
 
+        const MOTION_THRESHOLD = 15; 
+        let lastX = 0, lastY = 0, lastZ = 0;
+        let lastTime = 0;
+
         function togglePedometer() {
-            const btn = document.getElementById('btnPedoStart');
             if (!pedoActive) {
-                pedoActive = true;
-                btn.innerText = "⏸️ 일시정지";
-                btn.style.background = "linear-gradient(135deg, #F39C12, #D35400)";
-                
-                pedoTimer = setInterval(() => {
-                    pedoSteps += Math.floor(Math.random() * 5) + 3; // 실시간 걸음 수 상승
-                    pedoSeconds += 1;
-                    updatePedometerUI();
-                }, 800);
+                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                    DeviceMotionEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                startPedometerTracking();
+                            } else {
+                                alert("모션 센서 접근 권한이 거부되었습니다.");
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    startPedometerTracking();
+                }
             } else {
-                pedoActive = false;
-                btn.innerText = "🚀 출발하기";
-                btn.style.background = "linear-gradient(135deg, #2ECC71, #27AE60)";
-                clearInterval(pedoTimer);
+                stopPedometerTracking();
+            }
+        }
+
+        function startPedometerTracking() {
+            pedoActive = true;
+            const btn = document.getElementById('btnPedoStart');
+            btn.innerText = "⏸️ 일시정지";
+            btn.style.background = "linear-gradient(135deg, #F39C12, #D35400)";
+
+            window.addEventListener('devicemotion', handleMotion, false);
+
+            pedoTimeInterval = setInterval(() => {
+                pedoSeconds += 1;
+                updatePedometerUI();
+            }, 1000);
+        }
+
+        function stopPedometerTracking() {
+            pedoActive = false;
+            const btn = document.getElementById('btnPedoStart');
+            btn.innerText = "🚀 출발하기";
+            btn.style.background = "linear-gradient(135deg, #2ECC71, #27AE60)";
+
+            window.removeEventListener('devicemotion', handleMotion, false);
+            clearInterval(pedoTimeInterval);
+        }
+
+        function handleMotion(event) {
+            if (!pedoActive) return;
+
+            const current = event.accelerationIncludingGravity;
+            if (!current) return;
+
+            const currentTime = Date.now();
+            if ((currentTime - lastTime) > 150) {
+                lastTime = currentTime;
+
+                const deltaX = Math.abs(current.x - lastX);
+                const deltaY = Math.abs(current.y - lastY);
+                const deltaZ = Math.abs(current.z - lastZ);
+
+                if ((deltaX + deltaY + deltaZ) > MOTION_THRESHOLD) {
+                    pedoSteps += 1;
+                    updatePedometerUI();
+                }
+
+                lastX = current.x;
+                lastY = current.y;
+                lastZ = current.z;
             }
         }
 
         function resetPedometer() {
-            pedoActive = false;
-            clearInterval(pedoTimer);
+            stopPedometerTracking();
             pedoSteps = 0;
             pedoSeconds = 0;
-            
-            const btn = document.getElementById('btnPedoStart');
-            btn.innerText = "🚀 출발하기";
-            btn.style.background = "linear-gradient(135deg, #2ECC71, #27AE60)";
-            
+            lastX = 0; lastY = 0; lastZ = 0;
             updatePedometerUI();
         }
 
         function updatePedometerUI() {
             document.getElementById('pedoSteps').innerText = pedoSteps.toLocaleString();
             
-            // 칼로리 (보통 1보당 ~0.03~0.04 kcal)
             const cal = Math.floor(pedoSteps * 0.035);
             document.getElementById('pedoCal').innerText = cal;
             
-            // 거리 Km (보통 1보당 ~0.7m)
             const km = (pedoSteps * 0.0007).toFixed(1);
             document.getElementById('pedoKm').innerText = km;
             
-            // 활동 시간
             const mins = Math.floor(pedoSeconds / 60);
             const hrs = Math.floor(mins / 60);
             const remMins = mins % 60;
@@ -825,7 +860,6 @@
             if (hrs > 0) timeStr = `${hrs}h ${remMins}m`;
             document.getElementById('pedoTime').innerText = timeStr;
             
-            // 상태 레벨 및 목표 달성도
             const levelElem = document.getElementById('pedoLevel');
             const goalElem = document.getElementById('pedoGoalStatus');
             
@@ -847,7 +881,6 @@
             updatePedometerChart();
         }
 
-        // 다이얼 눈금 및 진행 게이지 그리기 Canvas 렌더링
         function renderPedometerDial() {
             const canvas = document.getElementById("pedoCanvas");
             if (!canvas) return;
@@ -887,7 +920,6 @@
                 ctx.stroke();
             }
 
-            // 게이지의 끝 주황색 포인트 핀 그리기
             if (activeTicks > 0) {
                 const currentAngle = startAngle + (activeTicks / totalTicks) * (endAngle - startAngle);
                 const pinX = cx + Math.cos(currentAngle) * (radius - 4);
@@ -900,7 +932,6 @@
             }
         }
 
-        // 만보기 실시간 동적 히스토리 차트 업데이트
         function updatePedometerChart() {
             const chartBox = document.getElementById('pedoChartBox');
             if (!chartBox) return;
@@ -908,7 +939,7 @@
             
             if (bars.length > 0) {
                 const lastBar = bars[bars.length - 1];
-                const dynamicHeight = Math.min(Math.max((pedoSteps / 100) * 0.5, 5), 50);
+                const dynamicHeight = Math.min(Math.max((pedoSteps / 100) * 2, 5), 50);
                 lastBar.style.height = dynamicHeight + "px";
             }
         }
@@ -924,7 +955,7 @@
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
         }
 
-        /* 🧱 1. 벽돌깨기 */
+        /* 🧱 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
         let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
         function startBrickGameEngine() {
@@ -959,7 +990,7 @@
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 2. 카드 매칭 */
+        /* 🃏 카드 매칭 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
@@ -981,7 +1012,7 @@
             }
         }
 
-        /* 🛸 3. 정통 갤러그 시스템 */
+        /* 🛸 갤러그 시스템 */
         let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
