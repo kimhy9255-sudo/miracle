@@ -9,7 +9,7 @@
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
         
-        /* 헤더 높이를 슬림하게 고정 */
+        /* 헤더 높이 고정 */
         .header { background-color: #FFF; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; height: 48px; }
         .header h1 { font-size: 16px; margin: 0; color: #2C3E50; font-weight: bold; }
         .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
@@ -18,9 +18,8 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
         
-        /* 새 캐릭터 영역 및 내부 로그인 버튼 위치 배치 */
+        /* 새 캐릭터 영역 */
         .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
-        
         .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
 
         .bird-container { width: 160px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; }
@@ -63,7 +62,7 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         
-        /* 미니게임 메뉴버튼 (4개 구성을 위해 repeat(2, 1fr)로 수정) */
+        /* 미니게임 메뉴버튼 */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
@@ -75,10 +74,18 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 👑 3-Match 퍼즐 전용 스타일 */
-        #match3Board { display: grid; grid-template-columns: repeat(6, 40px); grid-template-rows: repeat(6, 40px); gap: 4px; justify-content: center; margin: 10px auto; background: #2C3E50; padding: 8px; border-radius: 12px; width: fit-content; }
-        .m3-tile { width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; user-select: none; transition: transform 0.1s; background: #34495E; }
-        .m3-tile.selected { border: 2px solid #FFF; transform: scale(1.1); box-shadow: 0 0 8px #FFF; }
+        /* 3-Match 퍼즐 스타일 */
+        #match3Board { display: grid; grid-template-columns: repeat(6, 42px); grid-template-rows: repeat(6, 42px); gap: 5px; justify-content: center; margin: 10px auto; background: #1E293B; padding: 10px; border-radius: 16px; width: fit-content; }
+        .m3-tile { width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; user-select: none; transition: transform 0.1s; background: #334155; }
+        .m3-tile.selected { border: 2.5px solid #38BDF8; transform: scale(1.1); box-shadow: 0 0 10px #38BDF8; }
+
+        /* 🚀 전체화면 게임 오버레이 스타일 */
+        .fullscreen-game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #0F172A; z-index: 99999; flex-direction: column; align-items: center; justify-content: space-between; padding: 15px 10px env(safe-area-inset-bottom) 10px; }
+        .fullscreen-game-overlay.active { display: flex; }
+        .fullscreen-header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; color: white; padding: 5px 10px; }
+        .fullscreen-header h2 { font-size: 16px; margin: 0; }
+        .btn-close-fullscreen { background: #EF4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .fullscreen-content-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 450px; }
 
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
@@ -170,29 +177,29 @@
                 <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌 퍼즐</button>
             </div>
 
+            <!-- 미니게임 탭 내 미리보기 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
-                <canvas id="galagaCanvas" width="300" height="260"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 이동 (자동 연사! 격추당 +10,000원)</p>
+                <div style="font-size: 50px; margin: 20px 0;">🛸</div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="launchFullscreenGame('galaga')">🚀 갤러그 시작 / 전체화면</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">전체화면 전환 후 손가락 드래그로 조작 (격추당 +10,000원)</p>
             </div>
 
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
-                <canvas id="gameCanvas" width="300" height="240"></canvas>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
+                <div style="font-size: 50px; margin: 20px 0;">🧱</div>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="launchFullscreenGame('brick')">🕹️ 벽돌깨기 시작 / 전체화면</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">전체화면 전환 후 터치 드래그로 조작 (벽돌당 +100원)</p>
             </div>
 
             <div id="memoryGameArea" class="game-display-panel" style="display:none;">
-                <div id="cardBoard" class="card-grid"></div>
-                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
+                <div style="font-size: 50px; margin: 20px 0;">🃏</div>
+                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="launchFullscreenGame('memory')">🃏 짝맞추기 시작 / 전체화면</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">카드 전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🧩 신규: 3-Match 퍼즐 게임 영역 -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
-                <div id="match3Board"></div>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:#27AE60;" onclick="startMatch3Engine()">🧩 판 새로고침 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</p>
+                <div style="font-size: 50px; margin: 20px 0;">🧩</div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:#27AE60;" onclick="launchFullscreenGame('match3')">🧩 좌뇌 퍼즐 시작 / 전체화면</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</p>
             </div>
         </div>
 
@@ -285,6 +292,38 @@
         </div>
     </div>
 
+    <!-- 🚀 전체화면 게임 오버레이 영역 -->
+    <div id="fullscreenGameOverlay" class="fullscreen-game-overlay">
+        <div class="fullscreen-header">
+            <h2 id="fullscreenTitle">🎮 게임 플레이 중</h2>
+            <button class="btn-close-fullscreen" onclick="closeFullscreenGame()">❌ 메인으로 복귀</button>
+        </div>
+        
+        <div class="fullscreen-content-body">
+            <!-- 갤러그 전체화면 -->
+            <div id="fsGalagaBox" style="display:none; text-align:center; width:100%;">
+                <canvas id="galagaCanvas" width="340" height="420"></canvas>
+            </div>
+            <!-- 벽돌깨기 전체화면 -->
+            <div id="fsBrickBox" style="display:none; text-align:center; width:100%;">
+                <canvas id="gameCanvas" width="340" height="420"></canvas>
+            </div>
+            <!-- 짝맞추기 전체화면 -->
+            <div id="fsMemoryBox" style="display:none; text-align:center; width:100%;">
+                <div id="cardBoard" class="card-grid" style="max-width:320px; gap:12px;"></div>
+            </div>
+            <!-- 3-Match 퍼즐 전체화면 -->
+            <div id="fsMatch3Box" style="display:none; text-align:center; width:100%;">
+                <div id="match3Board"></div>
+                <div style="font-size:12px; color:#94A3B8; margin-top:12px;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</div>
+            </div>
+        </div>
+
+        <div style="width: 100%; max-width: 450px; text-align: center;">
+            <button id="fsResetBtn" class="btn-action" style="background:#22C55E; width:100%; font-size:16px; padding:14px;" onclick="restartCurrentGame()">🔄 게임 새로고침 / 리셋</button>
+        </div>
+    </div>
+
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
             <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
@@ -327,6 +366,7 @@
         let amount = 0; 
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
+        let currentGameType = '';
         
         const btn = document.getElementById('engineBtn');
         const amountDisplay = document.getElementById('subsidyAmount');
@@ -435,7 +475,6 @@
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
                 document.getElementById('navGame').classList.add('active'); 
-                setTimeout(() => { startGalagaGameEngine(); }, 50); 
             }
             else if(tabName === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
             else if(tabName === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
@@ -509,21 +548,60 @@
             document.getElementById('galagaGameArea').style.display = 'none';
             document.getElementById('match3GameArea').style.display = 'none';
 
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; } 
+            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; } 
+            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; }
+            else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; }
+        }
 
-            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
-            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
-            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
-            else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; startMatch3Engine(); }
+        /* 🚀 전체화면 실행 & 종료 관리 시스템 */
+        function launchFullscreenGame(gameType) {
+            currentGameType = gameType;
+            document.getElementById('fsGalagaBox').style.display = 'none';
+            document.getElementById('fsBrickBox').style.display = 'none';
+            document.getElementById('fsMemoryBox').style.display = 'none';
+            document.getElementById('fsMatch3Box').style.display = 'none';
+
+            const titleEl = document.getElementById('fullscreenTitle');
+
+            if(gameType === 'galaga') {
+                titleEl.innerText = "🛸 정통 갤러그";
+                document.getElementById('fsGalagaBox').style.display = 'block';
+                startGalagaGameEngine();
+            } else if(gameType === 'brick') {
+                titleEl.innerText = "🧱 벽돌깨기";
+                document.getElementById('fsBrickBox').style.display = 'block';
+                startBrickGameEngine();
+            } else if(gameType === 'memory') {
+                titleEl.innerText = "🃏 짝맞추기";
+                document.getElementById('fsMemoryBox').style.display = 'block';
+                startMemoryGameEngine();
+            } else if(gameType === 'match3') {
+                titleEl.innerText = "🧩 좌뇌 퍼즐";
+                document.getElementById('fsMatch3Box').style.display = 'block';
+                startMatch3Engine();
+            }
+
+            document.getElementById('fullscreenGameOverlay').classList.add('active');
+        }
+
+        function restartCurrentGame() {
+            if(currentGameType) launchFullscreenGame(currentGameType);
+        }
+
+        function closeFullscreenGame() {
+            cancelAnimationFrame(gameAnimationId); 
+            cancelAnimationFrame(galagaAnimationId);
+            document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
         /* 🧱 1. 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+        let gameAnimationId = null; let ballRadius = 6, ballX, ballY, dx, dy; let paddleHeight = 14, paddleWidth = 70, paddleX; let bricks = [];
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 3; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 40; dx = 2.2; dy = -2.2; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 4; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
             drawBrickGame();
         }
         function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
@@ -534,11 +612,11 @@
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
             ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
             for (let c = 0; c < 6; c++) {
-                for (let r = 0; r < 3; r++) {
+                for (let r = 0; r < 4; r++) {
                     if (bricks[c][r] && bricks[c][r].status === 1) {
-                        let brickX = c * 47 + 12; let brickY = r * 17 + 15; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
-                        ctx.beginPath(); ctx.rect(brickX, brickY, 42, 12); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
-                        if (ballX > brickX && ballX < brickX + 42 && ballY > brickY && ballY < brickY + 12) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
+                        let brickX = c * 52 + 15; let brickY = r * 20 + 20; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
+                        ctx.beginPath(); ctx.rect(brickX, brickY, 46, 14); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                        if (ballX > brickX && ballX < brickX + 46 && ballY > brickY && ballY < brickY + 14) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
                     }
                 }
             }
@@ -546,7 +624,12 @@
             if (ballY + dy < ballRadius) dy = -dy;
             else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
                 if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; } 
-                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("🧱 게임 리셋 완료!"); startBrickGameEngine(); return; }
+                else if (ballY + dy > gameCanvas.height - ballRadius) { 
+                    cancelAnimationFrame(gameAnimationId); 
+                    if(confirm("💥 공을 놓쳤습니다! 메인 화면으로 돌아가시겠습니까?")) { closeFullscreenGame(); }
+                    else { startBrickGameEngine(); }
+                    return; 
+                }
             }
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
@@ -567,7 +650,13 @@
                 let c1 = flippedCards[0]; let c2 = flippedCards[1];
                 if (c1.dataset.emoji === c2.dataset.emoji) {
                     c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
-                    if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
+                    if (matchedPairs === 4) { 
+                        amount += 1000; updateTotalBalance(); 
+                        setTimeout(() => {
+                            if(confirm("🎉 축하합니다! 보상금 +1,000원 수령!\n메인 화면으로 돌아갈까요?")) { closeFullscreenGame(); }
+                            else { startMemoryGameEngine(); }
+                        }, 300);
+                    }
                 } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
         }
@@ -576,34 +665,34 @@
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 150; 
+        let playerShipX = 170; 
         let playerBullets = []; 
         let enemyShips = []; 
         let particles = [];
         let galagaFrame = 0;
         let starfield = [];
 
-        for(let i=0; i<30; i++) {
-            starfield.push({ x: Math.random()*300, y: Math.random()*260, size: Math.random()*1.5, speed: Math.random()*1 + 0.2 });
+        for(let i=0; i<35; i++) {
+            starfield.push({ x: Math.random()*340, y: Math.random()*420, size: Math.random()*1.5, speed: Math.random()*1 + 0.2 });
         }
 
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 150;
+            playerBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 170;
 
             const rows = [
-                { type: 'boss', count: 4, y: 35, score: 40000 },
-                { type: 'butterfly', count: 6, y: 55, score: 20000 },
-                { type: 'bee', count: 8, y: 75, score: 10000 }
+                { type: 'boss', count: 4, y: 45, score: 40000 },
+                { type: 'butterfly', count: 6, y: 75, score: 20000 },
+                { type: 'bee', count: 8, y: 105, score: 10000 }
             ];
 
             rows.forEach(r => {
-                const spacing = 220 / (r.count + 1);
+                const spacing = 260 / (r.count + 1);
                 for(let i=0; i<r.count; i++) {
                     enemyShips.push({
                         targetX: 40 + (i + 1) * spacing,
                         targetY: r.y,
-                        x: 150,
+                        x: 170,
                         y: -30,
                         type: r.type,
                         score: r.score,
@@ -631,29 +720,29 @@
             ctx.save();
             ctx.translate(x, y);
             if(type === 'player') {
-                ctx.fillStyle = "#FFFFFF"; ctx.fillRect(-2, -7, 4, 14);
-                ctx.fillStyle = "#FF3300"; ctx.fillRect(-7, 2, 14, 4);
-                ctx.fillStyle = "#33CCFF"; ctx.fillRect(-1, -4, 2, 3);
+                ctx.fillStyle = "#FFFFFF"; ctx.fillRect(-2, -8, 4, 16);
+                ctx.fillStyle = "#FF3300"; ctx.fillRect(-8, 2, 16, 5);
+                ctx.fillStyle = "#33CCFF"; ctx.fillRect(-1, -4, 2, 4);
             } else if(type === 'boss') {
-                ctx.fillStyle = "#00FF66"; ctx.fillRect(-6, -6, 12, 12);
-                ctx.fillStyle = "#0066FF"; ctx.fillRect(-8, -2, 16, 4);
+                ctx.fillStyle = "#00FF66"; ctx.fillRect(-7, -7, 14, 14);
+                ctx.fillStyle = "#0066FF"; ctx.fillRect(-9, -2, 18, 4);
                 ctx.fillStyle = "#FFCC00"; ctx.fillRect(-3, -3, 6, 6);
             } else if(type === 'butterfly') {
-                ctx.fillStyle = "#CC33FF"; ctx.fillRect(-6, -5, 12, 10);
-                ctx.fillStyle = "#FF6600"; ctx.fillRect(-8, 0, 16, 3);
+                ctx.fillStyle = "#CC33FF"; ctx.fillRect(-7, -5, 14, 10);
+                ctx.fillStyle = "#FF6600"; ctx.fillRect(-9, 0, 18, 3);
             } else if(type === 'bee') {
-                ctx.fillStyle = "#FFFF00"; ctx.fillRect(-5, -5, 10, 10);
-                ctx.fillStyle = "#FF0000"; ctx.fillRect(-7, -1, 14, 3);
+                ctx.fillStyle = "#FFFF00"; ctx.fillRect(-6, -6, 12, 12);
+                ctx.fillStyle = "#FF0000"; ctx.fillRect(-8, -1, 16, 3);
             }
             ctx.restore();
         }
 
         function createExplosion(x, y) {
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<14; i++) {
                 particles.push({
                     x: x, y: y,
-                    vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4,
-                    life: 15, color: Math.random() > 0.5 ? "#FF3300" : "#FFCC00"
+                    vx: (Math.random()-0.5)*5, vy: (Math.random()-0.5)*5,
+                    life: 18, color: Math.random() > 0.5 ? "#FF3300" : "#FFCC00"
                 });
             }
         }
@@ -665,32 +754,32 @@
 
             starfield.forEach(s => {
                 s.y += s.speed;
-                if(s.y > 260) s.y = 0;
+                if(s.y > 420) s.y = 0;
                 gCtx.fillStyle = "#FFFFFF";
                 gCtx.fillRect(s.x, s.y, s.size, s.size);
             });
 
-            drawPixelSprite(gCtx, 'player', playerShipX, 235);
+            drawPixelSprite(gCtx, 'player', playerShipX, 380);
 
-            if(galagaFrame % 10 === 0) {
-                playerBullets.push({ x: playerShipX - 4, y: 225 });
-                playerBullets.push({ x: playerShipX + 4, y: 225 });
+            if(galagaFrame % 9 === 0) {
+                playerBullets.push({ x: playerShipX - 5, y: 370 });
+                playerBullets.push({ x: playerShipX + 5, y: 370 });
             }
 
             playerBullets.forEach((b, bIdx) => {
-                b.y -= 6;
+                b.y -= 7;
                 gCtx.fillStyle = "#FFFF00";
-                gCtx.fillRect(b.x - 1, b.y, 2, 6);
+                gCtx.fillRect(b.x - 1, b.y, 2, 7);
                 if(b.y < 0) playerBullets.splice(bIdx, 1);
             });
 
-            let formationOffsetX = Math.sin(galagaFrame * 0.05) * 8;
+            let formationOffsetX = Math.sin(galagaFrame * 0.05) * 10;
             
             enemyShips.forEach((enemy, eIdx) => {
                 if(enemy.state === 'entering') {
                     enemy.entryAngle += 0.06;
-                    enemy.y += 2.2;
-                    enemy.x = 150 + Math.sin(enemy.entryAngle) * 60;
+                    enemy.y += 2.5;
+                    enemy.x = 170 + Math.sin(enemy.entryAngle) * 70;
                     if(enemy.y >= enemy.targetY) {
                         enemy.state = 'formation';
                     }
@@ -698,16 +787,16 @@
                     enemy.x = enemy.targetX + formationOffsetX;
                     enemy.y = enemy.targetY;
 
-                    if(Math.random() < 0.002 && galagaFrame > 100) {
+                    if(Math.random() < 0.003 && galagaFrame > 80) {
                         enemy.state = 'swooping';
                         enemy.swoopTimer = 0;
                     }
                 } else if(enemy.state === 'swooping') {
                     enemy.swoopTimer += 0.04;
-                    enemy.y += 2.5;
-                    enemy.x += Math.cos(enemy.swoopTimer * 2) * 3;
+                    enemy.y += 2.8;
+                    enemy.x += Math.cos(enemy.swoopTimer * 2) * 3.5;
 
-                    if(enemy.y > 270) {
+                    if(enemy.y > 430) {
                         enemy.y = -20;
                         enemy.state = 'entering';
                     }
@@ -716,7 +805,7 @@
                 drawPixelSprite(gCtx, enemy.type, enemy.x, enemy.y);
 
                 playerBullets.forEach((b, bIdx) => {
-                    if(Math.abs(b.x - enemy.x) < 10 && Math.abs(b.y - enemy.y) < 10) {
+                    if(Math.abs(b.x - enemy.x) < 12 && Math.abs(b.y - enemy.y) < 12) {
                         createExplosion(enemy.x, enemy.y);
                         playerBullets.splice(bIdx, 1);
                         amount += enemy.score;
@@ -725,12 +814,12 @@
                     }
                 });
 
-                if(Math.abs(playerShipX - enemy.x) < 12 && Math.abs(235 - enemy.y) < 12) {
-                    createExplosion(playerShipX, 235);
+                if(Math.abs(playerShipX - enemy.x) < 14 && Math.abs(380 - enemy.y) < 14) {
+                    createExplosion(playerShipX, 380);
                     cancelAnimationFrame(galagaAnimationId);
                     setTimeout(() => {
-                        alert("🛸 적 기체와 충돌했습니다! 기지를 재정비합니다.");
-                        startGalagaGameEngine();
+                        if(confirm("💥 적 기체와 충돌했습니다! 메인으로 돌아갈까요?")) { closeFullscreenGame(); }
+                        else { startGalagaGameEngine(); }
                     }, 100);
                 }
             });
@@ -743,21 +832,22 @@
             });
 
             if(enemyShips.length === 0) {
-                alert("🎉 웨이브 클리어! 적 편대를 전멸시켰습니다.");
-                startGalagaGameEngine();
+                setTimeout(() => {
+                    if(confirm("🎉 모든 적을 격추했습니다! 메인 화면으로 돌아갈까요?")) { closeFullscreenGame(); }
+                    else { startGalagaGameEngine(); }
+                }, 100);
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
         }
 
-        /* 🧩 4. 로열 매치 스타일 3-Match 퍼즐 엔진 */
+        /* 🧩 4. 3-Match 퍼즐 엔진 */
         const M3_SIZE = 6;
         const M3_EMOJIS = ['🔴', '🟡', '🟢', '🔵', '🟣'];
         let m3BoardData = [];
         let m3Selected = null;
 
         function startMatch3Engine() {
-            const boardEl = document.getElementById('match3Board');
             m3BoardData = [];
             m3Selected = null;
             for (let r = 0; r < M3_SIZE; r++) {
@@ -826,7 +916,7 @@
                 let earned = 0;
                 matched.forEach(m => {
                     if (m3BoardData[m.r][m.c] !== null) {
-                        earned += 500; // 블록 1개당 500원 적립!
+                        earned += 500;
                         m3BoardData[m.r][m.c] = null;
                     }
                 });
