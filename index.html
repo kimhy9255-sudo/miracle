@@ -62,15 +62,24 @@
         .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
+        
+        /* 미니게임 메뉴버튼 (4개 구성을 위해 repeat(2, 1fr)로 수정) */
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
+        
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
+
+        /* 👑 3-Match 퍼즐 전용 스타일 */
+        #match3Board { display: grid; grid-template-columns: repeat(6, 40px); grid-template-rows: repeat(6, 40px); gap: 4px; justify-content: center; margin: 10px auto; background: #2C3E50; padding: 8px; border-radius: 12px; width: fit-content; }
+        .m3-tile { width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; user-select: none; transition: transform 0.1s; background: #34495E; }
+        .m3-tile.selected { border: 2px solid #FFF; transform: scale(1.1); box-shadow: 0 0 8px #FFF; }
+
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
@@ -111,7 +120,6 @@
 
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
-                <!-- 동그라미 친 위치로 옮긴 로그인 버튼 -->
                 <button class="inline-login-btn" onclick="openAdminModal()">
                     🔑 로그인
                 </button>
@@ -159,6 +167,7 @@
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
+                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌 퍼즐</button>
             </div>
 
             <div id="galagaGameArea" class="game-display-panel">
@@ -177,6 +186,13 @@
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
+            </div>
+
+            <!-- 🧩 신규: 3-Match 퍼즐 게임 영역 -->
+            <div id="match3GameArea" class="game-display-panel" style="display:none;">
+                <div id="match3Board"></div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:#27AE60;" onclick="startMatch3Engine()">🧩 판 새로고침 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</p>
             </div>
         </div>
 
@@ -483,12 +499,22 @@
         }
 
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
-            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('btnSelectBrick').classList.remove('active'); 
+            document.getElementById('btnSelectMemory').classList.remove('active'); 
+            document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectMatch3').classList.remove('active');
+
+            document.getElementById('brickGameArea').style.display = 'none'; 
+            document.getElementById('memoryGameArea').style.display = 'none'; 
+            document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('match3GameArea').style.display = 'none';
+
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+
             if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
+            else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; startMatch3Engine(); }
         }
 
         /* 🧱 1. 벽돌깨기 */
@@ -722,6 +748,115 @@
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
+        }
+
+        /* 🧩 4. 로열 매치 스타일 3-Match 퍼즐 엔진 */
+        const M3_SIZE = 6;
+        const M3_EMOJIS = ['🔴', '🟡', '🟢', '🔵', '🟣'];
+        let m3BoardData = [];
+        let m3Selected = null;
+
+        function startMatch3Engine() {
+            const boardEl = document.getElementById('match3Board');
+            m3BoardData = [];
+            m3Selected = null;
+            for (let r = 0; r < M3_SIZE; r++) {
+                m3BoardData[r] = [];
+                for (let c = 0; c < M3_SIZE; c++) {
+                    m3BoardData[r][c] = Math.floor(Math.random() * M3_EMOJIS.length);
+                }
+            }
+            renderMatch3Board();
+        }
+
+        function renderMatch3Board() {
+            const boardEl = document.getElementById('match3Board');
+            if(!boardEl) return;
+            boardEl.innerHTML = '';
+            for (let r = 0; r < M3_SIZE; r++) {
+                for (let c = 0; c < M3_SIZE; c++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'm3-tile';
+                    tile.innerText = m3BoardData[r][c] !== null ? M3_EMOJIS[m3BoardData[r][c]] : '';
+                    if (m3Selected && m3Selected.r === r && m3Selected.c === c) {
+                        tile.classList.add('selected');
+                    }
+                    tile.onclick = () => onMatch3Click(r, c);
+                    boardEl.appendChild(tile);
+                }
+            }
+        }
+
+        function onMatch3Click(r, c) {
+            if (!m3Selected) {
+                m3Selected = { r, c };
+            } else {
+                const isAdjacent = Math.abs(m3Selected.r - r) + Math.abs(m3Selected.c - c) === 1;
+                if (isAdjacent) {
+                    let temp = m3BoardData[m3Selected.r][m3Selected.c];
+                    m3BoardData[m3Selected.r][m3Selected.c] = m3BoardData[r][c];
+                    m3BoardData[r][c] = temp;
+                    checkMatch3();
+                }
+                m3Selected = null;
+            }
+            renderMatch3Board();
+        }
+
+        function checkMatch3() {
+            let matched = [];
+            for (let r = 0; r < M3_SIZE; r++) {
+                for (let c = 0; c < M3_SIZE - 2; c++) {
+                    let val = m3BoardData[r][c];
+                    if (val !== null && val === m3BoardData[r][c+1] && val === m3BoardData[r][c+2]) {
+                        matched.push({r, c}, {r, c: c+1}, {r, c: c+2});
+                    }
+                }
+            }
+            for (let r = 0; r < M3_SIZE - 2; r++) {
+                for (let c = 0; c < M3_SIZE; c++) {
+                    let val = m3BoardData[r][c];
+                    if (val !== null && val === m3BoardData[r+1][c] && val === m3BoardData[r+2][c]) {
+                        matched.push({r, c}, {r: r+1, c}, {r: r+2, c});
+                    }
+                }
+            }
+
+            if (matched.length > 0) {
+                let earned = 0;
+                matched.forEach(m => {
+                    if (m3BoardData[m.r][m.c] !== null) {
+                        earned += 500; // 블록 1개당 500원 적립!
+                        m3BoardData[m.r][m.c] = null;
+                    }
+                });
+                amount += earned;
+                updateTotalBalance();
+                setTimeout(dropMatch3, 250);
+            }
+        }
+
+        function dropMatch3() {
+            for (let c = 0; c < M3_SIZE; c++) {
+                for (let r = M3_SIZE - 1; r >= 0; r--) {
+                    if (m3BoardData[r][c] === null) {
+                        for (let k = r - 1; k >= 0; k--) {
+                            if (m3BoardData[k][c] !== null) {
+                                m3BoardData[r][c] = m3BoardData[k][c];
+                                m3BoardData[k][c] = null;
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (let r = 0; r < M3_SIZE; r++) {
+                    if (m3BoardData[r][c] === null) {
+                        m3BoardData[r][c] = Math.floor(Math.random() * M3_EMOJIS.length);
+                    }
+                }
+            }
+            renderMatch3Board();
+            setTimeout(checkMatch3, 200);
         }
 
         window.onload = loadSavedData;
