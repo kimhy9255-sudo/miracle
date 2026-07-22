@@ -18,7 +18,7 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
         
-        /* 캐릭터 영역 및 내부 로그인 버튼 위치 배치 */
+        /* 새 캐릭터 영역 및 내부 로그인 버튼 위치 배치 */
         .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
         
         .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
@@ -62,8 +62,8 @@
         .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
@@ -111,6 +111,7 @@
 
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
+                <!-- 동그라미 친 위치로 옮긴 로그인 버튼 -->
                 <button class="inline-login-btn" onclick="openAdminModal()">
                     🔑 로그인
                 </button>
@@ -155,11 +156,9 @@
 
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <!-- 새로 추가된 이미지 미로 게임 버튼 -->
-                <button id="btnSelectMaze" class="btn-game-select" style="background:#C0392B;" onclick="switchMiniGame('maze')">🧠 좌뇌미로</button>
             </div>
 
             <div id="galagaGameArea" class="game-display-panel">
@@ -178,13 +177,6 @@
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
-            </div>
-
-            <!-- 새로 추가된 미로 게임 패널 -->
-            <div id="mazeGameArea" class="game-display-panel" style="display:none; background:#111;">
-                <canvas id="mazeCanvas" width="300" height="280"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E74C3C, #C0392B);" onclick="startMazeGameEngine()">🔄 미로 재시작</button>
-                <p style="font-size:11px; color:#BDC3C7; margin:6px 0 0 0;">드래그로 손가락(👆)을 움직여 전구(💡)에 닿으면 <b>+50,000원</b>!</p>
             </div>
         </div>
 
@@ -422,7 +414,7 @@
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId); cancelAnimationFrame(mazeAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -491,22 +483,12 @@
         }
 
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active'); 
-            document.getElementById('btnSelectMemory').classList.remove('active'); 
-            document.getElementById('btnSelectGalaga').classList.remove('active');
-            document.getElementById('btnSelectMaze').classList.remove('active');
-
-            document.getElementById('brickGameArea').style.display = 'none'; 
-            document.getElementById('memoryGameArea').style.display = 'none'; 
-            document.getElementById('galagaGameArea').style.display = 'none';
-            document.getElementById('mazeGameArea').style.display = 'none';
-
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId); cancelAnimationFrame(mazeAnimationId);
-
+            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
             if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
-            else if(gameType === 'maze') { document.getElementById('btnSelectMaze').classList.add('active'); document.getElementById('mazeGameArea').style.display = 'block'; startMazeGameEngine(); }
         }
 
         /* 🧱 1. 벽돌깨기 */
@@ -740,116 +722,6 @@
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
-        }
-
-        /* 🧠 4. 좌뇌 테스트 미로 찾기 게임 엔진 */
-        let mazeCanvas = document.getElementById("mazeCanvas");
-        let mCtx = mazeCanvas.getContext("2d");
-        let mazeAnimationId = null;
-        let handPos = { x: 50, y: 240 };
-        let lightBulbPos = { x: 150, y: 120 };
-        let isTouchDragging = false;
-        let mazeCleared = false;
-
-        // 화살표 미로 트랙 정보
-        let mazeArrows = [
-            // 상단 레드/옐로우
-            {x: 40, y: 60, dir: 'up', color: '#E74C3C'}, {x: 80, y: 60, dir: 'right', color: '#E74C3C'},
-            {x: 120, y: 40, dir: 'up', color: '#F1C40F'}, {x: 180, y: 40, dir: 'down', color: '#F1C40F'},
-            {x: 220, y: 60, dir: 'left', color: '#E74C3C'}, {x: 260, y: 60, dir: 'up', color: '#E74C3C'},
-            
-            // 중간 그린/시안
-            {x: 40, y: 130, dir: 'right', color: '#2ECC71'}, {x: 90, y: 120, dir: 'right', color: '#2ECC71'},
-            {x: 210, y: 120, dir: 'left', color: '#1ABC9C'}, {x: 260, y: 130, dir: 'left', color: '#1ABC9C'},
-
-            // 하단 보라/퍼플
-            {x: 50, y: 190, dir: 'up', color: '#9B59B6'}, {x: 90, y: 200, dir: 'right', color: '#8E44AD'},
-            {x: 210, y: 200, dir: 'left', color: '#8E44AD'}, {x: 250, y: 190, dir: 'up', color: '#9B59B6'}
-        ];
-
-        function startMazeGameEngine() {
-            cancelAnimationFrame(mazeAnimationId);
-            handPos = { x: 50, y: 240 };
-            mazeCleared = false;
-            drawMazeGame();
-        }
-
-        function setHandPosition(clientX, clientY) {
-            let rect = mazeCanvas.getBoundingClientRect();
-            let relativeX = clientX - rect.left;
-            let relativeY = clientY - rect.top;
-            
-            if(relativeX >= 0 && relativeX <= mazeCanvas.width && relativeY >= 0 && relativeY <= mazeCanvas.height) {
-                handPos.x = relativeX;
-                handPos.y = relativeY;
-            }
-        }
-
-        mazeCanvas.addEventListener("touchstart", (e) => { isTouchDragging = true; setHandPosition(e.touches[0].clientX, e.touches[0].clientY); });
-        mazeCanvas.addEventListener("touchmove", (e) => { if(isTouchDragging) { e.preventDefault(); setHandPosition(e.touches[0].clientX, e.touches[0].clientY); } });
-        mazeCanvas.addEventListener("touchend", () => { isTouchDragging = false; });
-        mazeCanvas.addEventListener("mousedown", (e) => { isTouchDragging = true; setHandPosition(e.clientX, e.clientY); });
-        mazeCanvas.addEventListener("mousemove", (e) => { if(isTouchDragging) setHandPosition(e.clientX, e.clientY); });
-        mazeCanvas.addEventListener("mouseup", () => { isTouchDragging = false; });
-
-        function drawMazeGame() {
-            mCtx.fillStyle = "#0D0814";
-            mCtx.fillRect(0, 0, mazeCanvas.width, mazeCanvas.height);
-
-            // 상단 타이틀 텍스트
-            mCtx.fillStyle = "#E74C3C";
-            mCtx.font = "bold 13px sans-serif";
-            mCtx.textAlign = "center";
-            mCtx.fillText('Only "LEFT-BRAINED"', 150, 22);
-            mCtx.fillStyle = "#FFFFFF";
-            mCtx.font = "12px sans-serif";
-            mCtx.fillText('can solve this', 150, 38);
-
-            // 트로피 아이콘
-            mCtx.font = "20px sans-serif";
-            mCtx.fillText("🏆", 30, 28);
-
-            // 미로 화살표 및 연결선 그리기
-            mazeArrows.forEach((a) => {
-                mCtx.strokeStyle = a.color;
-                mCtx.lineWidth = 2;
-                mCtx.beginPath();
-                mCtx.moveTo(a.x, a.y);
-
-                if(a.dir === 'up') mCtx.lineTo(a.x, a.y - 12);
-                else if(a.dir === 'down') mCtx.lineTo(a.x, a.y + 12);
-                else if(a.dir === 'left') mCtx.lineTo(a.x - 12, a.y);
-                else if(a.dir === 'right') mCtx.lineTo(a.x + 12, a.y);
-                mCtx.stroke();
-
-                // 화살표 촉
-                mCtx.fillStyle = a.color;
-                mCtx.beginPath();
-                if(a.dir === 'up') { mCtx.moveTo(a.x-3, a.y-10); mCtx.lineTo(a.x+3, a.y-10); mCtx.lineTo(a.x, a.y-15); }
-                else if(a.dir === 'right') { mCtx.moveTo(a.x+10, a.y-3); mCtx.lineTo(a.x+10, a.y+3); mCtx.lineTo(a.x+15, a.y); }
-                else if(a.dir === 'left') { mCtx.moveTo(a.x-10, a.y-3); mCtx.lineTo(a.x-10, a.y+3); mCtx.lineTo(a.x-15, a.y); }
-                else if(a.dir === 'down') { mCtx.moveTo(a.x-3, a.y+10); mCtx.lineTo(a.x+3, a.y+10); mCtx.lineTo(a.x, a.y+15); }
-                mCtx.fill();
-            });
-
-            // 중앙 전구 (목표 지점)
-            mCtx.font = "34px sans-serif";
-            mCtx.fillText("💡", lightBulbPos.x, lightBulbPos.y + 10);
-
-            // 손가락 아이콘 (플레이어)
-            mCtx.font = "26px sans-serif";
-            mCtx.fillText("👆", handPos.x, handPos.y);
-
-            // 전구 도착 성공 판정
-            let dist = Math.hypot(handPos.x - lightBulbPos.x, handPos.y - lightBulbPos.y);
-            if (dist < 25 && !mazeCleared) {
-                mazeCleared = true;
-                amount += 50000;
-                updateTotalBalance();
-                alert("🎉 천재 좌뇌 인증 성공!\n미로 탈출 보상으로 +50,000원이 지급되었습니다!");
-            }
-
-            mazeAnimationId = requestAnimationFrame(drawMazeGame);
         }
 
         window.onload = loadSavedData;
