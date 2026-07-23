@@ -229,7 +229,7 @@
             <div id="stockGameArea" class="game-display-panel">
                 <div style="font-size: 50px; margin: 15px 0;">📈</div>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E74C3C, #C0392B);" onclick="launchFullscreenGame('stock')">🚀 주식 차트 트레이딩 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">다이버전스 & 컨버전스 파동 패턴 시뮬레이션 지수 차트!</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">실시간 실부방 코스닥 시세 차트를 보고 롱/숏 투자!</p>
             </div>
 
             <div id="galagaGameArea" class="game-display-panel" style="display:none;">
@@ -362,8 +362,6 @@
                                 <span class="stock-price" id="stCurrPrice">100,000</span>
                                 <span class="stock-change" id="stPriceChange">+0.00%</span>
                             </div>
-                            <!-- ✨ 패턴 표시 라벨 추가 -->
-                            <div id="stPatternTag" style="font-size:10px; color:#F59E0B; font-weight:bold; margin-top:2px;">[파동 분석 중]</div>
                         </div>
                         <div style="text-align:right;">
                             <div style="color:#9CA3AF; font-size:10px;">투자 가능 잔고</div>
@@ -703,48 +701,37 @@
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
-        /* 📈✨ [고도화 반영] 다이버전스 & 컨버전스 시뮬레이션 차트 엔진 */
+        /* 📈 [수정 완료] 상승 컨버전스 & 하락 다이버전스 로테이션 적용 주식 엔진 */
         let stockCanvas = document.getElementById('stockCanvas');
         let sCtx = stockCanvas.getContext('2d');
         let stockHistory = [];
-        let indicatorHistory = []; // 지표 데이터(RSI/지표 역할)
         let stockCurrentPrice = 100000;
-        let stockCurrentIndicator = 50.0;
         let stockBasePrice = 100000;
         let stockIntervalId = null;
         let stockPosition = null;
         let selectedInvestRatio = 0.5;
 
-        // 패턴 로테이션 제어 변수
-        let currentPatternIndex = 0; 
-        let patternStepCounter = 0;
-        const STEPS_PER_PATTERN = 25; // 각 패턴당 단계 수
-        
-        const PATTERN_LABELS = [
-            "📈 상승 다이버전스 (반등 준비)",
-            "🚀 상승 컨버전스 (강력한 폭등)",
-            "⚠️ 고점 하락 다이버전스 (급락 위험!)",
-            "📉 하락 다이버전스 여파 (강력한 급락)"
-        ];
+        // 패턴 순환 제어용 변수
+        let stockCyclePhase = 'UP'; // 'UP': 상승 컨버전스, 'DOWN': 하락 다이버전스
+        let stockPhaseTimer = 0;
 
         function startStockGameEngine() {
             if(stockIntervalId) clearInterval(stockIntervalId);
             stockHistory = [];
-            indicatorHistory = [];
-            stockCurrentPrice = 100000;
-            stockCurrentIndicator = 50.0;
-            stockBasePrice = 100000;
-            currentPatternIndex = 0;
-            patternStepCounter = 0;
+            stockCurrentPrice = 80000;
+            stockBasePrice = 80000;
+            stockCyclePhase = 'UP';
+            stockPhaseTimer = 0;
             
-            // 초기 15개 캔들 기본 데이터 준비
-            for(let i=0; i<15; i++) {
+            // 초기 40개 데이터 생성
+            for(let i=0; i<40; i++) {
+                let upwardBias = 800 + Math.random() * 2500; 
+                stockCurrentPrice = Math.max(10000, stockCurrentPrice + upwardBias + (Math.random() - 0.45) * 1200);
                 stockHistory.push(stockCurrentPrice);
-                indicatorHistory.push(stockCurrentIndicator);
             }
             
             updateTotalBalance();
-            stockIntervalId = setInterval(updateStockPrice, 700);
+            stockIntervalId = setInterval(updateStockPrice, 800);
             renderStockUI();
         }
 
@@ -754,44 +741,26 @@
         }
 
         function updateStockPrice() {
-            patternStepCounter++;
-            if (patternStepCounter > STEPS_PER_PATTERN) {
-                patternStepCounter = 1;
-                currentPatternIndex = (currentPatternIndex + 1) % PATTERN_LABELS.length;
+            stockPhaseTimer++;
+            
+            // 30틱 주기마다 패턴 로테이션 (상승 컨버전스 ⇄ 하락 다이버전스)
+            if(stockPhaseTimer > 30) {
+                stockCyclePhase = stockCyclePhase === 'UP' ? 'DOWN' : 'UP';
+                stockPhaseTimer = 0;
             }
 
-            let priceDelta = 0;
-            let indicatorDelta = 0;
-
-            // 로테이션 패턴 로직 구현
-            if (currentPatternIndex === 0) {
-                // 1. 상승 다이버전스 : 가격은 저점을 갱신하며 내려가나 지표는 상승함
-                priceDelta = -1200 + (Math.random() - 0.5) * 600;
-                indicatorDelta = +1.5 + (Math.random() - 0.5) * 0.5;
-            } else if (currentPatternIndex === 1) {
-                // 2. 급격한 상승 컨버전스 : 가격과 지표가 동시에 수직 상승
-                priceDelta = +3200 + (Math.random() - 0.3) * 800;
-                indicatorDelta = +2.2 + (Math.random() - 0.3) * 0.6;
-            } else if (currentPatternIndex === 2) {
-                // 3. 고점 하락 다이버전스 : 주가는 고점을 높이나 지표는 급격히 하락 (급락 예고)
-                priceDelta = +800 + (Math.random() - 0.4) * 400; 
-                indicatorDelta = -2.8 + (Math.random() - 0.5) * 0.6;
-            } else if (currentPatternIndex === 3) {
-                // 4. 급락 진행 : 하락 다이버전스 후 엄청난 급락
-                priceDelta = -4500 + (Math.random() - 0.6) * 1000;
-                indicatorDelta = -1.8 + (Math.random() - 0.5) * 0.5;
+            let delta = 0;
+            if(stockCyclePhase === 'UP') {
+                // 상승 컨버전스 패턴 (우상향 편향)
+                delta = (Math.random() - 0.38) * 3200 + 800;
+            } else {
+                // 하락 다이버전스 패턴 (우하향 급락 및 파동 편향)
+                delta = (Math.random() - 0.65) * 3500 - 1000;
             }
 
-            stockCurrentPrice = Math.max(5000, Math.floor(stockCurrentPrice + priceDelta));
-            stockCurrentIndicator = Math.min(95, Math.max(5, stockCurrentIndicator + indicatorDelta));
-
+            stockCurrentPrice = Math.max(5000, Math.floor(stockCurrentPrice + delta));
             stockHistory.push(stockCurrentPrice);
-            indicatorHistory.push(stockCurrentIndicator);
-
-            if (stockHistory.length > 45) {
-                stockHistory.shift();
-                indicatorHistory.shift();
-            }
+            if(stockHistory.length > 50) stockHistory.shift();
 
             renderStockUI();
         }
@@ -799,12 +768,9 @@
         function renderStockUI() {
             const priceEl = document.getElementById('stCurrPrice');
             const changeEl = document.getElementById('stPriceChange');
-            const patternTagEl = document.getElementById('stPatternTag');
             const diff = stockCurrentPrice - stockBasePrice;
             const rate = ((diff / stockBasePrice) * 100).toFixed(2);
             
-            if (patternTagEl) patternTagEl.innerText = PATTERN_LABELS[currentPatternIndex];
-
             priceEl.innerText = stockCurrentPrice.toLocaleString();
             if(diff >= 0) {
                 priceEl.style.color = '#EF4444';
@@ -856,40 +822,76 @@
             }
         }
 
-        /* 주가 차트 및 지표 하단 차트 병행 렌더링 */
         function drawStockChart() {
             sCtx.fillStyle = '#111827';
             sCtx.fillRect(0, 0, stockCanvas.width, stockCanvas.height);
 
             if(stockHistory.length < 2) return;
 
-            let mainChartHeight = 190;
-            let subChartHeight = 70;
-            let padding = 15;
-
-            // 1. 주가 메인 차트 영역 범위 계산
-            let minP = Math.min(...stockHistory) * 0.95;
-            let maxP = Math.max(...stockHistory) * 1.05;
+            let min = Math.min(...stockHistory) * 0.95;
+            let max = Math.max(...stockHistory) * 1.05;
+            let padding = 25;
+            let chartHeight = stockCanvas.height - padding * 2;
             let stepX = stockCanvas.width / (stockHistory.length - 1);
 
-            // 주가 격자선
+            // 배경 가로 격자선
             sCtx.strokeStyle = '#1F2937';
             sCtx.lineWidth = 1;
-            for(let i=1; i<=2; i++) {
-                let y = (mainChartHeight / 3) * i;
+            for(let i=1; i<=3; i++) {
+                let y = (stockCanvas.height / 4) * i;
                 sCtx.beginPath();
                 sCtx.moveTo(0, y); sCtx.lineTo(stockCanvas.width, y);
                 sCtx.stroke();
             }
 
-            // 메인 주가 라인 차트 (하락 다이버전스/급락 시 붉은색, 상승 시 하늘색)
+            // 1. 이동평균선 계산 (MA 5, MA 20)
+            let ma5 = [];
+            let ma20 = [];
+            for(let i = 0; i < stockHistory.length; i++) {
+                if(i >= 4) {
+                    let sum5 = 0;
+                    for(let j = i - 4; j <= i; j++) sum5 += stockHistory[j];
+                    ma5.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum5 / 5 - min) / (max - min)) * chartHeight });
+                }
+                if(i >= 19) {
+                    let sum20 = 0;
+                    for(let j = i - 19; j <= i; j++) sum20 += stockHistory[j];
+                    ma20.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum20 / 20 - min) / (max - min)) * chartHeight });
+                }
+            }
+
+            // 2. 장기 이동평균선 (20일선)
+            if(ma20.length > 1) {
+                sCtx.beginPath();
+                sCtx.lineWidth = 2.5;
+                sCtx.strokeStyle = '#9CA3AF';
+                for(let i = 0; i < ma20.length; i++) {
+                    if(i === 0) sCtx.moveTo(ma20[i].x, ma20[i].y);
+                    else sCtx.lineTo(ma20[i].x, ma20[i].y);
+                }
+                sCtx.stroke();
+            }
+
+            // 3. 단기 이동평균선 (5일선)
+            if(ma5.length > 1) {
+                sCtx.beginPath();
+                sCtx.lineWidth = 2.5;
+                sCtx.strokeStyle = '#EF4444';
+                for(let i = 0; i < ma5.length; i++) {
+                    if(i === 0) sCtx.moveTo(ma5[i].x, ma5[i].y);
+                    else sCtx.lineTo(ma5[i].x, ma5[i].y);
+                }
+                sCtx.stroke();
+            }
+
+            // 4. 주가 메인 라인 차트
             sCtx.beginPath();
-            sCtx.lineWidth = 2.5;
-            sCtx.strokeStyle = (currentPatternIndex === 2 || currentPatternIndex === 3) ? '#EF4444' : '#38BDF8';
+            sCtx.lineWidth = 3;
+            sCtx.strokeStyle = '#38BDF8';
 
             for(let i = 0; i < stockHistory.length; i++) {
                 let x = i * stepX;
-                let y = mainChartHeight - padding - ((stockHistory[i] - minP) / (maxP - minP)) * (mainChartHeight - padding * 2);
+                let y = stockCanvas.height - padding - ((stockHistory[i] - min) / (max - min)) * chartHeight;
                 if(i === 0) sCtx.moveTo(x, y);
                 else sCtx.lineTo(x, y);
             }
@@ -897,7 +899,7 @@
 
             // 진입 가격 점선 표시
             if(stockPosition) {
-                let entryY = mainChartHeight - padding - ((stockPosition.entryPrice - minP) / (maxP - minP)) * (mainChartHeight - padding * 2);
+                let entryY = stockCanvas.height - padding - ((stockPosition.entryPrice - min) / (max - min)) * chartHeight;
                 sCtx.strokeStyle = '#F59E0B';
                 sCtx.setLineDash([4, 4]);
                 sCtx.beginPath();
@@ -905,32 +907,6 @@
                 sCtx.stroke();
                 sCtx.setLineDash([]);
             }
-
-            // 2. 하단 보조 지표 차트 구분 경계선 (Divergence / Convergence Indicator)
-            let subTopY = mainChartHeight + 10;
-            sCtx.strokeStyle = '#374151';
-            sCtx.beginPath();
-            sCtx.moveTo(0, subTopY); sCtx.lineTo(stockCanvas.width, subTopY);
-            sCtx.stroke();
-
-            // 보조 지표 라인 차트 (보라색/노란색)
-            sCtx.beginPath();
-            sCtx.lineWidth = 2;
-            sCtx.strokeStyle = '#FACC15';
-
-            let minI = 0, maxI = 100;
-            for(let i = 0; i < indicatorHistory.length; i++) {
-                let x = i * stepX;
-                let y = (stockCanvas.height - 10) - ((indicatorHistory[i] - minI) / (maxI - minI)) * subChartHeight;
-                if(i === 0) sCtx.moveTo(x, y);
-                else sCtx.lineTo(x, y);
-            }
-            sCtx.stroke();
-
-            // 지표 텍스트 라벨
-            sCtx.fillStyle = '#9CA3AF';
-            sCtx.font = '10px sans-serif';
-            sCtx.fillText('지표(RSI/보조)', 5, subTopY + 12);
         }
 
         function executeStockOrder(type) {
@@ -951,7 +927,7 @@
             if(stockPosition.type === 'BUY') {
                 pnlRatio = (stockCurrentPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
             } else {
-                pnlRatio = (stockPosition.entryPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
+                pnlRatio = (stockPosition.entryPrice - stockCurrentPrice) / stockPosition.entryPrice;
             }
 
             let returnAmt = Math.floor(stockPosition.amount + (stockPosition.amount * pnlRatio));
