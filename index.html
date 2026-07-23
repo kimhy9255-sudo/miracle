@@ -9,27 +9,52 @@
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
         
-        /* 헤더 높이 고정 */
-        .header { background-color: #FFF; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; height: 48px; }
+        /* 헤더 높이 및 레이아웃 수정 */
+        .header { 
+            background-color: #FFF; 
+            padding: 8px 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            flex-shrink: 0; 
+            height: 52px; 
+            gap: 8px;
+        }
 
-        /* [수정] 헤더 타이틀 - 고급스러운 금색 그라데이션 및 효과 적용 */
-        .header h1 {
-            margin: 0;
-            font-weight: 800; /* 조금 더 두껍게 해서 금색을 강조 */
-            
-            /* 기본 크기는 유지하되 모바일 배율에 따라 미세 조정 */
-            font-size: clamp(15px, 4vw, 17px);
-            
-            /* 금색 그라데이션 연출 */
+        /* ✨ [수정] 헤더 타이틀 영역 (실부방 크게 + 실수로도 부자되는 방 작게, 우측 아이디 영역까지 꽉 채움) */
+        .header-title-wrap {
+            display: flex;
+            align-items: baseline; /* 글자 아래 기준선 정렬 */
+            gap: 4px;
+            flex: 1; /* 남은 여백을 꽉 채우도록 설정 */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* 공통 황금빛 그라데이션 텍스트 스타일 */
+        .gold-text {
             background: linear-gradient(135deg, #FFE259 0%, #FFA751 45%, #FFD700 70%, #B8860B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            
-            /* 글자가 더 선명하고 돋보이게 입체감 있는 은은한 그림자 추가 */
             filter: drop-shadow(0px 1px 2px rgba(212, 175, 55, 0.4));
         }
 
-        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
+        /* 1. 앞에 크게 들어가는 '실부방' */
+        .main-logo-text {
+            font-size: clamp(18px, 5.2vw, 22px);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        /* 2. 바로 옆 작게 들어가는 '(실수로도 부자되는 방)' */
+        .sub-logo-text {
+            font-size: clamp(11px, 3.2vw, 13px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
         
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
@@ -135,8 +160,12 @@
 <body>
 
     <div id="mainAppLayout">
+        <!-- 🌟 [수정된 헤더] 실부방 큰글씨 + (실수로도 부자되는 방) 작은글씨 + 황금색 -->
         <div class="header">
-            <h1>실부방(실수로도 부자되는 방)</h1>
+            <div class="header-title-wrap">
+                <span class="gold-text main-logo-text">실부방</span>
+                <span class="gold-text sub-logo-text">(실수로도 부자되는 방)</span>
+            </div>
             <div id="userBadge" class="user-welcome-info tier-whale">
                 <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
             </div>
