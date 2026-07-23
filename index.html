@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>실수로도 부자되는 곳</title>
+    <title>실수로도 부자되는 방</title>
     <style>
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -11,7 +11,24 @@
         
         /* 헤더 높이 고정 */
         .header { background-color: #FFF; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; height: 48px; }
-        .header h1 { font-size: 16px; margin: 0; color: #2C3E50; font-weight: bold; }
+
+        /* [수정] 헤더 타이틀 - 고급스러운 금색 그라데이션 및 효과 적용 */
+        .header h1 {
+            margin: 0;
+            font-weight: 800; /* 조금 더 두껍게 해서 금색을 강조 */
+            
+            /* 기본 크기는 유지하되 모바일 배율에 따라 미세 조정 */
+            font-size: clamp(15px, 4vw, 17px);
+            
+            /* 금색 그라데이션 연출 */
+            background: linear-gradient(135deg, #FFE259 0%, #FFA751 45%, #FFD700 70%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* 글자가 더 선명하고 돋보이게 입체감 있는 은은한 그림자 추가 */
+            filter: drop-shadow(0px 1px 2px rgba(212, 175, 55, 0.4));
+        }
+
         .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
         
@@ -119,7 +136,7 @@
 
     <div id="mainAppLayout">
         <div class="header">
-            <h1>실수로도 부자되는 곳</h1>
+            <h1>실수로도 부자되는 방</h1>
             <div id="userBadge" class="user-welcome-info tier-whale">
                 <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
             </div>
