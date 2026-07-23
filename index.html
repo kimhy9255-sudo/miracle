@@ -701,33 +701,32 @@
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
-        /* 📈 [수정 완료] 상승 컨버전스 & 하락 다이버전스 로테이션 적용 주식 엔진 */
+        /* 📈 [수정 완료] 상승 2파동 -> 급속 상승 컨버전스 -> 길게 하락 다이버전스 로테이션 적용 엔진 */
         let stockCanvas = document.getElementById('stockCanvas');
         let sCtx = stockCanvas.getContext('2d');
         let stockHistory = [];
-        let stockCurrentPrice = 100000;
-        let stockBasePrice = 100000;
+        let stockCurrentPrice = 80000;
+        let stockBasePrice = 80000;
         let stockIntervalId = null;
         let stockPosition = null;
         let selectedInvestRatio = 0.5;
 
-        // 패턴 순환 제어용 변수
-        let stockCyclePhase = 'UP'; // 'UP': 상승 컨버전스, 'DOWN': 하락 다이버전스
-        let stockPhaseTimer = 0;
+        // 사이클 및 로테이션 제어 변수
+        let stockCycleTick = 0;       // 주기 내의 현재 위치 (0 ~ 59)
+        const CYCLE_TOTAL_TICKS = 60; // 한 사이클당 총 틱 수 (각 구간별로 구분됨)
+        let cycleBasePrice = 80000;   // 각 사이클의 기준 가격 (바닥점 연결용)
 
         function startStockGameEngine() {
             if(stockIntervalId) clearInterval(stockIntervalId);
             stockHistory = [];
             stockCurrentPrice = 80000;
             stockBasePrice = 80000;
-            stockCyclePhase = 'UP';
-            stockPhaseTimer = 0;
+            cycleBasePrice = 80000;
+            stockCycleTick = 0;
             
-            // 초기 40개 데이터 생성
-            for(let i=0; i<40; i++) {
-                let upwardBias = 800 + Math.random() * 2500; 
-                stockCurrentPrice = Math.max(10000, stockCurrentPrice + upwardBias + (Math.random() - 0.45) * 1200);
-                stockHistory.push(stockCurrentPrice);
+            // 초기 데이터 세팅
+            for(let i = 0; i < 40; i++) {
+                updateStockPriceLogic();
             }
             
             updateTotalBalance();
@@ -741,28 +740,56 @@
         }
 
         function updateStockPrice() {
-            stockPhaseTimer++;
-            
-            // 30틱 주기마다 패턴 로테이션 (상승 컨버전스 ⇄ 하락 다이버전스)
-            if(stockPhaseTimer > 30) {
-                stockCyclePhase = stockCyclePhase === 'UP' ? 'DOWN' : 'UP';
-                stockPhaseTimer = 0;
+            updateStockPriceLogic();
+            renderStockUI();
+        }
+
+        // 주가 시뮬레이션 핵심 로직 함수
+        function updateStockPriceLogic() {
+            stockCycleTick++;
+            if(stockCycleTick >= CYCLE_TOTAL_TICKS) {
+                stockCycleTick = 0; // 한 주기가 끝나면 다시 상승 2파동부터 로테이션
+                cycleBasePrice = stockCurrentPrice; // 바닥점 기준 가격 재설정
             }
 
-            let delta = 0;
-            if(stockCyclePhase === 'UP') {
-                // 상승 컨버전스 패턴 (우상향 편향)
-                delta = (Math.random() - 0.38) * 3200 + 800;
-            } else {
-                // 하락 다이버전스 패턴 (우하향 급락 및 파동 편향)
-                delta = (Math.random() - 0.65) * 3500 - 1000;
+            // 한 주기를 0~1 사이의 진행 비율 t로 계산
+            let t = stockCycleTick / CYCLE_TOTAL_TICKS;
+            let priceDelta = 0;
+
+            // 1. 상승 2파동 구간 (0.0 <= t < 0.35)
+            if (t < 0.35) {
+                let subT = t / 0.35;
+                // 우상향 추세 + 2개의 사인파 봉우리
+                let trend = subT * 12000;
+                let wave = Math.sin(subT * Math.PI * 4) * 2500;
+                let targetPrice = cycleBasePrice + trend + wave;
+                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.5) * 600;
+            } 
+            // 2. 급속한 상승 컨버전스 구간 (0.35 <= t < 0.50) -> 폭발적 급등
+            else if (t < 0.50) {
+                let subT = (t - 0.35) / 0.15;
+                // 지수 함수적으로 급격한 가속 상승
+                let expGain = (Math.exp(subT * 2.2) - 1) * 11000;
+                let baseWaveVal = cycleBasePrice + 12000; 
+                let targetPrice = baseWaveVal + expGain;
+                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.4) * 1000;
+            } 
+            // 3. 고점에서 길게 진행되는 하락 다이버전스 (0.50 <= t < 1.00)
+            else {
+                let subT = (t - 0.50) / 0.50;
+                let peakPrice = cycleBasePrice + 12000 + (Math.exp(2.2) - 1) * 11000;
+                
+                // 에너지 감쇄 + 진폭 감소 파동 + 바닥으로 우하향 곡선
+                let decay = Math.exp(-2.5 * subT);
+                let osc = Math.sin(subT * Math.PI * 6) * 3000 * decay;
+                let drop = (peakPrice - cycleBasePrice) * Math.pow(subT, 0.75);
+                let targetPrice = peakPrice - drop + osc;
+                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.5) * 500;
             }
 
-            stockCurrentPrice = Math.max(5000, Math.floor(stockCurrentPrice + delta));
+            stockCurrentPrice = Math.max(3000, Math.floor(stockCurrentPrice + priceDelta));
             stockHistory.push(stockCurrentPrice);
             if(stockHistory.length > 50) stockHistory.shift();
-
-            renderStockUI();
         }
 
         function renderStockUI() {
