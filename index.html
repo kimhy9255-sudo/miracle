@@ -104,8 +104,8 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         
-        /* 미니게임 메뉴버튼 */
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
+        /* 미니게임 메뉴버튼 (주식 차트 포함 5개 버튼 대응) */
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
@@ -120,6 +120,19 @@
         #match3Board { display: grid; grid-template-columns: repeat(6, 42px); grid-template-rows: repeat(6, 42px); gap: 5px; justify-content: center; margin: 10px auto; background: #1E293B; padding: 10px; border-radius: 16px; width: fit-content; }
         .m3-tile { width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; user-select: none; transition: transform 0.1s; background: #334155; }
         .m3-tile.selected { border: 2.5px solid #38BDF8; transform: scale(1.1); box-shadow: 0 0 10px #38BDF8; }
+
+        /* 📈 주식 트레이딩 UI 전용 스타일 */
+        .stock-dashboard { background: #111827; border-radius: 14px; padding: 12px; color: #F3F4F6; font-size: 12px; text-align: left; }
+        .stock-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2937; padding-bottom: 8px; margin-bottom: 8px; }
+        .stock-price { font-size: 18px; font-weight: 800; }
+        .stock-change { font-size: 11px; font-weight: 700; margin-left: 4px; }
+        .stock-controls { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .stock-btn-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+        .btn-trade { padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 12px; }
+        .btn-buy { background: #EF4444; }
+        .btn-sell { background: #3B82F6; }
+        .btn-close-pos { background: #10B981; }
+        .stock-position-card { background: #1F2937; padding: 8px; border-radius: 8px; margin-top: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
 
         /* 🚀 전체화면 게임 오버레이 스타일 */
         .fullscreen-game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #0F172A; z-index: 99999; flex-direction: column; align-items: center; justify-content: space-between; padding: 15px 10px env(safe-area-inset-bottom) 10px; }
@@ -216,15 +229,23 @@
         </div>
 
         <div id="gameTab" class="tab-content">
+            <!-- 🎮 미니게임 선택 메뉴 (주식차트 포함 5종) -->
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
+                <button id="btnSelectStock" class="btn-game-select active" style="background:#E74C3C;" onclick="switchMiniGame('stock')">📈 주식 차트</button>
+                <button id="btnSelectGalaga" class="btn-game-select" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌 퍼즐</button>
+                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌퍼즐</button>
             </div>
 
             <!-- 미니게임 탭 내 미리보기 패널 -->
-            <div id="galagaGameArea" class="game-display-panel">
+            <div id="stockGameArea" class="game-display-panel">
+                <div style="font-size: 50px; margin: 15px 0;">📈</div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E74C3C, #C0392B);" onclick="launchFullscreenGame('stock')">🚀 주식 차트 트레이딩 시작 / 전체화면</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">실시간 실부방 코스닥 시세 차트를 보고 롱/숏 투자!</p>
+            </div>
+
+            <div id="galagaGameArea" class="game-display-panel" style="display:none;">
                 <div style="font-size: 50px; margin: 20px 0;">🛸</div>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="launchFullscreenGame('galaga')">🚀 갤러그 시작 / 전체화면</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">전체화면 전환 후 손가락 드래그로 조작 (격추당 +10,000원)</p>
@@ -346,6 +367,54 @@
         </div>
         
         <div class="fullscreen-content-body">
+            <!-- 📈 주식 차트 트레이딩 전체화면 -->
+            <div id="fsStockBox" style="display:none; text-align:center; width:100%;">
+                <div class="stock-dashboard">
+                    <div class="stock-header">
+                        <div>
+                            <div style="color:#9CA3AF; font-size:10px;">실부방 시뮬레이션 지수</div>
+                            <div>
+                                <span class="stock-price" id="stCurrPrice">100,000</span>
+                                <span class="stock-change" id="stPriceChange">+0.00%</span>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="color:#9CA3AF; font-size:10px;">투자 가능 잔고</div>
+                            <div style="font-weight:bold; color:#10B981;" id="stUserBalance">0 원</div>
+                        </div>
+                    </div>
+                    
+                    <canvas id="stockCanvas" width="340" height="200"></canvas>
+                    
+                    <div class="stock-position-card">
+                        <div>
+                            <div>보유 포지션: <b id="stPosType" style="color:#9CA3AF;">없음</b></div>
+                            <div style="color:#9CA3AF; font-size:10px;">진입가: <span id="stEntryPrice">0</span> | 금액: <span id="stInvestAmt">0</span>원</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div>평가 손익</div>
+                            <div id="stPnL" style="font-weight:bold; font-size:13px;">0원 (0.00%)</div>
+                        </div>
+                    </div>
+
+                    <div class="stock-controls">
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+                            <span>투자금: </span>
+                            <div>
+                                <button onclick="setStockInvestRatio(0.1)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">10%</button>
+                                <button onclick="setStockInvestRatio(0.5)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">50%</button>
+                                <button onclick="setStockInvestRatio(1.0)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">전액</button>
+                            </div>
+                        </div>
+                        <div class="stock-btn-row">
+                            <button class="btn-trade btn-buy" onclick="executeStockOrder('BUY')">🔴 매수 (LONG)</button>
+                            <button class="btn-trade btn-sell" onclick="executeStockOrder('SELL')">🔵 매도 (SHORT)</button>
+                            <button class="btn-trade btn-close-pos" onclick="closeStockPosition()">⚡ 청산하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 갤러그 전체화면 -->
             <div id="fsGalagaBox" style="display:none; text-align:center; width:100%;">
                 <canvas id="galagaCanvas" width="340" height="420"></canvas>
@@ -496,6 +565,7 @@
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
             if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+            if(document.getElementById('stUserBalance')) document.getElementById('stUserBalance').innerText = amount.toLocaleString() + " 원";
             if(shouldSave) saveCurrentData();
         }
 
@@ -517,6 +587,7 @@
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            if(stockIntervalId) clearInterval(stockIntervalId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -584,17 +655,20 @@
         }
 
         function switchMiniGame(gameType) {
+            document.getElementById('btnSelectStock').classList.remove('active');
             document.getElementById('btnSelectBrick').classList.remove('active'); 
             document.getElementById('btnSelectMemory').classList.remove('active'); 
             document.getElementById('btnSelectGalaga').classList.remove('active');
             document.getElementById('btnSelectMatch3').classList.remove('active');
 
+            document.getElementById('stockGameArea').style.display = 'none';
             document.getElementById('brickGameArea').style.display = 'none'; 
             document.getElementById('memoryGameArea').style.display = 'none'; 
             document.getElementById('galagaGameArea').style.display = 'none';
             document.getElementById('match3GameArea').style.display = 'none';
 
-            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; } 
+            if(gameType === 'stock') { document.getElementById('btnSelectStock').classList.add('active'); document.getElementById('stockGameArea').style.display = 'block'; }
+            else if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; } 
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; }
             else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; }
@@ -603,6 +677,7 @@
         /* 🚀 전체화면 실행 & 종료 관리 시스템 */
         function launchFullscreenGame(gameType) {
             currentGameType = gameType;
+            document.getElementById('fsStockBox').style.display = 'none';
             document.getElementById('fsGalagaBox').style.display = 'none';
             document.getElementById('fsBrickBox').style.display = 'none';
             document.getElementById('fsMemoryBox').style.display = 'none';
@@ -610,7 +685,11 @@
 
             const titleEl = document.getElementById('fullscreenTitle');
 
-            if(gameType === 'galaga') {
+            if(gameType === 'stock') {
+                titleEl.innerText = "📈 주식 차트 트레이딩";
+                document.getElementById('fsStockBox').style.display = 'block';
+                startStockGameEngine();
+            } else if(gameType === 'galaga') {
                 titleEl.innerText = "🛸 정통 갤러그";
                 document.getElementById('fsGalagaBox').style.display = 'block';
                 startGalagaGameEngine();
@@ -638,7 +717,187 @@
         function closeFullscreenGame() {
             cancelAnimationFrame(gameAnimationId); 
             cancelAnimationFrame(galagaAnimationId);
+            if(stockIntervalId) clearInterval(stockIntervalId);
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
+        }
+
+        /* 📈 5. 실시간 주식 차트 트레이딩 엔진 */
+        let stockCanvas = document.getElementById('stockCanvas');
+        let sCtx = stockCanvas.getContext('2d');
+        let stockHistory = [];
+        let stockCurrentPrice = 100000;
+        let stockBasePrice = 100000;
+        let stockIntervalId = null;
+        let stockPosition = null; // { type: 'BUY'|'SELL', entryPrice: number, amount: number }
+        let selectedInvestRatio = 0.5;
+
+        function startStockGameEngine() {
+            if(stockIntervalId) clearInterval(stockIntervalId);
+            stockHistory = [];
+            stockCurrentPrice = 100000;
+            stockBasePrice = 100000;
+            
+            // 초기 30개 데이터 생성
+            for(let i=0; i<30; i++) {
+                let change = (Math.random() - 0.49) * 1500;
+                stockCurrentPrice = Math.max(10000, stockCurrentPrice + change);
+                stockHistory.push(stockCurrentPrice);
+            }
+            
+            updateTotalBalance();
+            stockIntervalId = setInterval(updateStockPrice, 800);
+            renderStockUI();
+        }
+
+        function setStockInvestRatio(ratio) {
+            selectedInvestRatio = ratio;
+            alert(`투자 비중이 ${ratio * 100}%로 설정되었습니다.`);
+        }
+
+        function updateStockPrice() {
+            let volatility = (Math.random() - 0.485) * 2200;
+            stockCurrentPrice = Math.max(5000, Math.floor(stockCurrentPrice + volatility));
+            stockHistory.push(stockCurrentPrice);
+            if(stockHistory.length > 40) stockHistory.shift();
+
+            renderStockUI();
+        }
+
+        function renderStockUI() {
+            // 가격 정보 업데이트
+            const priceEl = document.getElementById('stCurrPrice');
+            const changeEl = document.getElementById('stPriceChange');
+            const diff = stockCurrentPrice - stockBasePrice;
+            const rate = ((diff / stockBasePrice) * 100).toFixed(2);
+            
+            priceEl.innerText = stockCurrentPrice.toLocaleString();
+            if(diff >= 0) {
+                priceEl.style.color = '#EF4444';
+                changeEl.innerText = `+${rate}% ▲`;
+                changeEl.style.color = '#EF4444';
+            } else {
+                priceEl.style.color = '#3B82F6';
+                changeEl.innerText = `${rate}% ▼`;
+                changeEl.style.color = '#3B82F6';
+            }
+
+            // 차트 그리기
+            drawStockChart();
+
+            // 포지션 손익 계산 및 표시
+            const posTypeEl = document.getElementById('stPosType');
+            const entryEl = document.getElementById('stEntryPrice');
+            const investEl = document.getElementById('stInvestAmt');
+            const pnlEl = document.getElementById('stPnL');
+
+            if(stockPosition) {
+                posTypeEl.innerText = stockPosition.type === 'BUY' ? '🔴 매수 (LONG)' : '🔵 매도 (SHORT)';
+                posTypeEl.style.color = stockPosition.type === 'BUY' ? '#EF4444' : '#3B82F6';
+                entryEl.innerText = stockPosition.entryPrice.toLocaleString();
+                investEl.innerText = stockPosition.amount.toLocaleString();
+
+                let pnlRatio = 0;
+                if(stockPosition.type === 'BUY') {
+                    pnlRatio = (stockCurrentPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
+                } else {
+                    pnlRatio = (stockPosition.entryPrice - stockCurrentPrice) / stockPosition.entryPrice;
+                }
+
+                let pnlAmt = Math.floor(stockPosition.amount * pnlRatio);
+                let pnlPercent = (pnlRatio * 100).toFixed(2);
+
+                if(pnlAmt >= 0) {
+                    pnlEl.innerText = `+${pnlAmt.toLocaleString()}원 (+${pnlPercent}%)`;
+                    pnlEl.style.color = '#EF4444';
+                } else {
+                    pnlEl.innerText = `${pnlAmt.toLocaleString()}원 (${pnlPercent}%)`;
+                    pnlEl.style.color = '#3B82F6';
+                }
+            } else {
+                posTypeEl.innerText = '없음';
+                posTypeEl.style.color = '#9CA3AF';
+                entryEl.innerText = '0';
+                investEl.innerText = '0';
+                pnlEl.innerText = '0원 (0.00%)';
+                pnlEl.style.color = '#F3F4F6';
+            }
+        }
+
+        function drawStockChart() {
+            sCtx.fillStyle = '#111827';
+            sCtx.fillRect(0, 0, stockCanvas.width, stockCanvas.height);
+
+            if(stockHistory.length < 2) return;
+
+            let min = Math.min(...stockHistory) * 0.98;
+            let max = Math.max(...stockHistory) * 1.02;
+            let padding = 20;
+            let chartHeight = stockCanvas.height - padding * 2;
+            let stepX = stockCanvas.width / (stockHistory.length - 1);
+
+            // 격자선
+            sCtx.strokeStyle = '#1F2937';
+            sCtx.lineWidth = 1;
+            sCtx.beginPath();
+            sCtx.moveTo(0, stockCanvas.height / 2); sCtx.lineTo(stockCanvas.width, stockCanvas.height / 2);
+            sCtx.stroke();
+
+            // 주가 꺾은선 그려주기
+            sCtx.beginPath();
+            sCtx.lineWidth = 2;
+            sCtx.strokeStyle = stockHistory[stockHistory.length - 1] >= stockHistory[0] ? '#EF4444' : '#3B82F6';
+
+            for(let i = 0; i < stockHistory.length; i++) {
+                let x = i * stepX;
+                let y = stockCanvas.height - padding - ((stockHistory[i] - min) / (max - min)) * chartHeight;
+                if(i === 0) sCtx.moveTo(x, y);
+                else sCtx.lineTo(x, y);
+            }
+            sCtx.stroke();
+
+            // 진입 가격선 표시
+            if(stockPosition) {
+                let entryY = stockCanvas.height - padding - ((stockPosition.entryPrice - min) / (max - min)) * chartHeight;
+                sCtx.strokeStyle = '#F59E0B';
+                sCtx.setLineDash([4, 4]);
+                sCtx.beginPath();
+                sCtx.moveTo(0, entryY); sCtx.lineTo(stockCanvas.width, entryY);
+                sCtx.stroke();
+                sCtx.setLineDash([]);
+            }
+        }
+
+        function executeStockOrder(type) {
+            if(stockPosition) { alert("이미 보유 중인 포지션이 있습니다. 먼저 청산하세요."); return; }
+            let investAmt = Math.floor(amount * selectedInvestRatio);
+            if(investAmt < 1000) { alert("최소 투자금은 1,000원 이상이어야 합니다."); return; }
+
+            amount -= investAmt;
+            stockPosition = { type: type, entryPrice: stockCurrentPrice, amount: investAmt };
+            updateTotalBalance();
+            alert(`[${type === 'BUY' ? '매수' : '매도'}] 포지션 진입 완료! (${investAmt.toLocaleString()}원)`);
+        }
+
+        function closeStockPosition() {
+            if(!stockPosition) { alert("청산할 포지션이 없습니다."); return; }
+
+            let pnlRatio = 0;
+            if(stockPosition.type === 'BUY') {
+                pnlRatio = (stockCurrentPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
+            } else {
+                pnlRatio = (stockPosition.entryPrice - stockCurrentPrice) / stockPosition.entryPrice;
+            }
+
+            let returnAmt = Math.floor(stockPosition.amount + (stockPosition.amount * pnlRatio));
+            returnAmt = Math.max(0, returnAmt);
+
+            amount += returnAmt;
+            let profit = returnAmt - stockPosition.amount;
+            alert(`⚡ 청산 완료!\n손익: ${profit >= 0 ? '+' : ''}${profit.toLocaleString()}원\n최종 정산금: ${returnAmt.toLocaleString()}원`);
+
+            stockPosition = null;
+            updateTotalBalance();
+            renderStockUI();
         }
 
         /* 🧱 1. 벽돌깨기 */
