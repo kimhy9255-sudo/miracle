@@ -9,7 +9,6 @@
         body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
         
-        /* 헤더 높이 및 레이아웃 수정 */
         .header { 
             background-color: #FFF; 
             padding: 8px 12px; 
@@ -22,17 +21,15 @@
             gap: 8px;
         }
 
-        /* ✨ [수정] 헤더 타이틀 영역 (실부방 크게 + 실수로도 부자되는 방 작게, 우측 아이디 영역까지 꽉 채움) */
         .header-title-wrap {
             display: flex;
-            align-items: baseline; /* 글자 아래 기준선 정렬 */
+            align-items: baseline;
             gap: 4px;
-            flex: 1; /* 남은 여백을 꽉 채우도록 설정 */
+            flex: 1;
             white-space: nowrap;
             overflow: hidden;
         }
 
-        /* 공통 황금빛 그라데이션 텍스트 스타일 */
         .gold-text {
             background: linear-gradient(135deg, #FFE259 0%, #FFA751 45%, #FFD700 70%, #B8860B 100%);
             -webkit-background-clip: text;
@@ -40,14 +37,12 @@
             filter: drop-shadow(0px 1px 2px rgba(212, 175, 55, 0.4));
         }
 
-        /* 1. 앞에 크게 들어가는 '실부방' */
         .main-logo-text {
             font-size: clamp(18px, 5.2vw, 22px);
             font-weight: 900;
             letter-spacing: -0.5px;
         }
 
-        /* 2. 바로 옆 작게 들어가는 '(실수로도 부자되는 방)' */
         .sub-logo-text {
             font-size: clamp(11px, 3.2vw, 13px);
             font-weight: 700;
@@ -60,7 +55,6 @@
         .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
         
-        /* 새 캐릭터 영역 */
         .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
         .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
 
@@ -104,7 +98,6 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         
-        /* 미니게임 메뉴버튼 (주식 차트 포함 5개 버튼 대응) */
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
@@ -116,12 +109,10 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 3-Match 퍼즐 스타일 */
         #match3Board { display: grid; grid-template-columns: repeat(6, 42px); grid-template-rows: repeat(6, 42px); gap: 5px; justify-content: center; margin: 10px auto; background: #1E293B; padding: 10px; border-radius: 16px; width: fit-content; }
         .m3-tile { width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; user-select: none; transition: transform 0.1s; background: #334155; }
         .m3-tile.selected { border: 2.5px solid #38BDF8; transform: scale(1.1); box-shadow: 0 0 10px #38BDF8; }
 
-        /* 📈 주식 트레이딩 UI 전용 스타일 */
         .stock-dashboard { background: #111827; border-radius: 14px; padding: 12px; color: #F3F4F6; font-size: 12px; text-align: left; }
         .stock-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2937; padding-bottom: 8px; margin-bottom: 8px; }
         .stock-price { font-size: 18px; font-weight: 800; }
@@ -134,7 +125,6 @@
         .btn-close-pos { background: #10B981; }
         .stock-position-card { background: #1F2937; padding: 8px; border-radius: 8px; margin-top: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* 🚀 전체화면 게임 오버레이 스타일 */
         .fullscreen-game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #0F172A; z-index: 99999; flex-direction: column; align-items: center; justify-content: space-between; padding: 15px 10px env(safe-area-inset-bottom) 10px; }
         .fullscreen-game-overlay.active { display: flex; }
         .fullscreen-header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; color: white; padding: 5px 10px; }
@@ -173,7 +163,6 @@
 <body>
 
     <div id="mainAppLayout">
-        <!-- 🌟 [수정된 헤더] 실부방 큰글씨 + (실수로도 부자되는 방) 작은글씨 + 황금색 -->
         <div class="header">
             <div class="header-title-wrap">
                 <span class="gold-text main-logo-text">실부방</span>
@@ -229,7 +218,6 @@
         </div>
 
         <div id="gameTab" class="tab-content">
-            <!-- 🎮 미니게임 선택 메뉴 (주식차트 포함 5종) -->
             <div class="game-menu-container">
                 <button id="btnSelectStock" class="btn-game-select active" style="background:#E74C3C;" onclick="switchMiniGame('stock')">📈 주식 차트</button>
                 <button id="btnSelectGalaga" class="btn-game-select" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
@@ -238,7 +226,6 @@
                 <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌퍼즐</button>
             </div>
 
-            <!-- 미니게임 탭 내 미리보기 패널 -->
             <div id="stockGameArea" class="game-display-panel">
                 <div style="font-size: 50px; margin: 15px 0;">📈</div>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E74C3C, #C0392B);" onclick="launchFullscreenGame('stock')">🚀 주식 차트 트레이딩 시작 / 전체화면</button>
@@ -359,7 +346,6 @@
         </div>
     </div>
 
-    <!-- 🚀 전체화면 게임 오버레이 영역 -->
     <div id="fullscreenGameOverlay" class="fullscreen-game-overlay">
         <div class="fullscreen-header">
             <h2 id="fullscreenTitle">🎮 게임 플레이 중</h2>
@@ -367,7 +353,6 @@
         </div>
         
         <div class="fullscreen-content-body">
-            <!-- 📈 주식 차트 트레이딩 전체화면 -->
             <div id="fsStockBox" style="display:none; text-align:center; width:100%;">
                 <div class="stock-dashboard">
                     <div class="stock-header">
@@ -384,7 +369,8 @@
                         </div>
                     </div>
                     
-                    <canvas id="stockCanvas" width="340" height="200"></canvas>
+                    <!-- ✨ [수정] Canvas 높이를 300으로 늘려 중간 화면을 길게 조정 -->
+                    <canvas id="stockCanvas" width="340" height="300"></canvas>
                     
                     <div class="stock-position-card">
                         <div>
@@ -415,19 +401,15 @@
                 </div>
             </div>
 
-            <!-- 갤러그 전체화면 -->
             <div id="fsGalagaBox" style="display:none; text-align:center; width:100%;">
                 <canvas id="galagaCanvas" width="340" height="420"></canvas>
             </div>
-            <!-- 벽돌깨기 전체화면 -->
             <div id="fsBrickBox" style="display:none; text-align:center; width:100%;">
                 <canvas id="gameCanvas" width="340" height="420"></canvas>
             </div>
-            <!-- 짝맞추기 전체화면 -->
             <div id="fsMemoryBox" style="display:none; text-align:center; width:100%;">
                 <div id="cardBoard" class="card-grid" style="max-width:320px; gap:12px;"></div>
             </div>
-            <!-- 3-Match 퍼즐 전체화면 -->
             <div id="fsMatch3Box" style="display:none; text-align:center; width:100%;">
                 <div id="match3Board"></div>
                 <div style="font-size:12px; color:#94A3B8; margin-top:12px;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</div>
@@ -674,7 +656,6 @@
             else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; }
         }
 
-        /* 🚀 전체화면 실행 & 종료 관리 시스템 */
         function launchFullscreenGame(gameType) {
             currentGameType = gameType;
             document.getElementById('fsStockBox').style.display = 'none';
@@ -721,26 +702,26 @@
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
-        /* 📈 5. 실시간 주식 차트 트레이딩 엔진 */
+        /* 📈 ✨ [수정] 이동평균선(5일/20일선) & 우상향 상승 컨버전스 차트 엔진 */
         let stockCanvas = document.getElementById('stockCanvas');
         let sCtx = stockCanvas.getContext('2d');
         let stockHistory = [];
         let stockCurrentPrice = 100000;
         let stockBasePrice = 100000;
         let stockIntervalId = null;
-        let stockPosition = null; // { type: 'BUY'|'SELL', entryPrice: number, amount: number }
+        let stockPosition = null;
         let selectedInvestRatio = 0.5;
 
         function startStockGameEngine() {
             if(stockIntervalId) clearInterval(stockIntervalId);
             stockHistory = [];
-            stockCurrentPrice = 100000;
-            stockBasePrice = 100000;
+            stockCurrentPrice = 80000;
+            stockBasePrice = 80000;
             
-            // 초기 30개 데이터 생성
-            for(let i=0; i<30; i++) {
-                let change = (Math.random() - 0.49) * 1500;
-                stockCurrentPrice = Math.max(10000, stockCurrentPrice + change);
+            // 초기 40개 데이터 생성 (상승 컨버전스 형태)
+            for(let i=0; i<40; i++) {
+                let upwardBias = 800 + Math.random() * 2500; // 우상향 편향
+                stockCurrentPrice = Math.max(10000, stockCurrentPrice + upwardBias + (Math.random() - 0.45) * 1200);
                 stockHistory.push(stockCurrentPrice);
             }
             
@@ -755,16 +736,16 @@
         }
 
         function updateStockPrice() {
-            let volatility = (Math.random() - 0.485) * 2200;
+            // 강력한 상승 우상향 추세 알고리즘
+            let volatility = (Math.random() - 0.38) * 3200; 
             stockCurrentPrice = Math.max(5000, Math.floor(stockCurrentPrice + volatility));
             stockHistory.push(stockCurrentPrice);
-            if(stockHistory.length > 40) stockHistory.shift();
+            if(stockHistory.length > 50) stockHistory.shift();
 
             renderStockUI();
         }
 
         function renderStockUI() {
-            // 가격 정보 업데이트
             const priceEl = document.getElementById('stCurrPrice');
             const changeEl = document.getElementById('stPriceChange');
             const diff = stockCurrentPrice - stockBasePrice;
@@ -781,10 +762,8 @@
                 changeEl.style.color = '#3B82F6';
             }
 
-            // 차트 그리기
             drawStockChart();
 
-            // 포지션 손익 계산 및 표시
             const posTypeEl = document.getElementById('stPosType');
             const entryEl = document.getElementById('stEntryPrice');
             const investEl = document.getElementById('stInvestAmt');
@@ -823,29 +802,73 @@
             }
         }
 
+        /* ✨ [수정] 차트 그리기: 이동평균선(MA5/MA20) 및 캔들/라인 차트 구현 */
         function drawStockChart() {
             sCtx.fillStyle = '#111827';
             sCtx.fillRect(0, 0, stockCanvas.width, stockCanvas.height);
 
             if(stockHistory.length < 2) return;
 
-            let min = Math.min(...stockHistory) * 0.98;
-            let max = Math.max(...stockHistory) * 1.02;
-            let padding = 20;
+            let min = Math.min(...stockHistory) * 0.95;
+            let max = Math.max(...stockHistory) * 1.05;
+            let padding = 25;
             let chartHeight = stockCanvas.height - padding * 2;
             let stepX = stockCanvas.width / (stockHistory.length - 1);
 
-            // 격자선
+            // 배경 가로 격자선
             sCtx.strokeStyle = '#1F2937';
             sCtx.lineWidth = 1;
-            sCtx.beginPath();
-            sCtx.moveTo(0, stockCanvas.height / 2); sCtx.lineTo(stockCanvas.width, stockCanvas.height / 2);
-            sCtx.stroke();
+            for(let i=1; i<=3; i++) {
+                let y = (stockCanvas.height / 4) * i;
+                sCtx.beginPath();
+                sCtx.moveTo(0, y); sCtx.lineTo(stockCanvas.width, y);
+                sCtx.stroke();
+            }
 
-            // 주가 꺾은선 그려주기
+            // 1. 이동평균선 계산 (MA 5, MA 20)
+            let ma5 = [];
+            let ma20 = [];
+            for(let i = 0; i < stockHistory.length; i++) {
+                if(i >= 4) {
+                    let sum5 = 0;
+                    for(let j = i - 4; j <= i; j++) sum5 += stockHistory[j];
+                    ma5.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum5 / 5 - min) / (max - min)) * chartHeight });
+                }
+                if(i >= 19) {
+                    let sum20 = 0;
+                    for(let j = i - 19; j <= i; j++) sum20 += stockHistory[j];
+                    ma20.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum20 / 20 - min) / (max - min)) * chartHeight });
+                }
+            }
+
+            // 2. 검은색/어두운 회색 장기 이동평균선 (20일선)
+            if(ma20.length > 1) {
+                sCtx.beginPath();
+                sCtx.lineWidth = 2.5;
+                sCtx.strokeStyle = '#9CA3AF'; // 어두운 회색/검은선
+                for(let i = 0; i < ma20.length; i++) {
+                    if(i === 0) sCtx.moveTo(ma20[i].x, ma20[i].y);
+                    else sCtx.lineTo(ma20[i].x, ma20[i].y);
+                }
+                sCtx.stroke();
+            }
+
+            // 3. 빨간색 단기 이동평균선 (5일선)
+            if(ma5.length > 1) {
+                sCtx.beginPath();
+                sCtx.lineWidth = 2.5;
+                sCtx.strokeStyle = '#EF4444'; // 빨간선
+                for(let i = 0; i < ma5.length; i++) {
+                    if(i === 0) sCtx.moveTo(ma5[i].x, ma5[i].y);
+                    else sCtx.lineTo(ma5[i].x, ma5[i].y);
+                }
+                sCtx.stroke();
+            }
+
+            // 4. 주가 메인 라인 차트
             sCtx.beginPath();
-            sCtx.lineWidth = 2;
-            sCtx.strokeStyle = stockHistory[stockHistory.length - 1] >= stockHistory[0] ? '#EF4444' : '#3B82F6';
+            sCtx.lineWidth = 3;
+            sCtx.strokeStyle = '#38BDF8'; // 메인 지수 선
 
             for(let i = 0; i < stockHistory.length; i++) {
                 let x = i * stepX;
@@ -855,7 +878,7 @@
             }
             sCtx.stroke();
 
-            // 진입 가격선 표시
+            // 진입 가격 점선 표시
             if(stockPosition) {
                 let entryY = stockCanvas.height - padding - ((stockPosition.entryPrice - min) / (max - min)) * chartHeight;
                 sCtx.strokeStyle = '#F59E0B';
@@ -966,7 +989,7 @@
             }
         }
 
-        /* 🛸 3. 리얼 아케이드 정통 갤러그 엔진 */
+        /* 🛸 3. 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
