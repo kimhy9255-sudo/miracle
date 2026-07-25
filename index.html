@@ -37,22 +37,13 @@
             filter: drop-shadow(0px 1px 2px rgba(212, 175, 55, 0.4));
         }
 
-        .main-logo-text {
-            font-size: clamp(18px, 5.2vw, 22px);
-            font-weight: 900;
-            letter-spacing: -0.5px;
-        }
-
-        .sub-logo-text {
-            font-size: clamp(11px, 3.2vw, 13px);
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
+        .main-logo-text { font-size: clamp(18px, 5.2vw, 22px); font-weight: 900; letter-spacing: -0.5px; }
+        .sub-logo-text { font-size: clamp(11px, 3.2vw, 13px); font-weight: 700; letter-spacing: -0.5px; }
 
         .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
         
-        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 5px 20px; overflow-y: auto; }
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; padding: 5px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
         
         .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
@@ -98,6 +89,10 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         
+        /* 쿠팡 통합 스타일 */
+        .btn-coupang { background: linear-gradient(135deg, #E22B31, #C0181E); color: white; box-shadow: 0 4px 10px rgba(226,43,49,0.25); border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .coupang-banner-card { background: #FFF0F0; border: 1px solid #FFCDCD; border-radius: 16px; padding: 10px 14px; width: 100%; max-width: 340px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
@@ -137,7 +132,9 @@
         .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
         .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
         .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
+        
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
@@ -149,6 +146,7 @@
         .item-name { font-size: 13px; font-weight: bold; color: #2C3E50; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 90%; }
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
+        
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
@@ -173,11 +171,10 @@
             </div>
         </div>
 
+        <!-- 1. 홈 탭 -->
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
-                <button class="inline-login-btn" onclick="openAdminModal()">
-                    🔑 로그인
-                </button>
+                <button class="inline-login-btn" onclick="openAdminModal()">🔑 로그인</button>
                 <div class="bird-container">
                     <div class="bird-hair"></div>
                     <div class="bird-wing wing-left" id="leftWing"></div>
@@ -213,10 +210,24 @@
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
                     <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
+                    <!-- 쿠팡 바로가기 적립 버튼 -->
+                    <button class="btn-coupang" onclick="openCoupangStore()">
+                        <span style="background:white; color:#E22B31; border-radius:4px; padding:0 4px; font-size:11px;">coupang</span> 쿠팡 쇼핑하고 캐시백 적립
+                    </button>
                 </div>
+            </div>
+
+            <!-- 쿠팡 파트너스 배너 연동 -->
+            <div class="coupang-banner-card" onclick="openCoupangStore()">
+                <div style="text-align:left;">
+                    <div style="font-weight:bold; font-size:12px; color:#C0181E;">🛍️ 쿠팡 골드박스 로켓배송</div>
+                    <div style="font-size:10px; color:#555;">실부방 전용 핫딜 구매 시 자산 추가 지급!</div>
+                </div>
+                <span style="font-size:18px;">➔</span>
             </div>
         </div>
 
+        <!-- 2. 기적 게임 탭 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
                 <button id="btnSelectStock" class="btn-game-select active" style="background:#E74C3C;" onclick="switchMiniGame('stock')">📈 주식 차트</button>
@@ -257,6 +268,7 @@
             </div>
         </div>
 
+        <!-- 3. 디파이 금고 탭 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
@@ -266,9 +278,12 @@
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
+            
+            <!-- 카카오페이 충전 간편 연동 버튼 -->
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
+
             <div id="vaultBenefitBanner" class="benefit-banner">
                 🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.
             </div>
@@ -279,11 +294,20 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
+        <!-- 4. 기적 상점 탭 -->
         <div id="shopTab" class="tab-content">
             <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
+
+            <!-- 쿠팡 쇼핑 적립 상품 추가 -->
+            <div style="width:100%; max-width:340px; margin-bottom:8px;">
+                <button class="btn-coupang" style="font-size:12px; padding:8px;" onclick="openCoupangStore()">
+                    🛒 쿠팡 연결 스토어에서 제휴 파트너 상품 보러가기
+                </button>
+            </div>
+
             <div class="shop-grid">
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
@@ -298,6 +322,13 @@
                     <div class="item-name">참치마요 삼각김밥</div>
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
+                </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">📦</div>
+                    <div class="item-name">쿠팡 로켓 프레시 박스</div>
+                    <div class="item-price"><del>30,000p</del> 15,000p</div>
+                    <button class="btn-exchange" onclick="buyCoupangItem('쿠팡 로켓 프레시 박스', 15000)">쿠팡 교환</button>
                 </div>
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
@@ -320,16 +351,10 @@
                     <div class="item-price"><del>1,600억p</del> 800억p</div>
                     <button class="btn-exchange" onclick="buyItem('초호화 고래 개인 제트기', 80000000000)">교환하기</button>
                 </div>
-                <div class="shop-item">
-                    <div class="vip-badge">VIP 50%</div>
-                    <div class="item-emoji">🚀</div>
-                    <div class="item-name">화성 탐사 특급 로켓</div>
-                    <div class="item-price"><del>3조p</del> 1.5조p</div>
-                    <button class="btn-exchange" onclick="buyItem('화성 탐사 특급 로켓', 1500000000000)">교환하기</button>
-                </div>
             </div>
         </div>
 
+        <!-- 하단 내비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
@@ -346,6 +371,7 @@
         </div>
     </div>
 
+    <!-- 전체 화면 게임 오버레이 -->
     <div id="fullscreenGameOverlay" class="fullscreen-game-overlay">
         <div class="fullscreen-header">
             <h2 id="fullscreenTitle">🎮 게임 플레이 중</h2>
@@ -420,15 +446,19 @@
         </div>
     </div>
 
+    <!-- 카카오페이 결제 모달 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
-            <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
+            <div style="font-size:24px; font-weight:bold; color:#3C1E1E; margin-bottom:4px;">kakao<span style="font-weight:normal;">pay</span></div>
+            <h3 style="margin-top:0px; color:#3C1E1E; font-size:15px;">카카오페이 머니 충전 및 자동 연동</h3>
+            <p style="font-size:11px; color:#666; margin-bottom:12px;">원하는 금액을 입력하시면 결제 완료 후 즉시 금고에 추가 예치됩니다.</p>
             <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;">
-            <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
+            <button id="btnKakaoPayExec" onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">💛 결제 및 예치 완료하기</button>
             <div style="font-size:13px; color:#7F8C8D; margin-top:12px; cursor:pointer;" onclick="closeKakaoModal()">취소</div>
         </div>
     </div>
 
+    <!-- 광고 모달 -->
     <div id="adOverlay" class="ad-overlay">
         <div class="ad-box">
             <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
@@ -440,6 +470,7 @@
         </div>
     </div>
 
+    <!-- 설정 및 로그인 모달 -->
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
             <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
@@ -533,11 +564,42 @@
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
+        /* 💛 카카오페이 결제 연동 */
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
-            alert("💛 페이 완료! [" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치됩니다.");
-            vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
+            
+            const btnPay = document.getElementById('btnKakaoPayExec');
+            btnPay.innerText = "⏳ 카카오페이 결제 승인 요청 중...";
+            btnPay.disabled = true;
+
+            setTimeout(() => {
+                alert("💛 카카오페이 결제 승인 성공!\n[" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치되었습니다.");
+                vaultAsset += payAmt; 
+                btnPay.innerText = "💛 결제 및 예치 완료하기";
+                btnPay.disabled = false;
+                closeKakaoModal(); 
+                updateTotalBalance();
+            }, 1200);
+        }
+
+        /* 🛒 쿠팡 제휴 매장 연동 */
+        function openCoupangStore() {
+            alert("🛒 쿠팡 로켓배송 제휴 스토어로 연결됩니다.\n구매 확인 시 기적 지원금 포인트가 추가 적립됩니다.");
+            window.open("https://www.coupang.com", "_blank");
+            // 쿠팡 이동 보상 혜택 지급
+            amount += 5000;
+            updateTotalBalance();
+        }
+
+        function buyCoupangItem(itemName, price) {
+            if (amount >= price) { 
+                amount -= price; 
+                updateTotalBalance(); 
+                alert("📦 [" + itemName + "] 쿠팡 교환 성공!\n쿠팡 로켓배송 배송지로 송장이 발급되었습니다. 🎉"); 
+            } else { 
+                alert("❌ 보유 기적 포인트가 부족합니다!"); 
+            }
         }
 
         function updateTotalBalance(shouldSave = true) {
@@ -701,7 +763,7 @@
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
-        /* 📈 [수정 완료] 상승 2파동 -> 급속 상승 컨버전스 -> 길게 하락 다이버전스 로테이션 적용 엔진 */
+        /* 📈 상승 2파동 -> 급속 상승 컨버전스 -> 길게 하락 다이버전스 로테이션 적용 주식 엔진 */
         let stockCanvas = document.getElementById('stockCanvas');
         let sCtx = stockCanvas.getContext('2d');
         let stockHistory = [];
@@ -711,10 +773,9 @@
         let stockPosition = null;
         let selectedInvestRatio = 0.5;
 
-        // 사이클 및 로테이션 제어 변수
-        let stockCycleTick = 0;       // 주기 내의 현재 위치 (0 ~ 59)
-        const CYCLE_TOTAL_TICKS = 60; // 한 사이클당 총 틱 수 (각 구간별로 구분됨)
-        let cycleBasePrice = 80000;   // 각 사이클의 기준 가격 (바닥점 연결용)
+        let stockCycleTick = 0;       
+        const CYCLE_TOTAL_TICKS = 60; 
+        let cycleBasePrice = 80000;   
 
         function startStockGameEngine() {
             if(stockIntervalId) clearInterval(stockIntervalId);
@@ -724,7 +785,6 @@
             cycleBasePrice = 80000;
             stockCycleTick = 0;
             
-            // 초기 데이터 세팅
             for(let i = 0; i < 40; i++) {
                 updateStockPriceLogic();
             }
@@ -744,42 +804,33 @@
             renderStockUI();
         }
 
-        // 주가 시뮬레이션 핵심 로직 함수
         function updateStockPriceLogic() {
             stockCycleTick++;
             if(stockCycleTick >= CYCLE_TOTAL_TICKS) {
-                stockCycleTick = 0; // 한 주기가 끝나면 다시 상승 2파동부터 로테이션
-                cycleBasePrice = stockCurrentPrice; // 바닥점 기준 가격 재설정
+                stockCycleTick = 0; 
+                cycleBasePrice = stockCurrentPrice; 
             }
 
-            // 한 주기를 0~1 사이의 진행 비율 t로 계산
             let t = stockCycleTick / CYCLE_TOTAL_TICKS;
             let priceDelta = 0;
 
-            // 1. 상승 2파동 구간 (0.0 <= t < 0.35)
             if (t < 0.35) {
                 let subT = t / 0.35;
-                // 우상향 추세 + 2개의 사인파 봉우리
                 let trend = subT * 12000;
                 let wave = Math.sin(subT * Math.PI * 4) * 2500;
                 let targetPrice = cycleBasePrice + trend + wave;
                 priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.5) * 600;
             } 
-            // 2. 급속한 상승 컨버전스 구간 (0.35 <= t < 0.50) -> 폭발적 급등
             else if (t < 0.50) {
                 let subT = (t - 0.35) / 0.15;
-                // 지수 함수적으로 급격한 가속 상승
                 let expGain = (Math.exp(subT * 2.2) - 1) * 11000;
                 let baseWaveVal = cycleBasePrice + 12000; 
                 let targetPrice = baseWaveVal + expGain;
                 priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.4) * 1000;
             } 
-            // 3. 고점에서 길게 진행되는 하락 다이버전스 (0.50 <= t < 1.00)
             else {
                 let subT = (t - 0.50) / 0.50;
                 let peakPrice = cycleBasePrice + 12000 + (Math.exp(2.2) - 1) * 11000;
-                
-                // 에너지 감쇄 + 진폭 감소 파동 + 바닥으로 우하향 곡선
                 let decay = Math.exp(-2.5 * subT);
                 let osc = Math.sin(subT * Math.PI * 6) * 3000 * decay;
                 let drop = (peakPrice - cycleBasePrice) * Math.pow(subT, 0.75);
@@ -861,7 +912,6 @@
             let chartHeight = stockCanvas.height - padding * 2;
             let stepX = stockCanvas.width / (stockHistory.length - 1);
 
-            // 배경 가로 격자선
             sCtx.strokeStyle = '#1F2937';
             sCtx.lineWidth = 1;
             for(let i=1; i<=3; i++) {
@@ -871,7 +921,6 @@
                 sCtx.stroke();
             }
 
-            // 1. 이동평균선 계산 (MA 5, MA 20)
             let ma5 = [];
             let ma20 = [];
             for(let i = 0; i < stockHistory.length; i++) {
@@ -887,7 +936,6 @@
                 }
             }
 
-            // 2. 장기 이동평균선 (20일선)
             if(ma20.length > 1) {
                 sCtx.beginPath();
                 sCtx.lineWidth = 2.5;
@@ -899,7 +947,6 @@
                 sCtx.stroke();
             }
 
-            // 3. 단기 이동평균선 (5일선)
             if(ma5.length > 1) {
                 sCtx.beginPath();
                 sCtx.lineWidth = 2.5;
@@ -911,7 +958,6 @@
                 sCtx.stroke();
             }
 
-            // 4. 주가 메인 라인 차트
             sCtx.beginPath();
             sCtx.lineWidth = 3;
             sCtx.strokeStyle = '#38BDF8';
@@ -924,7 +970,6 @@
             }
             sCtx.stroke();
 
-            // 진입 가격 점선 표시
             if(stockPosition) {
                 let entryY = stockCanvas.height - padding - ((stockPosition.entryPrice - min) / (max - min)) * chartHeight;
                 sCtx.strokeStyle = '#F59E0B';
@@ -969,7 +1014,7 @@
             renderStockUI();
         }
 
-        /* 🧱 1. 벽돌깨기 */
+        /* 🧱 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
         let gameAnimationId = null; let ballRadius = 6, ballX, ballY, dx, dy; let paddleHeight = 14, paddleWidth = 70, paddleX; let bricks = [];
         function startBrickGameEngine() {
@@ -1008,7 +1053,7 @@
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 2. 카드 매칭 */
+        /* 🃏 카드 매칭 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
@@ -1035,7 +1080,7 @@
             }
         }
 
-        /* 🛸 3. 갤러그 엔진 */
+        /* 🛸 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
@@ -1215,7 +1260,7 @@
             }
         }
 
-        /* 🧩 4. 3-Match 퍼즐 엔진 */
+        /* 🧩 3-Match 퍼즐 엔진 */
         const M3_SIZE = 6;
         const M3_EMOJIS = ['🔴', '🟡', '🟢', '🔵', '🟣'];
         let m3BoardData = [];
