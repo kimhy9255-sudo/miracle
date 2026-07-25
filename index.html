@@ -89,7 +89,6 @@
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         
-        /* 쿠팡 통합 스타일 */
         .btn-coupang { background: linear-gradient(135deg, #E22B31, #C0181E); color: white; box-shadow: 0 4px 10px rgba(226,43,49,0.25); border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .coupang-banner-card { background: #FFF0F0; border: 1px solid #FFCDCD; border-radius: 16px; padding: 10px 14px; width: 100%; max-width: 340px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
 
@@ -210,14 +209,12 @@
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
                     <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
-                    <!-- 쿠팡 바로가기 적립 버튼 -->
                     <button class="btn-coupang" onclick="openCoupangStore()">
                         <span style="background:white; color:#E22B31; border-radius:4px; padding:0 4px; font-size:11px;">coupang</span> 쿠팡 쇼핑하고 캐시백 적립
                     </button>
                 </div>
             </div>
 
-            <!-- 쿠팡 파트너스 배너 연동 -->
             <div class="coupang-banner-card" onclick="openCoupangStore()">
                 <div style="text-align:left;">
                     <div style="font-weight:bold; font-size:12px; color:#C0181E;">🛍️ 쿠팡 골드박스 로켓배송</div>
@@ -279,7 +276,6 @@
                 </div>
             </div>
             
-            <!-- 카카오페이 충전 간편 연동 버튼 -->
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
@@ -301,7 +297,6 @@
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
 
-            <!-- 쿠팡 쇼핑 적립 상품 추가 -->
             <div style="width:100%; max-width:340px; margin-bottom:8px;">
                 <button class="btn-coupang" style="font-size:12px; padding:8px;" onclick="openCoupangStore()">
                     🛒 쿠팡 연결 스토어에서 제휴 파트너 상품 보러가기
@@ -492,7 +487,8 @@
     <script>
         let amount = 0; 
         let vaultAsset = 0;
-        let isRunning = false; let intervalId = null;
+        let isRunning = false; 
+        let intervalId = null;
         let currentGameType = '';
         
         const btn = document.getElementById('engineBtn');
@@ -564,7 +560,6 @@
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
         function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
-        /* 💛 카카오페이 결제 연동 */
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
@@ -583,11 +578,9 @@
             }, 1200);
         }
 
-        /* 🛒 쿠팡 제휴 매장 연동 */
         function openCoupangStore() {
             alert("🛒 쿠팡 로켓배송 제휴 스토어로 연결됩니다.\n구매 확인 시 기적 지원금 포인트가 추가 적립됩니다.");
             window.open("https://www.coupang.com", "_blank");
-            // 쿠팡 이동 보상 혜택 지급
             amount += 5000;
             updateTotalBalance();
         }
@@ -626,8 +619,15 @@
         function changeTabUrl(tabName) { routeTabs(tabName); }
 
         function routeTabs(tabName) {
-            document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
-            document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
+            document.getElementById('homeTab').classList.remove('active'); 
+            document.getElementById('gameTab').classList.remove('active'); 
+            document.getElementById('vaultTab').classList.remove('active'); 
+            document.getElementById('shopTab').classList.remove('active');
+            
+            document.getElementById('navHome').classList.remove('active'); 
+            document.getElementById('navGame').classList.remove('active'); 
+            document.getElementById('navVault').classList.remove('active'); 
+            document.getElementById('navShop').classList.remove('active');
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
             if(stockIntervalId) clearInterval(stockIntervalId);
@@ -648,7 +648,8 @@
                 openAdminModal();
                 return;
             }
-            const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
+            const leftWing = document.getElementById('leftWing'); 
+            const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
@@ -763,7 +764,7 @@
             document.getElementById('fullscreenGameOverlay').classList.remove('active');
         }
 
-        /* 📈 상승 2파동 -> 급속 상승 컨버전스 -> 길게 하락 다이버전스 로테이션 적용 주식 엔진 */
+        /* 📈 주식 차트 엔진 */
         let stockCanvas = document.getElementById('stockCanvas');
         let sCtx = stockCanvas.getContext('2d');
         let stockHistory = [];
@@ -1015,17 +1016,29 @@
         }
 
         /* 🧱 벽돌깨기 */
-        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; let ballRadius = 6, ballX, ballY, dx, dy; let paddleHeight = 14, paddleWidth = 70, paddleX; let bricks = [];
+        let gameCanvas = document.getElementById("gameCanvas"); 
+        let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null; 
+        let ballRadius = 6, ballX, ballY, dx, dy; 
+        let paddleHeight = 14, paddleWidth = 70, paddleX; 
+        let bricks = [];
+
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
             ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 40; dx = 2.2; dy = -2.2; paddleX = (gameCanvas.width - paddleWidth) / 2;
             for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 4; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
             drawBrickGame();
         }
-        function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
+
+        function setPaddleX(clientX) { 
+            let rect = gameCanvas.getBoundingClientRect(); 
+            let relativeX = clientX - rect.left; 
+            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; 
+        }
+
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
         gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
+
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
@@ -1053,8 +1066,11 @@
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 카드 매칭 */
-        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
+        /* 🃏 짝맞추기 */
+        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; 
+        let flippedCards = []; 
+        let matchedPairs = 0;
+
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
             let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
@@ -1062,6 +1078,7 @@
                 const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
             });
         }
+
         function handleCardClick() {
             if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
             this.classList.add('flipped'); flippedCards.push(this);
@@ -1260,7 +1277,7 @@
             }
         }
 
-        /* 🧩 3-Match 퍼즐 엔진 */
+        /* 🧩 3-Match 좌뇌퍼즐 엔진 */
         const M3_SIZE = 6;
         const M3_EMOJIS = ['🔴', '🟡', '🟢', '🔵', '🟣'];
         let m3BoardData = [];
