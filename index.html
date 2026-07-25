@@ -43,10 +43,10 @@
         .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
         .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
         
-        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; padding: 5px 20px; overflow-y: auto; }
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; padding: 10px 20px; overflow-y: auto; }
         .tab-content.active { display: flex; }
         
-        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 2px; height: 130px; }
+        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 10px; height: 130px; }
         .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
 
         .bird-container { width: 160px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; }
@@ -75,22 +75,19 @@
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
         
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 8px; }
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 14px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 2px; }
         .total-value { font-size: 22px; font-weight: bold; word-break: break-all; }
-        .card { background: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 10px; }
+        .card { background: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 2px; }
         .card-value { font-size: 20px; font-weight: bold; color: #2C3E50; word-break: break-all; }
         
         .control-section { display: flex; width: 100%; max-width: 340px; }
-        .action-button-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .action-button-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         
-        .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 13px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
-        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
-        
-        .btn-coupang { background: linear-gradient(135deg, #E22B31, #C0181E); color: white; box-shadow: 0 4px 10px rgba(226,43,49,0.25); border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .coupang-banner-card { background: #FFF0F0; border: 1px solid #FFCDCD; border-radius: 16px; padding: 10px 14px; width: 100%; max-width: 340px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .btn-bonus { background: linear-gradient(135deg, #2ECC71, #27AE60); box-shadow: 0 4px 10px rgba(46,204,113,0.25); }
 
         .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
         .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
@@ -146,10 +143,8 @@
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
         
-        .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
-        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
-        .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
+        .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
         .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
@@ -208,19 +203,8 @@
             <div class="control-section">
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
-                    <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
-                    <button class="btn-coupang" onclick="openCoupangStore()">
-                        <span style="background:white; color:#E22B31; border-radius:4px; padding:0 4px; font-size:11px;">coupang</span> 쿠팡 쇼핑하고 캐시백 적립
-                    </button>
+                    <button class="btn-action btn-bonus" onclick="claimDailyBonus()">🎁 데일리 출석 보상 받기</button>
                 </div>
-            </div>
-
-            <div class="coupang-banner-card" onclick="openCoupangStore()">
-                <div style="text-align:left;">
-                    <div style="font-weight:bold; font-size:12px; color:#C0181E;">🛍️ 쿠팡 골드박스 로켓배송</div>
-                    <div style="font-size:10px; color:#555;">실부방 전용 핫딜 구매 시 자산 추가 지급!</div>
-                </div>
-                <span style="font-size:18px;">➔</span>
             </div>
         </div>
 
@@ -254,7 +238,7 @@
 
             <div id="memoryGameArea" class="game-display-panel" style="display:none;">
                 <div style="font-size: 50px; margin: 20px 0;">🃏</div>
-                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="launchFullscreenGame('memory')">🃏 짝맞추기 시작 / 전체화면</button>
+                <button class="btn-action" style="background:#E67E22; margin-top:10px; width:100%;" onclick="launchFullscreenGame('memory')">🃏 짝맞추기 시작 / 전체화면</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">카드 전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
@@ -292,15 +276,9 @@
 
         <!-- 4. 기적 상점 탭 -->
         <div id="shopTab" class="tab-content">
-            <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
+            <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
-            </div>
-
-            <div style="width:100%; max-width:340px; margin-bottom:8px;">
-                <button class="btn-coupang" style="font-size:12px; padding:8px;" onclick="openCoupangStore()">
-                    🛒 쿠팡 연결 스토어에서 제휴 파트너 상품 보러가기
-                </button>
             </div>
 
             <div class="shop-grid">
@@ -320,10 +298,10 @@
                 </div>
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
-                    <div class="item-emoji">📦</div>
-                    <div class="item-name">쿠팡 로켓 프레시 박스</div>
-                    <div class="item-price"><del>30,000p</del> 15,000p</div>
-                    <button class="btn-exchange" onclick="buyCoupangItem('쿠팡 로켓 프레시 박스', 15000)">쿠팡 교환</button>
+                    <div class="item-emoji">☕</div>
+                    <div class="item-name">스타벅스 아메리카노</div>
+                    <div class="item-price"><del>4,500p</del> 2,250p</div>
+                    <button class="btn-exchange" onclick="buyItem('스타벅스 아메리카노', 2250)">교환하기</button>
                 </div>
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
@@ -453,18 +431,6 @@
         </div>
     </div>
 
-    <!-- 광고 모달 -->
-    <div id="adOverlay" class="ad-overlay">
-        <div class="ad-box">
-            <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
-            <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
-            <div style="font-size:45px; margin-top:10px;">🌱</div>
-            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px; color:#27AE60;">지구를 지키는 착한 기업</div>
-            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
-            <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
-        </div>
-    </div>
-
     <!-- 설정 및 로그인 모달 -->
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
@@ -578,21 +544,13 @@
             }, 1200);
         }
 
-        function openCoupangStore() {
-            alert("🛒 쿠팡 로켓배송 제휴 스토어로 연결됩니다.\n구매 확인 시 기적 지원금 포인트가 추가 적립됩니다.");
-            window.open("https://www.coupang.com", "_blank");
-            amount += 5000;
+        function claimDailyBonus() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) { alert("🔒 보상은 로그인 후 이용 가능합니다."); openAdminModal(); return; }
+            const bonus = 50000;
+            amount += bonus;
             updateTotalBalance();
-        }
-
-        function buyCoupangItem(itemName, price) {
-            if (amount >= price) { 
-                amount -= price; 
-                updateTotalBalance(); 
-                alert("📦 [" + itemName + "] 쿠팡 교환 성공!\n쿠팡 로켓배송 배송지로 송장이 발급되었습니다. 🎉"); 
-            } else { 
-                alert("❌ 보유 기적 포인트가 부족합니다!"); 
-            }
+            alert(`🎁 데일리 출석 보상이 지급되었습니다! (+${bonus.toLocaleString()}원)`);
         }
 
         function updateTotalBalance(shouldSave = true) {
@@ -662,29 +620,6 @@
 
         function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
-
-        let adCountdown = 5; let adTimerId = null;
-        function openRandomAdPopup() {
-            const loggedInUser = localStorage.getItem("loggedInUser");
-            if (!loggedInUser) { alert("❌ 광고 보상은 로그인 후 이용 가능합니다."); openAdminModal(); return; }
-            adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
-            document.getElementById('adTimer').innerText = adCountdown + 's';
-            const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
-            adTimerId = setInterval(() => {
-                adCountdown--; document.getElementById('adTimer').innerText = adCountdown + 's';
-                if(adCountdown <= 0) {
-                    clearInterval(adTimerId); document.getElementById('adTimer').innerText = '완료!';
-                    closeBtn.innerText = "보상 받기"; closeBtn.disabled = false; closeBtn.classList.add('ready'); closeBtn.onclick = finishAdReward;
-                }
-            }, 1000);
-        }
-
-        function finishAdReward() {
-            const bonusAmount = Math.floor(amount / 3);
-            amount += bonusAmount; updateTotalBalance();
-            document.getElementById('adOverlay').style.display = 'none'; 
-            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
-        }
 
         function handleDeposit() {
             const input = prompt("예치할 금액을 입력하세요", amount);
