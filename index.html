@@ -110,19 +110,19 @@
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
         /* 자산 보유 카드 스타일 */
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
         .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
         .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
 
-        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
+        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
 
-        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
+        .control-section { display: flex; width: 100%; max-width: 360px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
-        .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 12px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
         .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
@@ -131,7 +131,7 @@
         /* 🆕 상단 게임 이동/네비게이션 창 */
         .game-top-bar {
             width: 100%;
-            max-width: 340px;
+            max-width: 360px;
             background: #2C3E50;
             border-radius: 12px;
             padding: 8px 12px;
@@ -145,7 +145,7 @@
             background: #3498DB;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: bold;
@@ -156,12 +156,12 @@
         }
 
         /* 🎮 기적 게임 창 레이아웃 */
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
-        .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
-        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
+        .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
+        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
         
         /* 🆕 전체화면 실행 모드 스타일 */
         .game-display-panel.fullscreen-mode {
@@ -173,7 +173,7 @@
             max-width: 100vw !important;
             z-index: 9990 !important;
             border-radius: 0 !important;
-            padding: 10px !important;
+            padding: 15px 10px !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
@@ -182,39 +182,64 @@
         }
         .game-display-panel.fullscreen-mode canvas {
             max-width: 95vw !important;
-            height: 60vh !important;
+            height: 55vh !important;
             object-fit: contain;
         }
         .game-display-panel.fullscreen-mode .match3-grid,
         .game-display-panel.fullscreen-mode .card-grid {
-            max-width: 90vw !important;
+            max-width: 95vw !important;
         }
 
         /* 카드 짝맞추기 게임 보드 */
-        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
-        .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
+        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 10px auto; }
+        .memory-card { height: 65px; background: #34495E; border-radius: 8px; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 🧩 3매치 퍼즐 게임 보드 스타일 */
-        .match3-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; max-width: 280px; margin: 10px auto; background: #2C3E50; padding: 6px; border-radius: 12px; }
-        .match3-tile { aspect-ratio: 1; background: #34495E; border-radius: 8px; font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: transform 0.15s ease, background-color 0.2s; }
-        .match3-tile.selected { background: #E74C3C; transform: scale(1.1); box-shadow: 0 0 8px rgba(231,76,60,0.8); z-index: 10; }
+        /* 🧩 3매치 퍼즐 게임 보드 스타일 (터치 최적화 & 크기 대폭 확대) */
+        .match3-grid { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 6px; 
+            width: 100%;
+            max-width: 340px; 
+            margin: 10px auto; 
+            background: #2C3E50; 
+            padding: 8px; 
+            border-radius: 16px; 
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+            touch-action: manipulation;
+        }
+        .match3-tile { 
+            aspect-ratio: 1; 
+            background: #34495E; 
+            border-radius: 10px; 
+            font-size: 28px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            user-select: none; 
+            transition: transform 0.15s ease, background-color 0.2s; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+        .match3-tile.selected { background: #E74C3C; transform: scale(1.1); box-shadow: 0 0 12px rgba(231,76,60,0.9); z-index: 10; }
 
         /* 금고 & 상점 */
-        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
         .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
-        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
-        .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
+        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 360px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
+        .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 360px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 360px; gap: 10px; margin-bottom: 12px; }
 
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; padding-bottom: 20px; }
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 360px; margin-top: 8px; padding-bottom: 20px; }
         .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
         .vip-badge { display: block; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
         .item-emoji { font-size: 36px; margin-bottom: 6px; }
@@ -224,7 +249,7 @@
 
         /* 모달 및 팝업 */
         .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 360px; padding: 25px 20px; text-align: center; position: relative; }
         .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
         .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
@@ -331,8 +356,8 @@
             <!-- 🧩 3매치 퍼즐 패널 -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div id="match3Board" class="match3-grid"></div>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E67E22, #2ECC71);" onclick="startMatch3GameEngine()">🧩 판 새로고침 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">이웃한 타일을 터치해 가로/세로 3개를 맞추세요! (개당 +500원)</p>
+                <button class="btn-action" style="margin-top:12px; width:100%; background:linear-gradient(135deg, #E67E22, #2ECC71);" onclick="startMatch3GameEngine()">🧩 판 새로고침 / 리셋</button>
+                <p style="font-size:12px; color:#7F8C8D; margin:8px 0 0 0;">이웃한 타일을 터치해 가로/세로 3개를 맞추세요! (개당 +500원)</p>
             </div>
         </div>
 
@@ -357,12 +382,12 @@
                 <button class="btn-vault btn-deposit" onclick="handleDeposit()">예치하기</button>
                 <button class="btn-vault btn-withdraw" onclick="handleWithdraw()">출금하기</button>
             </div>
-            <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
+            <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 360px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
         <!-- 🛍️ 탭 4: 기적 상점 -->
         <div id="shopTab" class="tab-content">
-            <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
+            <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
