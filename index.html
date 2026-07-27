@@ -1,3 +1,4 @@
+Harry:
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -77,7 +78,8 @@
         
         .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
         .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
-        .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
+
+.beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
 
         .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
         .bird-eye { 
@@ -118,7 +120,7 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
 
-        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
+.control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
@@ -128,9 +130,9 @@
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
 
-        /* 🎮 기적 게임 창 레이아웃 (퍼즐 추가로 4열 배치) */
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        /* 🎮 기적 게임 창 레이아웃 */
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
@@ -151,7 +153,7 @@
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
 
-        .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
+.btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
@@ -201,7 +203,7 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
 
-                        <div class="bird-beak-wrap">
+<div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
                         </div>
@@ -238,10 +240,9 @@
         <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🧩 파이프퍼즐</button>
             </div>
 
             <!-- 🛸 정통 갤러그 패널 -->
@@ -262,13 +263,6 @@
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
-
-            <!-- 🧩 사진 퍼즐 게임 패널 -->
-            <div id="puzzleGameArea" class="game-display-panel" style="display:none;">
-                <canvas id="puzzleCanvas" width="280" height="280"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #27AE60, #2ECC71);" onclick="startPuzzleGameEngine()">🧩 퍼즐 리셋 / 재배치</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">블록을 슬라이드해 시작점(S)부터 도착점(G)까지 길을 연결하세요! (+50,000원)</p>
-            </div>
         </div>
 
         <!-- 🏦 탭 3: 디파이 금고 -->
@@ -278,7 +272,7 @@
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
 
-                <div class="backend-usdt-box">
+<div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
@@ -348,7 +342,7 @@
             </div>
         </div>
 
-        <!-- 하단 네비게이션 바 -->
+<!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
@@ -407,7 +401,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         let amount = 0; 
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
@@ -424,7 +418,7 @@
             const loggedInUser = localStorage.getItem("loggedInUser");
             
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
+                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser}));
                 if (userData) {
                     amount = parseInt(userData.totalBalance) || 0;
                     vaultAsset = parseInt(userData.vaultAsset) || 0;
@@ -442,10 +436,10 @@
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || {};
+                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser})) || {};
                 userData.totalBalance = amount;
                 userData.vaultAsset = vaultAsset;
-                localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+                localStorage.setItem(user_${loggedInUser}, JSON.stringify(userData));
             }
         }
 
@@ -459,7 +453,7 @@
                 return;
             }
 
-            if (localStorage.getItem(`user_${id}`)) {
+            if (localStorage.getItem(user_${id})) {
                 alert("이미 존재하는 아이디입니다.");
                 return;
             }
@@ -471,15 +465,15 @@
                 vaultAsset: 0
             };
 
-            localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
-            alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
+            localStorage.setItem(user_${id}, JSON.stringify(newUser));
+            alert(🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.);
         }
 
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
 
-            const storedData = localStorage.getItem(`user_${id}`);
+            const storedData = localStorage.getItem(user_${id});
             if (!storedData) {
                 alert("존재하지 않는 회원 계정입니다.");
                 return;
@@ -492,7 +486,7 @@
             }
 
             localStorage.setItem("loggedInUser", id);
-            alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
+            alert(🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.);
             
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
@@ -508,7 +502,8 @@
         }
 
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
-        function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
+
+function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
@@ -555,7 +550,7 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* ☁️ 엔진 가동 조건 */
+        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -569,7 +564,8 @@
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 35000) + 15000; updateTotalBalance(); }, 1000);
-            } else {
+
+} else {
                 isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
                 leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
             }
@@ -606,7 +602,7 @@
             amount += bonusAmount; 
             updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none'; 
-            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
+            alert(🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원));
         }
 
         function handleDeposit() {
@@ -622,20 +618,20 @@
         }
 
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active'); document.getElementById('btnSelectPuzzle').classList.remove('active');
-            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none'; document.getElementById('puzzleGameArea').style.display = 'none';
+            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
             if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
             else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
             else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
-            else if(gameType === 'puzzle') { document.getElementById('btnSelectPuzzle').classList.add('active'); document.getElementById('puzzleGameArea').style.display = 'block'; startPuzzleGameEngine(); }
         }
 
         /* 🧱 1. 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+
+let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
             ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
@@ -690,7 +686,7 @@
             }
         }
 
-        /* 🛸 3. 정통 갤러그 시스템 */
+/* 🛸 3. 정통 갤러그 시스템 */
         let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
@@ -782,132 +778,6 @@
                 startGalagaGameEngine();
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
-            }
-        }
-
-        /* 🧩 4. 퍼즐 게임 (Unroll / Slide Pipe Puzzle) */
-        let pCanvas = document.getElementById("puzzleCanvas");
-        let pCtx = pCanvas ? pCanvas.getContext("2d") : null;
-        let puzzleGrid = [
-            [ 'S', 'EMPTY', 'EMPTY' ],
-            [ 'CURVE_DR', 'HORIZ', 'CURVE_LD' ],
-            [ 'VERT', 'EMPTY', 'G' ]
-        ]; // 3x3 보드
-        let emptyPos = { r: 0, c: 1 }; // 빈 칸 위치
-
-        function startPuzzleGameEngine() {
-            if(!pCanvas) return;
-            // 초기 맵 (셔플된 상태)
-            puzzleGrid = [
-                [ 'S', 'CURVE_LD', 'EMPTY' ],
-                [ 'VERT', 'HORIZ', 'CURVE_DR' ],
-                [ 'EMPTY', 'EMPTY', 'G' ]
-            ];
-            emptyPos = { r: 0, c: 2 };
-            drawPuzzleBoard();
-        }
-
-        function drawPuzzleBoard() {
-            if(!pCtx) return;
-            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-            let tileSize = pCanvas.width / 3;
-
-            for(let r=0; r<3; r++) {
-                for(let c=0; c<3; c++) {
-                    let tile = puzzleGrid[r][c];
-                    let x = c * tileSize;
-                    let y = r * tileSize;
-
-                    if(tile !== 'EMPTY') {
-                        // 타일 배경 (나무 테두리 + 파란 블록)
-                        pCtx.fillStyle = tile === 'S' ? '#2980B9' : (tile === 'G' ? '#27AE60' : '#3498DB');
-                        pCtx.fillRect(x+2, y+2, tileSize-4, tileSize-4);
-                        pCtx.strokeStyle = '#1A5276';
-                        pCtx.lineWidth = 3;
-                        pCtx.strokeRect(x+2, y+2, tileSize-4, tileSize-4);
-
-                        // 파이프 길 그리기
-                        pCtx.strokeStyle = '#111';
-                        pCtx.lineWidth = 18;
-                        pCtx.lineCap = 'round';
-                        let cx = x + tileSize/2;
-                        let cy = y + tileSize/2;
-
-                        pCtx.beginPath();
-                        if(tile === 'S') { // 시작 (위 -> 아래)
-                            pCtx.moveTo(cx, y);
-                            pCtx.lineTo(cx, cy + 10);
-                            pCtx.stroke();
-                            // 구슬 표시
-                            pCtx.fillStyle = '#E74C3C';
-                            pCtx.beginPath(); pCtx.arc(cx, cy, 10, 0, Math.PI*2); pCtx.fill();
-                        } else if(tile === 'G') { // 목표
-                            pCtx.moveTo(cx - 10, cy);
-                            pCtx.lineTo(x + tileSize, cy);
-                            pCtx.stroke();
-                            pCtx.fillStyle = '#F1C40F';
-                            pCtx.beginPath(); pCtx.arc(cx, cy, 12, 0, Math.PI*2); pCtx.fill();
-                        } else if(tile === 'VERT') {
-                            pCtx.moveTo(cx, y); pCtx.lineTo(cx, y + tileSize); pCtx.stroke();
-                        } else if(tile === 'HORIZ') {
-                            pCtx.moveTo(x, cy); pCtx.lineTo(x + tileSize, cy); pCtx.stroke();
-                        } else if(tile === 'CURVE_DR') { // Down -> Right
-                            pCtx.moveTo(cx, y + tileSize); pCtx.arcTo(cx, cy, x + tileSize, cy, tileSize/2); pCtx.stroke();
-                        } else if(tile === 'CURVE_LD') { // Left -> Down
-                            pCtx.moveTo(x, cy); pCtx.arcTo(cx, cy, cx, y + tileSize, tileSize/2); pCtx.stroke();
-                        }
-
-                        // 텍스트 라벨
-                        pCtx.fillStyle = '#FFF';
-                        pCtx.font = 'bold 12px sans-serif';
-                        if(tile === 'S') pCtx.fillText("START", x+8, y+20);
-                        if(tile === 'G') pCtx.fillText("GOAL", x+8, y+20);
-                    } else {
-                        // 빈 슬롯
-                        pCtx.fillStyle = '#1A252F';
-                        pCtx.fillRect(x+2, y+2, tileSize-4, tileSize-4);
-                    }
-                }
-            }
-        }
-
-        function handlePuzzleClick(e) {
-            let rect = pCanvas.getBoundingClientRect();
-            let clickX = e.clientX - rect.left;
-            let clickY = e.clientY - rect.top;
-            let tileSize = pCanvas.width / 3;
-
-            let c = Math.floor(clickX / tileSize);
-            let r = Math.floor(clickY / tileSize);
-
-            // 클릭한 칸이 빈 칸과 인접해 있는지 확인 (S, G 블록은 이동 불가)
-            if(puzzleGrid[r][c] === 'S' || puzzleGrid[r][c] === 'G') return;
-
-            let dist = Math.abs(r - emptyPos.r) + Math.abs(c - emptyPos.c);
-            if(dist === 1) { // 상하좌우 1칸 거리일 때 이동
-                puzzleGrid[emptyPos.r][emptyPos.c] = puzzleGrid[r][c];
-                puzzleGrid[r][c] = 'EMPTY';
-                emptyPos = { r, c };
-                drawPuzzleBoard();
-                checkPuzzleWin();
-            }
-        }
-
-        pCanvas.addEventListener('click', handlePuzzleClick);
-        pCanvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            let touch = e.touches[0];
-            handlePuzzleClick(touch);
-        });
-
-        function checkPuzzleWin() {
-            // 퍼즐 완성 조건 검사 (예: 특정 완성 형태)
-            if(puzzleGrid[0][1] === 'CURVE_LD' && puzzleGrid[1][1] === 'CURVE_DR' && puzzleGrid[1][2] === 'VERT') {
-                setTimeout(() => {
-                    amount += 50000;
-                    updateTotalBalance();
-                    alert("🎉 [길 연결 성공!] 구슬이 도착지점까지 통과했습니다! 보상 +50,000원 지급! 🪙");
-                }, 100);
             }
         }
 
