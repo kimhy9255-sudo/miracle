@@ -77,8 +77,7 @@
         
         .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
         .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
-
-.beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
+        .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
 
         .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
         .bird-eye { 
@@ -119,7 +118,7 @@
         .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
         .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
 
-.control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
+        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
         .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
@@ -152,7 +151,7 @@
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
 
-.btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
@@ -202,7 +201,7 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
 
-<div class="bird-beak-wrap">
+                        <div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
                         </div>
@@ -271,7 +270,7 @@
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
 
-<div class="backend-usdt-box">
+                <div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
@@ -341,7 +340,7 @@
             </div>
         </div>
 
-<!-- 하단 네비게이션 바 -->
+        <!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
@@ -400,7 +399,7 @@
         </div>
     </div>
 
-<script>
+    <script>
         let amount = 0; 
         let vaultAsset = 0;
         let isRunning = false; let intervalId = null;
@@ -417,7 +416,7 @@
             const loggedInUser = localStorage.getItem("loggedInUser");
             
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser}));
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
                 if (userData) {
                     amount = parseInt(userData.totalBalance) || 0;
                     vaultAsset = parseInt(userData.vaultAsset) || 0;
@@ -435,10 +434,10 @@
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
-                const userData = JSON.parse(localStorage.getItem(user_${loggedInUser})) || {};
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || {};
                 userData.totalBalance = amount;
                 userData.vaultAsset = vaultAsset;
-                localStorage.setItem(user_${loggedInUser}, JSON.stringify(userData));
+                localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
             }
         }
 
@@ -452,7 +451,7 @@
                 return;
             }
 
-            if (localStorage.getItem(user_${id})) {
+            if (localStorage.getItem(`user_${id}`)) {
                 alert("이미 존재하는 아이디입니다.");
                 return;
             }
@@ -464,15 +463,15 @@
                 vaultAsset: 0
             };
 
-            localStorage.setItem(user_${id}, JSON.stringify(newUser));
-            alert(🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.);
+            localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
+            alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
         }
 
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
 
-            const storedData = localStorage.getItem(user_${id});
+            const storedData = localStorage.getItem(`user_${id}`);
             if (!storedData) {
                 alert("존재하지 않는 회원 계정입니다.");
                 return;
@@ -485,7 +484,7 @@
             }
 
             localStorage.setItem("loggedInUser", id);
-            alert(🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.);
+            alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
             
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
@@ -501,8 +500,7 @@
         }
 
         function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
-
-function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
+        function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
         
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
@@ -563,8 +561,7 @@ function closeKakaoModal() { document.getElementById('payModal').style.display =
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
                 intervalId = setInterval(() => { amount += Math.floor(Math.random() * 35000) + 15000; updateTotalBalance(); }, 1000);
-
-} else {
+            } else {
                 isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
                 leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
             }
@@ -601,7 +598,7 @@ function closeKakaoModal() { document.getElementById('payModal').style.display =
             amount += bonusAmount; 
             updateTotalBalance();
             document.getElementById('adOverlay').style.display = 'none'; 
-            alert(🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원));
+            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
         }
 
         function handleDeposit() {
@@ -629,8 +626,8 @@ function closeKakaoModal() { document.getElementById('payModal').style.display =
 
         /* 🧱 1. 벽돌깨기 */
         let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-
-let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+        
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
             ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
@@ -641,6 +638,7 @@ let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddle
 
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
         gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
+        
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
@@ -668,7 +666,7 @@ let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddle
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
             let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
-            shuffled.forEach((emoji, index) => {
+            shuffled.forEach((emoji) => {
                 const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
             });
         }
@@ -685,7 +683,7 @@ let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddle
             }
         }
 
-/* 🛸 3. 정통 갤러그 시스템 */
+        /* 🛸 3. 정통 갤러그 시스템 */
         let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
