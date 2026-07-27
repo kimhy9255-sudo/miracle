@@ -216,14 +216,14 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 🧩 3매치 퍼즐 게임 보드 스타일 */
+        /* 🧩 새로운 성장형 스테이지 퍼즐 보드 스타일 */
         .match3-grid { 
             display: grid; 
             grid-template-columns: repeat(6, 1fr); 
             gap: 6px; 
             width: 100%;
             max-width: 340px; 
-            margin: 10px auto; 
+            margin: 8px auto; 
             background: #2C3E50; 
             padding: 8px; 
             border-radius: 16px; 
@@ -234,7 +234,7 @@
             aspect-ratio: 1; 
             background: #34495E; 
             border-radius: 10px; 
-            font-size: 28px; 
+            font-size: 26px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -245,6 +245,19 @@
             touch-action: manipulation;
         }
         .match3-tile.selected { background: #E74C3C; transform: scale(1.1); box-shadow: 0 0 12px rgba(231,76,60,0.9); z-index: 10; }
+
+        /* 퍼즐 전용 상태 정보 바 */
+        .puzzle-status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #F2F4F4;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 5px;
+        }
 
         /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
@@ -351,7 +364,7 @@
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 3매치</button>
+                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🏆 성장 퍼즐</button>
             </div>
 
             <!-- 🛸 정통 갤러그 패널 -->
@@ -390,16 +403,27 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🧩 3매치 퍼즐 패널 -->
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🧩 3매치 퍼즐</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🏆 성장 퍼즐</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
+                
+                <div class="puzzle-status-bar">
+                    <span>🚩 Stage <strong id="pStage">1</strong></span>
+                    <span>⏳ <strong id="pTimer" style="color:#E74C3C;">60</strong>초</span>
+                    <span>🎯 목표: <strong id="pScore">0</strong> / <span id="pTarget">1000</span></span>
+                </div>
+
                 <div id="match3Board" class="match3-grid"></div>
-                <button class="btn-action" style="margin-top:12px; width:100%; background:linear-gradient(135deg, #E67E22, #2ECC71);" onclick="startMatch3GameEngine()">🧩 판 새로고침 / 리셋</button>
-                <p style="font-size:12px; color:#7F8C8D; margin:8px 0 0 0;">이웃한 타일을 터치해 가로/세로 3개를 맞추세요! (개당 +500원)</p>
+
+                <div style="display:flex; gap:6px; margin-top:8px;">
+                    <button class="btn-action" style="flex:1; background:#E67E22; font-size:13px;" onclick="reShuffleBoard()">🔀 판 섞기</button>
+                    <button class="btn-action" style="flex:1; background:#2ECC71; font-size:13px;" onclick="startStagePuzzleEngine(1)">🔄 STAGE 1 리셋</button>
+                </div>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">1분 내 목표 달성 시 성공! 단계별로 난이도가 착착 올라갑니다.</p>
             </div>
         </div>
 
@@ -704,6 +728,7 @@
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            clearInterval(puzzleTimerId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -794,6 +819,7 @@
             document.getElementById('match3GameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            clearInterval(puzzleTimerId);
 
             if(gameType === 'brick') { 
                 currentActiveGameAreaId = 'brickGameArea';
@@ -817,7 +843,7 @@
                 currentActiveGameAreaId = 'match3GameArea';
                 document.getElementById('btnSelectMatch3').classList.add('active'); 
                 document.getElementById('match3GameArea').style.display = 'block'; 
-                startMatch3GameEngine(); 
+                startStagePuzzleEngine(1); 
             }
         }
 
@@ -975,102 +1001,155 @@
             }
         }
 
-        /* 🧩 4. 3매치 타일 퍼즐 */
-        const m3Size = 6;
-        const m3Types = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
-        let m3Board = [];
-        let m3Selected = null;
-        let isM3Processing = false;
+        /* 🏆 4. 완전히 개편된 성장형 퍼즐 엔진 (1분 제한시간 + 난이도 점진 상승) */
+        const allTileTypes = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
+        let currentStage = 1;
+        let currentPuzzleScore = 0;
+        let targetPuzzleScore = 1000;
+        let puzzleTimeLeft = 60;
+        let puzzleTimerId = null;
+        let pActiveTypes = [];
+        
+        let pSize = 6;
+        let pBoard = [];
+        let pSelected = null;
+        let isPProcessing = false;
 
-        function startMatch3GameEngine() {
-            m3Selected = null;
-            isM3Processing = false;
-            do {
-                m3Board = [];
-                for (let r = 0; r < m3Size; r++) {
-                    m3Board[r] = [];
-                    for (let c = 0; c < m3Size; c++) {
-                        m3Board[r][c] = m3Types[Math.floor(Math.random() * m3Types.length)];
-                    }
-                }
-            } while (checkM3Matches().length > 0);
-            renderM3Board();
+        function startStagePuzzleEngine(stage) {
+            currentStage = stage || 1;
+            currentPuzzleScore = 0;
+            puzzleTimeLeft = 60;
+            
+            // 난이도 설계: 단계가 오를수록 타일 종류 증가 및 목표점수 상승
+            let activeTypeCount = Math.min(4 + Math.floor((currentStage - 1) / 2), allTileTypes.length);
+            pActiveTypes = allTileTypes.slice(0, activeTypeCount);
+            targetPuzzleScore = currentStage * 1200;
+
+            document.getElementById('pStage').innerText = currentStage;
+            document.getElementById('pScore').innerText = currentPuzzleScore;
+            document.getElementById('pTarget').innerText = targetPuzzleScore;
+            document.getElementById('pTimer').innerText = puzzleTimeLeft;
+
+            pSelected = null;
+            isPProcessing = false;
+
+            initValidBoard();
+            startPuzzleTimer();
         }
 
-        function renderM3Board() {
+        function startPuzzleTimer() {
+            clearInterval(puzzleTimerId);
+            puzzleTimerId = setInterval(() => {
+                puzzleTimeLeft--;
+                document.getElementById('pTimer').innerText = puzzleTimeLeft;
+                if (puzzleTimeLeft <= 0) {
+                    clearInterval(puzzleTimerId);
+                    alert(`⏳ 제한 시간(60초) 종료!\nStage ${currentStage} 실패! 1단계부터 다시 도전하세요.`);
+                    startStagePuzzleEngine(1);
+                }
+            }, 1000);
+        }
+
+        function initValidBoard() {
+            let hasMoves = false;
+            let attempts = 0;
+            do {
+                pBoard = [];
+                for (let r = 0; r < pSize; r++) {
+                    pBoard[r] = [];
+                    for (let c = 0; c < pSize; c++) {
+                        pBoard[r][c] = pActiveTypes[Math.floor(Math.random() * pActiveTypes.length)];
+                    }
+                }
+                // 시작 시 맞춰진 터짐이 없고, 유효한 이동(Match 가능 수)이 남아있는지 확인
+                if (checkPMatches().length === 0 && checkPossibleMoves()) {
+                    hasMoves = true;
+                }
+                attempts++;
+            } while (!hasMoves && attempts < 100);
+
+            renderPBoard();
+        }
+
+        function reShuffleBoard() {
+            if (isPProcessing) return;
+            initValidBoard();
+        }
+
+        function renderPBoard() {
             const boardElem = document.getElementById('match3Board');
             boardElem.innerHTML = '';
-            for (let r = 0; r < m3Size; r++) {
-                for (let c = 0; c < m3Size; c++) {
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize; c++) {
                     const tile = document.createElement('div');
                     tile.classList.add('match3-tile');
-                    tile.innerText = m3Board[r][c];
+                    tile.innerText = pBoard[r][c] || '';
                     tile.dataset.row = r;
                     tile.dataset.col = c;
-                    if (m3Selected && m3Selected.r === r && m3Selected.c === c) {
+                    if (pSelected && pSelected.r === r && pSelected.c === c) {
                         tile.classList.add('selected');
                     }
-                    tile.onclick = () => handleM3TileClick(r, c);
+                    tile.onclick = () => handlePTileClick(r, c);
                     boardElem.appendChild(tile);
                 }
             }
         }
 
-        function handleM3TileClick(r, c) {
-            if (isM3Processing) return;
+        function handlePTileClick(r, c) {
+            if (isPProcessing) return;
 
-            if (!m3Selected) {
-                m3Selected = { r, c };
-                renderM3Board();
+            if (!pSelected) {
+                pSelected = { r, c };
+                renderPBoard();
             } else {
-                let r1 = m3Selected.r, c1 = m3Selected.c;
+                let r1 = pSelected.r, c1 = pSelected.c;
                 let r2 = r, c2 = c;
                 let isAdjacent = (Math.abs(r1 - r2) + Math.abs(c1 - c2)) === 1;
 
                 if (isAdjacent) {
-                    isM3Processing = true;
-                    swapM3Tiles(r1, c1, r2, c2);
-                    let matches = checkM3Matches();
+                    isPProcessing = true;
+                    swapPTiles(r1, c1, r2, c2);
+                    let matches = checkPMatches();
                     
                     if (matches.length > 0) {
-                        m3Selected = null;
-                        renderM3Board();
-                        processM3Matches();
+                        pSelected = null;
+                        renderPBoard();
+                        processPMatches();
                     } else {
                         setTimeout(() => {
-                            swapM3Tiles(r1, c1, r2, c2);
-                            m3Selected = null;
-                            renderM3Board();
-                            isM3Processing = false;
+                            swapPTiles(r1, c1, r2, c2);
+                            pSelected = null;
+                            renderPBoard();
+                            isPProcessing = false;
                         }, 250);
                     }
                 } else {
-                    m3Selected = { r, c };
-                    renderM3Board();
+                    pSelected = { r, c };
+                    renderPBoard();
                 }
             }
         }
 
-        function swapM3Tiles(r1, c1, r2, c2) {
-            let temp = m3Board[r1][c1];
-            m3Board[r1][c1] = m3Board[r2][c2];
-            m3Board[r2][c2] = temp;
+        function swapPTiles(r1, c1, r2, c2) {
+            let temp = pBoard[r1][c1];
+            pBoard[r1][c1] = pBoard[r2][c2];
+            pBoard[r2][c2] = temp;
         }
 
-        function checkM3Matches() {
+        function checkPMatches() {
             let matched = [];
-            for (let r = 0; r < m3Size; r++) {
-                for (let c = 0; c < m3Size - 2; c++) {
-                    let type = m3Board[r][c];
-                    if (type && type === m3Board[r][c+1] && type === m3Board[r][c+2]) {
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize - 2; c++) {
+                    let type = pBoard[r][c];
+                    if (type && type === pBoard[r][c+1] && type === pBoard[r][c+2]) {
                         matched.push({r, c}, {r, c: c+1}, {r, c: c+2});
                     }
                 }
             }
-            for (let c = 0; c < m3Size; c++) {
-                for (let r = 0; r < m3Size - 2; r++) {
-                    let type = m3Board[r][c];
-                    if (type && type === m3Board[r+1][c] && type === m3Board[r+2][c]) {
+            for (let c = 0; c < pSize; c++) {
+                for (let r = 0; r < pSize - 2; r++) {
+                    let type = pBoard[r][c];
+                    if (type && type === pBoard[r+1][c] && type === pBoard[r+2][c]) {
                         matched.push({r, c}, {r: r+1, c}, {r: r+2, c});
                     }
                 }
@@ -1078,10 +1157,34 @@
             return matched;
         }
 
-        function processM3Matches() {
-            let matches = checkM3Matches();
+        function checkPossibleMoves() {
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize; c++) {
+                    if (c < pSize - 1) {
+                        swapPTiles(r, c, r, c + 1);
+                        let m = checkPMatches();
+                        swapPTiles(r, c, r, c + 1);
+                        if (m.length > 0) return true;
+                    }
+                    if (r < pSize - 1) {
+                        swapPTiles(r, c, r + 1, c);
+                        let m = checkPMatches();
+                        swapPTiles(r, c, r + 1, c);
+                        if (m.length > 0) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function processPMatches() {
+            let matches = checkPMatches();
             if (matches.length === 0) {
-                isM3Processing = false;
+                isPProcessing = false;
+                // 더 이상 맞출 수 있는 수가 없다면 섞어주기
+                if (!checkPossibleMoves()) {
+                    reShuffleBoard();
+                }
                 return;
             }
 
@@ -1089,31 +1192,50 @@
             matches.forEach(m => { uniqueMatches[`${m.r},${m.c}`] = m; });
             let matchCount = Object.keys(uniqueMatches).length;
 
-            amount += matchCount * 500;
+            let gainedPoints = matchCount * 100;
+            currentPuzzleScore += gainedPoints;
+            amount += gainedPoints * 5; // 보상금 수령
             updateTotalBalance();
 
+            document.getElementById('pScore').innerText = currentPuzzleScore;
+
             Object.values(uniqueMatches).forEach(m => {
-                m3Board[m.r][m.c] = null;
+                pBoard[m.r][m.c] = null;
             });
 
-            for (let c = 0; c < m3Size; c++) {
-                let emptyRow = m3Size - 1;
-                for (let r = m3Size - 1; r >= 0; r--) {
-                    if (m3Board[r][c] !== null) {
-                        m3Board[emptyRow][c] = m3Board[r][c];
-                        if (emptyRow !== r) m3Board[r][c] = null;
+            // 타일 떨어뜨리기 및 빈자리 새로 채우기
+            for (let c = 0; c < pSize; c++) {
+                let emptyRow = pSize - 1;
+                for (let r = pSize - 1; r >= 0; r--) {
+                    if (pBoard[r][c] !== null) {
+                        pBoard[emptyRow][c] = pBoard[r][c];
+                        if (emptyRow !== r) pBoard[r][c] = null;
                         emptyRow--;
                     }
                 }
                 for (let r = emptyRow; r >= 0; r--) {
-                    m3Board[r][c] = m3Types[Math.floor(Math.random() * m3Types.length)];
+                    pBoard[r][c] = pActiveTypes[Math.floor(Math.random() * pActiveTypes.length)];
                 }
             }
 
-            renderM3Board();
-            setTimeout(() => {
-                processM3Matches();
-            }, 300);
+            renderPBoard();
+
+            // 클리어 조건 달성 검사
+            if (currentPuzzleScore >= targetPuzzleScore) {
+                clearInterval(puzzleTimerId);
+                let rewardBonus = currentStage * 50000;
+                amount += rewardBonus;
+                updateTotalBalance();
+                
+                setTimeout(() => {
+                    alert(`🎉 축하합니다! STAGE ${currentStage} 클리어!\n🎁 단계 클리어 보상: +${rewardBonus.toLocaleString()}원 지급!\n다음 단계로 이동합니다.`);
+                    startStagePuzzleEngine(currentStage + 1);
+                }, 200);
+            } else {
+                setTimeout(() => {
+                    processPMatches();
+                }, 300);
+            }
         }
 
         window.onload = loadSavedData;
