@@ -128,19 +128,78 @@
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
 
+        /* 🆕 상단 게임 이동/네비게이션 창 */
+        .game-top-bar {
+            width: 100%;
+            max-width: 340px;
+            background: #2C3E50;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        .btn-nav-top {
+            background: #3498DB;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         /* 🎮 기적 게임 창 레이아웃 */
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
+        .btn-game-select { padding: 8px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
         .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
         
+        /* 🆕 전체화면 실행 모드 스타일 */
+        .game-display-panel.fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            z-index: 9990 !important;
+            border-radius: 0 !important;
+            padding: 10px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background: #1A252F !important;
+        }
+        .game-display-panel.fullscreen-mode canvas {
+            max-width: 95vw !important;
+            height: 60vh !important;
+            object-fit: contain;
+        }
+        .game-display-panel.fullscreen-mode .match3-grid,
+        .game-display-panel.fullscreen-mode .card-grid {
+            max-width: 90vw !important;
+        }
+
         /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
+
+        /* 🧩 3매치 퍼즐 게임 보드 스타일 */
+        .match3-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; max-width: 280px; margin: 10px auto; background: #2C3E50; padding: 6px; border-radius: 12px; }
+        .match3-tile { aspect-ratio: 1; background: #34495E; border-radius: 8px; font-size: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: transform 0.15s ease, background-color 0.2s; }
+        .match3-tile.selected { background: #E74C3C; transform: scale(1.1); box-shadow: 0 0 8px rgba(231,76,60,0.8); z-index: 10; }
 
         /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
@@ -237,10 +296,17 @@
 
         <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
+            <!-- 🆕 상단 바로가기 / 빠른 전환 상단 창 -->
+            <div class="game-top-bar">
+                <button class="btn-nav-top" onclick="changeTabUrl('home')" style="background:#E74C3C;">🏠 홈 화면으로</button>
+                <button class="btn-nav-top" onclick="toggleFullScreenGame()" style="background:#2ECC71;">📱 전체화면으로 크게 플레이</button>
+            </div>
+
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 정통 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
+                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 3매치</button>
             </div>
 
             <!-- 🛸 정통 갤러그 패널 -->
@@ -260,6 +326,13 @@
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
+            </div>
+
+            <!-- 🧩 3매치 퍼즐 패널 -->
+            <div id="match3GameArea" class="game-display-panel" style="display:none;">
+                <div id="match3Board" class="match3-grid"></div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E67E22, #2ECC71);" onclick="startMatch3GameEngine()">🧩 판 새로고침 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">이웃한 타일을 터치해 가로/세로 3개를 맞추세요! (개당 +500원)</p>
             </div>
         </div>
 
@@ -529,7 +602,29 @@
             else { alert("❌ 보유 기적 포인트가 부족합니다!"); }
         }
 
-        function changeTabUrl(tabName) { routeTabs(tabName); }
+        function changeTabUrl(tabName) { 
+            exitFullScreenGame();
+            routeTabs(tabName); 
+        }
+
+        /* 🆕 전체화면 실행/해제 제어 기능 */
+        let currentActiveGameAreaId = 'galagaGameArea';
+
+        function toggleFullScreenGame() {
+            const activePanel = document.getElementById(currentActiveGameAreaId);
+            if(activePanel) {
+                if (activePanel.classList.contains('fullscreen-mode')) {
+                    exitFullScreenGame();
+                } else {
+                    activePanel.classList.add('fullscreen-mode');
+                }
+            }
+        }
+
+        function exitFullScreenGame() {
+            const panels = document.querySelectorAll('.game-display-panel');
+            panels.forEach(p => p.classList.remove('fullscreen-mode'));
+        }
 
         function routeTabs(tabName) {
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
@@ -614,14 +709,43 @@
         }
 
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active');
-            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none';
+            exitFullScreenGame();
+            document.getElementById('btnSelectBrick').classList.remove('active'); 
+            document.getElementById('btnSelectMemory').classList.remove('active'); 
+            document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectMatch3').classList.remove('active');
+
+            document.getElementById('brickGameArea').style.display = 'none'; 
+            document.getElementById('memoryGameArea').style.display = 'none'; 
+            document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('match3GameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
-            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
-            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
-            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
+            if(gameType === 'brick') { 
+                currentActiveGameAreaId = 'brickGameArea';
+                document.getElementById('btnSelectBrick').classList.add('active'); 
+                document.getElementById('brickGameArea').style.display = 'block'; 
+                startBrickGameEngine(); 
+            } 
+            else if(gameType === 'memory') { 
+                currentActiveGameAreaId = 'memoryGameArea';
+                document.getElementById('btnSelectMemory').classList.add('active'); 
+                document.getElementById('memoryGameArea').style.display = 'block'; 
+                startMemoryGameEngine(); 
+            } 
+            else if(gameType === 'galaga') { 
+                currentActiveGameAreaId = 'galagaGameArea';
+                document.getElementById('btnSelectGalaga').classList.add('active'); 
+                document.getElementById('galagaGameArea').style.display = 'block'; 
+                startGalagaGameEngine(); 
+            }
+            else if(gameType === 'match3') { 
+                currentActiveGameAreaId = 'match3GameArea';
+                document.getElementById('btnSelectMatch3').classList.add('active'); 
+                document.getElementById('match3GameArea').style.display = 'block'; 
+                startMatch3GameEngine(); 
+            }
         }
 
         /* 🧱 1. 벽돌깨기 */
@@ -776,6 +900,147 @@
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
+        }
+
+        /* 🧩 4. 3매치(매치3) 타일 퍼즐 시스템 */
+        const m3Size = 6;
+        const m3Types = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
+        let m3Board = [];
+        let m3Selected = null;
+        let isM3Processing = false;
+
+        function startMatch3GameEngine() {
+            m3Selected = null;
+            isM3Processing = false;
+            do {
+                m3Board = [];
+                for (let r = 0; r < m3Size; r++) {
+                    m3Board[r] = [];
+                    for (let c = 0; c < m3Size; c++) {
+                        m3Board[r][c] = m3Types[Math.floor(Math.random() * m3Types.length)];
+                    }
+                }
+            } while (checkM3Matches().length > 0);
+            renderM3Board();
+        }
+
+        function renderM3Board() {
+            const boardElem = document.getElementById('match3Board');
+            boardElem.innerHTML = '';
+            for (let r = 0; r < m3Size; r++) {
+                for (let c = 0; c < m3Size; c++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add('match3-tile');
+                    tile.innerText = m3Board[r][c];
+                    tile.dataset.row = r;
+                    tile.dataset.col = c;
+                    if (m3Selected && m3Selected.r === r && m3Selected.c === c) {
+                        tile.classList.add('selected');
+                    }
+                    tile.onclick = () => handleM3TileClick(r, c);
+                    boardElem.appendChild(tile);
+                }
+            }
+        }
+
+        function handleM3TileClick(r, c) {
+            if (isM3Processing) return;
+
+            if (!m3Selected) {
+                m3Selected = { r, c };
+                renderM3Board();
+            } else {
+                let r1 = m3Selected.r, c1 = m3Selected.c;
+                let r2 = r, c2 = c;
+                let isAdjacent = (Math.abs(r1 - r2) + Math.abs(c1 - c2)) === 1;
+
+                if (isAdjacent) {
+                    isM3Processing = true;
+                    swapM3Tiles(r1, c1, r2, c2);
+                    let matches = checkM3Matches();
+                    
+                    if (matches.length > 0) {
+                        m3Selected = null;
+                        renderM3Board();
+                        processM3Matches();
+                    } else {
+                        setTimeout(() => {
+                            swapM3Tiles(r1, c1, r2, c2);
+                            m3Selected = null;
+                            renderM3Board();
+                            isM3Processing = false;
+                        }, 250);
+                    }
+                } else {
+                    m3Selected = { r, c };
+                    renderM3Board();
+                }
+            }
+        }
+
+        function swapM3Tiles(r1, c1, r2, c2) {
+            let temp = m3Board[r1][c1];
+            m3Board[r1][c1] = m3Board[r2][c2];
+            m3Board[r2][c2] = temp;
+        }
+
+        function checkM3Matches() {
+            let matched = [];
+            for (let r = 0; r < m3Size; r++) {
+                for (let c = 0; c < m3Size - 2; c++) {
+                    let type = m3Board[r][c];
+                    if (type && type === m3Board[r][c+1] && type === m3Board[r][c+2]) {
+                        matched.push({r, c}, {r, c: c+1}, {r, c: c+2});
+                    }
+                }
+            }
+            for (let c = 0; c < m3Size; c++) {
+                for (let r = 0; r < m3Size - 2; r++) {
+                    let type = m3Board[r][c];
+                    if (type && type === m3Board[r+1][c] && type === m3Board[r+2][c]) {
+                        matched.push({r, c}, {r: r+1, c}, {r: r+2, c});
+                    }
+                }
+            }
+            return matched;
+        }
+
+        function processM3Matches() {
+            let matches = checkM3Matches();
+            if (matches.length === 0) {
+                isM3Processing = false;
+                return;
+            }
+
+            let uniqueMatches = {};
+            matches.forEach(m => { uniqueMatches[`${m.r},${m.c}`] = m; });
+            let matchCount = Object.keys(uniqueMatches).length;
+
+            amount += matchCount * 500;
+            updateTotalBalance();
+
+            Object.values(uniqueMatches).forEach(m => {
+                m3Board[m.r][m.c] = null;
+            });
+
+            for (let c = 0; c < m3Size; c++) {
+                let emptyRow = m3Size - 1;
+                for (let r = m3Size - 1; r >= 0; r--) {
+                    if (m3Board[r][c] !== null) {
+                        m3Board[emptyRow][c] = m3Board[r][c];
+                        if (emptyRow !== r) m3Board[r][c] = null;
+                        emptyRow--;
+                    }
+                }
+                for (let r = emptyRow; r >= 0; r--) {
+                    m3Board[r][c] = m3Types[Math.floor(Math.random() * m3Types.length)];
+                }
+            }
+
+            renderM3Board();
+            setTimeout(() => {
+                processM3Matches();
+            }, 300);
         }
 
         window.onload = loadSavedData;
