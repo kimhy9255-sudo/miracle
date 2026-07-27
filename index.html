@@ -128,7 +128,7 @@
         .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
         .btn-admin-gear { background-color: white; color: #5D6D7E; }
 
-        /* 🆕 상단 게임 이동/네비게이션 창 */
+        /* 상단 게임 이동/네비게이션 창 */
         .game-top-bar {
             width: 100%;
             max-width: 360px;
@@ -160,10 +160,24 @@
         .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
-        .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
+        .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
         .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
         
-        /* 🆕 전체화면 실행 모드 스타일 */
+        /* 🆕 전체화면 모드 시 최상단 고정 컨트롤 바 */
+        .fullscreen-control-bar {
+            display: none;
+            width: 100%;
+            max-width: 360px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 🆕 전체화면 실행 모드 스타일 확장 */
         .game-display-panel.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -173,16 +187,22 @@
             max-width: 100vw !important;
             z-index: 9990 !important;
             border-radius: 0 !important;
-            padding: 15px 10px !important;
+            padding: calc(20px + env(safe-area-inset-top)) 15px 20px 15px !important;
             display: flex !important;
             flex-direction: column !important;
-            justify-content: center !important;
+            justify-content: flex-start !important;
             align-items: center !important;
             background: #1A252F !important;
+            overflow-y: auto !important;
         }
+        
+        .game-display-panel.fullscreen-mode .fullscreen-control-bar {
+            display: flex !important;
+        }
+
         .game-display-panel.fullscreen-mode canvas {
             max-width: 95vw !important;
-            height: 55vh !important;
+            height: 50vh !important;
             object-fit: contain;
         }
         .game-display-panel.fullscreen-mode .match3-grid,
@@ -196,7 +216,7 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 🧩 3매치 퍼즐 게임 보드 스타일 (터치 최적화 & 크기 대폭 확대) */
+        /* 🧩 3매치 퍼즐 게임 보드 스타일 */
         .match3-grid { 
             display: grid; 
             grid-template-columns: repeat(6, 1fr); 
@@ -321,7 +341,7 @@
 
         <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
-            <!-- 🆕 상단 바로가기 / 빠른 전환 상단 창 -->
+            <!-- 상단 바로가기 / 빠른 전환 상단 창 -->
             <div class="game-top-bar">
                 <button class="btn-nav-top" onclick="changeTabUrl('home')" style="background:#E74C3C;">🏠 홈 화면으로</button>
                 <button class="btn-nav-top" onclick="toggleFullScreenGame()" style="background:#2ECC71;">📱 전체화면으로 크게 플레이</button>
@@ -336,18 +356,35 @@
 
             <!-- 🛸 정통 갤러그 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 갤러그</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
                 <canvas id="galagaCanvas" width="300" height="240"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
             </div>
 
+            <!-- 🧱 벽돌깨기 패널 -->
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧱 벽돌깨기</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
                 <canvas id="gameCanvas" width="300" height="240"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
             </div>
 
+            <!-- 🃏 카드 짝맞추기 패널 -->
             <div id="memoryGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🃏 짝맞추기</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
@@ -355,6 +392,11 @@
 
             <!-- 🧩 3매치 퍼즐 패널 -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧩 3매치 퍼즐</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
                 <div id="match3Board" class="match3-grid"></div>
                 <button class="btn-action" style="margin-top:12px; width:100%; background:linear-gradient(135deg, #E67E22, #2ECC71);" onclick="startMatch3GameEngine()">🧩 판 새로고침 / 리셋</button>
                 <p style="font-size:12px; color:#7F8C8D; margin:8px 0 0 0;">이웃한 타일을 터치해 가로/세로 3개를 맞추세요! (개당 +500원)</p>
@@ -539,7 +581,7 @@
             }
         }
 
-        /* 💡 회원가입 시 1,000만 원 기본 지급 */
+        /* 💡 회원가입 및 로그인 처리 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
@@ -557,7 +599,7 @@
             const newUser = {
                 username: id,
                 password: pw,
-                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
+                totalBalance: 10000000,
                 vaultAsset: 0
             };
 
@@ -651,6 +693,12 @@
             panels.forEach(p => p.classList.remove('fullscreen-mode'));
         }
 
+        /* 🆕 전체화면에서 홈으로 바로 빠져나가는 함수 */
+        function goHomeFromFullScreen() {
+            exitFullScreenGame();
+            changeTabUrl('home');
+        }
+
         function routeTabs(tabName) {
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
@@ -667,7 +715,7 @@
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
-        /* ☁️ 엔진 가동 조건 수정: 비회원일 경우 로그인 모달 표시 */
+        /* ☁️ 엔진 가동 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -927,7 +975,7 @@
             }
         }
 
-        /* 🧩 4. 3매치(매치3) 타일 퍼즐 시스템 */
+        /* 🧩 4. 3매치 타일 퍼즐 */
         const m3Size = 6;
         const m3Types = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
         let m3Board = [];
