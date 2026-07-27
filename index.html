@@ -3,138 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>실부방(실수로도 부자되는 방)</title>
+    <title>사각지대 없는 기적 재단</title>
     <style>
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        body { font-family: 'Apple SD Gothic Neo', sans-serif; margin: 0; padding: 0; background-color: #F4F7F6; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
-        
-        .header { 
-            background-color: #FFF; 
-            padding: 8px 12px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-            flex-shrink: 0; 
-            height: 52px; 
-            gap: 8px;
-        }
-
-        .header-title-wrap {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-            flex: 1;
-            white-space: nowrap;
+        body {
+            font-family: 'Apple SD Gothic Neo', sans-serif;
+            margin: 0; padding: 0;
+            background-color: #F4F7F6;
+            display: flex; flex-direction: column;
+            height: 100vh;
             overflow: hidden;
         }
 
-        .gold-text {
-            background: linear-gradient(135deg, #FFE259 0%, #FFA751 45%, #FFD700 70%, #B8860B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 1px 2px rgba(212, 175, 55, 0.4));
+        /* 📱 메인 서비스 화면 레이아웃 */
+        #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+
+        /* 상단 헤더 */
+        .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .header h1 { font-size: 17px; margin: 0; color: #2C3E50; font-weight: bold; }
+        
+        /* 등급별 뱃지 */
+        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
+        .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
+
+        /* 메인 컨텐츠 영역 */
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
+        .tab-content.active { display: flex; }
+
+        /* 🕊️ 기적이 영역 */
+        .bird-area { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            width: 100%; 
+            max-width: 340px; 
+            margin-bottom: 5px;
+            height: 140px;
+        }
+        .bird-container { 
+            width: 160px; 
+            height: 120px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
         }
 
-        .main-logo-text { font-size: clamp(18px, 5.2vw, 22px); font-weight: 900; letter-spacing: -0.5px; }
-        .sub-logo-text { font-size: clamp(11px, 3.2vw, 13px); font-weight: 700; letter-spacing: -0.5px; }
-
-        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-        .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
+        /* 머리 위 깃털 */
+        .bird-hair {
+            position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF;
+            border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1;
+            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out;
+        }
+        .bird-hair::after {
+            content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px;
+            background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg);
+        }
         
-        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; padding: 10px 20px; overflow-y: auto; }
-        .tab-content.active { display: flex; }
-        
-        .bird-area { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 340px; margin-bottom: 10px; height: 130px; }
-        .inline-login-btn { position: absolute; right: 0; top: 10px; background: white; border: 1px solid #d1d5db; color: #4b5563; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); z-index: 10; }
+        /* 몸통 */
+        .bird-body { 
+            width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
+            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; 
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); 
+            z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out;
+        }
 
-        .bird-container { width: 160px; height: 120px; display: flex; justify-content: center; align-items: center; position: relative; }
-        .bird-hair { position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF; border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1; box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out; }
-        .bird-hair::after { content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px; background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg); }
-        .bird-body { width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out; }
-        .bird-belly { position: absolute; bottom: 6px; width: 50px; height: 25px; background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%); border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08); }
+        .bird-belly {
+            position: absolute; bottom: 6px; width: 50px; height: 25px;
+            background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%);
+            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
+        }
+        
         .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
         .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
         .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
+
         .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
-        .bird-eye { width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .eye-pupil { width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%); border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex; }
+        .bird-eye { 
+            width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        
+        .eye-pupil {
+            width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
+            border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex;
+        }
         .eye-pupil::after { content: ''; position: absolute; width: 8px; height: 8px; background: white; border-radius: 50%; top: 2px; left: 2px; box-shadow: 0 0 2px rgba(255,255,255,0.8); }
+        
+        /* 날개 및 발 */
         .bird-wing { position: absolute; width: 44px; height: 28px; background: linear-gradient(to bottom, #5dade2, #2980b9); top: 42px; z-index: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .wing-left { left: 4px; border-radius: 30px 10px 10px 30px; transform-origin: right center; animation: flapLeftFly 0.5s infinite alternate ease-in-out; }
         .wing-right { right: 4px; border-radius: 10px 30px 30px 10px; transform-origin: left center; animation: flapRightFly 0.5s infinite alternate ease-in-out; }
         .bird-feet { position: absolute; bottom: -8px; display: flex; gap: 20px; z-index: 1; animation: feetMove 2s infinite ease-in-out; }
         .foot { width: 14px; height: 10px; background: linear-gradient(to bottom, #f39c12, #e67e22); border-radius: 6px 6px 4px 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
         @keyframes breathLiving { 0%, 100% { transform: translateY(0px) scale(1, 1); } 35% { transform: translateY(-7px) scale(0.96, 1.04); } 70% { transform: translateY(3px) scale(1.03, 0.96); } }
         @keyframes hairWag { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-8deg) scaleY(1.05); } }
         @keyframes feetMove { 0%, 100% { transform: translateY(0px); } 35% { transform: translateY(2px) scaleY(0.9); } }
         @keyframes movePupil { 0%, 100% { transform: translate(0px, 0px); } 20%, 30% { transform: translate(-3px, 2px); } 50%, 60% { transform: translate(3px, -2px); } }
         @keyframes flapLeftFly { 0% { transform: rotate(-30deg); } 100% { transform: rotate(15deg); } }
         @keyframes flapRightFly { 0% { transform: rotate(30deg); } 100% { transform: rotate(-15deg); } }
+
         .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
         .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
-        
-        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 14px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
-        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 2px; }
-        .total-value { font-size: 22px; font-weight: bold; word-break: break-all; }
-        .card { background: white; border-radius: 20px; padding: 12px 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
-        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 2px; }
-        .card-value { font-size: 20px; font-weight: bold; color: #2C3E50; word-break: break-all; }
-        
-        .control-section { display: flex; width: 100%; max-width: 340px; }
-        .action-button-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-        
-        .btn-action { color: white; border: none; border-radius: 14px; padding: 13px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
-        .btn-bonus { background: linear-gradient(135deg, #2ECC71, #27AE60); box-shadow: 0 4px 10px rgba(46,204,113,0.25); }
 
-        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .btn-game-select { padding: 8px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        /* 자산 보유 카드 스타일 */
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
+        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+        .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
+
+        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
+        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
+        .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
+
+        .control-section { display: flex; width: 100%; max-width: 340px; align-items: center; gap: 12px; }
+        .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 11px; width: 100%; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
+        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
+        .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+        .btn-admin-gear { background-color: white; color: #5D6D7E; }
+
+        /* 🎮 기적 게임 창 레이아웃 (퍼즐 추가로 4열 배치) */
+        .game-menu-container { width: 100%; max-width: 340px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
+        .btn-game-select { padding: 8px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; }
-        .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
+        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 280px; height: auto; }
+        
+        /* 카드 짝맞추기 게임 보드 */
         .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
         .memory-card { height: 60px; background: #34495E; border-radius: 8px; font-size: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        #match3Board { display: grid; grid-template-columns: repeat(6, 42px); grid-template-rows: repeat(6, 42px); gap: 5px; justify-content: center; margin: 10px auto; background: #1E293B; padding: 10px; border-radius: 16px; width: fit-content; }
-        .m3-tile { width: 42px; height: 42px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; user-select: none; transition: transform 0.1s; background: #334155; }
-        .m3-tile.selected { border: 2.5px solid #38BDF8; transform: scale(1.1); box-shadow: 0 0 10px #38BDF8; }
-
-        .stock-dashboard { background: #111827; border-radius: 14px; padding: 12px; color: #F3F4F6; font-size: 12px; text-align: left; }
-        .stock-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1F2937; padding-bottom: 8px; margin-bottom: 8px; }
-        .stock-price { font-size: 18px; font-weight: 800; }
-        .stock-change { font-size: 11px; font-weight: 700; margin-left: 4px; }
-        .stock-controls { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .stock-btn-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-        .btn-trade { padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 12px; }
-        .btn-buy { background: #EF4444; }
-        .btn-sell { background: #3B82F6; }
-        .btn-close-pos { background: #10B981; }
-        .stock-position-card { background: #1F2937; padding: 8px; border-radius: 8px; margin-top: 8px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
-
-        .fullscreen-game-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #0F172A; z-index: 99999; flex-direction: column; align-items: center; justify-content: space-between; padding: 15px 10px env(safe-area-inset-bottom) 10px; }
-        .fullscreen-game-overlay.active { display: flex; }
-        .fullscreen-header { width: 100%; max-width: 450px; display: flex; justify-content: space-between; align-items: center; color: white; padding: 5px 10px; }
-        .fullscreen-header h2 { font-size: 16px; margin: 0; }
-        .btn-close-fullscreen { background: #EF4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .fullscreen-content-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 450px; }
-
+        /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 340px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
         .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
         .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
         .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
         .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 340px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
-        
         .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 340px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        
         .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 340px; gap: 10px; margin-bottom: 12px; }
+
         .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
         .btn-deposit { background-color: #2ECC71; color: white; }
         .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
+
         .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 340px; margin-top: 8px; padding-bottom: 20px; }
         .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
         .vip-badge { display: block; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
@@ -142,33 +162,36 @@
         .item-name { font-size: 13px; font-weight: bold; color: #2C3E50; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 90%; }
         .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
         .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
+
+        /* 모달 및 팝업 */
+        .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
+        .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
         
-        .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 340px; padding: 25px 20px; text-align: center; position: relative; }
+        /* 하단 네비게이션 바 */
         .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
         .nav-item.active { color: #357ABD; font-weight: bold; }
         .nav-icon { font-size: 20px; margin-bottom: 2px; }
+        
         .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
     </style>
 </head>
 <body>
 
     <div id="mainAppLayout">
+        <!-- 상단 헤더 -->
         <div class="header">
-            <div class="header-title-wrap">
-                <span class="gold-text main-logo-text">실부방</span>
-                <span class="gold-text sub-logo-text">(실수로도 부자되는 방)</span>
-            </div>
+            <h1>사각지대 없는 기적 재단</h1>
             <div id="userBadge" class="user-welcome-info tier-whale">
                 <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
             </div>
         </div>
 
-        <!-- 1. 홈 탭 -->
+        <!-- 🕊️ 탭 1: 홈 화면 -->
         <div id="homeTab" class="tab-content active">
             <div class="bird-area">
-                <button class="inline-login-btn" onclick="openAdminModal()">🔑 로그인</button>
                 <div class="bird-container">
                     <div class="bird-hair"></div>
                     <div class="bird-wing wing-left" id="leftWing"></div>
@@ -177,6 +200,7 @@
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                             <div class="bird-eye"><div class="eye-pupil"></div></div>
                         </div>
+
                         <div class="bird-beak-wrap">
                             <div class="beak-top"></div>
                             <div class="beak-bottom"></div>
@@ -203,67 +227,64 @@
             <div class="control-section">
                 <div class="action-button-group">
                     <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
-                    <button class="btn-action btn-bonus" onclick="claimDailyBonus()">🎁 데일리 출석 보상 받기</button>
+                    <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
+                </div>
+                <div class="side-icon-group">
+                    <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. 기적 게임 탭 -->
+        <!-- 🎮 탭 2: 기적 게임 공간 -->
         <div id="gameTab" class="tab-content">
             <div class="game-menu-container">
-                <button id="btnSelectStock" class="btn-game-select active" style="background:#E74C3C;" onclick="switchMiniGame('stock')">📈 주식 차트</button>
-                <button id="btnSelectGalaga" class="btn-game-select" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🧩 좌뇌퍼즐</button>
+                <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🧩 파이프퍼즐</button>
             </div>
 
-            <div id="stockGameArea" class="game-display-panel">
-                <div style="font-size: 50px; margin: 15px 0;">📈</div>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E74C3C, #C0392B);" onclick="launchFullscreenGame('stock')">🚀 주식 차트 트레이딩 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">실시간 실부방 코스닥 시세 차트를 보고 롱/숏 투자!</p>
-            </div>
-
-            <div id="galagaGameArea" class="game-display-panel" style="display:none;">
-                <div style="font-size: 50px; margin: 20px 0;">🛸</div>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="launchFullscreenGame('galaga')">🚀 갤러그 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">전체화면 전환 후 손가락 드래그로 조작 (격추당 +10,000원)</p>
+            <!-- 🛸 정통 갤러그 패널 -->
+            <div id="galagaGameArea" class="game-display-panel">
+                <canvas id="galagaCanvas" width="300" height="240"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
             </div>
 
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
-                <div style="font-size: 50px; margin: 20px 0;">🧱</div>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="launchFullscreenGame('brick')">🕹️ 벽돌깨기 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">전체화면 전환 후 터치 드래그로 조작 (벽돌당 +100원)</p>
+                <canvas id="gameCanvas" width="300" height="240"></canvas>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
             </div>
 
             <div id="memoryGameArea" class="game-display-panel" style="display:none;">
-                <div style="font-size: 50px; margin: 20px 0;">🃏</div>
-                <button class="btn-action" style="background:#E67E22; margin-top:10px; width:100%;" onclick="launchFullscreenGame('memory')">🃏 짝맞추기 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">카드 전부 맞추면 보상 <b>+1,000원</b>!</p>
+                <div id="cardBoard" class="card-grid"></div>
+                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <div id="match3GameArea" class="game-display-panel" style="display:none;">
-                <div style="font-size: 50px; margin: 20px 0;">🧩</div>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:#27AE60;" onclick="launchFullscreenGame('match3')">🧩 좌뇌 퍼즐 시작 / 전체화면</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:8px 0 0 0;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</p>
+            <!-- 🧩 사진 퍼즐 게임 패널 -->
+            <div id="puzzleGameArea" class="game-display-panel" style="display:none;">
+                <canvas id="puzzleCanvas" width="280" height="280"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #27AE60, #2ECC71);" onclick="startPuzzleGameEngine()">🧩 퍼즐 리셋 / 재배치</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">블록을 슬라이드해 시작점(S)부터 도착점(G)까지 길을 연결하세요! (+50,000원)</p>
             </div>
         </div>
 
-        <!-- 3. 디파이 금고 탭 -->
+        <!-- 🏦 탭 3: 디파이 금고 -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-card">
                 <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
                 <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
                 <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
+
                 <div class="backend-usdt-box">
                     <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
                 </div>
             </div>
-            
             <button class="btn-kakaopay" onclick="openKakaoModal()">
                 <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
             </button>
-
             <div id="vaultBenefitBanner" class="benefit-banner">
                 🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.
             </div>
@@ -274,13 +295,12 @@
             <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 340px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
         </div>
 
-        <!-- 4. 기적 상점 탭 -->
+        <!-- 🛍️ 탭 4: 기적 상점 -->
         <div id="shopTab" class="tab-content">
-            <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 5px;">
+            <div style="width: 100%; max-width: 340px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
                 <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
                 <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
             </div>
-
             <div class="shop-grid">
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
@@ -296,13 +316,7 @@
                     <div class="item-price"><del>1,300p</del> 650p</div>
                     <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
                 </div>
-                <div class="shop-item">
-                    <div class="vip-badge">VIP 50%</div>
-                    <div class="item-emoji">☕</div>
-                    <div class="item-name">스타벅스 아메리카노</div>
-                    <div class="item-price"><del>4,500p</del> 2,250p</div>
-                    <button class="btn-exchange" onclick="buyItem('스타벅스 아메리카노', 2250)">교환하기</button>
-                </div>
+
                 <div class="shop-item">
                     <div class="vip-badge">VIP 50%</div>
                     <div class="item-emoji">🏎️</div>
@@ -324,10 +338,17 @@
                     <div class="item-price"><del>1,600억p</del> 800억p</div>
                     <button class="btn-exchange" onclick="buyItem('초호화 고래 개인 제트기', 80000000000)">교환하기</button>
                 </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🚀</div>
+                    <div class="item-name">화성 탐사 특급 로켓</div>
+                    <div class="item-price"><del>3조p</del> 1.5조p</div>
+                    <button class="btn-exchange" onclick="buyItem('화성 탐사 특급 로켓', 1500000000000)">교환하기</button>
+                </div>
             </div>
         </div>
 
-        <!-- 하단 내비게이션 바 -->
+        <!-- 하단 네비게이션 바 -->
         <div class="nav-bar">
             <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
                 <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
@@ -344,108 +365,44 @@
         </div>
     </div>
 
-    <!-- 전체 화면 게임 오버레이 -->
-    <div id="fullscreenGameOverlay" class="fullscreen-game-overlay">
-        <div class="fullscreen-header">
-            <h2 id="fullscreenTitle">🎮 게임 플레이 중</h2>
-            <button class="btn-close-fullscreen" onclick="closeFullscreenGame()">❌ 메인으로 복귀</button>
-        </div>
-        
-        <div class="fullscreen-content-body">
-            <div id="fsStockBox" style="display:none; text-align:center; width:100%;">
-                <div class="stock-dashboard">
-                    <div class="stock-header">
-                        <div>
-                            <div style="color:#9CA3AF; font-size:10px;">실부방 시뮬레이션 지수</div>
-                            <div>
-                                <span class="stock-price" id="stCurrPrice">100,000</span>
-                                <span class="stock-change" id="stPriceChange">+0.00%</span>
-                            </div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="color:#9CA3AF; font-size:10px;">투자 가능 잔고</div>
-                            <div style="font-weight:bold; color:#10B981;" id="stUserBalance">0 원</div>
-                        </div>
-                    </div>
-                    
-                    <canvas id="stockCanvas" width="340" height="300"></canvas>
-                    
-                    <div class="stock-position-card">
-                        <div>
-                            <div>보유 포지션: <b id="stPosType" style="color:#9CA3AF;">없음</b></div>
-                            <div style="color:#9CA3AF; font-size:10px;">진입가: <span id="stEntryPrice">0</span> | 금액: <span id="stInvestAmt">0</span>원</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div>평가 손익</div>
-                            <div id="stPnL" style="font-weight:bold; font-size:13px;">0원 (0.00%)</div>
-                        </div>
-                    </div>
-
-                    <div class="stock-controls">
-                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
-                            <span>투자금: </span>
-                            <div>
-                                <button onclick="setStockInvestRatio(0.1)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">10%</button>
-                                <button onclick="setStockInvestRatio(0.5)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">50%</button>
-                                <button onclick="setStockInvestRatio(1.0)" style="background:#374151; color:white; border:none; padding:2px 6px; border-radius:4px;">전액</button>
-                            </div>
-                        </div>
-                        <div class="stock-btn-row">
-                            <button class="btn-trade btn-buy" onclick="executeStockOrder('BUY')">🔴 매수 (LONG)</button>
-                            <button class="btn-trade btn-sell" onclick="executeStockOrder('SELL')">🔵 매도 (SHORT)</button>
-                            <button class="btn-trade btn-close-pos" onclick="closeStockPosition()">⚡ 청산하기</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="fsGalagaBox" style="display:none; text-align:center; width:100%;">
-                <canvas id="galagaCanvas" width="340" height="420"></canvas>
-            </div>
-            <div id="fsBrickBox" style="display:none; text-align:center; width:100%;">
-                <canvas id="gameCanvas" width="340" height="420"></canvas>
-            </div>
-            <div id="fsMemoryBox" style="display:none; text-align:center; width:100%;">
-                <div id="cardBoard" class="card-grid" style="max-width:320px; gap:12px;"></div>
-            </div>
-            <div id="fsMatch3Box" style="display:none; text-align:center; width:100%;">
-                <div id="match3Board"></div>
-                <div style="font-size:12px; color:#94A3B8; margin-top:12px;">3개 이상 맞춰 터뜨리면 **개당 +500원** 적립!</div>
-            </div>
-        </div>
-
-        <div style="width: 100%; max-width: 450px; text-align: center;">
-            <button id="fsResetBtn" class="btn-action" style="background:#22C55E; width:100%; font-size:16px; padding:14px;" onclick="restartCurrentGame()">🔄 게임 새로고침 / 리셋</button>
-        </div>
-    </div>
-
-    <!-- 카카오페이 결제 모달 -->
+    <!-- 모달 창 구조체 -->
     <div id="payModal" class="pay-modal">
         <div class="pay-box" style="border-top: 8px solid #FFEB00;">
-            <div style="font-size:24px; font-weight:bold; color:#3C1E1E; margin-bottom:4px;">kakao<span style="font-weight:normal;">pay</span></div>
-            <h3 style="margin-top:0px; color:#3C1E1E; font-size:15px;">카카오페이 머니 충전 및 자동 연동</h3>
-            <p style="font-size:11px; color:#666; margin-bottom:12px;">원하는 금액을 입력하시면 결제 완료 후 즉시 금고에 추가 예치됩니다.</p>
+            <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
             <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;">
-            <button id="btnKakaoPayExec" onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">💛 결제 및 예치 완료하기</button>
+            <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
             <div style="font-size:13px; color:#7F8C8D; margin-top:12px; cursor:pointer;" onclick="closeKakaoModal()">취소</div>
         </div>
     </div>
 
-    <!-- 설정 및 로그인 모달 -->
+    <div id="adOverlay" class="ad-overlay">
+        <div class="ad-box">
+            <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
+            <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
+            <div style="font-size:45px; margin-top:10px;">🌱</div>
+            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px; color:#27AE60;">지구를 지키는 착한 기업</div>
+            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
+            <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
+        </div>
+    </div>
+
     <div id="adminModal" class="admin-modal">
         <div class="admin-box">
             <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
+            
             <div style="text-align: left; margin: 15px 0; padding: 12px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
                 <label style="font-weight: bold; color: #2C3E50;">아이디</label>
                 <input type="text" id="authIdInput" class="auth-input" style="padding: 8px; margin-bottom: 8px; margin-top: 4px;" placeholder="아이디 입력">
                 <label style="font-weight: bold; color: #2C3E50;">비밀번호</label>
                 <input type="password" id="authPwInput" class="auth-input" style="padding: 8px; margin-bottom: 12px; margin-top: 4px;" placeholder="비밀번호 입력">
+                
                 <div style="display: flex; gap: 6px;">
                     <button onclick="handleRegister()" style="flex: 1; padding: 10px; border: none; background: #3498DB; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">신규 회원가입</button>
                     <button onclick="handleLogin()" style="flex: 1; padding: 10px; border: none; background: #2ECC71; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">로그인</button>
                 </div>
                 <button onclick="handleLogout()" style="width: 100%; margin-top: 6px; padding: 8px; border: none; background: #E74C3C; color: white; border-radius: 8px; font-size: 12px; cursor: pointer;">로그아웃</button>
             </div>
+
             <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor: pointer;">닫기</button>
         </div>
     </div>
@@ -453,9 +410,7 @@
     <script>
         let amount = 0; 
         let vaultAsset = 0;
-        let isRunning = false; 
-        let intervalId = null;
-        let currentGameType = '';
+        let isRunning = false; let intervalId = null;
         
         const btn = document.getElementById('engineBtn');
         const amountDisplay = document.getElementById('subsidyAmount');
@@ -464,8 +419,10 @@
         const shopPointsDisplay = document.getElementById('shopPoints');
         const userBadgeText = document.getElementById('userBadgeText');
 
+        /* 💡 데이터 로드 */
         function loadSavedData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
+            
             if (loggedInUser) {
                 const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
                 if (userData) {
@@ -481,6 +438,7 @@
             updateTotalBalance(false);
         }
 
+        /* 💡 데이터 저장 */
         function saveCurrentData() {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (loggedInUser) {
@@ -491,12 +449,28 @@
             }
         }
 
+        /* 💡 회원가입 시 1,000만 원 기본 지급 */
         function handleRegister() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
-            if (!id || !pw) { alert("아이디와 비밀번호를 입력해주세요."); return; }
-            if (localStorage.getItem(`user_${id}`)) { alert("이미 존재하는 아이디입니다."); return; }
-            const newUser = { username: id, password: pw, totalBalance: 10000000, vaultAsset: 0 };
+
+            if (!id || !pw) {
+                alert("아이디와 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            if (localStorage.getItem(`user_${id}`)) {
+                alert("이미 존재하는 아이디입니다.");
+                return;
+            }
+
+            const newUser = {
+                username: id,
+                password: pw,
+                totalBalance: 10000000, // 🎁 신규 회원 1,000만 원 지급
+                vaultAsset: 0
+            };
+
             localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
             alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
         }
@@ -504,12 +478,22 @@
         function handleLogin() {
             const id = document.getElementById("authIdInput").value.trim();
             const pw = document.getElementById("authPwInput").value.trim();
+
             const storedData = localStorage.getItem(`user_${id}`);
-            if (!storedData) { alert("존재하지 않는 회원 계정입니다."); return; }
+            if (!storedData) {
+                alert("존재하지 않는 회원 계정입니다.");
+                return;
+            }
+
             const userData = JSON.parse(storedData);
-            if (userData.password !== pw) { alert("비밀번호가 일치하지 않습니다."); return; }
+            if (userData.password !== pw) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
             localStorage.setItem("loggedInUser", id);
             alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
+            
             document.getElementById("authIdInput").value = "";
             document.getElementById("authPwInput").value = "";
             closeAdminModal();
@@ -529,28 +513,8 @@
         function executeKakaoPay() {
             const payAmt = parseInt(document.getElementById('payInputAmount').value);
             if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
-            
-            const btnPay = document.getElementById('btnKakaoPayExec');
-            btnPay.innerText = "⏳ 카카오페이 결제 승인 요청 중...";
-            btnPay.disabled = true;
-
-            setTimeout(() => {
-                alert("💛 카카오페이 결제 승인 성공!\n[" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치되었습니다.");
-                vaultAsset += payAmt; 
-                btnPay.innerText = "💛 결제 및 예치 완료하기";
-                btnPay.disabled = false;
-                closeKakaoModal(); 
-                updateTotalBalance();
-            }, 1200);
-        }
-
-        function claimDailyBonus() {
-            const loggedInUser = localStorage.getItem("loggedInUser");
-            if (!loggedInUser) { alert("🔒 보상은 로그인 후 이용 가능합니다."); openAdminModal(); return; }
-            const bonus = 50000;
-            amount += bonus;
-            updateTotalBalance();
-            alert(`🎁 데일리 출석 보상이 지급되었습니다! (+${bonus.toLocaleString()}원)`);
+            alert("💛 페이 완료! [" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치됩니다.");
+            vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
         }
 
         function updateTotalBalance(shouldSave = true) {
@@ -559,7 +523,6 @@
             if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
             if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
             if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
-            if(document.getElementById('stUserBalance')) document.getElementById('stUserBalance').innerText = amount.toLocaleString() + " 원";
             if(shouldSave) saveCurrentData();
         }
 
@@ -577,28 +540,22 @@
         function changeTabUrl(tabName) { routeTabs(tabName); }
 
         function routeTabs(tabName) {
-            document.getElementById('homeTab').classList.remove('active'); 
-            document.getElementById('gameTab').classList.remove('active'); 
-            document.getElementById('vaultTab').classList.remove('active'); 
-            document.getElementById('shopTab').classList.remove('active');
-            
-            document.getElementById('navHome').classList.remove('active'); 
-            document.getElementById('navGame').classList.remove('active'); 
-            document.getElementById('navVault').classList.remove('active'); 
-            document.getElementById('navShop').classList.remove('active');
+            document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
+            document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
-            if(stockIntervalId) clearInterval(stockIntervalId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
                 document.getElementById('navGame').classList.add('active'); 
+                setTimeout(() => { startGalagaGameEngine(); }, 50); 
             }
             else if(tabName === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
             else if(tabName === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
             else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
         }
 
+        /* ☁️ 엔진 가동 조건 */
         btn.addEventListener('click', () => {
             const loggedInUser = localStorage.getItem("loggedInUser");
             if (!loggedInUser) {
@@ -606,8 +563,8 @@
                 openAdminModal();
                 return;
             }
-            const leftWing = document.getElementById('leftWing'); 
-            const rightWing = document.getElementById('rightWing');
+
+            const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
             if (!isRunning) {
                 isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
                 leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
@@ -620,6 +577,37 @@
 
         function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+
+        let adCountdown = 5; let adTimerId = null;
+        
+        function openRandomAdPopup() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) {
+                alert("❌ 광고 보상은 로그인 후 이용 가능합니다.");
+                openAdminModal();
+                return;
+            }
+
+            adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
+            document.getElementById('adTimer').innerText = adCountdown + 's';
+            const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
+
+            adTimerId = setInterval(() => {
+                adCountdown--; document.getElementById('adTimer').innerText = adCountdown + 's';
+                if(adCountdown <= 0) {
+                    clearInterval(adTimerId); document.getElementById('adTimer').innerText = '완료!';
+                    closeBtn.innerText = "보상 받기"; closeBtn.disabled = false; closeBtn.classList.add('ready'); closeBtn.onclick = finishAdReward;
+                }
+            }, 1000);
+        }
+
+        function finishAdReward() {
+            const bonusAmount = Math.floor(amount / 3);
+            amount += bonusAmount; 
+            updateTotalBalance();
+            document.getElementById('adOverlay').style.display = 'none'; 
+            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
+        }
 
         function handleDeposit() {
             const input = prompt("예치할 금액을 입력하세요", amount);
@@ -634,356 +622,40 @@
         }
 
         function switchMiniGame(gameType) {
-            document.getElementById('btnSelectStock').classList.remove('active');
-            document.getElementById('btnSelectBrick').classList.remove('active'); 
-            document.getElementById('btnSelectMemory').classList.remove('active'); 
-            document.getElementById('btnSelectGalaga').classList.remove('active');
-            document.getElementById('btnSelectMatch3').classList.remove('active');
-
-            document.getElementById('stockGameArea').style.display = 'none';
-            document.getElementById('brickGameArea').style.display = 'none'; 
-            document.getElementById('memoryGameArea').style.display = 'none'; 
-            document.getElementById('galagaGameArea').style.display = 'none';
-            document.getElementById('match3GameArea').style.display = 'none';
-
-            if(gameType === 'stock') { document.getElementById('btnSelectStock').classList.add('active'); document.getElementById('stockGameArea').style.display = 'block'; }
-            else if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; } 
-            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; } 
-            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; }
-            else if(gameType === 'match3') { document.getElementById('btnSelectMatch3').classList.add('active'); document.getElementById('match3GameArea').style.display = 'block'; }
-        }
-
-        function launchFullscreenGame(gameType) {
-            currentGameType = gameType;
-            document.getElementById('fsStockBox').style.display = 'none';
-            document.getElementById('fsGalagaBox').style.display = 'none';
-            document.getElementById('fsBrickBox').style.display = 'none';
-            document.getElementById('fsMemoryBox').style.display = 'none';
-            document.getElementById('fsMatch3Box').style.display = 'none';
-
-            const titleEl = document.getElementById('fullscreenTitle');
-
-            if(gameType === 'stock') {
-                titleEl.innerText = "📈 주식 차트 트레이딩";
-                document.getElementById('fsStockBox').style.display = 'block';
-                startStockGameEngine();
-            } else if(gameType === 'galaga') {
-                titleEl.innerText = "🛸 정통 갤러그";
-                document.getElementById('fsGalagaBox').style.display = 'block';
-                startGalagaGameEngine();
-            } else if(gameType === 'brick') {
-                titleEl.innerText = "🧱 벽돌깨기";
-                document.getElementById('fsBrickBox').style.display = 'block';
-                startBrickGameEngine();
-            } else if(gameType === 'memory') {
-                titleEl.innerText = "🃏 짝맞추기";
-                document.getElementById('fsMemoryBox').style.display = 'block';
-                startMemoryGameEngine();
-            } else if(gameType === 'match3') {
-                titleEl.innerText = "🧩 좌뇌 퍼즐";
-                document.getElementById('fsMatch3Box').style.display = 'block';
-                startMatch3Engine();
-            }
-
-            document.getElementById('fullscreenGameOverlay').classList.add('active');
-        }
-
-        function restartCurrentGame() {
-            if(currentGameType) launchFullscreenGame(currentGameType);
-        }
-
-        function closeFullscreenGame() {
-            cancelAnimationFrame(gameAnimationId); 
-            cancelAnimationFrame(galagaAnimationId);
-            if(stockIntervalId) clearInterval(stockIntervalId);
-            document.getElementById('fullscreenGameOverlay').classList.remove('active');
-        }
-
-        /* 📈 주식 차트 엔진 */
-        let stockCanvas = document.getElementById('stockCanvas');
-        let sCtx = stockCanvas.getContext('2d');
-        let stockHistory = [];
-        let stockCurrentPrice = 80000;
-        let stockBasePrice = 80000;
-        let stockIntervalId = null;
-        let stockPosition = null;
-        let selectedInvestRatio = 0.5;
-
-        let stockCycleTick = 0;       
-        const CYCLE_TOTAL_TICKS = 60; 
-        let cycleBasePrice = 80000;   
-
-        function startStockGameEngine() {
-            if(stockIntervalId) clearInterval(stockIntervalId);
-            stockHistory = [];
-            stockCurrentPrice = 80000;
-            stockBasePrice = 80000;
-            cycleBasePrice = 80000;
-            stockCycleTick = 0;
+            document.getElementById('btnSelectBrick').classList.remove('active'); document.getElementById('btnSelectMemory').classList.remove('active'); document.getElementById('btnSelectGalaga').classList.remove('active'); document.getElementById('btnSelectPuzzle').classList.remove('active');
+            document.getElementById('brickGameArea').style.display = 'none'; document.getElementById('memoryGameArea').style.display = 'none'; document.getElementById('galagaGameArea').style.display = 'none'; document.getElementById('puzzleGameArea').style.display = 'none';
             
-            for(let i = 0; i < 40; i++) {
-                updateStockPriceLogic();
-            }
-            
-            updateTotalBalance();
-            stockIntervalId = setInterval(updateStockPrice, 800);
-            renderStockUI();
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+
+            if(gameType === 'brick') { document.getElementById('btnSelectBrick').classList.add('active'); document.getElementById('brickGameArea').style.display = 'block'; startBrickGameEngine(); } 
+            else if(gameType === 'memory') { document.getElementById('btnSelectMemory').classList.add('active'); document.getElementById('memoryGameArea').style.display = 'block'; startMemoryGameEngine(); } 
+            else if(gameType === 'galaga') { document.getElementById('btnSelectGalaga').classList.add('active'); document.getElementById('galagaGameArea').style.display = 'block'; startGalagaGameEngine(); }
+            else if(gameType === 'puzzle') { document.getElementById('btnSelectPuzzle').classList.add('active'); document.getElementById('puzzleGameArea').style.display = 'block'; startPuzzleGameEngine(); }
         }
 
-        function setStockInvestRatio(ratio) {
-            selectedInvestRatio = ratio;
-            alert(`투자 비중이 ${ratio * 100}%로 설정되었습니다.`);
-        }
-
-        function updateStockPrice() {
-            updateStockPriceLogic();
-            renderStockUI();
-        }
-
-        function updateStockPriceLogic() {
-            stockCycleTick++;
-            if(stockCycleTick >= CYCLE_TOTAL_TICKS) {
-                stockCycleTick = 0; 
-                cycleBasePrice = stockCurrentPrice; 
-            }
-
-            let t = stockCycleTick / CYCLE_TOTAL_TICKS;
-            let priceDelta = 0;
-
-            if (t < 0.35) {
-                let subT = t / 0.35;
-                let trend = subT * 12000;
-                let wave = Math.sin(subT * Math.PI * 4) * 2500;
-                let targetPrice = cycleBasePrice + trend + wave;
-                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.5) * 600;
-            } 
-            else if (t < 0.50) {
-                let subT = (t - 0.35) / 0.15;
-                let expGain = (Math.exp(subT * 2.2) - 1) * 11000;
-                let baseWaveVal = cycleBasePrice + 12000; 
-                let targetPrice = baseWaveVal + expGain;
-                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.4) * 1000;
-            } 
-            else {
-                let subT = (t - 0.50) / 0.50;
-                let peakPrice = cycleBasePrice + 12000 + (Math.exp(2.2) - 1) * 11000;
-                let decay = Math.exp(-2.5 * subT);
-                let osc = Math.sin(subT * Math.PI * 6) * 3000 * decay;
-                let drop = (peakPrice - cycleBasePrice) * Math.pow(subT, 0.75);
-                let targetPrice = peakPrice - drop + osc;
-                priceDelta = (targetPrice - stockCurrentPrice) + (Math.random() - 0.5) * 500;
-            }
-
-            stockCurrentPrice = Math.max(3000, Math.floor(stockCurrentPrice + priceDelta));
-            stockHistory.push(stockCurrentPrice);
-            if(stockHistory.length > 50) stockHistory.shift();
-        }
-
-        function renderStockUI() {
-            const priceEl = document.getElementById('stCurrPrice');
-            const changeEl = document.getElementById('stPriceChange');
-            const diff = stockCurrentPrice - stockBasePrice;
-            const rate = ((diff / stockBasePrice) * 100).toFixed(2);
-            
-            priceEl.innerText = stockCurrentPrice.toLocaleString();
-            if(diff >= 0) {
-                priceEl.style.color = '#EF4444';
-                changeEl.innerText = `+${rate}% ▲`;
-                changeEl.style.color = '#EF4444';
-            } else {
-                priceEl.style.color = '#3B82F6';
-                changeEl.innerText = `${rate}% ▼`;
-                changeEl.style.color = '#3B82F6';
-            }
-
-            drawStockChart();
-
-            const posTypeEl = document.getElementById('stPosType');
-            const entryEl = document.getElementById('stEntryPrice');
-            const investEl = document.getElementById('stInvestAmt');
-            const pnlEl = document.getElementById('stPnL');
-
-            if(stockPosition) {
-                posTypeEl.innerText = stockPosition.type === 'BUY' ? '🔴 매수 (LONG)' : '🔵 매도 (SHORT)';
-                posTypeEl.style.color = stockPosition.type === 'BUY' ? '#EF4444' : '#3B82F6';
-                entryEl.innerText = stockPosition.entryPrice.toLocaleString();
-                investEl.innerText = stockPosition.amount.toLocaleString();
-
-                let pnlRatio = 0;
-                if(stockPosition.type === 'BUY') {
-                    pnlRatio = (stockCurrentPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
-                } else {
-                    pnlRatio = (stockPosition.entryPrice - stockCurrentPrice) / stockPosition.entryPrice;
-                }
-
-                let pnlAmt = Math.floor(stockPosition.amount * pnlRatio);
-                let pnlPercent = (pnlRatio * 100).toFixed(2);
-
-                if(pnlAmt >= 0) {
-                    pnlEl.innerText = `+${pnlAmt.toLocaleString()}원 (+${pnlPercent}%)`;
-                    pnlEl.style.color = '#EF4444';
-                } else {
-                    pnlEl.innerText = `${pnlAmt.toLocaleString()}원 (${pnlPercent}%)`;
-                    pnlEl.style.color = '#3B82F6';
-                }
-            } else {
-                posTypeEl.innerText = '없음';
-                posTypeEl.style.color = '#9CA3AF';
-                entryEl.innerText = '0';
-                investEl.innerText = '0';
-                pnlEl.innerText = '0원 (0.00%)';
-                pnlEl.style.color = '#F3F4F6';
-            }
-        }
-
-        function drawStockChart() {
-            sCtx.fillStyle = '#111827';
-            sCtx.fillRect(0, 0, stockCanvas.width, stockCanvas.height);
-
-            if(stockHistory.length < 2) return;
-
-            let min = Math.min(...stockHistory) * 0.95;
-            let max = Math.max(...stockHistory) * 1.05;
-            let padding = 25;
-            let chartHeight = stockCanvas.height - padding * 2;
-            let stepX = stockCanvas.width / (stockHistory.length - 1);
-
-            sCtx.strokeStyle = '#1F2937';
-            sCtx.lineWidth = 1;
-            for(let i=1; i<=3; i++) {
-                let y = (stockCanvas.height / 4) * i;
-                sCtx.beginPath();
-                sCtx.moveTo(0, y); sCtx.lineTo(stockCanvas.width, y);
-                sCtx.stroke();
-            }
-
-            let ma5 = [];
-            let ma20 = [];
-            for(let i = 0; i < stockHistory.length; i++) {
-                if(i >= 4) {
-                    let sum5 = 0;
-                    for(let j = i - 4; j <= i; j++) sum5 += stockHistory[j];
-                    ma5.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum5 / 5 - min) / (max - min)) * chartHeight });
-                }
-                if(i >= 19) {
-                    let sum20 = 0;
-                    for(let j = i - 19; j <= i; j++) sum20 += stockHistory[j];
-                    ma20.push({ x: i * stepX, y: stockCanvas.height - padding - ((sum20 / 20 - min) / (max - min)) * chartHeight });
-                }
-            }
-
-            if(ma20.length > 1) {
-                sCtx.beginPath();
-                sCtx.lineWidth = 2.5;
-                sCtx.strokeStyle = '#9CA3AF';
-                for(let i = 0; i < ma20.length; i++) {
-                    if(i === 0) sCtx.moveTo(ma20[i].x, ma20[i].y);
-                    else sCtx.lineTo(ma20[i].x, ma20[i].y);
-                }
-                sCtx.stroke();
-            }
-
-            if(ma5.length > 1) {
-                sCtx.beginPath();
-                sCtx.lineWidth = 2.5;
-                sCtx.strokeStyle = '#EF4444';
-                for(let i = 0; i < ma5.length; i++) {
-                    if(i === 0) sCtx.moveTo(ma5[i].x, ma5[i].y);
-                    else sCtx.lineTo(ma5[i].x, ma5[i].y);
-                }
-                sCtx.stroke();
-            }
-
-            sCtx.beginPath();
-            sCtx.lineWidth = 3;
-            sCtx.strokeStyle = '#38BDF8';
-
-            for(let i = 0; i < stockHistory.length; i++) {
-                let x = i * stepX;
-                let y = stockCanvas.height - padding - ((stockHistory[i] - min) / (max - min)) * chartHeight;
-                if(i === 0) sCtx.moveTo(x, y);
-                else sCtx.lineTo(x, y);
-            }
-            sCtx.stroke();
-
-            if(stockPosition) {
-                let entryY = stockCanvas.height - padding - ((stockPosition.entryPrice - min) / (max - min)) * chartHeight;
-                sCtx.strokeStyle = '#F59E0B';
-                sCtx.setLineDash([4, 4]);
-                sCtx.beginPath();
-                sCtx.moveTo(0, entryY); sCtx.lineTo(stockCanvas.width, entryY);
-                sCtx.stroke();
-                sCtx.setLineDash([]);
-            }
-        }
-
-        function executeStockOrder(type) {
-            if(stockPosition) { alert("이미 보유 중인 포지션이 있습니다. 먼저 청산하세요."); return; }
-            let investAmt = Math.floor(amount * selectedInvestRatio);
-            if(investAmt < 1000) { alert("최소 투자금은 1,000원 이상이어야 합니다."); return; }
-
-            amount -= investAmt;
-            stockPosition = { type: type, entryPrice: stockCurrentPrice, amount: investAmt };
-            updateTotalBalance();
-            alert(`[${type === 'BUY' ? '매수' : '매도'}] 포지션 진입 완료! (${investAmt.toLocaleString()}원)`);
-        }
-
-        function closeStockPosition() {
-            if(!stockPosition) { alert("청산할 포지션이 없습니다."); return; }
-
-            let pnlRatio = 0;
-            if(stockPosition.type === 'BUY') {
-                pnlRatio = (stockCurrentPrice - stockPosition.entryPrice) / stockPosition.entryPrice;
-            } else {
-                pnlRatio = (stockPosition.entryPrice - stockCurrentPrice) / stockPosition.entryPrice;
-            }
-
-            let returnAmt = Math.floor(stockPosition.amount + (stockPosition.amount * pnlRatio));
-            returnAmt = Math.max(0, returnAmt);
-
-            amount += returnAmt;
-            let profit = returnAmt - stockPosition.amount;
-            alert(`⚡ 청산 완료!\n손익: ${profit >= 0 ? '+' : ''}${profit.toLocaleString()}원\n최종 정산금: ${returnAmt.toLocaleString()}원`);
-
-            stockPosition = null;
-            updateTotalBalance();
-            renderStockUI();
-        }
-
-        /* 🧱 벽돌깨기 */
-        let gameCanvas = document.getElementById("gameCanvas"); 
-        let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; 
-        let ballRadius = 6, ballX, ballY, dx, dy; 
-        let paddleHeight = 14, paddleWidth = 70, paddleX; 
-        let bricks = [];
-
+        /* 🧱 1. 벽돌깨기 */
+        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
         function startBrickGameEngine() {
             cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 40; dx = 2.2; dy = -2.2; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 4; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 3; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
             drawBrickGame();
         }
-
-        function setPaddleX(clientX) { 
-            let rect = gameCanvas.getBoundingClientRect(); 
-            let relativeX = clientX - rect.left; 
-            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; 
-        }
+        function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
 
         gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
         gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
-
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
             ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
             for (let c = 0; c < 6; c++) {
-                for (let r = 0; r < 4; r++) {
+                for (let r = 0; r < 3; r++) {
                     if (bricks[c][r] && bricks[c][r].status === 1) {
-                        let brickX = c * 52 + 15; let brickY = r * 20 + 20; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
-                        ctx.beginPath(); ctx.rect(brickX, brickY, 46, 14); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
-                        if (ballX > brickX && ballX < brickX + 46 && ballY > brickY && ballY < brickY + 14) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
+                        let brickX = c * 47 + 12; let brickY = r * 17 + 15; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
+                        ctx.beginPath(); ctx.rect(brickX, brickY, 42, 12); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                        if (ballX > brickX && ballX < brickX + 42 && ballY > brickY && ballY < brickY + 12) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
                     }
                 }
             }
@@ -991,21 +663,13 @@
             if (ballY + dy < ballRadius) dy = -dy;
             else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
                 if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; } 
-                else if (ballY + dy > gameCanvas.height - ballRadius) { 
-                    cancelAnimationFrame(gameAnimationId); 
-                    if(confirm("💥 공을 놓쳤습니다! 메인 화면으로 돌아가시겠습니까?")) { closeFullscreenGame(); }
-                    else { startBrickGameEngine(); }
-                    return; 
-                }
+                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("🧱 게임 리셋 완료!"); startBrickGameEngine(); return; }
             }
             ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 짝맞추기 */
-        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; 
-        let flippedCards = []; 
-        let matchedPairs = 0;
-
+        /* 🃏 2. 카드 매칭 */
+        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
             let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
@@ -1013,7 +677,6 @@
                 const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
             });
         }
-
         function handleCardClick() {
             if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
             this.classList.add('flipped'); flippedCards.push(this);
@@ -1021,61 +684,33 @@
                 let c1 = flippedCards[0]; let c2 = flippedCards[1];
                 if (c1.dataset.emoji === c2.dataset.emoji) {
                     c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
-                    if (matchedPairs === 4) { 
-                        amount += 1000; updateTotalBalance(); 
-                        setTimeout(() => {
-                            if(confirm("🎉 축하합니다! 보상금 +1,000원 수령!\n메인 화면으로 돌아갈까요?")) { closeFullscreenGame(); }
-                            else { startMemoryGameEngine(); }
-                        }, 300);
-                    }
+
+                    if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
                 } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
         }
 
-        /* 🛸 갤러그 엔진 */
-        let galagaCanvas = document.getElementById("galagaCanvas"); 
-        let gCtx = galagaCanvas.getContext("2d");
+        /* 🛸 3. 정통 갤러그 시스템 */
+        let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 170; 
-        let playerBullets = []; 
-        let enemyShips = []; 
-        let particles = [];
-        let galagaFrame = 0;
-        let starfield = [];
-
-        for(let i=0; i<35; i++) {
-            starfield.push({ x: Math.random()*340, y: Math.random()*420, size: Math.random()*1.5, speed: Math.random()*1 + 0.2 });
-        }
-
+        let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
+        let enemyDirection = 1;
+        
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; enemyShips = []; particles = []; galagaFrame = 0; playerShipX = 170;
-
-            const rows = [
-                { type: 'boss', count: 4, y: 45, score: 40000 },
-                { type: 'butterfly', count: 6, y: 75, score: 20000 },
-                { type: 'bee', count: 8, y: 105, score: 10000 }
-            ];
-
-            rows.forEach(r => {
-                const spacing = 260 / (r.count + 1);
-                for(let i=0; i<r.count; i++) {
+            playerBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
+            for(let row = 0; row < 2; row++) {
+                for(let col = 0; col < 5; col++) {
                     enemyShips.push({
-                        targetX: 40 + (i + 1) * spacing,
-                        targetY: r.y,
-                        x: 170,
-                        y: -30,
-                        type: r.type,
-                        score: r.score,
-                        state: 'entering',
-                        entryAngle: (i * 0.5),
-                        swoopTimer: 0,
-                        width: 16,
-                        height: 14
+                        x: col * 45 + 50,
+                        y: row * 25 + 30,
+                        baseX: col * 45 + 50,
+                        width: 18,
+                        height: 14,
+                        color: row === 0 ? "#E74C3C" : "#F1C40F"
                     });
                 }
-            });
-
+            }
             loopGalagaGame();
         }
 
@@ -1087,237 +722,193 @@
         galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
 
-        function drawPixelSprite(ctx, type, x, y) {
-            ctx.save();
-            ctx.translate(x, y);
-            if(type === 'player') {
-                ctx.fillStyle = "#FFFFFF"; ctx.fillRect(-2, -8, 4, 16);
-                ctx.fillStyle = "#FF3300"; ctx.fillRect(-8, 2, 16, 5);
-                ctx.fillStyle = "#33CCFF"; ctx.fillRect(-1, -4, 2, 4);
-            } else if(type === 'boss') {
-                ctx.fillStyle = "#00FF66"; ctx.fillRect(-7, -7, 14, 14);
-                ctx.fillStyle = "#0066FF"; ctx.fillRect(-9, -2, 18, 4);
-                ctx.fillStyle = "#FFCC00"; ctx.fillRect(-3, -3, 6, 6);
-            } else if(type === 'butterfly') {
-                ctx.fillStyle = "#CC33FF"; ctx.fillRect(-7, -5, 14, 10);
-                ctx.fillStyle = "#FF6600"; ctx.fillRect(-9, 0, 18, 3);
-            } else if(type === 'bee') {
-                ctx.fillStyle = "#FFFF00"; ctx.fillRect(-6, -6, 12, 12);
-                ctx.fillStyle = "#FF0000"; ctx.fillRect(-8, -1, 16, 3);
-            }
-            ctx.restore();
-        }
-
-        function createExplosion(x, y) {
-            for(let i=0; i<14; i++) {
-                particles.push({
-                    x: x, y: y,
-                    vx: (Math.random()-0.5)*5, vy: (Math.random()-0.5)*5,
-                    life: 18, color: Math.random() > 0.5 ? "#FF3300" : "#FFCC00"
-                });
-            }
-        }
-
         function loopGalagaGame() {
-            gCtx.fillStyle = "#000000";
-            gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
+            gCtx.clearRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            starfield.forEach(s => {
-                s.y += s.speed;
-                if(s.y > 420) s.y = 0;
-                gCtx.fillStyle = "#FFFFFF";
-                gCtx.fillRect(s.x, s.y, s.size, s.size);
-            });
+            gCtx.beginPath();
+            gCtx.moveTo(playerShipX, 210);
+            gCtx.lineTo(playerShipX - 10, 228);
+            gCtx.lineTo(playerShipX + 10, 228);
+            gCtx.fillStyle = "#3498DB"; gCtx.fill(); gCtx.closePath();
+            
+            gCtx.fillStyle = "#FFF";
+            gCtx.fillRect(playerShipX - 2, 215, 4, 10);
 
-            drawPixelSprite(gCtx, 'player', playerShipX, 380);
-
-            if(galagaFrame % 9 === 0) {
-                playerBullets.push({ x: playerShipX - 5, y: 370 });
-                playerBullets.push({ x: playerShipX + 5, y: 370 });
-            }
+            if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
 
             playerBullets.forEach((b, bIdx) => {
-                b.y -= 7;
-                gCtx.fillStyle = "#FFFF00";
-                gCtx.fillRect(b.x - 1, b.y, 2, 7);
+                b.y -= 4.5;
+                gCtx.fillStyle = "#2ECC71";
+                gCtx.fillRect(b.x - 1.5, b.y, 3, 7);
                 if(b.y < 0) playerBullets.splice(bIdx, 1);
             });
 
-            let formationOffsetX = Math.sin(galagaFrame * 0.05) * 10;
-            
+            let shiftDown = false;
+            enemyShips.forEach(enemy => {
+                enemy.x += enemyDirection * 0.5;
+                if(enemy.x > galagaCanvas.width - 25 || enemy.x < 10) { shiftDown = true; }
+            });
+
+            if(shiftDown) {
+                enemyDirection *= -1;
+                enemyShips.forEach(enemy => { enemy.y += 6; });
+            }
+
             enemyShips.forEach((enemy, eIdx) => {
-                if(enemy.state === 'entering') {
-                    enemy.entryAngle += 0.06;
-                    enemy.y += 2.5;
-                    enemy.x = 170 + Math.sin(enemy.entryAngle) * 70;
-                    if(enemy.y >= enemy.targetY) {
-                        enemy.state = 'formation';
-                    }
-                } else if(enemy.state === 'formation') {
-                    enemy.x = enemy.targetX + formationOffsetX;
-                    enemy.y = enemy.targetY;
-
-                    if(Math.random() < 0.003 && galagaFrame > 80) {
-                        enemy.state = 'swooping';
-                        enemy.swoopTimer = 0;
-                    }
-                } else if(enemy.state === 'swooping') {
-                    enemy.swoopTimer += 0.04;
-                    enemy.y += 2.8;
-                    enemy.x += Math.cos(enemy.swoopTimer * 2) * 3.5;
-
-                    if(enemy.y > 430) {
-                        enemy.y = -20;
-                        enemy.state = 'entering';
-                    }
-                }
-
-                drawPixelSprite(gCtx, enemy.type, enemy.x, enemy.y);
+                gCtx.fillStyle = enemy.color;
+                gCtx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                gCtx.fillStyle = "#FFF";
+                gCtx.fillRect(enemy.x + 7, enemy.y + 3, 4, 4);
 
                 playerBullets.forEach((b, bIdx) => {
-                    if(Math.abs(b.x - enemy.x) < 12 && Math.abs(b.y - enemy.y) < 12) {
-                        createExplosion(enemy.x, enemy.y);
+                    if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
                         playerBullets.splice(bIdx, 1);
-                        amount += enemy.score;
-                        updateTotalBalance();
                         enemyShips.splice(eIdx, 1);
+                        amount += 10000; 
+                        updateTotalBalance();
                     }
                 });
 
-                if(Math.abs(playerShipX - enemy.x) < 14 && Math.abs(380 - enemy.y) < 14) {
-                    createExplosion(playerShipX, 380);
+                if(enemy.y > 195) {
                     cancelAnimationFrame(galagaAnimationId);
-                    setTimeout(() => {
-                        if(confirm("💥 적 기체와 충돌했습니다! 메인으로 돌아갈까요?")) { closeFullscreenGame(); }
-                        else { startGalagaGameEngine(); }
-                    }, 100);
+                    alert("🛸 경보! 적 편대의 침공을 허용했습니다. 다시 방어 기지를 구축합니다.");
+                    startGalagaGameEngine();
                 }
             });
 
-            particles.forEach((p, pIdx) => {
-                p.x += p.vx; p.y += p.vy; p.life--;
-                gCtx.fillStyle = p.color;
-                gCtx.fillRect(p.x, p.y, 2, 2);
-                if(p.life <= 0) particles.splice(pIdx, 1);
-            });
-
             if(enemyShips.length === 0) {
-                setTimeout(() => {
-                    if(confirm("🎉 모든 적을 격추했습니다! 메인 화면으로 돌아갈까요?")) { closeFullscreenGame(); }
-                    else { startGalagaGameEngine(); }
-                }, 100);
+                alert("🎉 웨이브 클리어! 적 군단이 더 빠른 속도로 재집결합니다.");
+                startGalagaGameEngine();
             } else {
                 galagaAnimationId = requestAnimationFrame(loopGalagaGame);
             }
         }
 
-        /* 🧩 3-Match 좌뇌퍼즐 엔진 */
-        const M3_SIZE = 6;
-        const M3_EMOJIS = ['🔴', '🟡', '🟢', '🔵', '🟣'];
-        let m3BoardData = [];
-        let m3Selected = null;
+        /* 🧩 4. 퍼즐 게임 (Unroll / Slide Pipe Puzzle) */
+        let pCanvas = document.getElementById("puzzleCanvas");
+        let pCtx = pCanvas ? pCanvas.getContext("2d") : null;
+        let puzzleGrid = [
+            [ 'S', 'EMPTY', 'EMPTY' ],
+            [ 'CURVE_DR', 'HORIZ', 'CURVE_LD' ],
+            [ 'VERT', 'EMPTY', 'G' ]
+        ]; // 3x3 보드
+        let emptyPos = { r: 0, c: 1 }; // 빈 칸 위치
 
-        function startMatch3Engine() {
-            m3BoardData = [];
-            m3Selected = null;
-            for (let r = 0; r < M3_SIZE; r++) {
-                m3BoardData[r] = [];
-                for (let c = 0; c < M3_SIZE; c++) {
-                    m3BoardData[r][c] = Math.floor(Math.random() * M3_EMOJIS.length);
-                }
-            }
-            renderMatch3Board();
+        function startPuzzleGameEngine() {
+            if(!pCanvas) return;
+            // 초기 맵 (셔플된 상태)
+            puzzleGrid = [
+                [ 'S', 'CURVE_LD', 'EMPTY' ],
+                [ 'VERT', 'HORIZ', 'CURVE_DR' ],
+                [ 'EMPTY', 'EMPTY', 'G' ]
+            ];
+            emptyPos = { r: 0, c: 2 };
+            drawPuzzleBoard();
         }
 
-        function renderMatch3Board() {
-            const boardEl = document.getElementById('match3Board');
-            if(!boardEl) return;
-            boardEl.innerHTML = '';
-            for (let r = 0; r < M3_SIZE; r++) {
-                for (let c = 0; c < M3_SIZE; c++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'm3-tile';
-                    tile.innerText = m3BoardData[r][c] !== null ? M3_EMOJIS[m3BoardData[r][c]] : '';
-                    if (m3Selected && m3Selected.r === r && m3Selected.c === c) {
-                        tile.classList.add('selected');
-                    }
-                    tile.onclick = () => onMatch3Click(r, c);
-                    boardEl.appendChild(tile);
-                }
-            }
-        }
+        function drawPuzzleBoard() {
+            if(!pCtx) return;
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            let tileSize = pCanvas.width / 3;
 
-        function onMatch3Click(r, c) {
-            if (!m3Selected) {
-                m3Selected = { r, c };
-            } else {
-                const isAdjacent = Math.abs(m3Selected.r - r) + Math.abs(m3Selected.c - c) === 1;
-                if (isAdjacent) {
-                    let temp = m3BoardData[m3Selected.r][m3Selected.c];
-                    m3BoardData[m3Selected.r][m3Selected.c] = m3BoardData[r][c];
-                    m3BoardData[r][c] = temp;
-                    checkMatch3();
-                }
-                m3Selected = null;
-            }
-            renderMatch3Board();
-        }
+            for(let r=0; r<3; r++) {
+                for(let c=0; c<3; c++) {
+                    let tile = puzzleGrid[r][c];
+                    let x = c * tileSize;
+                    let y = r * tileSize;
 
-        function checkMatch3() {
-            let matched = [];
-            for (let r = 0; r < M3_SIZE; r++) {
-                for (let c = 0; c < M3_SIZE - 2; c++) {
-                    let val = m3BoardData[r][c];
-                    if (val !== null && val === m3BoardData[r][c+1] && val === m3BoardData[r][c+2]) {
-                        matched.push({r, c}, {r, c: c+1}, {r, c: c+2});
-                    }
-                }
-            }
-            for (let r = 0; r < M3_SIZE - 2; r++) {
-                for (let c = 0; c < M3_SIZE; c++) {
-                    let val = m3BoardData[r][c];
-                    if (val !== null && val === m3BoardData[r+1][c] && val === m3BoardData[r+2][c]) {
-                        matched.push({r, c}, {r: r+1, c}, {r: r+2, c});
-                    }
-                }
-            }
+                    if(tile !== 'EMPTY') {
+                        // 타일 배경 (나무 테두리 + 파란 블록)
+                        pCtx.fillStyle = tile === 'S' ? '#2980B9' : (tile === 'G' ? '#27AE60' : '#3498DB');
+                        pCtx.fillRect(x+2, y+2, tileSize-4, tileSize-4);
+                        pCtx.strokeStyle = '#1A5276';
+                        pCtx.lineWidth = 3;
+                        pCtx.strokeRect(x+2, y+2, tileSize-4, tileSize-4);
 
-            if (matched.length > 0) {
-                let earned = 0;
-                matched.forEach(m => {
-                    if (m3BoardData[m.r][m.c] !== null) {
-                        earned += 500;
-                        m3BoardData[m.r][m.c] = null;
-                    }
-                });
-                amount += earned;
-                updateTotalBalance();
-                setTimeout(dropMatch3, 250);
-            }
-        }
+                        // 파이프 길 그리기
+                        pCtx.strokeStyle = '#111';
+                        pCtx.lineWidth = 18;
+                        pCtx.lineCap = 'round';
+                        let cx = x + tileSize/2;
+                        let cy = y + tileSize/2;
 
-        function dropMatch3() {
-            for (let c = 0; c < M3_SIZE; c++) {
-                for (let r = M3_SIZE - 1; r >= 0; r--) {
-                    if (m3BoardData[r][c] === null) {
-                        for (let k = r - 1; k >= 0; k--) {
-                            if (m3BoardData[k][c] !== null) {
-                                m3BoardData[r][c] = m3BoardData[k][c];
-                                m3BoardData[k][c] = null;
-                                break;
-                            }
+                        pCtx.beginPath();
+                        if(tile === 'S') { // 시작 (위 -> 아래)
+                            pCtx.moveTo(cx, y);
+                            pCtx.lineTo(cx, cy + 10);
+                            pCtx.stroke();
+                            // 구슬 표시
+                            pCtx.fillStyle = '#E74C3C';
+                            pCtx.beginPath(); pCtx.arc(cx, cy, 10, 0, Math.PI*2); pCtx.fill();
+                        } else if(tile === 'G') { // 목표
+                            pCtx.moveTo(cx - 10, cy);
+                            pCtx.lineTo(x + tileSize, cy);
+                            pCtx.stroke();
+                            pCtx.fillStyle = '#F1C40F';
+                            pCtx.beginPath(); pCtx.arc(cx, cy, 12, 0, Math.PI*2); pCtx.fill();
+                        } else if(tile === 'VERT') {
+                            pCtx.moveTo(cx, y); pCtx.lineTo(cx, y + tileSize); pCtx.stroke();
+                        } else if(tile === 'HORIZ') {
+                            pCtx.moveTo(x, cy); pCtx.lineTo(x + tileSize, cy); pCtx.stroke();
+                        } else if(tile === 'CURVE_DR') { // Down -> Right
+                            pCtx.moveTo(cx, y + tileSize); pCtx.arcTo(cx, cy, x + tileSize, cy, tileSize/2); pCtx.stroke();
+                        } else if(tile === 'CURVE_LD') { // Left -> Down
+                            pCtx.moveTo(x, cy); pCtx.arcTo(cx, cy, cx, y + tileSize, tileSize/2); pCtx.stroke();
                         }
-                    }
-                }
-                for (let r = 0; r < M3_SIZE; r++) {
-                    if (m3BoardData[r][c] === null) {
-                        m3BoardData[r][c] = Math.floor(Math.random() * M3_EMOJIS.length);
+
+                        // 텍스트 라벨
+                        pCtx.fillStyle = '#FFF';
+                        pCtx.font = 'bold 12px sans-serif';
+                        if(tile === 'S') pCtx.fillText("START", x+8, y+20);
+                        if(tile === 'G') pCtx.fillText("GOAL", x+8, y+20);
+                    } else {
+                        // 빈 슬롯
+                        pCtx.fillStyle = '#1A252F';
+                        pCtx.fillRect(x+2, y+2, tileSize-4, tileSize-4);
                     }
                 }
             }
-            renderMatch3Board();
-            setTimeout(checkMatch3, 200);
+        }
+
+        function handlePuzzleClick(e) {
+            let rect = pCanvas.getBoundingClientRect();
+            let clickX = e.clientX - rect.left;
+            let clickY = e.clientY - rect.top;
+            let tileSize = pCanvas.width / 3;
+
+            let c = Math.floor(clickX / tileSize);
+            let r = Math.floor(clickY / tileSize);
+
+            // 클릭한 칸이 빈 칸과 인접해 있는지 확인 (S, G 블록은 이동 불가)
+            if(puzzleGrid[r][c] === 'S' || puzzleGrid[r][c] === 'G') return;
+
+            let dist = Math.abs(r - emptyPos.r) + Math.abs(c - emptyPos.c);
+            if(dist === 1) { // 상하좌우 1칸 거리일 때 이동
+                puzzleGrid[emptyPos.r][emptyPos.c] = puzzleGrid[r][c];
+                puzzleGrid[r][c] = 'EMPTY';
+                emptyPos = { r, c };
+                drawPuzzleBoard();
+                checkPuzzleWin();
+            }
+        }
+
+        pCanvas.addEventListener('click', handlePuzzleClick);
+        pCanvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            let touch = e.touches[0];
+            handlePuzzleClick(touch);
+        });
+
+        function checkPuzzleWin() {
+            // 퍼즐 완성 조건 검사 (예: 특정 완성 형태)
+            if(puzzleGrid[0][1] === 'CURVE_LD' && puzzleGrid[1][1] === 'CURVE_DR' && puzzleGrid[1][2] === 'VERT') {
+                setTimeout(() => {
+                    amount += 50000;
+                    updateTotalBalance();
+                    alert("🎉 [길 연결 성공!] 구슬이 도착지점까지 통과했습니다! 보상 +50,000원 지급! 🪙");
+                }, 100);
+            }
         }
 
         window.onload = loadSavedData;
