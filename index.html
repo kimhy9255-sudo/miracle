@@ -161,9 +161,9 @@
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
-        .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; image-rendering: pixelated; }
+        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
         
-        /* 전체화면 모드 시 최상단 고정 컨트롤 바 */
+        /* 🆕 전체화면 모드 시 최상단 고정 컨트롤 바 */
         .fullscreen-control-bar {
             display: none;
             width: 100%;
@@ -177,7 +177,7 @@
             backdrop-filter: blur(5px);
         }
 
-        /* 전체화면 실행 모드 스타일 확장 */
+        /* 🆕 전체화면 실행 모드 스타일 확장 */
         .game-display-panel.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -202,7 +202,7 @@
 
         .game-display-panel.fullscreen-mode canvas {
             max-width: 95vw !important;
-            height: 55vh !important;
+            height: 50vh !important;
             object-fit: contain;
         }
         .game-display-panel.fullscreen-mode .match3-grid,
@@ -216,7 +216,7 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 성장형 스테이지 퍼즐 보드 스타일 */
+        /* 🧩 새로운 성장형 스테이지 퍼즐 보드 스타일 */
         .match3-grid { 
             display: grid; 
             grid-template-columns: repeat(6, 1fr); 
@@ -361,22 +361,22 @@
             </div>
 
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 UFO 침공</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
                 <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🏆 성장 퍼즐</button>
             </div>
 
-            <!-- 🛸 정통 갤러그 패널 -->
+            <!-- 🛸 픽셀 UFO 침공 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 정통 오리지널 갤러그</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 UFO 침공</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
-                <canvas id="galagaCanvas" width="300" height="340"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
+                <canvas id="galagaCanvas" width="300" height="240"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 출격 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! UFO 격추당 +10,000원)</p>
             </div>
 
             <!-- 🧱 벽돌깨기 패널 -->
@@ -403,7 +403,7 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🏆 성장형 스테이지 퍼즐 패널 -->
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -717,6 +717,7 @@
             panels.forEach(p => p.classList.remove('fullscreen-mode'));
         }
 
+        /* 🆕 전체화면에서 홈으로 바로 빠져나가는 함수 */
         function goHomeFromFullScreen() {
             exitFullScreenGame();
             changeTabUrl('home');
@@ -905,297 +906,134 @@
             }
         }
 
-        /* 🛸 3. 오리지널 레트로 갤러그 시스템 (완전 개편) */
-        let galagaCanvas = document.getElementById("galagaCanvas"); 
-        let gCtx = galagaCanvas.getContext("2d");
+        /* 🛸 3. 픽셀 도트 아트 UFO 슈팅 게임 시스템 (저작권 회피 독자적 UFO 디자인) */
+        let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 150; 
-        let playerBullets = []; 
-        let enemyShips = []; 
-        let galagaFrame = 0;
-        let galagaScore = 0;
-        let galagaStars = [];
-        let tractorBeamActive = false;
-        let tractorBeamTimer = 0;
-        let beamBoss = null;
-
-        // 레트로 우주 별빛 초기화
-        function initGalagaStars() {
-            galagaStars = [];
-            const colors = ['#FFFFFF', '#FF0000', '#00FFFF', '#FFFF00', '#00FF00', '#FF00FF'];
-            for(let i = 0; i < 40; i++) {
-                galagaStars.push({
-                    x: Math.random() * galagaCanvas.width,
-                    y: Math.random() * galagaCanvas.height,
-                    speed: 0.5 + Math.random() * 1.5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    size: Math.random() > 0.8 ? 2 : 1
-                });
-            }
-        }
-
-        // 🎨 Pixel Art 스프라이트 렌더러
-        function drawPixelSprite(ctx, x, y, pixelMap, colorMap, scale = 1.5) {
-            ctx.save();
-            ctx.translate(x, y);
-            for (let r = 0; r < pixelMap.length; r++) {
-                for (let c = 0; c < pixelMap[r].length; c++) {
-                    let key = pixelMap[r][c];
-                    if (key !== ' ') {
-                        ctx.fillStyle = colorMap[key] || '#FFF';
-                        ctx.fillRect(c * scale, r * scale, scale, scale);
-                    }
-                }
-            }
-            ctx.restore();
-        }
-
-        // 1) 아군 Fighter (플레이어 기체)
-        const fighterMap = [
-            "      W      ",
-            "     WWW     ",
-            "     WWW     ",
-            "    WWWWW    ",
-            "   WWWWWWW   ",
-            "  WWWWWWWWW  ",
-            " RWWWRWRWWWR ",
-            "RRWWWRWRWWWRR",
-            "RRRRWWWWWRRRR",
-            "R  RWWWWWR  R",
-            "   R W W R   "
-        ];
-        const fighterColors = { 'W': '#FFFFFF', 'R': '#FF0000' };
-
-        // 2) 적 Boss Galaga (보라/초록)
-        const bossMap = [
-            "   GGGGGGG   ",
-            "  GGGGGGGGG  ",
-            " GGG B B GGG ",
-            "GGGG B B GGGG",
-            " B GGGGGGG B ",
-            "BBB GGGGG BBB",
-            "BBBB     BBBB",
-            " BBB  B  BBB "
-        ];
-        const bossColors1 = { 'G': '#33CC33', 'B': '#9933FF' }; // 상단 비행중
-        const bossColors2 = { 'G': '#00FFFF', 'B': '#3333FF' }; // 피격시 변색
-
-        // 3) 적 Goei (빨강/파랑)
-        const goeiMap = [
-            "   RR   RR   ",
-            "  RRRR RRRR  ",
-            " RRRRRRRRRRR ",
-            "RRR B B B RRR",
-            "RRR B B B RRR",
-            " RRRRRRRRRRR ",
-            "  BBB   BBB  ",
-            " BBB     BBB "
-        ];
-        const goeiColors = { 'R': '#FF0033', 'B': '#3333FF' };
-
-        // 4) 적 Zako (노랑/파랑)
-        const zakoMap = [
-            "    YYYYY    ",
-            "   YYYYYYY   ",
-            "  YY B B YY  ",
-            " YYY B B YYY ",
-            "YYYYYYYYYYYYY",
-            " YYY BBB YYY ",
-            "  BB     BB  ",
-            " BBB     BBB "
-        ];
-        const zakoColors = { 'Y': '#FFFF00', 'B': '#0066FF' };
-
+        let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
+        let enemyDirection = 1;
+        
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; 
-            enemyShips = []; 
-            galagaFrame = 0; 
-            galagaScore = 600;
-            playerShipX = galagaCanvas.width / 2 - 10; 
-            tractorBeamActive = false;
-            tractorBeamTimer = 0;
-            beamBoss = null;
-
-            initGalagaStars();
-
-            // 원작 오리지널 갤러그 대형 배치
-            // Row 0: Boss 4기 (보라/초록)
-            for(let col = 0; col < 4; col++) {
-                enemyShips.push({
-                    type: 'boss', x: col * 32 + 100, y: 35, baseX: col * 32 + 100, baseY: 35,
-                    width: 20, height: 16, hp: 2, score: 400, isDiving: false, vx: 0, vy: 0
-                });
-            }
-            // Row 1 & 2: Goei 8기 (빨강)
+            playerBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
+            
+            // 적 픽셀 UFO 군단 생성 (5열 2행)
             for(let row = 0; row < 2; row++) {
-                for(let col = 0; col < 8; col++) {
+                for(let col = 0; col < 5; col++) {
                     enemyShips.push({
-                        type: 'goei', x: col * 28 + 40, y: row * 20 + 60, baseX: col * 28 + 40, baseY: row * 20 + 60,
-                        width: 18, height: 14, hp: 1, score: 160, isDiving: false, vx: 0, vy: 0
+                        x: col * 48 + 35,
+                        y: row * 28 + 25,
+                        width: 24,
+                        height: 16,
+                        type: row === 0 ? "bossUfo" : "normalUfo"
                     });
                 }
             }
-            // Row 3 & 4: Zako 10기 (노랑)
-            for(let row = 0; row < 2; row++) {
-                for(let col = 0; col < 10; col++) {
-                    enemyShips.push({
-                        type: 'zako', x: col * 24 + 28, y: row * 18 + 100, baseX: col * 24 + 28, baseY: row * 18 + 100,
-                        width: 16, height: 14, hp: 1, score: 80, isDiving: false, vx: 0, vy: 0
-                    });
-                }
-            }
-
             loopGalagaGame();
         }
 
         function setPlayerX(clientX) {
             let rect = galagaCanvas.getBoundingClientRect();
             let relativeX = clientX - rect.left;
-            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) playerShipX = relativeX - 10;
+            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) playerShipX = relativeX;
         }
         galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
 
-        function loopGalagaGame() {
-            gCtx.fillStyle = "#000000";
-            gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
-            galagaFrame++;
+        /* 🛸 독자적 픽셀 도트 렌더링 함수 (UFO 및 아군 기체) */
+        function drawPixelUFO(ctx, x, y, isBoss) {
+            ctx.fillStyle = isBoss ? "#E74C3C" : "#9B59B6"; // UFO 돔 상단
+            ctx.fillRect(x + 8, y, 8, 4);
 
-            // 1) 별빛 배경 이동 및 그리기
-            galagaStars.forEach(s => {
-                s.y += s.speed;
-                if(s.y > galagaCanvas.height) { s.y = 0; s.x = Math.random() * galagaCanvas.width; }
-                gCtx.fillStyle = s.color;
-                gCtx.fillRect(s.x, s.y, s.size, s.size);
-            });
+            ctx.fillStyle = isBoss ? "#F1C40F" : "#00D2D3"; // UFO 중앙 몸체
+            ctx.fillRect(x + 2, y + 4, 20, 6);
 
-            // 2) 상단 UI (1UP & 점수)
-            gCtx.font = "bold 13px sans-serif";
-            gCtx.fillStyle = "#FF0000";
-            gCtx.fillText("1UP", 15, 18);
-            gCtx.fillStyle = "#FFFFFF";
-            gCtx.fillText(galagaScore.toString().padStart(5, ' '), 220, 18);
+            ctx.fillStyle = "#FFFFFF"; // UFO 조명 램프
+            ctx.fillRect(x + 4, y + 6, 2, 2);
+            ctx.fillRect(x + 11, y + 6, 2, 2);
+            ctx.fillRect(x + 18, y + 6, 2, 2);
 
-            // 3) 아군 플레이어 (파이터)
-            drawPixelSprite(gCtx, playerShipX, galagaCanvas.height - 30, fighterMap, fighterColors, 1.4);
+            ctx.fillStyle = isBoss ? "#C0392B" : "#8E44AD"; // UFO 하단 받침
+            ctx.fillRect(x + 6, y + 10, 12, 4);
 
-            // 하단 남은 기체 잔여 표시 (오리지널 느낌)
-            drawPixelSprite(gCtx, 10, galagaCanvas.height - 18, fighterMap, fighterColors, 0.8);
-            drawPixelSprite(gCtx, 25, galagaCanvas.height - 18, fighterMap, fighterColors, 0.8);
-
-            // 4) 자동 연사 총알 발사
-            if(galagaFrame % 10 === 0) {
-                playerBullets.push({ x: playerShipX + 8, y: galagaCanvas.height - 32 });
-                playerBullets.push({ x: playerShipX + 13, y: galagaCanvas.height - 32 });
-            }
-
-            playerBullets.forEach((b, bIdx) => {
-                b.y -= 6;
-                gCtx.fillStyle = "#FFFF00";
-                gCtx.fillRect(b.x, b.y, 2, 6);
-                gCtx.fillStyle = "#FF0000";
-                gCtx.fillRect(b.x, b.y + 4, 2, 2);
-
-                if(b.y < 20) playerBullets.splice(bIdx, 1);
-            });
-
-            // 5) 보스 적 급강하 & 트랙터 빔 공격 패턴
-            if (galagaFrame % 180 === 0 && !tractorBeamActive) {
-                let availableBosses = enemyShips.filter(e => e.type === 'boss' && !e.isDiving);
-                if (availableBosses.length > 0) {
-                    beamBoss = availableBosses[Math.floor(Math.random() * availableBosses.length)];
-                    beamBoss.isDiving = true;
-                    beamBoss.vy = 1.2;
-                }
-            }
-
-            if (beamBoss) {
-                if (beamBoss.isDiving) {
-                    beamBoss.y += beamBoss.vy;
-                    if (beamBoss.y > 130 && !tractorBeamActive) {
-                        tractorBeamActive = true;
-                        tractorBeamTimer = 0;
-                        beamBoss.vy = 0;
-                    }
-                }
-
-                if (tractorBeamActive) {
-                    tractorBeamTimer++;
-                    // 트랙터 빔 파동 효과 그리기
-                    gCtx.save();
-                    gCtx.strokeStyle = (galagaFrame % 4 < 2) ? "#00FFFF" : "#0066FF";
-                    gCtx.lineWidth = 1.5;
-                    let startY = beamBoss.y + 16;
-                    for (let i = 0; i < 12; i++) {
-                        let beamY = startY + (i * 9);
-                        let width = 10 + (i * 7);
-                        gCtx.beginPath();
-                        gCtx.ellipse(beamBoss.x + 10, beamY, width / 2, 3, 0, 0, Math.PI);
-                        gCtx.stroke();
-                    }
-                    gCtx.restore();
-
-                    if (tractorBeamTimer > 120) {
-                        tractorBeamActive = false;
-                        beamBoss.vy = 2; // 다시 복귀
-                    }
-                }
-
-                if (beamBoss.y > galagaCanvas.height) {
-                    beamBoss.y = -20;
-                    beamBoss.isDiving = false;
-                    beamBoss = null;
-                }
-            }
-
-            // 6) 적 편대 전체 유기적 좌우 좌우 진동
-            let formationOffset = Math.sin(galagaFrame * 0.04) * 15;
-
-            // 7) 적 렌더링 & 충돌 체크
-            enemyShips.forEach((enemy, eIdx) => {
-                let renderX = enemy.isDiving ? enemy.x : enemy.baseX + formationOffset;
-                let renderY = enemy.y;
-
-                if (enemy.type === 'boss') {
-                    let mapColor = (enemy.hp === 2) ? bossColors1 : bossColors2;
-                    drawPixelSprite(gCtx, renderX, renderY, bossMap, mapColor, 1.3);
-                } else if (enemy.type === 'goei') {
-                    drawPixelSprite(gCtx, renderX, renderY, goeiMap, goeiColors, 1.2);
-                } else if (enemy.type === 'zako') {
-                    drawPixelSprite(gCtx, renderX, renderY, zakoMap, zakoColors, 1.1);
-                }
-
-                // 총알 충돌 확인
-                playerBullets.forEach((b, bIdx) => {
-                    if (b.x >= renderX && b.x <= renderX + enemy.width &&
-                        b.y >= renderY && b.y <= renderY + enemy.height) {
-                        
-                        playerBullets.splice(bIdx, 1);
-                        enemy.hp--;
-
-                        if (enemy.hp <= 0) {
-                            if (enemy === beamBoss) { tractorBeamActive = false; beamBoss = null; }
-                            enemyShips.splice(eIdx, 1);
-                            galagaScore += enemy.score;
-                            amount += 10000; 
-                            updateTotalBalance();
-                        }
-                    }
-                });
-            });
-
-            // 승리 체크
-            if(enemyShips.length === 0) {
-                alert("🎉 STAGE CLEARED! 적 완파 완료!");
-                startGalagaGameEngine();
-                return;
-            }
-
-            galagaAnimationId = requestAnimationFrame(loopGalagaGame);
+            ctx.fillStyle = "#34495E"; // 다리/안테나 도트
+            ctx.fillRect(x + 4, y + 14, 2, 2);
+            ctx.fillRect(x + 18, y + 14, 2, 2);
         }
 
-        /* 🏆 4. 성장형 퍼즐 엔진 */
+        function drawPixelPlayerShip(ctx, x, y) {
+            // 아군 픽셀 아케이드 기체
+            ctx.fillStyle = "#10AC84";
+            ctx.fillRect(x - 2, y, 4, 6); // 메인 캐논
+
+            ctx.fillStyle = "#2ECC71";
+            ctx.fillRect(x - 6, y + 6, 12, 8); // 중앙 몸체
+
+            ctx.fillStyle = "#10AC84";
+            ctx.fillRect(x - 12, y + 10, 24, 6); // 날개
+
+            ctx.fillStyle = "#FF9F43";
+            ctx.fillRect(x - 4, y + 14, 8, 3); // 엔진 분사구
+        }
+
+        function loopGalagaGame() {
+            gCtx.clearRect(0, 0, galagaCanvas.width, galagaCanvas.height);
+            galagaFrame++;
+
+            // 플레이어 픽셀 기체 그리기
+            drawPixelPlayerShip(gCtx, playerShipX, 210);
+
+            // 자동 발사 총알
+            if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
+
+            playerBullets.forEach((b, bIdx) => {
+                b.y -= 5;
+                gCtx.fillStyle = "#54A0FF";
+                gCtx.fillRect(b.x - 1.5, b.y, 3, 8);
+                if(b.y < 0) playerBullets.splice(bIdx, 1);
+            });
+
+            let shiftDown = false;
+            enemyShips.forEach(enemy => {
+                enemy.x += enemyDirection * 0.6;
+                if(enemy.x > galagaCanvas.width - 30 || enemy.x < 10) { shiftDown = true; }
+            });
+
+            if(shiftDown) {
+                enemyDirection *= -1;
+                enemyShips.forEach(enemy => { enemy.y += 6; });
+            }
+
+            enemyShips.forEach((enemy, eIdx) => {
+                // UFO 픽셀아트 그리기
+                drawPixelUFO(gCtx, enemy.x, enemy.y, enemy.type === "bossUfo");
+
+                // 총알 충돌 검사
+                playerBullets.forEach((b, bIdx) => {
+                    if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
+                        playerBullets.splice(bIdx, 1);
+                        enemyShips.splice(eIdx, 1);
+                        amount += 10000; 
+                        updateTotalBalance();
+                    }
+                });
+
+                // 침공 패배 조건
+                if(enemy.y > 190) {
+                    cancelAnimationFrame(galagaAnimationId);
+                    alert("🛸 경보! UFO 외계 비행선이 기지에 침투했습니다! 다시 방어선을 구축합니다.");
+                    startGalagaGameEngine();
+                }
+            });
+
+            if(enemyShips.length === 0) {
+                alert("🎉 UFO 모함 격퇴 완료! 적 외계 비행선이 더 빠르게 재집결합니다.");
+                startGalagaGameEngine();
+            } else {
+                galagaAnimationId = requestAnimationFrame(loopGalagaGame);
+            }
+        }
+
+        /* 🏆 4. 성장형 퍼즐 엔진 (1분 제한시간 + 난이도 점진 상승) */
         const allTileTypes = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
         let currentStage = 1;
         let currentPuzzleScore = 0;
@@ -1385,7 +1223,7 @@
 
             let gainedPoints = matchCount * 100;
             currentPuzzleScore += gainedPoints;
-            amount += gainedPoints * 5;
+            amount += gainedPoints * 5; 
             updateTotalBalance();
 
             document.getElementById('pScore').innerText = currentPuzzleScore;
