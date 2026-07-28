@@ -155,9 +155,9 @@
             gap: 4px;
         }
 
-        /* 🎮 기적 게임 창 레이아웃 (4개 메뉴 설정으로 확장) */
-        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        /* 🎮 기적 게임 창 레이아웃 (3개 메뉴 설정) */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
@@ -315,12 +315,10 @@
                 <button class="btn-nav-top" onclick="toggleFullScreenGame()" style="background:#2ECC71;">📱 전체화면으로 크게 플레이</button>
             </div>
 
-            <!-- 미니게임 선택 메뉴 (추가된 게임 포함 총 4개) -->
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
-                <button id="btnSelectNewGame" class="btn-game-select" style="background:#E67E22;" onclick="switchMiniGame('newgame')">🎯 새게임</button>
             </div>
 
             <!-- 🚀 원본 갤러그 패널 -->
@@ -356,18 +354,6 @@
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
-            </div>
-
-            <!-- 🎯 추가된 신규 게임 패널 (예시: 캐치 미니 게임 또는 반사신경 게임) -->
-            <div id="newGameArea" class="game-display-panel" style="display:none;">
-                <div class="fullscreen-control-bar">
-                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🎯 새게임 (반사신경)</span>
-                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
-                </div>
-                <canvas id="newGameCanvas" width="300" height="240"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #E67E22, #D35400);" onclick="startNewGameEngine()">🎯 새게임 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면을 터치해 타겟을 맞추세요! (성공 시 +500원)</p>
             </div>
         </div>
 
@@ -669,7 +655,7 @@
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId); cancelAnimationFrame(newGameAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -752,14 +738,12 @@
             document.getElementById('btnSelectBrick').classList.remove('active'); 
             document.getElementById('btnSelectMemory').classList.remove('active'); 
             document.getElementById('btnSelectGalaga').classList.remove('active');
-            document.getElementById('btnSelectNewGame').classList.remove('active');
 
             document.getElementById('brickGameArea').style.display = 'none'; 
             document.getElementById('memoryGameArea').style.display = 'none'; 
             document.getElementById('galagaGameArea').style.display = 'none';
-            document.getElementById('newGameArea').style.display = 'none';
             
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId); cancelAnimationFrame(newGameAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
             if(gameType === 'brick') { 
                 currentActiveGameAreaId = 'brickGameArea';
@@ -779,12 +763,6 @@
                 document.getElementById('galagaGameArea').style.display = 'block'; 
                 startGalagaGameEngine(); 
             }
-            else if(gameType === 'newgame') {
-                currentActiveGameAreaId = 'newGameArea';
-                document.getElementById('btnSelectNewGame').classList.add('active');
-                document.getElementById('newGameArea').style.display = 'block';
-                startNewGameEngine();
-            }
         }
 
         /* 🧱 1. 알록달록 무지개 칼라 벽돌깨기 엔진 */
@@ -795,11 +773,12 @@
         let paddleHeight = 12, paddleWidth = 65, paddleX; 
         let bricks = [];
         
+        // 줄별 알록달록 비비드 칼라 배열
         const rowColors = [
-            { top: "#FF4E50", bottom: "#F9D423" },
-            { top: "#FF007F", bottom: "#7928CA" },
-            { top: "#00F2FE", bottom: "#4FACFE" },
-            { top: "#43E97B", bottom: "#38F9D7" }
+            { top: "#FF4E50", bottom: "#F9D423" }, // 1줄: 레드/옐로우 그라데이션
+            { top: "#FF007F", bottom: "#7928CA" }, // 2줄: 핑크/퍼플 그라데이션
+            { top: "#00F2FE", bottom: "#4FACFE" }, // 3줄: 시원한 네온 시안
+            { top: "#43E97B", bottom: "#38F9D7" }  // 4줄: 에메랄드 그린
         ];
 
         function startBrickGameEngine() {
@@ -810,6 +789,7 @@
             dy = -2; 
             paddleX = (gameCanvas.width - paddleWidth) / 2;
 
+            // 6열 4행 벽돌 구성
             for (let c = 0; c < 6; c++) { 
                 bricks[c] = []; 
                 for (let r = 0; r < 4; r++) { 
@@ -831,6 +811,7 @@
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             
+            // 1. 공 (화려한 네온 골드 비주얼)
             ctx.beginPath(); 
             ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); 
             ctx.fillStyle = "#FFD700"; 
@@ -838,8 +819,9 @@
             ctx.shadowColor = "#FFD700";
             ctx.fill(); 
             ctx.closePath();
-            ctx.shadowBlur = 0;
+            ctx.shadowBlur = 0; // 그림자 초기화
 
+            // 2. 알록달록 무지개 빛깔 패널(판) 드로잉
             ctx.beginPath(); 
             let paddleGradient = ctx.createLinearGradient(paddleX, 0, paddleX + paddleWidth, 0);
             paddleGradient.addColorStop(0, '#FF007F');
@@ -849,10 +831,12 @@
             ctx.roundRect ? ctx.roundRect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight, 6) : ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight);
             ctx.fill(); 
             
+            // 패들 상단 하이라이트 라인
             ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
             ctx.fillRect(paddleX + 4, gameCanvas.height - paddleHeight - 4, paddleWidth - 8, 2);
             ctx.closePath();
 
+            // 3. 알록달록 입체 칼라 벽돌 드로잉
             for (let c = 0; c < 6; c++) {
                 for (let r = 0; r < 4; r++) {
                     if (bricks[c][r] && bricks[c][r].status === 1) {
@@ -862,6 +846,7 @@
                         bricks[c][r].y = brickY;
 
                         ctx.beginPath(); 
+                        // 각 줄마다 다채로운 그라데이션 적용
                         let brickGradient = ctx.createLinearGradient(brickX, brickY, brickX, brickY + 13);
                         brickGradient.addColorStop(0, rowColors[r].top);
                         brickGradient.addColorStop(1, rowColors[r].bottom);
@@ -870,10 +855,12 @@
                         ctx.roundRect ? ctx.roundRect(brickX, brickY, 41, 14, 3) : ctx.rect(brickX, brickY, 41, 14);
                         ctx.fill(); 
 
+                        // 벽돌 테두리 입체감 효과
                         ctx.strokeStyle = "rgba(255,255,255,0.4)";
                         ctx.stroke();
                         ctx.closePath();
 
+                        // 공 충돌 검사
                         if (ballX > brickX && ballX < brickX + 41 && ballY > brickY && ballY < brickY + 14) { 
                             dy = -dy; 
                             bricks[c][r].status = 0; 
@@ -884,6 +871,7 @@
                 }
             }
 
+            // 벽면 충돌 검사
             if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
             if (ballY + dy < ballRadius) dy = -dy;
             else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
@@ -1116,71 +1104,6 @@
             }
 
             galagaAnimationId = requestAnimationFrame(loopGalagaGame);
-        }
-
-        /* 🎯 4. 추가된 신규 미니게임 엔진 (타겟 맞추기 반사신경 게임) */
-        let newGameCanvas = document.getElementById("newGameCanvas");
-        let nCtx = newGameCanvas ? newGameCanvas.getContext("2d") : null;
-        let newGameAnimationId = null;
-        let targetX = 150, targetY = 120, targetRadius = 20;
-        let targetSpeedX = 2, targetSpeedY = 1.5;
-        let newGameScore = 0;
-
-        function startNewGameEngine() {
-            cancelAnimationFrame(newGameAnimationId);
-            if(!newGameCanvas) return;
-            newGameScore = 0;
-            targetX = Math.random() * (newGameCanvas.width - 60) + 30;
-            targetY = Math.random() * (newGameCanvas.height - 60) + 30;
-            loopNewGame();
-        }
-
-        if(newGameCanvas) {
-            newGameCanvas.addEventListener("click", (e) => {
-                let rect = newGameCanvas.getBoundingClientRect();
-                let clickX = e.clientX - rect.left;
-                let clickY = e.clientY - rect.top;
-                let dist = Math.hypot(clickX - targetX, clickY - targetY);
-                if (dist <= targetRadius) {
-                    newGameScore++;
-                    amount += 500;
-                    updateTotalBalance();
-                    // 타겟 위치 재배치
-                    targetX = Math.random() * (newGameCanvas.width - 60) + 30;
-                    targetY = Math.random() * (newGameCanvas.height - 60) + 30;
-                    targetSpeedX *= 1.1; // 점차 빠르게
-                    targetSpeedY *= 1.1;
-                }
-            });
-        }
-
-        function loopNewGame() {
-            if(!nCtx) return;
-            nCtx.fillStyle = "#111111";
-            nCtx.fillRect(0, 0, newGameCanvas.width, newGameCanvas.height);
-
-            // 타겟 이동
-            targetX += targetSpeedX;
-            targetY += targetSpeedY;
-            if(targetX - targetRadius < 0 || targetX + targetRadius > newGameCanvas.width) targetSpeedX = -targetSpeedX;
-            if(targetY - targetRadius < 0 || targetY + targetRadius > newGameCanvas.height) targetSpeedY = -targetSpeedY;
-
-            // 타겟 그리기
-            nCtx.beginPath();
-            nCtx.arc(targetX, targetY, targetRadius, 0, Math.PI * 2);
-            nCtx.fillStyle = "#E74C3C";
-            nCtx.fill();
-            nCtx.strokeStyle = "#FFFFFF";
-            nCtx.lineWidth = 3;
-            nCtx.stroke();
-            nCtx.closePath();
-
-            // 점수 표시
-            nCtx.fillStyle = "#FFFFFF";
-            nCtx.font = "bold 14px sans-serif";
-            nCtx.fillText("맞춘 횟수: " + newGameScore, 15, 25);
-
-            newGameAnimationId = requestAnimationFrame(loopNewGame);
         }
 
         window.onload = loadSavedData;
