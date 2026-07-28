@@ -1,571 +1,1244 @@
-import pygame
-import random
-import math
-import sys
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>사각지대 없는 기적 재단</title>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body {
+            font-family: 'Apple SD Gothic Neo', sans-serif;
+            margin: 0; padding: 0;
+            background-color: #F4F7F6;
+            display: flex; flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-# ==========================================
-# 1. 게임 기본 환경 설정
-# ==========================================
-pygame.init()
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("스마트폰 스타일 슈팅 게임 - 노멀 & 하드코어 보스전")
-clock = pygame.time.Clock()
-FPS = 60
+        /* 📱 메인 서비스 화면 레이아웃 */
+        #mainAppLayout { display: flex; flex-direction: column; height: 100vh; padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
 
-# 색상 정의
-WHITE     = (255, 255, 255)
-BLACK     = (0, 0, 0)
-RED       = (235, 60, 60)
-GREEN     = (50, 205, 50)
-YELLOW    = (255, 215, 0)
-DARK_GRAY = (40, 40, 50)
-PURPLE    = (160, 32, 240)
-ORANGE    = (255, 140, 0)
-
-# 폰트 설정
-try:
-    font = pygame.font.SysFont("malgungothic", 22)
-    large_font = pygame.font.SysFont("malgungothic", 45)
-except:
-    font = pygame.font.Font(None, 28)
-    large_font = pygame.font.Font(None, 50)
-
-# 전체 게임 상태 (0: 메뉴, 1: 오리지널 노멀 모드, 2: 하드코어 보스 모드)
-game_state = 0
-
-
-# ==========================================
-# 2. [오리지널 클래스] 적(타겟) 및 이펙트
-# (사용자가 주신 코드 원본 그대로 보존)
-# ==========================================
-class Target:
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.x = random.randint(80, WIDTH - 80)
-        self.y = random.randint(100, HEIGHT - 150)
-        self.size = random.randint(15, 25)
-        self.max_size = random.randint(55, 75)
-        self.grow_speed = random.uniform(0.3, 0.7)
+        /* 상단 헤더 */
+        .header { background-color: #FFF; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .header h1 { font-size: 17px; margin: 0; color: #2C3E50; font-weight: bold; }
         
-        self.type = random.choices([1, 2, 3], weights=[60, 25, 15])[0]
-        if self.type == 1:
-            self.color = RED
-            self.score_val = 100
-        elif self.type == 2:
-            self.color = YELLOW
-            self.grow_speed *= 1.5
-            self.score_val = 200
-        elif self.type == 3:
-            self.color = GREEN
-            self.score_val = 300
+        /* 등급별 뱃지 */
+        .user-welcome-info { font-size: 11px; font-weight: bold; color: white; background: #34495E; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 4px; }
+        .tier-whale { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
 
-        self.is_active = True
+        /* 메인 컨텐츠 영역 */
+        .tab-content { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 10px 20px; overflow-y: auto; }
+        .tab-content.active { display: flex; }
 
-    def update(self):
-        if self.is_active:
-            self.size += self.grow_speed
-            if self.size >= self.max_size:
-                self.is_active = False
-                return True
-        return False
+        /* 🕊️ 기적이 영역 */
+        .bird-area { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            width: 100%; 
+            max-width: 340px; 
+            margin-bottom: 5px;
+            height: 140px;
+        }
+        .bird-container { 
+            width: 160px; 
+            height: 120px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+        }
 
-    def draw(self, surface):
-        if self.is_active:
-            int_size = int(self.size)
-            pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), int_size)
-            pygame.draw.circle(surface, WHITE, (int(self.x), int(self.y)), int(max(1, int_size * 0.6)))
-            pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), int(max(1, int_size * 0.3)))
-
-    def is_hit(self, pos):
-        mx, my = pos
-        dist = math.hypot(self.x - mx, self.y - my)
-        return dist <= self.size
-
-
-class HitEffect:
-    """총을 쐈을 때 튀는 이펙트"""
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.timer = 10
-
-    def draw(self, surface):
-        if self.timer > 0:
-            pygame.draw.circle(surface, YELLOW, (self.x, self.y), 12, 2)
-            pygame.draw.line(surface, YELLOW, (self.x - 15, self.y), (self.x + 15, self.y), 2)
-            pygame.draw.line(surface, YELLOW, (self.x, self.y - 15), (self.x, self.y + 15), 2)
-            self.timer -= 1
-
-
-# ==========================================
-# 3. [오리지널 메인 게임] MobileFPSGame
-# (사용자가 주신 코드 원본 그대로 보존)
-# ==========================================
-class MobileFPSGame:
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.score = 0
-        self.health = 5
-        self.ammo = 7
-        self.max_ammo = 7
-        self.is_reloading = False
-        self.reload_timer = 0
-        self.targets = [Target() for _ in range(4)]
-        self.effects = []
-        self.game_over = False
-
-    def reload(self):
-        if not self.is_reloading and self.ammo < self.max_ammo:
-            self.is_reloading = True
-            self.reload_timer = 45
-
-    def update(self):
-        if self.game_over:
-            return
-
-        if self.is_reloading:
-            self.reload_timer -= 1
-            if self.reload_timer <= 0:
-                self.ammo = self.max_ammo
-                self.is_reloading = False
-
-        for target in self.targets:
-            missed = target.update()
-            if missed:
-                self.health -= 1
-                target.reset()
-                if self.health <= 0:
-                    self.game_over = True
-
-    def shoot(self, pos):
-        if self.game_over:
-            return
-
-        if self.is_reloading:
-            return
-        if self.ammo <= 0:
-            self.reload()
-            return
-
-        self.ammo -= 1
-        self.effects.append(HitEffect(pos[0], pos[1]))
-
-        hit_any = False
-        for target in self.targets:
-            if target.is_active and target.is_hit(pos):
-                self.score += target.score_val
-                target.reset()
-                hit_any = True
-                break
-
-        if self.ammo == 0:
-            self.reload()
-
-    def draw(self, surface):
-        surface.fill(DARK_GRAY)
-        pygame.draw.polygon(surface, (25, 25, 30), [(0, HEIGHT), (WIDTH, HEIGHT), (WIDTH*0.8, HEIGHT*0.6), (WIDTH*0.2, HEIGHT*0.6)])
-        pygame.draw.line(surface, (70, 70, 80), (0, HEIGHT*0.6), (WIDTH, HEIGHT*0.6), 2)
-
-        for target in self.targets:
-            target.draw(surface)
-
-        for effect in self.effects[:]:
-            effect.draw(surface)
-            if effect.timer <= 0:
-                self.effects.remove(effect)
-
-        # 조준경
-        mx, my = pygame.mouse.get_pos()
-        pygame.draw.circle(surface, GREEN, (mx, my), 18, 2)
-        pygame.draw.circle(surface, RED, (mx, my), 3)
-        pygame.draw.line(surface, GREEN, (mx - 25, my), (mx + 25, my), 1)
-        pygame.draw.line(surface, GREEN, (mx, my - 25), (mx, my + 25), 1)
-
-        # UI
-        score_txt = font.render(f"SCORE: {self.score}", True, WHITE)
-        health_txt = font.render(f"HP: {'❤️' * self.health}", True, RED)
-        surface.blit(score_txt, (20, 20))
-        surface.blit(health_txt, (20, 55))
-
-        btn_txt = font.render("[ESC] 메뉴로", True, RED)
-        surface.blit(btn_txt, (WIDTH - 120, 15))
-
-        if self.is_reloading:
-            ammo_str = "RELOADING..."
-            ammo_color = YELLOW
-        else:
-            ammo_str = f"AMMO: {'▮ ' * self.ammo}"
-            ammo_color = GREEN
-            
-        ammo_txt = font.render(ammo_str, True, ammo_color)
-        surface.blit(ammo_txt, (WIDTH - 220, HEIGHT - 50))
-
-        reload_btn_txt = font.render("[R] 클릭: 장전", True, WHITE)
-        surface.blit(reload_btn_txt, (WIDTH - 220, HEIGHT - 85))
-
-        if self.game_over:
-            s = pygame.Surface((WIDTH, HEIGHT))
-            s.set_alpha(200)
-            s.fill(BLACK)
-            surface.blit(s, (0, 0))
-
-            over_txt = large_font.render("MISSION FAILED", True, RED)
-            final_score = font.render(f"최종 점수: {self.score}", True, WHITE)
-            restart_txt = font.render("터치 / [R] 키를 눌러 다시 시작", True, YELLOW)
-
-            surface.blit(over_txt, (WIDTH//2 - over_txt.get_width()//2, HEIGHT//2 - 80))
-            surface.blit(final_score, (WIDTH//2 - final_score.get_width()//2, HEIGHT//2))
-            surface.blit(restart_txt, (WIDTH//2 - restart_txt.get_width()//2, HEIGHT//2 + 60))
-
-
-# ==========================================
-# 4. [신규 난이도 개발] 보스전 & 미사일 클래스
-# ==========================================
-class Missile:
-    """보스가 날리는 미사일 (격추하지 않으면 플레이어 체력 감소)"""
-    def __init__(self, start_x, start_y):
-        self.x = start_x
-        self.y = start_y
-        self.size = 10
-        self.max_size = 45
-        self.speed = random.uniform(0.6, 1.2)
-        self.is_active = True
-
-    def update(self):
-        if self.is_active:
-            self.size += self.speed
-            if self.size >= self.max_size:
-                self.is_active = False
-                return True # 나에게 명중함
-        return False
-
-    def draw(self, surface):
-        if self.is_active:
-            pygame.draw.circle(surface, ORANGE, (int(self.x), int(self.y)), int(self.size))
-            pygame.draw.circle(surface, RED, (int(self.x), int(self.y)), int(self.size * 0.5))
-
-    def is_hit(self, pos):
-        mx, my = pos
-        return math.hypot(self.x - mx, self.y - my) <= self.size
-
-
-class Boss:
-    """스테이지형 대형 보스"""
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.x = WIDTH // 2
-        self.y = 180
-        self.max_hp = 1000
-        self.hp = 1000
-        self.size = 60
-        self.speed_x = 3
-        self.missile_timer = 0
-
-    def update(self, missiles):
-        # 보스 좌우 이동
-        self.x += self.speed_x
-        if self.x - self.size < 50 or self.x + self.size > WIDTH - 50:
-            self.speed_x *= -1
-
-        # 주기적으로 미사일 발사
-        self.missile_timer += 1
-        if self.missile_timer > 90: # 1.5초마다 미사일 생성
-            self.missile_timer = 0
-            missiles.append(Missile(self.x + random.randint(-40, 40), self.y))
-
-    def draw(self, surface):
-        # 보스 본체
-        pygame.draw.circle(surface, PURPLE, (int(self.x), int(self.y)), self.size)
-        pygame.draw.circle(surface, RED, (int(self.x), int(self.y)), int(self.size * 0.6))
-        pygame.draw.circle(surface, BLACK, (int(self.x), int(self.y)), int(self.size * 0.2))
-
-        # 보스 HP 바
-        bar_w = 300
-        hp_ratio = max(0, self.hp / self.max_hp)
-        pygame.draw.rect(surface, RED, (WIDTH//2 - bar_w//2, 20, bar_w, 15))
-        pygame.draw.rect(surface, GREEN, (WIDTH//2 - bar_w//2, 20, bar_w * hp_ratio, 15))
-        pygame.draw.rect(surface, WHITE, (WIDTH//2 - bar_w//2, 20, bar_w, 15), 2)
+        /* 머리 위 깃털 */
+        .bird-hair {
+            position: absolute; top: -2px; width: 14px; height: 24px; background: #4FA3DF;
+            border-radius: 50% 50% 0 0; transform: rotate(-15deg); z-index: 1;
+            box-shadow: inset -2px 0 5px rgba(0,0,0,0.1); animation: hairWag 2s infinite ease-in-out;
+        }
+        .bird-hair::after {
+            content: ''; position: absolute; left: 6px; top: -3px; width: 10px; height: 20px;
+            background: #5dade2; border-radius: 50% 50% 0 0; transform: rotate(25deg);
+        }
         
-        b_txt = font.render("BOSS", True, WHITE)
-        surface.blit(b_txt, (WIDTH//2 - b_txt.get_width()//2, 40))
+        /* 몸통 */
+        .bird-body { 
+            width: 90px; height: 90px; background: radial-gradient(circle at 35% 35%, #5dade2 0%, #2980b9 70%, #1f618d 100%); 
+            border-radius: 52% 48% 51% 49% / 53% 53% 47% 47%; position: relative; 
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), inset 6px 6px 12px rgba(255,255,255,0.4), 0 10px 20px rgba(0,0,0,0.2); 
+            z-index: 2; display: flex; justify-content: center; animation: breathLiving 2s infinite ease-in-out;
+        }
 
-    def is_hit(self, pos):
-        mx, my = pos
-        return math.hypot(self.x - mx, self.y - my) <= self.size
+        .bird-belly {
+            position: absolute; bottom: 6px; width: 50px; height: 25px;
+            background: radial-gradient(circle at 50% 100%, #e8f4f8 0%, #abd4ec 80%);
+            border-radius: 50% 50% 40% 40% / 100% 100% 30% 30%; opacity: 0.85; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08);
+        }
+        
+        .bird-beak-wrap { position: absolute; bottom: 22px; z-index: 5; display: flex; flex-direction: column; align-items: center; transform: translateZ(10px); }
+        .beak-top { width: 24px; height: 16px; background: linear-gradient(to bottom, #f39c12, #d35400); border-radius: 50% 50% 50% 50% / 100% 100% 30% 30%; box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 2px 2px rgba(255,255,255,0.4); }
+        .beak-bottom { width: 18px; height: 12px; background: #ba4a00; border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
 
+        .bird-eyes-container { position: absolute; top: 15px; display: flex; gap: 2px; z-index: 4; }
+        .bird-eye { 
+            width: 32px; height: 38px; background: white; border-radius: 50% 50% 48% 48%; position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset -2px -2px 5px rgba(0,0,0,0.05), inset 2px 2px 5px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        
+        .eye-pupil {
+            width: 20px; height: 24px; background: radial-gradient(circle at 40% 40%, #2c3e50 0%, #1a252f 80%, #000000 100%);
+            border-radius: 50%; position: relative; border: 1.5px solid #2980b9; animation: movePupil 4s infinite ease-in-out; display: flex;
+        }
+        .eye-pupil::after { content: ''; position: absolute; width: 8px; height: 8px; background: white; border-radius: 50%; top: 2px; left: 2px; box-shadow: 0 0 2px rgba(255,255,255,0.8); }
+        
+        /* 날개 및 발 */
+        .bird-wing { position: absolute; width: 44px; height: 28px; background: linear-gradient(to bottom, #5dade2, #2980b9); top: 42px; z-index: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .wing-left { left: 4px; border-radius: 30px 10px 10px 30px; transform-origin: right center; animation: flapLeftFly 0.5s infinite alternate ease-in-out; }
+        .wing-right { right: 4px; border-radius: 10px 30px 30px 10px; transform-origin: left center; animation: flapRightFly 0.5s infinite alternate ease-in-out; }
+        .bird-feet { position: absolute; bottom: -8px; display: flex; gap: 20px; z-index: 1; animation: feetMove 2s infinite ease-in-out; }
+        .foot { width: 14px; height: 10px; background: linear-gradient(to bottom, #f39c12, #e67e22); border-radius: 6px 6px 4px 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-# ==========================================
-# 5. [신규 난이도 개발] HardcoreFPSGame
-# ==========================================
-class HardcoreFPSGame:
-    def __init__(self):
-        self.reset()
+        @keyframes breathLiving { 0%, 100% { transform: translateY(0px) scale(1, 1); } 35% { transform: translateY(-7px) scale(0.96, 1.04); } 70% { transform: translateY(3px) scale(1.03, 0.96); } }
+        @keyframes hairWag { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-8deg) scaleY(1.05); } }
+        @keyframes feetMove { 0%, 100% { transform: translateY(0px); } 35% { transform: translateY(2px) scaleY(0.9); } }
+        @keyframes movePupil { 0%, 100% { transform: translate(0px, 0px); } 20%, 30% { transform: translate(-3px, 2px); } 50%, 60% { transform: translate(3px, -2px); } }
+        @keyframes flapLeftFly { 0% { transform: rotate(-30deg); } 100% { transform: rotate(15deg); } }
+        @keyframes flapRightFly { 0% { transform: rotate(30deg); } 100% { transform: rotate(-15deg); } }
 
-    def reset(self):
-        self.score = 0
-        self.health = 5
-        self.ammo = 10
-        self.max_ammo = 10
-        self.combo = 0
-        self.is_reloading = False
-        self.reload_timer = 0
-        self.boss = Boss()
-        self.missiles = []
-        self.targets = [Target() for _ in range(3)]
-        self.effects = []
-        self.game_over = False
-        self.game_clear = False
+        .nodding.wing-left { animation: flapLeftFly 0.08s infinite alternate linear !important; }
+        .nodding.wing-right { animation: flapRightFly 0.08s infinite alternate linear !important; }
 
-    def reload(self):
-        if not self.is_reloading and self.ammo < self.max_ammo:
-            self.is_reloading = True
-            # 콤보가 높을수록 재장전 속도가 빨라짐
-            fast_reload = max(15, 40 - self.combo)
-            self.reload_timer = fast_reload
+        /* 자산 보유 카드 스타일 */
+        .total-balance-card { background: linear-gradient(135deg, #3498DB, #2980B9); color: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2); margin-bottom: 10px; }
+        .total-title { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+        .total-value { font-size: 24px; font-weight: bold; word-break: break-all; }
 
-    def update(self):
-        if self.game_over or self.game_clear:
-            return
+        .card { background: white; border-radius: 20px; padding: 15px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 12px; }
+        .card-title { font-size: 12px; color: #7F8C8D; margin-bottom: 4px; }
+        .card-value { font-size: 22px; font-weight: bold; color: #2C3E50; word-break: break-all; }
 
-        if self.is_reloading:
-            self.reload_timer -= 1
-            if self.reload_timer <= 0:
-                self.ammo = self.max_ammo
-                self.is_reloading = False
+        .control-section { display: flex; width: 100%; max-width: 360px; align-items: center; gap: 12px; }
+        .action-button-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .side-icon-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
-        # 보스 업데이트
-        self.boss.update(self.missiles)
+        .btn-action { color: white; border: none; border-radius: 14px; padding: 12px; width: 100%; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-engine { background-color: #357ABD; box-shadow: 0 4px 10px rgba(53,122,189,0.25); }
+        .btn-ad-reward { background: linear-gradient(135deg, #E67E22, #D35400); box-shadow: 0 4px 10px rgba(230,126,34,0.25); }
+        .btn-side-circle { width: 40px; height: 40px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+        .btn-admin-gear { background-color: white; color: #5D6D7E; }
 
-        # 미사일 이동 및 피격 판정
-        for m in self.missiles[:]:
-            hit_player = m.update()
-            if hit_player:
-                self.health -= 1
-                self.combo = 0 # 피격 시 콤보 초기화
-                self.missiles.remove(m)
-                if self.health <= 0:
-                    self.game_over = True
+        /* 상단 게임 이동/네비게이션 창 */
+        .game-top-bar {
+            width: 100%;
+            max-width: 360px;
+            background: #2C3E50;
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        .btn-nav-top {
+            background: #3498DB;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-        # 일반 적 업데이트
-        for target in self.targets:
-            missed = target.update()
-            if missed:
-                self.health -= 1
-                self.combo = 0
-                target.reset()
-                if self.health <= 0:
-                    self.game_over = True
+        /* 🎮 기적 게임 창 레이아웃 */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
+        .btn-game-select.active { background: #3498DB; }
+        
+        .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
+        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
+        
+        /* 🆕 전체화면 모드 시 최상단 고정 컨트롤 바 */
+        .fullscreen-control-bar {
+            display: none;
+            width: 100%;
+            max-width: 360px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
 
-    def shoot(self, pos):
-        if self.game_over or self.game_clear:
-            return
+        /* 🆕 전체화면 실행 모드 스타일 확장 */
+        .game-display-panel.fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            z-index: 9990 !important;
+            border-radius: 0 !important;
+            padding: calc(20px + env(safe-area-inset-top)) 15px 20px 15px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+            background: #1A252F !important;
+            overflow-y: auto !important;
+        }
+        
+        .game-display-panel.fullscreen-mode .fullscreen-control-bar {
+            display: flex !important;
+        }
 
-        if self.is_reloading:
-            return
-        if self.ammo <= 0:
-            self.reload()
-            return
+        .game-display-panel.fullscreen-mode canvas {
+            max-width: 95vw !important;
+            height: 50vh !important;
+            object-fit: contain;
+        }
+        .game-display-panel.fullscreen-mode .match3-grid,
+        .game-display-panel.fullscreen-mode .card-grid {
+            max-width: 95vw !important;
+        }
 
-        self.ammo -= 1
-        self.effects.append(HitEffect(pos[0], pos[1]))
-        hit_something = False
+        /* 카드 짝맞추기 게임 보드 */
+        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 10px auto; }
+        .memory-card { height: 65px; background: #34495E; border-radius: 8px; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
+        .memory-card.flipped { background: #ECF0F1; color: initial; }
+        .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        # 1. 미사일 맞췄는지 확인 (격추)
-        for m in self.missiles[:]:
-            if m.is_hit(pos):
-                self.missiles.remove(m)
-                self.score += 150
-                self.combo += 1
-                hit_something = True
-                break
+        /* 🧩 새로운 성장형 스테이지 퍼즐 보드 스타일 */
+        .match3-grid { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 6px; 
+            width: 100%;
+            max-width: 340px; 
+            margin: 8px auto; 
+            background: #2C3E50; 
+            padding: 8px; 
+            border-radius: 16px; 
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+            touch-action: manipulation;
+        }
+        .match3-tile { 
+            aspect-ratio: 1; 
+            background: #34495E; 
+            border-radius: 10px; 
+            font-size: 26px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            user-select: none; 
+            transition: transform 0.15s ease, background-color 0.2s; 
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+        .match3-tile.selected { background: #E74C3C; transform: scale(1.1); box-shadow: 0 0 12px rgba(231,76,60,0.9); z-index: 10; }
 
-        # 2. 보스 타격
-        if not hit_something and self.boss.is_hit(pos):
-            dmg = 25 + (self.combo * 2) # 콤보 높을수록 데미지 증가
-            self.boss.hp -= dmg
-            self.score += 50
-            self.combo += 1
-            hit_something = True
-            if self.boss.hp <= 0:
-                self.game_clear = True
+        /* 퍼즐 전용 상태 정보 바 */
+        .puzzle-status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #F2F4F4;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 5px;
+        }
 
-        # 3. 일반 적 타격
-        if not hit_something:
-            for target in self.targets:
-                if target.is_active and target.is_hit(pos):
-                    self.score += target.score_val
-                    self.combo += 1
-                    target.reset()
-                    hit_something = True
-                    break
+        /* 금고 & 상점 */
+        .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
+        .vault-balance-title { font-size: 12px; color: #BDC3C7; margin-bottom: 4px; }
+        .vault-balance-value { font-size: 24px; font-weight: bold; margin-bottom: 4px; word-break: break-all; }
+        .backend-usdt-box { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 7px 10px; font-size: 11px; color: #34E7E4; font-family: monospace; display: flex; justify-content: space-between; margin-top: 6px; border: 1px dashed rgba(52, 231, 228, 0.4); }
+        .benefit-banner { background: #FFF3CD; border: 1px solid #FFEBAA; border-radius: 14px; padding: 10px; width: 100%; max-width: 360px; margin-bottom: 12px; font-size: 11px; color: #856404; line-height: 1.4; text-align: left; }
+        .btn-kakaopay { background-color: #FFEB00; color: #3C1E1E; font-weight: bold; box-shadow: 0 4px 10px rgba(255,235,0,0.25); border: none; border-radius: 12px; padding: 11px; width: 100%; max-width: 360px; margin-bottom: 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .vault-action-group { display: flex; justify-content: space-between; width: 100%; max-width: 360px; gap: 10px; margin-bottom: 12px; }
 
-        # 빗맞혔을 경우 콤보 초기화
-        if not hit_something:
-            self.combo = 0
+        .btn-vault { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-deposit { background-color: #2ECC71; color: white; }
+        .btn-withdraw { background-color: #FFF; color: #2C3E50; border: 1px solid #BDC3C7; }
 
-        if self.ammo == 0:
-            self.reload()
+        .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 360px; margin-top: 8px; padding-bottom: 20px; }
+        .shop-item { background: white; border-radius: 16px; padding: 15px 8px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; position: relative; }
+        .vip-badge { display: block; position: absolute; top: 6px; right: 6px; background: #2ECC71; color: white; font-size: 8px; padding: 1px 5px; border-radius: 6px; font-weight: bold; }
+        .item-emoji { font-size: 36px; margin-bottom: 6px; }
+        .item-name { font-size: 13px; font-weight: bold; color: #2C3E50; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 90%; }
+        .item-price { font-size: 11px; color: #E74C3C; font-weight: bold; margin-bottom: 10px; }
+        .btn-exchange { background-color: #2ECC71; color: white; border: none; padding: 7px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 85%; }
 
-    def draw(self, surface):
-        surface.fill((20, 20, 30)) # 하드코어 모드는 어두운 인스턴스 배경
-        pygame.draw.polygon(surface, (10, 10, 15), [(0, HEIGHT), (WIDTH, HEIGHT), (WIDTH*0.8, HEIGHT*0.5), (WIDTH*0.2, HEIGHT*0.5)])
+        /* 모달 및 팝업 */
+        .ad-overlay, .admin-modal, .pay-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box, .admin-box, .pay-box { background-color: white; border-radius: 24px; width: 90%; max-width: 360px; padding: 25px 20px; text-align: center; position: relative; }
+        .btn-ad-close { background-color: #BDC3C7; color: white; border: none; padding: 12px; width: 100%; border-radius: 15px; font-size: 15px; font-weight: bold; cursor: not-allowed; }
+        .btn-ad-close.ready { background-color: #2ECC71; cursor: pointer; }
+        
+        /* 하단 네비게이션 바 */
+        .nav-bar { background-color: white; display: flex; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #EAEAEA; box-shadow: 0 -3px 8px rgba(0,0,0,0.04); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #95A5A6; text-decoration: none; width: 25%; cursor: pointer; text-align: center; }
+        .nav-item.active { color: #357ABD; font-weight: bold; }
+        .nav-icon { font-size: 20px; margin-bottom: 2px; }
+        
+        .auth-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #EAEAEA; border-radius: 12px; font-size: 14px; outline: none; }
+    </style>
+</head>
+<body>
 
-        # 오브젝트들 그리기
-        self.boss.draw(surface)
-        for m in self.missiles:
-            m.draw(surface)
-        for target in self.targets:
-            target.draw(surface)
-        for effect in self.effects[:]:
-            effect.draw(surface)
-            if effect.timer <= 0:
-                self.effects.remove(effect)
+    <div id="mainAppLayout">
+        <!-- 상단 헤더 -->
+        <div class="header">
+            <h1>사각지대 없는 기적 재단</h1>
+            <div id="userBadge" class="user-welcome-info tier-whale">
+                <span>🐳</span> <span id="userBadgeText">비회원 기적이</span>
+            </div>
+        </div>
 
-        # 조준경 (하드코어 스타일: 붉은 조준경)
-        mx, my = pygame.mouse.get_pos()
-        pygame.draw.circle(surface, RED, (mx, my), 20, 2)
-        pygame.draw.circle(surface, YELLOW, (mx, my), 3)
-        pygame.draw.line(surface, RED, (mx - 25, my), (mx + 25, my), 1)
-        pygame.draw.line(surface, RED, (mx, my - 25), (mx, my + 25), 1)
+        <!-- 🕊️ 탭 1: 홈 화면 -->
+        <div id="homeTab" class="tab-content active">
+            <div class="bird-area">
+                <div class="bird-container">
+                    <div class="bird-hair"></div>
+                    <div class="bird-wing wing-left" id="leftWing"></div>
+                    <div class="bird-body" id="miracleBird">
+                        <div class="bird-eyes-container">
+                            <div class="bird-eye"><div class="eye-pupil"></div></div>
+                            <div class="bird-eye"><div class="eye-pupil"></div></div>
+                        </div>
 
-        # UI
-        score_txt = font.render(f"SCORE: {self.score}", True, WHITE)
-        combo_txt = font.render(f"COMBO: {self.combo}x", True, YELLOW)
-        health_txt = font.render(f"HP: {'❤️' * self.health}", True, RED)
-        surface.blit(score_txt, (20, 70))
-        surface.blit(combo_txt, (20, 100))
-        surface.blit(health_txt, (20, 130))
-
-        btn_txt = font.render("[ESC] 메뉴로", True, RED)
-        surface.blit(btn_txt, (WIDTH - 120, 15))
-
-        if self.is_reloading:
-            ammo_str = "FAST RELOADING..."
-            ammo_color = YELLOW
-        else:
-            ammo_str = f"AMMO: {'▮ ' * self.ammo}"
-            ammo_color = GREEN
+                        <div class="bird-beak-wrap">
+                            <div class="beak-top"></div>
+                            <div class="beak-bottom"></div>
+                        </div>
+                        <div class="bird-belly"></div>
+                    </div>
+                    <div class="bird-wing wing-right" id="rightWing"></div>
+                    <div class="bird-feet">
+                        <div class="foot"></div>
+                        <div class="foot"></div>
+                    </div>
+                </div>
+            </div>
             
-        ammo_txt = font.render(ammo_str, True, ammo_color)
-        surface.blit(ammo_txt, (WIDTH - 240, HEIGHT - 50))
+            <div class="total-balance-card">
+                <div class="total-title">나의 누적 총잔고 (자산 합계)</div>
+                <div class="total-value"><span id="totalBalance">0</span> 원</div>
+            </div>
+            <div class="card">
+                <div class="card-title">이번 달 기적 지원금 (미예치)</div>
+                <div class="card-value"><span id="subsidyAmount">0</span> 원</div>
+            </div>
+            
+            <div class="control-section">
+                <div class="action-button-group">
+                    <button class="btn-action btn-engine" id="engineBtn">☁️ 엔진 가동하기</button>
+                    <button class="btn-action btn-ad-reward" onclick="openRandomAdPopup()">⚡ 광고 보고 보상 받기</button>
+                </div>
+                <div class="side-icon-group">
+                    <button class="btn-side-circle btn-admin-gear" onclick="openAdminModal()">⚙️</button>
+                </div>
+            </div>
+        </div>
 
-        # 게임 오버 & 클리어
-        if self.game_over or self.game_clear:
-            s = pygame.Surface((WIDTH, HEIGHT))
-            s.set_alpha(200)
-            s.fill(BLACK)
-            surface.blit(s, (0, 0))
+        <!-- 🎮 탭 2: 기적 게임 공간 -->
+        <div id="gameTab" class="tab-content">
+            <!-- 상단 바로가기 / 빠른 전환 상단 창 -->
+            <div class="game-top-bar">
+                <button class="btn-nav-top" onclick="changeTabUrl('home')" style="background:#E74C3C;">🏠 홈 화면으로</button>
+                <button class="btn-nav-top" onclick="toggleFullScreenGame()" style="background:#2ECC71;">📱 전체화면으로 크게 플레이</button>
+            </div>
 
-            msg_str = "MISSION COMPLETE!" if self.game_clear else "MISSION FAILED"
-            msg_color = GREEN if self.game_clear else RED
+            <div class="game-menu-container">
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 갤러그</button>
+                <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
+                <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
+                <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🏆 성장 퍼즐</button>
+            </div>
 
-            over_txt = large_font.render(msg_str, True, msg_color)
-            final_score = font.render(f"최종 점수: {self.score}", True, WHITE)
-            restart_txt = font.render("터치 / [R] 키를 눌러 다시 시작", True, YELLOW)
+            <!-- 🛸 정통 갤러그 패널 -->
+            <div id="galagaGameArea" class="game-display-panel">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 갤러그</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                <canvas id="galagaCanvas" width="300" height="240"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! 격추당 +10,000원)</p>
+            </div>
 
-            surface.blit(over_txt, (WIDTH//2 - over_txt.get_width()//2, HEIGHT//2 - 80))
-            surface.blit(final_score, (WIDTH//2 - final_score.get_width()//2, HEIGHT//2))
-            surface.blit(restart_txt, (WIDTH//2 - restart_txt.get_width()//2, HEIGHT//2 + 60))
+            <!-- 🧱 벽돌깨기 패널 -->
+            <div id="brickGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧱 벽돌깨기</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                <canvas id="gameCanvas" width="300" height="240"></canvas>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
+            </div>
 
+            <!-- 🃏 카드 짝맞추기 패널 -->
+            <div id="memoryGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🃏 짝맞추기</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                <div id="cardBoard" class="card-grid"></div>
+                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
+            </div>
 
-# ==========================================
-# 6. 메인 통합 실행 및 이벤트 루프
-# ==========================================
-normal_game = MobileFPSGame()
-hard_game = HardcoreFPSGame()
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
+            <div id="match3GameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🏆 성장 퍼즐</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                
+                <div class="puzzle-status-bar">
+                    <span>🚩 Stage <strong id="pStage">1</strong></span>
+                    <span>⏳ <strong id="pTimer" style="color:#E74C3C;">60</strong>초</span>
+                    <span>🎯 목표: <strong id="pScore">0</strong> / <span id="pTarget">1000</span></span>
+                </div>
 
-def draw_menu():
-    screen.fill((30, 30, 40))
-    pygame.mouse.set_visible(True)
+                <div id="match3Board" class="match3-grid"></div>
 
-    title = large_font.render("🎯 모바일 슈팅 게임 셀렉터", True, WHITE)
-    screen.blit(title, (WIDTH//2 - title.get_width()//2, 100))
+                <div style="display:flex; gap:6px; margin-top:8px;">
+                    <button class="btn-action" style="flex:1; background:#E67E22; font-size:13px;" onclick="reShuffleBoard()">🔀 판 섞기</button>
+                    <button class="btn-action" style="flex:1; background:#2ECC71; font-size:13px;" onclick="startStagePuzzleEngine(1)">🔄 STAGE 1 리셋</button>
+                </div>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">1분 내 목표 달성 시 성공! 단계별로 난이도가 착착 올라갑니다.</p>
+            </div>
+        </div>
 
-    # 모드 1 버튼
-    pygame.draw.rect(screen, GREEN, (220, 220, 360, 65), border_radius=12)
-    b1 = font.render("1. 노멀 사격 모드 (오리지널)", True, WHITE)
-    screen.blit(b1, (WIDTH//2 - b1.get_width()//2, 240))
+        <!-- 🏦 탭 3: 디파이 금고 -->
+        <div id="vaultTab" class="tab-content">
+            <div class="vault-card">
+                <div class="vault-balance-title">디파이 예치 총 자산 (원금)</div>
+                <div class="vault-balance-value"><span id="vaultAsset">0</span> 원</div>
+                <div class="vault-profit-rate">🚀 연이율 12.4% 복리 적용 중</div>
 
-    # 모드 2 버튼
-    pygame.draw.rect(screen, RED, (220, 320, 360, 65), border_radius=12)
-    b2 = font.render("2. 하드코어 보스전 모드 (신규 난이도)", True, WHITE)
-    screen.blit(b2, (WIDTH//2 - b2.get_width()//2, 340))
+                <div class="backend-usdt-box">
+                    <span>재단 마스터 풀:</span><span id="usdtValue">$934.41 USDT</span>
+                </div>
+            </div>
+            <button class="btn-kakaopay" onclick="openKakaoModal()">
+                <span style="background:#3C1E1E; color:#FFEB00; padding:2px 4px; border-radius:4px; font-size:11px;">kakao</span>페이로 3초 만에 VIP 충전하기
+            </button>
+            <div id="vaultBenefitBanner" class="benefit-banner">
+                🎯 <strong>고래 등급 달성!</strong> 이율 보상 및 상점 반값 적용 중입니다.
+            </div>
+            <div class="vault-action-group">
+                <button class="btn-vault btn-deposit" onclick="handleDeposit()">예치하기</button>
+                <button class="btn-vault btn-withdraw" onclick="handleWithdraw()">출금하기</button>
+            </div>
+            <button class="btn-action" style="background-color: #2ECC71; box-shadow:0 4px 10px rgba(46,204,113,0.3); width: 100%; max-width: 360px;" onclick="handleClaimInterest()">💰 기적 이자 수령하기</button>
+        </div>
 
-    guide = font.render("원하는 난이도 버튼을 터치/클릭하세요!", True, GRAY)
-    screen.blit(guide, (WIDTH//2 - guide.get_width()//2, 450))
+        <!-- 🛍️ 탭 4: 기적 상점 -->
+        <div id="shopTab" class="tab-content">
+            <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 5px;">
+                <h2 style="font-size: 17px; margin: 0; color: #2C3E50;">기적 상점</h2>
+                <span style="color: #357ABD; font-weight: bold; font-size: 13px;">보유: <span id="shopPoints">0</span>p</span>
+            </div>
+            <div class="shop-grid">
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🍌</div>
+                    <div class="item-name">바나나맛우유</div>
+                    <div class="item-price"><del>1,800p</del> 900p</div>
+                    <button class="btn-exchange" onclick="buyItem('바나나맛우유', 900)">교환하기</button>
+                </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🍙</div>
+                    <div class="item-name">참치마요 삼각김밥</div>
+                    <div class="item-price"><del>1,300p</del> 650p</div>
+                    <button class="btn-exchange" onclick="buyItem('참치마요 삼각김밥', 650)">교환하기</button>
+                </div>
 
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🏎️</div>
+                    <div class="item-name">한정판 부가티 슈퍼카</div>
+                    <div class="item-price"><del>80억p</del> 40억p</div>
+                    <button class="btn-exchange" onclick="buyItem('한정판 부가티 슈퍼카', 4000000000)">교환하기</button>
+                </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🏢</div>
+                    <div class="item-name">한강뷰 최상층 아파트</div>
+                    <div class="item-price"><del>200억p</del> 100억p</div>
+                    <button class="btn-exchange" onclick="buyItem('한강뷰 최상층 아파트', 10000000000)">교환하기</button>
+                </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🛩️</div>
+                    <div class="item-name">초호화 고래 개인 제트기</div>
+                    <div class="item-price"><del>1,600억p</del> 800억p</div>
+                    <button class="btn-exchange" onclick="buyItem('초호화 고래 개인 제트기', 80000000000)">교환하기</button>
+                </div>
+                <div class="shop-item">
+                    <div class="vip-badge">VIP 50%</div>
+                    <div class="item-emoji">🚀</div>
+                    <div class="item-name">화성 탐사 특급 로켓</div>
+                    <div class="item-price"><del>3조p</del> 1.5조p</div>
+                    <button class="btn-exchange" onclick="buyItem('화성 탐사 특급 로켓', 1500000000000)">교환하기</button>
+                </div>
+            </div>
+        </div>
 
-running = True
-while running:
-    clock.tick(FPS)
+        <!-- 하단 네비게이션 바 -->
+        <div class="nav-bar">
+            <div class="nav-item active" id="navHome" onclick="changeTabUrl('home')">
+                <span class="nav-icon">🕊️</span><span>홈(기적이)</span>
+            </div>
+            <div class="nav-item" id="navGame" onclick="changeTabUrl('game')">
+                <span class="nav-icon">🎮</span><span>기적 게임</span>
+            </div>
+            <div class="nav-item" id="navVault" onclick="changeTabUrl('vault')">
+                <span class="nav-icon">🏦</span><span>디파이 금고</span>
+            </div>
+            <div class="nav-item" id="navShop" onclick="changeTabUrl('shop')">
+                <span class="nav-icon">🛍️</span><span>기적 상점</span>
+            </div>
+        </div>
+    </div>
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    <!-- 모달 창 구조체 -->
+    <div id="payModal" class="pay-modal">
+        <div class="pay-box" style="border-top: 8px solid #FFEB00;">
+            <h3 style="margin-top:5px; color:#3C1E1E;">카카오페이 머니 충전</h3>
+            <input type="number" id="payInputAmount" class="auth-input" value="30000" style="text-align:center; font-size:18px; font-weight:bold; color:#2C3E50;">
+            <button onclick="executeKakaoPay()" style="width:100%; padding:14px; background-color:#FFEB00; color:#3C1E1E; border:none; border-radius:12px; font-size:15px; font-weight:bold; cursor:pointer;">결제 및 예치 완료하기</button>
+            <div style="font-size:13px; color:#7F8C8D; margin-top:12px; cursor:pointer;" onclick="closeKakaoModal()">취소</div>
+        </div>
+    </div>
 
-        # --- 메인 메뉴 ---
-        if game_state == 0:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mx, my = event.pos
-                if 220 <= mx <= 580 and 220 <= my <= 285:
-                    game_state = 1
-                    normal_game.reset()
-                    pygame.mouse.set_visible(False)
-                elif 220 <= mx <= 580 and 320 <= my <= 385:
-                    game_state = 2
-                    hard_game.reset()
-                    pygame.mouse.set_visible(False)
+    <div id="adOverlay" class="ad-overlay">
+        <div class="ad-box">
+            <div style="position:absolute; top:15px; left:15px; background:#7F8C8D; color:white; font-size:10px; padding:2px 6px; border-radius:4px;">광고</div>
+            <div style="position:absolute; top:15px; right:15px; color:#E74C3C; font-weight:bold; font-size:14px;" id="adTimer">5s</div>
+            <div style="font-size:45px; margin-top:10px;">🌱</div>
+            <div style="font-size:20px; font-weight:bold; margin-top:12px; margin-bottom:10px; color:#27AE60;">지구를 지키는 착한 기업</div>
+            <div style="font-size:14px; color:#34495E; line-height:1.6; margin-bottom:25px;">"우리가 쓰는 텀블러 하나가 내일의 푸른 숲을 만듭니다."</div>
+            <button id="adCloseBtn" class="btn-ad-close" disabled>잠시 후 닫기</button>
+        </div>
+    </div>
 
-        # --- 노멀 사격 모드 (오리지널 연동) ---
-        elif game_state == 1:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    game_state = 0
-                elif event.key == pygame.K_r:
-                    if normal_game.game_over:
-                        normal_game.reset()
-                    else:
-                        normal_game.reload()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if normal_game.game_over:
-                    normal_game.reset()
-                else:
-                    normal_game.shoot(event.pos)
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-box">
+            <h3 style="margin-top:0; color:#357ABD; border-bottom:2px solid #357ABD; padding-bottom:10px;">설정 및 로그인</h3>
+            
+            <div style="text-align: left; margin: 15px 0; padding: 12px; background: #f8f9fa; border-radius: 12px; font-size: 13px;">
+                <label style="font-weight: bold; color: #2C3E50;">아이디</label>
+                <input type="text" id="authIdInput" class="auth-input" style="padding: 8px; margin-bottom: 8px; margin-top: 4px;" placeholder="아이디 입력">
+                <label style="font-weight: bold; color: #2C3E50;">비밀번호</label>
+                <input type="password" id="authPwInput" class="auth-input" style="padding: 8px; margin-bottom: 12px; margin-top: 4px;" placeholder="비밀번호 입력">
+                
+                <div style="display: flex; gap: 6px;">
+                    <button onclick="handleRegister()" style="flex: 1; padding: 10px; border: none; background: #3498DB; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">신규 회원가입</button>
+                    <button onclick="handleLogin()" style="flex: 1; padding: 10px; border: none; background: #2ECC71; color: white; border-radius: 8px; font-weight: bold; cursor: pointer;">로그인</button>
+                </div>
+                <button onclick="handleLogout()" style="width: 100%; margin-top: 6px; padding: 8px; border: none; background: #E74C3C; color: white; border-radius: 8px; font-size: 12px; cursor: pointer;">로그아웃</button>
+            </div>
 
-        # --- 하드코어 보스 모드 (신규 난이도) ---
-        elif game_state == 2:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    game_state = 0
-                elif event.key == pygame.K_r:
-                    if hard_game.game_over or hard_game.game_clear:
-                        hard_game.reset()
-                    else:
-                        hard_game.reload()
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if hard_game.game_over or hard_game.game_clear:
-                    hard_game.reset()
-                else:
-                    hard_game.shoot(event.pos)
+            <button onclick="closeAdminModal()" style="width:100%; padding:12px; border:none; background:#BDC3C7; color:white; border-radius:12px; font-weight:bold; cursor: pointer;">닫기</button>
+        </div>
+    </div>
 
-    # --- 화면 출력 처리 ---
-    if game_state == 0:
-        draw_menu()
-    elif game_state == 1:
-        normal_game.update()
-        normal_game.draw(screen)
-    elif game_state == 2:
-        hard_game.update()
-        hard_game.draw(screen)
+    <script>
+        let amount = 0; 
+        let vaultAsset = 0;
+        let isRunning = false; let intervalId = null;
+        
+        const btn = document.getElementById('engineBtn');
+        const amountDisplay = document.getElementById('subsidyAmount');
+        const vaultAssetDisplay = document.getElementById('vaultAsset');
+        const totalBalanceDisplay = document.getElementById('totalBalance');
+        const shopPointsDisplay = document.getElementById('shopPoints');
+        const userBadgeText = document.getElementById('userBadgeText');
 
-    pygame.display.flip()
+        /* 💡 데이터 로드 */
+        function loadSavedData() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            
+            if (loggedInUser) {
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`));
+                if (userData) {
+                    amount = parseInt(userData.totalBalance) || 0;
+                    vaultAsset = parseInt(userData.vaultAsset) || 0;
+                    if (userBadgeText) userBadgeText.innerText = loggedInUser + " 대장님";
+                }
+            } else {
+                amount = 0;
+                vaultAsset = 0;
+                if (userBadgeText) userBadgeText.innerText = "비회원 기적이";
+            }
+            updateTotalBalance(false);
+        }
 
-pygame.quit()
-sys.exit()
+        /* 💡 데이터 저장 */
+        function saveCurrentData() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (loggedInUser) {
+                const userData = JSON.parse(localStorage.getItem(`user_${loggedInUser}`)) || {};
+                userData.totalBalance = amount;
+                userData.vaultAsset = vaultAsset;
+                localStorage.setItem(`user_${loggedInUser}`, JSON.stringify(userData));
+            }
+        }
+
+        /* 💡 회원가입 및 로그인 처리 */
+        function handleRegister() {
+            const id = document.getElementById("authIdInput").value.trim();
+            const pw = document.getElementById("authPwInput").value.trim();
+
+            if (!id || !pw) {
+                alert("아이디와 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            if (localStorage.getItem(`user_${id}`)) {
+                alert("이미 존재하는 아이디입니다.");
+                return;
+            }
+
+            const newUser = {
+                username: id,
+                password: pw,
+                totalBalance: 10000000,
+                vaultAsset: 0
+            };
+
+            localStorage.setItem(`user_${id}`, JSON.stringify(newUser));
+            alert(`🎉 회원가입 완료!\n[${id}]님께 가입 축하 지원금 10,000,000원이 지급되었습니다.`);
+        }
+
+        function handleLogin() {
+            const id = document.getElementById("authIdInput").value.trim();
+            const pw = document.getElementById("authPwInput").value.trim();
+
+            const storedData = localStorage.getItem(`user_${id}`);
+            if (!storedData) {
+                alert("존재하지 않는 회원 계정입니다.");
+                return;
+            }
+
+            const userData = JSON.parse(storedData);
+            if (userData.password !== pw) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            localStorage.setItem("loggedInUser", id);
+            alert(`🐳 환영합니다, ${id}님!\n개인 자산 데이터가 동기화되었습니다.`);
+            
+            document.getElementById("authIdInput").value = "";
+            document.getElementById("authPwInput").value = "";
+            closeAdminModal();
+            loadSavedData();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("loggedInUser");
+            alert("로그아웃 되었습니다. 첫 화면(0원) 모드로 전환됩니다.");
+            closeAdminModal();
+            loadSavedData();
+        }
+
+        function openKakaoModal() { document.getElementById('payModal').style.display = 'flex'; }
+        function closeKakaoModal() { document.getElementById('payModal').style.display = 'none'; }
+        
+        function executeKakaoPay() {
+            const payAmt = parseInt(document.getElementById('payInputAmount').value);
+            if(isNaN(payAmt) || payAmt <= 0) return alert("금액을 정확히 입력하세요.");
+            alert("💛 페이 완료! [" + payAmt.toLocaleString() + "원]이 디파이 금고로 추가 예치됩니다.");
+            vaultAsset += payAmt; closeKakaoModal(); updateTotalBalance();
+        }
+
+        function updateTotalBalance(shouldSave = true) {
+            let total = amount + vaultAsset;
+            if(totalBalanceDisplay) totalBalanceDisplay.innerText = total.toLocaleString();
+            if(amountDisplay) amountDisplay.innerText = amount.toLocaleString();
+            if(shopPointsDisplay) shopPointsDisplay.innerText = amount.toLocaleString();
+            if(vaultAssetDisplay) vaultAssetDisplay.innerText = vaultAsset.toLocaleString();
+            if(shouldSave) saveCurrentData();
+        }
+
+        function handleClaimInterest() {
+            const totalDailyInterest = Math.floor(vaultAsset * 0.00034);
+            amount += totalDailyInterest; updateTotalBalance();
+            alert("🎁 복리 이자 수령 완료! +" + totalDailyInterest.toLocaleString() + "원 💰");
+        }
+
+        function buyItem(itemName, finalPrice) {
+            if (amount >= finalPrice) { amount -= finalPrice; updateTotalBalance(); alert("🎁 [" + itemName + "] 교환 성공! 인벤토리에 지급되었습니다. 🎉"); } 
+            else { alert("❌ 보유 기적 포인트가 부족합니다!"); }
+        }
+
+        function changeTabUrl(tabName) { 
+            exitFullScreenGame();
+            routeTabs(tabName); 
+        }
+
+        /* 🆕 전체화면 실행/해제 제어 기능 */
+        let currentActiveGameAreaId = 'galagaGameArea';
+
+        function toggleFullScreenGame() {
+            const activePanel = document.getElementById(currentActiveGameAreaId);
+            if(activePanel) {
+                if (activePanel.classList.contains('fullscreen-mode')) {
+                    exitFullScreenGame();
+                } else {
+                    activePanel.classList.add('fullscreen-mode');
+                }
+            }
+        }
+
+        function exitFullScreenGame() {
+            const panels = document.querySelectorAll('.game-display-panel');
+            panels.forEach(p => p.classList.remove('fullscreen-mode'));
+        }
+
+        /* 🆕 전체화면에서 홈으로 바로 빠져나가는 함수 */
+        function goHomeFromFullScreen() {
+            exitFullScreenGame();
+            changeTabUrl('home');
+        }
+
+        function routeTabs(tabName) {
+            document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
+            document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
+            
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            clearInterval(puzzleTimerId);
+
+            if(tabName === 'game') { 
+                document.getElementById('gameTab').classList.add('active'); 
+                document.getElementById('navGame').classList.add('active'); 
+                setTimeout(() => { startGalagaGameEngine(); }, 50); 
+            }
+            else if(tabName === 'vault') { document.getElementById('vaultTab').classList.add('active'); document.getElementById('navVault').classList.add('active'); } 
+            else if(tabName === 'shop') { document.getElementById('shopTab').classList.add('active'); document.getElementById('navShop').classList.add('active'); } 
+            else { document.getElementById('homeTab').classList.add('active'); document.getElementById('navHome').classList.add('active'); }
+        }
+
+        /* ☁️ 엔진 가동 */
+        btn.addEventListener('click', () => {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) {
+                alert("🔒 엔진 가동은 로그인/회원가입 후 이용 가능합니다!");
+                openAdminModal();
+                return;
+            }
+
+            const leftWing = document.getElementById('leftWing'); const rightWing = document.getElementById('rightWing');
+            if (!isRunning) {
+                isRunning = true; btn.innerText = "☁️ 가동 중..."; btn.style.backgroundColor = "#E67E22"; 
+                leftWing.classList.add('nodding'); rightWing.classList.add('nodding');
+                intervalId = setInterval(() => { amount += Math.floor(Math.random() * 35000) + 15000; updateTotalBalance(); }, 1000);
+            } else {
+                isRunning = false; btn.innerText = "☁️ 엔진 가동하기"; btn.style.backgroundColor = "#357ABD"; 
+                leftWing.classList.remove('nodding'); rightWing.classList.remove('nodding'); clearInterval(intervalId);
+            }
+        });
+
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
+
+        let adCountdown = 5; let adTimerId = null;
+        
+        function openRandomAdPopup() {
+            const loggedInUser = localStorage.getItem("loggedInUser");
+            if (!loggedInUser) {
+                alert("❌ 광고 보상은 로그인 후 이용 가능합니다.");
+                openAdminModal();
+                return;
+            }
+
+            adCountdown = 5; document.getElementById('adOverlay').style.display = 'flex';
+            document.getElementById('adTimer').innerText = adCountdown + 's';
+            const closeBtn = document.getElementById('adCloseBtn'); closeBtn.innerText = "잠시 후 닫기"; closeBtn.disabled = true; closeBtn.classList.remove('ready');
+
+            adTimerId = setInterval(() => {
+                adCountdown--; document.getElementById('adTimer').innerText = adCountdown + 's';
+                if(adCountdown <= 0) {
+                    clearInterval(adTimerId); document.getElementById('adTimer').innerText = '완료!';
+                    closeBtn.innerText = "보상 받기"; closeBtn.disabled = false; closeBtn.classList.add('ready'); closeBtn.onclick = finishAdReward;
+                }
+            }, 1000);
+        }
+
+        function finishAdReward() {
+            const bonusAmount = Math.floor(amount / 3);
+            amount += bonusAmount; 
+            updateTotalBalance();
+            document.getElementById('adOverlay').style.display = 'none'; 
+            alert(`🎉 보상이 지급되었습니다! (+${bonusAmount.toLocaleString()}원)`);
+        }
+
+        function handleDeposit() {
+            const input = prompt("예치할 금액을 입력하세요", amount);
+            if (!input) return; const depAmt = parseInt(input);
+            if(!isNaN(depAmt) && depAmt > 0 && depAmt <= amount) { amount -= depAmt; vaultAsset += depAmt; updateTotalBalance(); }
+        }
+
+        function handleWithdraw() {
+            const input = prompt("출금할 금액을 입력하세요", vaultAsset);
+            if (!input) return; const witAmt = parseInt(input);
+            if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
+        }
+
+        function switchMiniGame(gameType) {
+            exitFullScreenGame();
+            document.getElementById('btnSelectBrick').classList.remove('active'); 
+            document.getElementById('btnSelectMemory').classList.remove('active'); 
+            document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectMatch3').classList.remove('active');
+
+            document.getElementById('brickGameArea').style.display = 'none'; 
+            document.getElementById('memoryGameArea').style.display = 'none'; 
+            document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('match3GameArea').style.display = 'none';
+            
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            clearInterval(puzzleTimerId);
+
+            if(gameType === 'brick') { 
+                currentActiveGameAreaId = 'brickGameArea';
+                document.getElementById('btnSelectBrick').classList.add('active'); 
+                document.getElementById('brickGameArea').style.display = 'block'; 
+                startBrickGameEngine(); 
+            } 
+            else if(gameType === 'memory') { 
+                currentActiveGameAreaId = 'memoryGameArea';
+                document.getElementById('btnSelectMemory').classList.add('active'); 
+                document.getElementById('memoryGameArea').style.display = 'block'; 
+                startMemoryGameEngine(); 
+            } 
+            else if(gameType === 'galaga') { 
+                currentActiveGameAreaId = 'galagaGameArea';
+                document.getElementById('btnSelectGalaga').classList.add('active'); 
+                document.getElementById('galagaGameArea').style.display = 'block'; 
+                startGalagaGameEngine(); 
+            }
+            else if(gameType === 'match3') { 
+                currentActiveGameAreaId = 'match3GameArea';
+                document.getElementById('btnSelectMatch3').classList.add('active'); 
+                document.getElementById('match3GameArea').style.display = 'block'; 
+                startStagePuzzleEngine(1); 
+            }
+        }
+
+        /* 🧱 1. 벽돌깨기 */
+        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
+        
+        function startBrickGameEngine() {
+            cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
+            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
+            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 3; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
+            drawBrickGame();
+        }
+        function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
+
+        gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
+        gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
+        
+        function drawBrickGame() {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
+            ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
+            for (let c = 0; c < 6; c++) {
+                for (let r = 0; r < 3; r++) {
+                    if (bricks[c][r] && bricks[c][r].status === 1) {
+                        let brickX = c * 47 + 12; let brickY = r * 17 + 15; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
+                        ctx.beginPath(); ctx.rect(brickX, brickY, 42, 12); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
+                        if (ballX > brickX && ballX < brickX + 42 && ballY > brickY && ballY < brickY + 12) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
+                    }
+                }
+            }
+            if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
+            if (ballY + dy < ballRadius) dy = -dy;
+            else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
+                if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; } 
+                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("🧱 게임 리셋 완료!"); startBrickGameEngine(); return; }
+            }
+            ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
+        }
+
+        /* 🃏 2. 카드 매칭 */
+        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
+        function startMemoryGameEngine() {
+            const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
+            let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
+            shuffled.forEach((emoji) => {
+                const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
+            });
+        }
+        function handleCardClick() {
+            if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
+            this.classList.add('flipped'); flippedCards.push(this);
+            if (flippedCards.length === 2) {
+                let c1 = flippedCards[0]; let c2 = flippedCards[1];
+                if (c1.dataset.emoji === c2.dataset.emoji) {
+                    c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
+
+                    if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
+                } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
+            }
+        }
+
+        /* 🛸 3. 정통 갤러그 시스템 */
+        let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
+        let galagaAnimationId = null;
+        let playerShipX = 150; let playerBullets = []; let enemyShips = []; let galagaFrame = 0;
+        let enemyDirection = 1;
+        
+        function startGalagaGameEngine() {
+            cancelAnimationFrame(galagaAnimationId);
+            playerBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
+            for(let row = 0; row < 2; row++) {
+                for(let col = 0; col < 5; col++) {
+                    enemyShips.push({
+                        x: col * 45 + 50,
+                        y: row * 25 + 30,
+                        baseX: col * 45 + 50,
+                        width: 18,
+                        height: 14,
+                        color: row === 0 ? "#E74C3C" : "#F1C40F"
+                    });
+                }
+            }
+            loopGalagaGame();
+        }
+
+        function setPlayerX(clientX) {
+            let rect = galagaCanvas.getBoundingClientRect();
+            let relativeX = clientX - rect.left;
+            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) playerShipX = relativeX;
+        }
+        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
+        galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
+
+        function loopGalagaGame() {
+            gCtx.clearRect(0, 0, galagaCanvas.width, galagaCanvas.height);
+            galagaFrame++;
+
+            gCtx.beginPath();
+            gCtx.moveTo(playerShipX, 210);
+            gCtx.lineTo(playerShipX - 10, 228);
+            gCtx.lineTo(playerShipX + 10, 228);
+            gCtx.fillStyle = "#3498DB"; gCtx.fill(); gCtx.closePath();
+            
+            gCtx.fillStyle = "#FFF";
+            gCtx.fillRect(playerShipX - 2, 215, 4, 10);
+
+            if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
+
+            playerBullets.forEach((b, bIdx) => {
+                b.y -= 4.5;
+                gCtx.fillStyle = "#2ECC71";
+                gCtx.fillRect(b.x - 1.5, b.y, 3, 7);
+                if(b.y < 0) playerBullets.splice(bIdx, 1);
+            });
+
+            let shiftDown = false;
+            enemyShips.forEach(enemy => {
+                enemy.x += enemyDirection * 0.5;
+                if(enemy.x > galagaCanvas.width - 25 || enemy.x < 10) { shiftDown = true; }
+            });
+
+            if(shiftDown) {
+                enemyDirection *= -1;
+                enemyShips.forEach(enemy => { enemy.y += 6; });
+            }
+
+            enemyShips.forEach((enemy, eIdx) => {
+                gCtx.fillStyle = enemy.color;
+                gCtx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                gCtx.fillStyle = "#FFF";
+                gCtx.fillRect(enemy.x + 7, enemy.y + 3, 4, 4);
+
+                playerBullets.forEach((b, bIdx) => {
+                    if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
+                        playerBullets.splice(bIdx, 1);
+                        enemyShips.splice(eIdx, 1);
+                        amount += 10000; 
+                        updateTotalBalance();
+                    }
+                });
+
+                if(enemy.y > 195) {
+                    cancelAnimationFrame(galagaAnimationId);
+                    alert("🛸 경보! 적 편대의 침공을 허용했습니다. 다시 방어 기지를 구축합니다.");
+                    startGalagaGameEngine();
+                }
+            });
+
+            if(enemyShips.length === 0) {
+                alert("🎉 웨이브 클리어! 적 군단이 더 빠른 속도로 재집결합니다.");
+                startGalagaGameEngine();
+            } else {
+                galagaAnimationId = requestAnimationFrame(loopGalagaGame);
+            }
+        }
+
+        /* 🏆 4. 완전히 개편된 성장형 퍼즐 엔진 (1분 제한시간 + 난이도 점진 상승) */
+        const allTileTypes = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
+        let currentStage = 1;
+        let currentPuzzleScore = 0;
+        let targetPuzzleScore = 1000;
+        let puzzleTimeLeft = 60;
+        let puzzleTimerId = null;
+        let pActiveTypes = [];
+        
+        let pSize = 6;
+        let pBoard = [];
+        let pSelected = null;
+        let isPProcessing = false;
+
+        function startStagePuzzleEngine(stage) {
+            currentStage = stage || 1;
+            currentPuzzleScore = 0;
+            puzzleTimeLeft = 60;
+            
+            // 난이도 설계: 단계가 오를수록 타일 종류 증가 및 목표점수 상승
+            let activeTypeCount = Math.min(4 + Math.floor((currentStage - 1) / 2), allTileTypes.length);
+            pActiveTypes = allTileTypes.slice(0, activeTypeCount);
+            targetPuzzleScore = currentStage * 1200;
+
+            document.getElementById('pStage').innerText = currentStage;
+            document.getElementById('pScore').innerText = currentPuzzleScore;
+            document.getElementById('pTarget').innerText = targetPuzzleScore;
+            document.getElementById('pTimer').innerText = puzzleTimeLeft;
+
+            pSelected = null;
+            isPProcessing = false;
+
+            initValidBoard();
+            startPuzzleTimer();
+        }
+
+        function startPuzzleTimer() {
+            clearInterval(puzzleTimerId);
+            puzzleTimerId = setInterval(() => {
+                puzzleTimeLeft--;
+                document.getElementById('pTimer').innerText = puzzleTimeLeft;
+                if (puzzleTimeLeft <= 0) {
+                    clearInterval(puzzleTimerId);
+                    alert(`⏳ 제한 시간(60초) 종료!\nStage ${currentStage} 실패! 1단계부터 다시 도전하세요.`);
+                    startStagePuzzleEngine(1);
+                }
+            }, 1000);
+        }
+
+        function initValidBoard() {
+            let hasMoves = false;
+            let attempts = 0;
+            do {
+                pBoard = [];
+                for (let r = 0; r < pSize; r++) {
+                    pBoard[r] = [];
+                    for (let c = 0; c < pSize; c++) {
+                        pBoard[r][c] = pActiveTypes[Math.floor(Math.random() * pActiveTypes.length)];
+                    }
+                }
+                // 시작 시 맞춰진 터짐이 없고, 유효한 이동(Match 가능 수)이 남아있는지 확인
+                if (checkPMatches().length === 0 && checkPossibleMoves()) {
+                    hasMoves = true;
+                }
+                attempts++;
+            } while (!hasMoves && attempts < 100);
+
+            renderPBoard();
+        }
+
+        function reShuffleBoard() {
+            if (isPProcessing) return;
+            initValidBoard();
+        }
+
+        function renderPBoard() {
+            const boardElem = document.getElementById('match3Board');
+            boardElem.innerHTML = '';
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize; c++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add('match3-tile');
+                    tile.innerText = pBoard[r][c] || '';
+                    tile.dataset.row = r;
+                    tile.dataset.col = c;
+                    if (pSelected && pSelected.r === r && pSelected.c === c) {
+                        tile.classList.add('selected');
+                    }
+                    tile.onclick = () => handlePTileClick(r, c);
+                    boardElem.appendChild(tile);
+                }
+            }
+        }
+
+        function handlePTileClick(r, c) {
+            if (isPProcessing) return;
+
+            if (!pSelected) {
+                pSelected = { r, c };
+                renderPBoard();
+            } else {
+                let r1 = pSelected.r, c1 = pSelected.c;
+                let r2 = r, c2 = c;
+                let isAdjacent = (Math.abs(r1 - r2) + Math.abs(c1 - c2)) === 1;
+
+                if (isAdjacent) {
+                    isPProcessing = true;
+                    swapPTiles(r1, c1, r2, c2);
+                    let matches = checkPMatches();
+                    
+                    if (matches.length > 0) {
+                        pSelected = null;
+                        renderPBoard();
+                        processPMatches();
+                    } else {
+                        setTimeout(() => {
+                            swapPTiles(r1, c1, r2, c2);
+                            pSelected = null;
+                            renderPBoard();
+                            isPProcessing = false;
+                        }, 250);
+                    }
+                } else {
+                    pSelected = { r, c };
+                    renderPBoard();
+                }
+            }
+        }
+
+        function swapPTiles(r1, c1, r2, c2) {
+            let temp = pBoard[r1][c1];
+            pBoard[r1][c1] = pBoard[r2][c2];
+            pBoard[r2][c2] = temp;
+        }
+
+        function checkPMatches() {
+            let matched = [];
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize - 2; c++) {
+                    let type = pBoard[r][c];
+                    if (type && type === pBoard[r][c+1] && type === pBoard[r][c+2]) {
+                        matched.push({r, c}, {r, c: c+1}, {r, c: c+2});
+                    }
+                }
+            }
+            for (let c = 0; c < pSize; c++) {
+                for (let r = 0; r < pSize - 2; r++) {
+                    let type = pBoard[r][c];
+                    if (type && type === pBoard[r+1][c] && type === pBoard[r+2][c]) {
+                        matched.push({r, c}, {r: r+1, c}, {r: r+2, c});
+                    }
+                }
+            }
+            return matched;
+        }
+
+        function checkPossibleMoves() {
+            for (let r = 0; r < pSize; r++) {
+                for (let c = 0; c < pSize; c++) {
+                    if (c < pSize - 1) {
+                        swapPTiles(r, c, r, c + 1);
+                        let m = checkPMatches();
+                        swapPTiles(r, c, r, c + 1);
+                        if (m.length > 0) return true;
+                    }
+                    if (r < pSize - 1) {
+                        swapPTiles(r, c, r + 1, c);
+                        let m = checkPMatches();
+                        swapPTiles(r, c, r + 1, c);
+                        if (m.length > 0) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function processPMatches() {
+            let matches = checkPMatches();
+            if (matches.length === 0) {
+                isPProcessing = false;
+                // 더 이상 맞출 수 있는 수가 없다면 섞어주기
+                if (!checkPossibleMoves()) {
+                    reShuffleBoard();
+                }
+                return;
+            }
+
+            let uniqueMatches = {};
+            matches.forEach(m => { uniqueMatches[`${m.r},${m.c}`] = m; });
+            let matchCount = Object.keys(uniqueMatches).length;
+
+            let gainedPoints = matchCount * 100;
+            currentPuzzleScore += gainedPoints;
+            amount += gainedPoints * 5; // 보상금 수령
+            updateTotalBalance();
+
+            document.getElementById('pScore').innerText = currentPuzzleScore;
+
+            Object.values(uniqueMatches).forEach(m => {
+                pBoard[m.r][m.c] = null;
+            });
+
+            // 타일 떨어뜨리기 및 빈자리 새로 채우기
+            for (let c = 0; c < pSize; c++) {
+                let emptyRow = pSize - 1;
+                for (let r = pSize - 1; r >= 0; r--) {
+                    if (pBoard[r][c] !== null) {
+                        pBoard[emptyRow][c] = pBoard[r][c];
+                        if (emptyRow !== r) pBoard[r][c] = null;
+                        emptyRow--;
+                    }
+                }
+                for (let r = emptyRow; r >= 0; r--) {
+                    pBoard[r][c] = pActiveTypes[Math.floor(Math.random() * pActiveTypes.length)];
+                }
+            }
+
+            renderPBoard();
+
+            // 클리어 조건 달성 검사
+            if (currentPuzzleScore >= targetPuzzleScore) {
+                clearInterval(puzzleTimerId);
+                let rewardBonus = currentStage * 50000;
+                amount += rewardBonus;
+                updateTotalBalance();
+                
+                setTimeout(() => {
+                    alert(`🎉 축하합니다! STAGE ${currentStage} 클리어!\n🎁 단계 클리어 보상: +${rewardBonus.toLocaleString()}원 지급!\n다음 단계로 이동합니다.`);
+                    startStagePuzzleEngine(currentStage + 1);
+                }, 200);
+            } else {
+                setTimeout(() => {
+                    processPMatches();
+                }, 300);
+            }
+        }
+
+        window.onload = loadSavedData;
+    </script>
+</body>
+</html>
