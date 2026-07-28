@@ -161,7 +161,7 @@
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
-        .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 330px; height: auto; }
+        .game-display-panel canvas { background: #111827; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 330px; height: auto; }
         
         /* 전체화면 모드 시 최상단 고정 컨트롤 바 */
         .fullscreen-control-bar {
@@ -361,12 +361,12 @@
 
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
-                <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
+                <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 스와이프 벽돌</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
                 <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🏆 성장 퍼즐</button>
             </div>
 
-            <!-- 🚀 원본 갤러그 패널 (원본 그래픽/크기/시스템 100% 유지) -->
+            <!-- 🚀 원본 갤러그 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -377,16 +377,16 @@
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
             </div>
 
-            <!-- 🧱 벽돌깨기 패널 -->
+            <!-- 🧱 멀티볼 스와이프 벽돌깨기 패널 (업데이트) -->
             <div id="brickGameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🧱 벽돌깨기</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧱 스와이프 벽돌깨기</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
-                <canvas id="gameCanvas" width="300" height="240"></canvas>
+                <canvas id="gameCanvas" width="320" height="380"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">드래그로 조작 후 손을 떼어 볼 발사! (타격당 +10원)</p>
             </div>
 
             <!-- 🃏 카드 짝맞추기 패널 -->
@@ -843,41 +843,298 @@
             }
         }
 
-        /* 🧱 1. 벽돌깨기 */
-        let gameCanvas = document.getElementById("gameCanvas"); let ctx = gameCanvas.getContext("2d");
-        let gameAnimationId = null; let ballRadius = 5, ballX, ballY, dx, dy; let paddleHeight = 12, paddleWidth = 60, paddleX; let bricks = [];
-        
-        function startBrickGameEngine() {
-            cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
-            ballX = gameCanvas.width / 2; ballY = gameCanvas.height - 35; dx = 1.5; dy = -1.5; paddleX = (gameCanvas.width - paddleWidth) / 2;
-            for (let c = 0; c < 6; c++) { bricks[c] = []; for (let r = 0; r < 3; r++) { bricks[c][r] = { x: 0, y: 0, status: 1 }; } }
-            drawBrickGame();
-        }
-        function setPaddleX(clientX) { let rect = gameCanvas.getBoundingClientRect(); let relativeX = clientX - rect.left; if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; }
+        /* 🧱 1. 멀티볼 스와이프 벽돌깨기 (BBTAN 스타일 신규 엔진) */
+        let gameCanvas = document.getElementById("gameCanvas");
+        let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null;
 
-        gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
-        gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
-        
-        function drawBrickGame() {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            ctx.beginPath(); ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); ctx.fillStyle = "#FF2E54"; ctx.fill(); ctx.closePath();
-            ctx.beginPath(); ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight); ctx.fillStyle = "#3498DB"; ctx.fill(); ctx.closePath();
-            for (let c = 0; c < 6; c++) {
-                for (let r = 0; r < 3; r++) {
-                    if (bricks[c][r] && bricks[c][r].status === 1) {
-                        let brickX = c * 47 + 12; let brickY = r * 17 + 15; bricks[c][r].x = brickX; bricks[c][r].y = brickY;
-                        ctx.beginPath(); ctx.rect(brickX, brickY, 42, 12); ctx.fillStyle = "#2ECC71"; ctx.fill(); ctx.closePath();
-                        if (ballX > brickX && ballX < brickX + 42 && ballY > brickY && ballY < brickY + 12) { dy = -dy; bricks[c][r].status = 0; amount += 100; updateTotalBalance(); }
+        let brickRows = 8;
+        let brickCols = 7;
+        let brickPadding = 3;
+        let brickOffsetTop = 45;
+        let brickOffsetLeft = 8;
+        let brickWidth = (320 - (brickOffsetLeft * 2) - (brickPadding * (brickCols - 1))) / brickCols;
+        let brickHeight = 28;
+
+        let bLevel = 1;
+        let bBalls = [];
+        let bTotalBalls = 20;
+        let bShooting = false;
+        let bAiming = false;
+        let bAimAngle = 0;
+        let bStartPos = { x: 160, y: 360 };
+        let bNextStartPos = null;
+        let bBricks = [];
+        let bColors = ['#E74C3C', '#E67E22', '#F1C40F', '#2ECC71', '#3498DB', '#9B59B6', '#1ABC9C'];
+
+        function initBrickBoard() {
+            bBricks = [];
+            bLevel = 1;
+            bTotalBalls = 20;
+            bStartPos = { x: 160, y: 360 };
+            bNextStartPos = null;
+            bShooting = false;
+            bAiming = false;
+            bBalls = [];
+            addNewBrickRow();
+        }
+
+        function addNewBrickRow() {
+            for(let r = bBricks.length - 1; r >= 0; r--) {
+                for(let c = 0; c < brickCols; c++) {
+                    if(bBricks[r][c]) {
+                        if(r + 1 >= brickRows) {
+                            alert("💥 블록이 바닥에 도달했습니다! 게임이 리셋됩니다.");
+                            initBrickBoard();
+                            return;
+                        }
+                        bBricks[r + 1][c] = bBricks[r][c];
+                        bBricks[r][c] = null;
                     }
                 }
             }
-            if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
-            if (ballY + dy < ballRadius) dy = -dy;
-            else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
-                if (ballX > paddleX && ballX < paddleX + paddleWidth) { dy = -dy; } 
-                else if (ballY + dy > gameCanvas.height - ballRadius) { cancelAnimationFrame(gameAnimationId); alert("🧱 게임 리셋 완료!"); startBrickGameEngine(); return; }
+
+            bBricks[0] = [];
+            let count = 0;
+            for(let c = 0; c < brickCols; c++) {
+                if(Math.random() > 0.35 || count < 2) {
+                    let hp = bLevel * 3 + Math.floor(Math.random() * 3);
+                    let color = bColors[Math.floor(Math.random() * bColors.length)];
+                    bBricks[0][c] = { hp: hp, maxHp: hp, color: color };
+                    count++;
+                } else {
+                    bBricks[0][c] = null;
+                }
             }
-            ballX += dx; ballY += dy; gameAnimationId = requestAnimationFrame(drawBrickGame);
+        }
+
+        function startBrickGameEngine() {
+            cancelAnimationFrame(gameAnimationId);
+            if(!gameCanvas) return;
+            initBrickBoard();
+            loopBrickGame();
+        }
+
+        function getAimPos(e) {
+            let rect = gameCanvas.getBoundingClientRect();
+            let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function handlePointerDown(e) {
+            if(bShooting) return;
+            let pos = getAimPos(e);
+            if(pos.y < bStartPos.y - 10) {
+                bAiming = true;
+                updateAimAngle(pos);
+            }
+        }
+
+        function handlePointerMove(e) {
+            if(!bAiming || bShooting) return;
+            let pos = getAimPos(e);
+            updateAimAngle(pos);
+        }
+
+        function handlePointerUp(e) {
+            if(!bAiming || bShooting) return;
+            bAiming = false;
+            bShooting = true;
+            fireBalls();
+        }
+
+        function updateAimAngle(pos) {
+            let dx = pos.x - bStartPos.x;
+            let dy = pos.y - bStartPos.y;
+            let angle = Math.atan2(dy, dx);
+            if(angle > -0.15) angle = -0.15;
+            if(angle < -Math.PI + 0.15) angle = -Math.PI + 0.15;
+            bAimAngle = angle;
+        }
+
+        gameCanvas.addEventListener('mousedown', handlePointerDown);
+        gameCanvas.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        gameCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); handlePointerDown(e); });
+        gameCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); handlePointerMove(e); });
+        gameCanvas.addEventListener('touchend', (e) => { handlePointerUp(e); });
+
+        function fireBalls() {
+            bBalls = [];
+            let vx = Math.cos(bAimAngle) * 7;
+            let vy = Math.sin(bAimAngle) * 7;
+            let count = 0;
+
+            let timer = setInterval(() => {
+                bBalls.push({
+                    x: bStartPos.x,
+                    y: bStartPos.y,
+                    vx: vx,
+                    vy: vy,
+                    active: true
+                });
+                count++;
+                if(count >= bTotalBalls) clearInterval(timer);
+            }, 60);
+        }
+
+        function updateBrickPhysics() {
+            if(!bShooting) return;
+
+            let allLanded = true;
+
+            for(let i = 0; i < bBalls.length; i++) {
+                let ball = bBalls[i];
+                if(!ball.active) continue;
+
+                allLanded = false;
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+
+                if(ball.x - 4 <= 0) { ball.x = 4; ball.vx = -ball.vx; }
+                if(ball.x + 4 >= gameCanvas.width) { ball.x = gameCanvas.width - 4; ball.vx = -ball.vx; }
+                if(ball.y - 4 <= 0) { ball.y = 4; ball.vy = -ball.vy; }
+
+                if(ball.y + 4 >= 365) {
+                    ball.active = false;
+                    ball.y = 365;
+                    if(!bNextStartPos) {
+                        bNextStartPos = { x: ball.x, y: 360 };
+                    }
+                    continue;
+                }
+
+                for(let r = 0; r < brickRows; r++) {
+                    for(let c = 0; c < brickCols; c++) {
+                        let brick = bBricks[r] ? bBricks[r][c] : null;
+                        if(brick) {
+                            let bx = brickOffsetLeft + c * (brickWidth + brickPadding);
+                            let by = brickOffsetTop + r * (brickHeight + brickPadding);
+
+                            if(ball.x + 4 > bx && ball.x - 4 < bx + brickWidth &&
+                               ball.y + 4 > by && ball.y - 4 < by + brickHeight) {
+                                
+                                let overlapLeft = (ball.x + 4) - bx;
+                                let overlapRight = (bx + brickWidth) - (ball.x - 4);
+                                let overlapTop = (ball.y + 4) - by;
+                                let overlapBottom = (by + brickHeight) - (ball.y - 4);
+
+                                let minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+                                if(minOverlap === overlapLeft || minOverlap === overlapRight) ball.vx = -ball.vx;
+                                else ball.vy = -ball.vy;
+
+                                brick.hp--;
+                                amount += 10;
+                                updateTotalBalance();
+
+                                if(brick.hp <= 0) {
+                                    bBricks[r][c] = null;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(allLanded && bBalls.length >= bTotalBalls) {
+                bShooting = false;
+                bLevel++;
+                bTotalBalls += 2;
+                if(bNextStartPos) {
+                    bStartPos = bNextStartPos;
+                    bNextStartPos = null;
+                }
+                addNewBrickRow();
+            }
+        }
+
+        function drawBrickGame() {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "bold 12px sans-serif";
+            ctx.fillText("STAGE: " + bLevel, 10, 25);
+            ctx.fillText("BALLS: " + bTotalBalls, 250, 25);
+
+            ctx.strokeStyle = "#34495E";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, 365);
+            ctx.lineTo(320, 365);
+            ctx.stroke();
+
+            for(let r = 0; r < brickRows; r++) {
+                for(let c = 0; c < brickCols; c++) {
+                    let brick = bBricks[r] ? bBricks[r][c] : null;
+                    if(brick) {
+                        let bx = brickOffsetLeft + c * (brickWidth + brickPadding);
+                        let by = brickOffsetTop + r * (brickHeight + brickPadding);
+
+                        ctx.fillStyle = brick.color;
+                        ctx.beginPath();
+                        ctx.roundRect(bx, by, brickWidth, brickHeight, 4);
+                        ctx.fill();
+
+                        ctx.strokeStyle = "rgba(255,255,255,0.2)";
+                        ctx.strokeRect(bx + 2, by + 2, brickWidth - 4, brickHeight - 4);
+
+                        ctx.fillStyle = "#FFFFFF";
+                        ctx.font = "bold 11px sans-serif";
+                        ctx.textAlign = "center";
+                        ctx.fillText(brick.hp, bx + brickWidth / 2, by + brickHeight / 2 + 4);
+                        ctx.textAlign = "start";
+                    }
+                }
+            }
+
+            if(bAiming && !bShooting) {
+                ctx.strokeStyle = "#3498DB";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(bStartPos.x, bStartPos.y);
+
+                let curX = bStartPos.x;
+                let curY = bStartPos.y;
+                let stepX = Math.cos(bAimAngle) * 12;
+                let stepY = Math.sin(bAimAngle) * 12;
+
+                for(let i = 0; i < 15; i++) {
+                    curX += stepX;
+                    curY += stepY;
+                    if(curX <= 0 || curX >= 320) stepX = -stepX;
+                    if(curY <= 0) break;
+                    ctx.lineTo(curX, curY);
+                }
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            ctx.fillStyle = "#2ECC71";
+            ctx.beginPath();
+            ctx.arc(bStartPos.x, bStartPos.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#E74C3C";
+            for(let ball of bBalls) {
+                if(ball.active) {
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function loopBrickGame() {
+            updateBrickPhysics();
+            drawBrickGame();
+            gameAnimationId = requestAnimationFrame(loopBrickGame);
         }
 
         /* 🃏 2. 카드 매칭 */
@@ -902,14 +1159,14 @@
             }
         }
 
-        /* 🚀 3. 원본 갤러그 엔진 (100% 원본 복원 + 적군 총알 시스템 하강 추가) */
+        /* 🚀 3. 원본 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         
         let gPlayerX = 160;
         let gBullets = [];
-        let gEnemyBullets = []; // 🆕 적군 총알 배열
+        let gEnemyBullets = [];
         let gEnemies = [];
         let gStars = [];
         let galagaScore = 2360;
@@ -920,19 +1177,15 @@
 
         function initGalagaEnemies() {
             gEnemies = [];
-            // 원본 4줄 레이아웃 (1UP, 2360 점수표시 등 100% 동일)
-            // Row 0: 보스 (초록) - 2기
             gEnemies.push({ x: 130, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
             gEnemies.push({ x: 170, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
 
-            // Row 1: 나비 (빨강/파랑) - 8기
             for(let i=0; i<8; i++) {
                 if(i === 3 || i === 4) continue;
                 gEnemies.push({ x: 35 + i*32, y: 80, type: 'butterfly', width: 20, height: 16, alive: true });
                 gEnemies.push({ x: 35 + i*32, y: 100, type: 'butterfly', width: 20, height: 16, alive: true });
             }
 
-            // Row 2 & 3: 미기 (노랑/초록) - 10기
             for(let i=0; i<10; i++) {
                 if(i === 4 || i === 5) continue;
                 gEnemies.push({ x: 20 + i*29, y: 125, type: 'bee', width: 18, height: 14, alive: true });
@@ -949,7 +1202,6 @@
             galagaFrame = 0;
             tractorBeamActive = false;
             
-            // 우주 배경 별 생성
             gStars = [];
             for(let i=0; i<40; i++) {
                 gStars.push({ x: Math.random()*320, y: Math.random()*380, speed: Math.random()*1.5 + 0.5 });
@@ -967,7 +1219,6 @@
         galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setGalagaPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setGalagaPlayerX(e.clientX); });
 
-        // 원본 갤러그 도트 그래픽 드로잉 함수들
         function drawGalagaPlayer(x, y) {
             gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-1, y-10, 2, 6);
             gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-4, y-4, 8, 4);
@@ -1000,7 +1251,6 @@
             gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            // 1. 별 배경 애니메이션
             gCtx.fillStyle = "#FFFFFF";
             gStars.forEach(star => {
                 star.y += star.speed;
@@ -1008,15 +1258,12 @@
                 gCtx.fillRect(star.x, star.y, 1.5, 1.5);
             });
 
-            // 2. 점수 및 UI 표시 (원본 갤러그 디자인)
             gCtx.fillStyle = "#FF0000"; gCtx.font = "bold 13px monospace"; gCtx.fillText("1UP", 30, 20);
             gCtx.fillStyle = "#FFFFFF"; gCtx.fillText(galagaScore.toString(), 220, 20);
 
-            // 3. 아군 내 기체 (하단 배율 보정)
             drawGalagaPlayer(gPlayerX, 340);
-            drawGalagaPlayer(20, 365); drawGalagaPlayer(38, 365); // 남은 목숨 원본 표시
+            drawGalagaPlayer(20, 365); drawGalagaPlayer(38, 365);
 
-            // 4. 발사 총알
             if(galagaFrame % 10 === 0) {
                 gBullets.push({ x: gPlayerX - 4, y: 330 });
                 gBullets.push({ x: gPlayerX + 4, y: 330 });
@@ -1030,7 +1277,6 @@
                 if(b.y < 25) gBullets.splice(i, 1);
             }
 
-            // 🔴 5. 적군이 아래로 떨어뜨리는 총알 시스템 추가
             if(galagaFrame % 35 === 0) {
                 let activeEnemies = gEnemies.filter(e => e.alive);
                 if(activeEnemies.length > 0) {
@@ -1042,10 +1288,9 @@
             gCtx.fillStyle = "#FF3333";
             for(let i = gEnemyBullets.length - 1; i >= 0; i--) {
                 let eb = gEnemyBullets[i];
-                eb.y += 2.5; // 천천히 하강
+                eb.y += 2.5;
                 gCtx.fillRect(eb.x - 1.5, eb.y, 3, 7);
 
-                // 플레이어 충돌 검사
                 if(eb.x >= gPlayerX - 10 && eb.x <= gPlayerX + 10 && eb.y >= 330 && eb.y <= 350) {
                     cancelAnimationFrame(galagaAnimationId);
                     alert("💥 적 총알에 격추되었습니다! 전열을 정비하고 다시 출격합니다.");
@@ -1056,7 +1301,6 @@
                 if(eb.y > 380) gEnemyBullets.splice(i, 1);
             }
 
-            // 6. 적군 렌더링 및 트랙터 빔 특수 공격 연출
             let aliveCount = 0;
             gEnemies.forEach((e) => {
                 if(!e.alive) return;
@@ -1066,7 +1310,6 @@
                 else if(e.type === 'butterfly') drawGalagaButterfly(e.x, e.y);
                 else if(e.type === 'bee') drawGalagaBee(e.x, e.y);
 
-                // 플레이어 총알 맞춤 검사
                 for(let i = gBullets.length - 1; i >= 0; i--) {
                     let b = gBullets[i];
                     if(Math.abs(b.x - e.x) < e.width/2 && Math.abs(b.y - e.y) < e.height/2) {
@@ -1083,7 +1326,6 @@
                 }
             });
 
-            // 트랙터 빔 이벤트 연출 (보스 특수패턴)
             if(galagaFrame % 200 === 0 && !tractorBeamActive && gEnemies[0] && gEnemies[0].alive) {
                 tractorBeamActive = true;
                 tractorBeamTimer = 100;
