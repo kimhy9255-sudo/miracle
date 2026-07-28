@@ -376,7 +376,7 @@
                 </div>
                 <canvas id="galagaCanvas" width="300" height="240"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">드래그로 회피 및 공격! (적 총알 조심 | UFO 격추당 +10,000원)</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! UFO 폭파 +10,000원)</p>
             </div>
 
             <!-- 🧱 벽돌깨기 패널 -->
@@ -403,7 +403,7 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🏆 성장형 스테이지 퍼즐 패널 -->
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -906,24 +906,15 @@
             }
         }
 
-        /* 🛸 3. 픽셀 도트 아트 UFO 슈팅 게임 시스템 (적군 총알 발사 기능 지원) */
+        /* 🛸 3. 픽셀 도트 아트 UFO 슈팅 게임 시스템 (적군 총알 하강 시스템 포함) */
         let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 150; 
-        let playerBullets = []; 
-        let enemyBullets = []; // 🎯 추가: 적군 총알 배열
-        let enemyShips = []; 
-        let galagaFrame = 0;
+        let playerShipX = 150; let playerBullets = []; let enemyBullets = []; let enemyShips = []; let galagaFrame = 0;
         let enemyDirection = 1;
         
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; 
-            enemyBullets = []; // 리셋 시 적 총알도 초기화
-            enemyShips = []; 
-            galagaFrame = 0; 
-            playerShipX = 150; 
-            enemyDirection = 1;
+            playerBullets = []; enemyBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
             
             // 적 픽셀 UFO 군단 생성 (5열 2행)
             for(let row = 0; row < 2; row++) {
@@ -948,7 +939,7 @@
         galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
         galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
 
-        /* 🛸 픽셀 도트 렌더링 함수 */
+        /* 🛸 독자적 픽셀 도트 렌더링 함수 (UFO 및 아군 기체) */
         function drawPixelUFO(ctx, x, y, isBoss) {
             ctx.fillStyle = isBoss ? "#E74C3C" : "#9B59B6"; // UFO 돔 상단
             ctx.fillRect(x + 8, y, 8, 4);
@@ -991,7 +982,7 @@
             // 플레이어 픽셀 기체 그리기
             drawPixelPlayerShip(gCtx, playerShipX, 210);
 
-            // 1. 플레이어 자동 발사 총알 처리
+            // 아군 자동 발사 총알
             if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
 
             playerBullets.forEach((b, bIdx) => {
@@ -1001,37 +992,38 @@
                 if(b.y < 0) playerBullets.splice(bIdx, 1);
             });
 
-            // 2. 적군 무작위 총알 발사 처리 (45프레임마다 발사)
+            // 🔴 적군(UFO)이 천천히 총알을 한 발씩 아래로 떨구는 로직
             if(galagaFrame % 45 === 0 && enemyShips.length > 0) {
-                let randomEnemy = enemyShips[Math.floor(Math.random() * enemyShips.length)];
+                let shooter = enemyShips[Math.floor(Math.random() * enemyShips.length)];
                 enemyBullets.push({
-                    x: randomEnemy.x + randomEnemy.width / 2,
-                    y: randomEnemy.y + randomEnemy.height
+                    x: shooter.x + shooter.width / 2,
+                    y: shooter.y + shooter.height
                 });
             }
 
             // 적군 총알 이동 및 플레이어 충돌 검사
-            for(let ebIdx = enemyBullets.length - 1; ebIdx >= 0; ebIdx--) {
+            for (let ebIdx = enemyBullets.length - 1; ebIdx >= 0; ebIdx--) {
                 let eb = enemyBullets[ebIdx];
-                eb.y += 3; // 떨어지는 총알 속도
-                
-                // 적 총알 그리기 (빨간/주황색)
-                gCtx.fillStyle = "#FF4757";
-                gCtx.fillRect(eb.x - 1.5, eb.y, 3, 7);
+                eb.y += 1.8; // 천천히 하강하는 속도
 
-                // 플레이어(기체) 충돌 여부 검사
-                if(eb.x >= playerShipX - 12 && eb.x <= playerShipX + 12 && eb.y >= 210 && eb.y <= 226) {
+                // 적 총알 그리기 (빨간색 픽셀 광선)
+                gCtx.fillStyle = "#FF4D4D";
+                gCtx.fillRect(eb.x - 1.5, eb.y, 3, 6);
+
+                // 플레이어 기체 히트박스 충돌 검사
+                if (eb.x >= playerShipX - 12 && eb.x <= playerShipX + 12 && eb.y >= 210 && eb.y <= 226) {
                     cancelAnimationFrame(galagaAnimationId);
-                    alert("💥 적 UFO의 총알에 격추당했습니다! 재출격합니다.");
+                    alert("💥 적 UFO의 미사일에 피격되었습니다! 전열을 정비하고 다시 출격합니다.");
                     startGalagaGameEngine();
                     return;
                 }
 
-                // 바닥을 벗어나면 제거
-                if(eb.y > galagaCanvas.height) enemyBullets.splice(ebIdx, 1);
+                // 화면 하단 이탈 시 제거
+                if (eb.y > galagaCanvas.height) {
+                    enemyBullets.splice(ebIdx, 1);
+                }
             }
 
-            // 3. 적 좌우 및 아래 이동 처리
             let shiftDown = false;
             enemyShips.forEach(enemy => {
                 enemy.x += enemyDirection * 0.6;
@@ -1043,12 +1035,11 @@
                 enemyShips.forEach(enemy => { enemy.y += 6; });
             }
 
-            // 4. 적 및 아군 총알 충돌 처리
             enemyShips.forEach((enemy, eIdx) => {
                 // UFO 픽셀아트 그리기
                 drawPixelUFO(gCtx, enemy.x, enemy.y, enemy.type === "bossUfo");
 
-                // 내 총알에 맞았는지 확인
+                // 총알 충돌 검사
                 playerBullets.forEach((b, bIdx) => {
                     if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
                         playerBullets.splice(bIdx, 1);
@@ -1058,7 +1049,7 @@
                     }
                 });
 
-                // 직접 충돌 패배 조건
+                // 침공 패배 조건
                 if(enemy.y > 190) {
                     cancelAnimationFrame(galagaAnimationId);
                     alert("🛸 경보! UFO 외계 비행선이 기지에 침투했습니다! 다시 방어선을 구축합니다.");
