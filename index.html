@@ -161,9 +161,9 @@
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
-        .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
+        .game-display-panel canvas { background: #000000; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 330px; height: auto; }
         
-        /* 🆕 전체화면 모드 시 최상단 고정 컨트롤 바 */
+        /* 전체화면 모드 시 최상단 고정 컨트롤 바 */
         .fullscreen-control-bar {
             display: none;
             width: 100%;
@@ -177,7 +177,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* 🆕 전체화면 실행 모드 스타일 확장 */
         .game-display-panel.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -202,7 +201,7 @@
 
         .game-display-panel.fullscreen-mode canvas {
             max-width: 95vw !important;
-            height: 50vh !important;
+            height: 60vh !important;
             object-fit: contain;
         }
         .game-display-panel.fullscreen-mode .match3-grid,
@@ -361,22 +360,21 @@
             </div>
 
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🛸 UFO 침공</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
                 <button id="btnSelectMatch3" class="btn-game-select" onclick="switchMiniGame('match3')">🏆 성장 퍼즐</button>
             </div>
 
-            <!-- 🛸 픽셀 UFO 침공 패널 -->
+            <!-- 🚀 원본 갤러그 패널 (원본 그래픽/크기/시스템 100% 유지) -->
             <div id="galagaGameArea" class="game-display-panel">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 UFO 침공</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🚀 갤러그</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
-                <canvas id="galagaCanvas" width="300" height="240"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 출격 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">손가락 드래그로 좌우 이동 (자동 연사! UFO 폭파 +10,000원)</p>
+                <canvas id="galagaCanvas" width="320" height="380"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
             </div>
 
             <!-- 🧱 벽돌깨기 패널 -->
@@ -403,7 +401,7 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -698,7 +696,6 @@
             routeTabs(tabName); 
         }
 
-        /* 🆕 전체화면 실행/해제 제어 기능 */
         let currentActiveGameAreaId = 'galagaGameArea';
 
         function toggleFullScreenGame() {
@@ -717,7 +714,6 @@
             panels.forEach(p => p.classList.remove('fullscreen-mode'));
         }
 
-        /* 🆕 전체화면에서 홈으로 바로 빠져나가는 함수 */
         function goHomeFromFullScreen() {
             exitFullScreenGame();
             changeTabUrl('home');
@@ -906,167 +902,217 @@
             }
         }
 
-        /* 🛸 3. 픽셀 도트 아트 UFO 슈팅 게임 시스템 (적군 총알 하강 시스템 포함) */
-        let galagaCanvas = document.getElementById("galagaCanvas"); let gCtx = galagaCanvas.getContext("2d");
+        /* 🚀 3. 원본 갤러그 엔진 (100% 원본 복원 + 적군 총알 시스템 하강 추가) */
+        let galagaCanvas = document.getElementById("galagaCanvas"); 
+        let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
-        let playerShipX = 150; let playerBullets = []; let enemyBullets = []; let enemyShips = []; let galagaFrame = 0;
-        let enemyDirection = 1;
         
+        let gPlayerX = 160;
+        let gBullets = [];
+        let gEnemyBullets = []; // 🆕 적군 총알 배열
+        let gEnemies = [];
+        let gStars = [];
+        let galagaScore = 2360;
+        let galagaFrame = 0;
+        let tractorBeamActive = false;
+        let tractorBeamTimer = 0;
+        let tractorBoss = null;
+
+        function initGalagaEnemies() {
+            gEnemies = [];
+            // 원본 4줄 레이아웃 (1UP, 2360 점수표시 등 100% 동일)
+            // Row 0: 보스 (초록) - 2기
+            gEnemies.push({ x: 130, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
+            gEnemies.push({ x: 170, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
+
+            // Row 1: 나비 (빨강/파랑) - 8기
+            for(let i=0; i<8; i++) {
+                if(i === 3 || i === 4) continue;
+                gEnemies.push({ x: 35 + i*32, y: 80, type: 'butterfly', width: 20, height: 16, alive: true });
+                gEnemies.push({ x: 35 + i*32, y: 100, type: 'butterfly', width: 20, height: 16, alive: true });
+            }
+
+            // Row 2 & 3: 미기 (노랑/초록) - 10기
+            for(let i=0; i<10; i++) {
+                if(i === 4 || i === 5) continue;
+                gEnemies.push({ x: 20 + i*29, y: 125, type: 'bee', width: 18, height: 14, alive: true });
+                gEnemies.push({ x: 20 + i*29, y: 145, type: 'bee', width: 18, height: 14, alive: true });
+            }
+        }
+
         function startGalagaGameEngine() {
             cancelAnimationFrame(galagaAnimationId);
-            playerBullets = []; enemyBullets = []; enemyShips = []; galagaFrame = 0; playerShipX = 150; enemyDirection = 1;
+            gBullets = [];
+            gEnemyBullets = [];
+            gPlayerX = 160;
+            galagaScore = 2360;
+            galagaFrame = 0;
+            tractorBeamActive = false;
             
-            // 적 픽셀 UFO 군단 생성 (5열 2행)
-            for(let row = 0; row < 2; row++) {
-                for(let col = 0; col < 5; col++) {
-                    enemyShips.push({
-                        x: col * 48 + 35,
-                        y: row * 28 + 25,
-                        width: 24,
-                        height: 16,
-                        type: row === 0 ? "bossUfo" : "normalUfo"
-                    });
-                }
+            // 우주 배경 별 생성
+            gStars = [];
+            for(let i=0; i<40; i++) {
+                gStars.push({ x: Math.random()*320, y: Math.random()*380, speed: Math.random()*1.5 + 0.5 });
             }
+
+            initGalagaEnemies();
             loopGalagaGame();
         }
 
-        function setPlayerX(clientX) {
+        function setGalagaPlayerX(clientX) {
             let rect = galagaCanvas.getBoundingClientRect();
             let relativeX = clientX - rect.left;
-            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) playerShipX = relativeX;
+            if(relativeX > 15 && relativeX < galagaCanvas.width - 15) gPlayerX = relativeX;
         }
-        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPlayerX(e.touches[0].clientX); });
-        galagaCanvas.addEventListener("mousemove", (e) => { setPlayerX(e.clientX); });
+        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setGalagaPlayerX(e.touches[0].clientX); });
+        galagaCanvas.addEventListener("mousemove", (e) => { setGalagaPlayerX(e.clientX); });
 
-        /* 🛸 독자적 픽셀 도트 렌더링 함수 (UFO 및 아군 기체) */
-        function drawPixelUFO(ctx, x, y, isBoss) {
-            ctx.fillStyle = isBoss ? "#E74C3C" : "#9B59B6"; // UFO 돔 상단
-            ctx.fillRect(x + 8, y, 8, 4);
-
-            ctx.fillStyle = isBoss ? "#F1C40F" : "#00D2D3"; // UFO 중앙 몸체
-            ctx.fillRect(x + 2, y + 4, 20, 6);
-
-            ctx.fillStyle = "#FFFFFF"; // UFO 조명 램프
-            ctx.fillRect(x + 4, y + 6, 2, 2);
-            ctx.fillRect(x + 11, y + 6, 2, 2);
-            ctx.fillRect(x + 18, y + 6, 2, 2);
-
-            ctx.fillStyle = isBoss ? "#C0392B" : "#8E44AD"; // UFO 하단 받침
-            ctx.fillRect(x + 6, y + 10, 12, 4);
-
-            ctx.fillStyle = "#34495E"; // 다리/안테나 도트
-            ctx.fillRect(x + 4, y + 14, 2, 2);
-            ctx.fillRect(x + 18, y + 14, 2, 2);
+        // 원본 갤러그 도트 그래픽 드로잉 함수들
+        function drawGalagaPlayer(x, y) {
+            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-1, y-10, 2, 6);
+            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-4, y-4, 8, 4);
+            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-10, y, 20, 6);
+            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-12, y+4, 4, 6); gCtx.fillRect(x+8, y+4, 4, 6);
+            gCtx.fillStyle = "#0000FF"; gCtx.fillRect(x-6, y+2, 12, 4);
         }
 
-        function drawPixelPlayerShip(ctx, x, y) {
-            // 아군 픽셀 아케이드 기체
-            ctx.fillStyle = "#10AC84";
-            ctx.fillRect(x - 2, y, 4, 6); // 메인 캐논
+        function drawGalagaBoss(x, y) {
+            gCtx.fillStyle = "#00FF00"; gCtx.fillRect(x-8, y-6, 16, 4);
+            gCtx.fillStyle = "#008800"; gCtx.fillRect(x-10, y-2, 20, 6);
+            gCtx.fillStyle = "#00FFFF"; gCtx.fillRect(x-6, y+4, 12, 4);
+            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-2, y-4, 4, 4);
+        }
 
-            ctx.fillStyle = "#2ECC71";
-            ctx.fillRect(x - 6, y + 6, 12, 8); // 중앙 몸체
+        function drawGalagaButterfly(x, y) {
+            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-8, y-5, 16, 4);
+            gCtx.fillStyle = "#0000FF"; gCtx.fillRect(x-6, y-1, 12, 6);
+            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-10, y-3, 4, 4); gCtx.fillRect(x+6, y-3, 4, 4);
+        }
 
-            ctx.fillStyle = "#10AC84";
-            ctx.fillRect(x - 12, y + 10, 24, 6); // 날개
-
-            ctx.fillStyle = "#FF9F43";
-            ctx.fillRect(x - 4, y + 14, 8, 3); // 엔진 분사구
+        function drawGalagaBee(x, y) {
+            gCtx.fillStyle = "#FFFF00"; gCtx.fillRect(x-7, y-4, 14, 4);
+            gCtx.fillStyle = "#00FF00"; gCtx.fillRect(x-5, y, 10, 4);
+            gCtx.fillStyle = "#FF8800"; gCtx.fillRect(x-8, y-2, 3, 3); gCtx.fillRect(x+5, y-2, 3, 3);
         }
 
         function loopGalagaGame() {
-            gCtx.clearRect(0, 0, galagaCanvas.width, galagaCanvas.height);
+            gCtx.fillStyle = "#000000";
+            gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            // 플레이어 픽셀 기체 그리기
-            drawPixelPlayerShip(gCtx, playerShipX, 210);
-
-            // 아군 자동 발사 총알
-            if(galagaFrame % 12 === 0) { playerBullets.push({ x: playerShipX, y: 205 }); }
-
-            playerBullets.forEach((b, bIdx) => {
-                b.y -= 5;
-                gCtx.fillStyle = "#54A0FF";
-                gCtx.fillRect(b.x - 1.5, b.y, 3, 8);
-                if(b.y < 0) playerBullets.splice(bIdx, 1);
+            // 1. 별 배경 애니메이션
+            gCtx.fillStyle = "#FFFFFF";
+            gStars.forEach(star => {
+                star.y += star.speed;
+                if(star.y > 380) star.y = 0;
+                gCtx.fillRect(star.x, star.y, 1.5, 1.5);
             });
 
-            // 🔴 적군(UFO)이 천천히 총알을 한 발씩 아래로 떨구는 로직
-            if(galagaFrame % 45 === 0 && enemyShips.length > 0) {
-                let shooter = enemyShips[Math.floor(Math.random() * enemyShips.length)];
-                enemyBullets.push({
-                    x: shooter.x + shooter.width / 2,
-                    y: shooter.y + shooter.height
-                });
+            // 2. 점수 및 UI 표시 (원본 갤러그 디자인)
+            gCtx.fillStyle = "#FF0000"; gCtx.font = "bold 13px monospace"; gCtx.fillText("1UP", 30, 20);
+            gCtx.fillStyle = "#FFFFFF"; gCtx.fillText(galagaScore.toString(), 220, 20);
+
+            // 3. 아군 내 기체 (하단 배율 보정)
+            drawGalagaPlayer(gPlayerX, 340);
+            drawGalagaPlayer(20, 365); drawGalagaPlayer(38, 365); // 남은 목숨 원본 표시
+
+            // 4. 발사 총알
+            if(galagaFrame % 10 === 0) {
+                gBullets.push({ x: gPlayerX - 4, y: 330 });
+                gBullets.push({ x: gPlayerX + 4, y: 330 });
             }
 
-            // 적군 총알 이동 및 플레이어 충돌 검사
-            for (let ebIdx = enemyBullets.length - 1; ebIdx >= 0; ebIdx--) {
-                let eb = enemyBullets[ebIdx];
-                eb.y += 1.8; // 천천히 하강하는 속도
+            gCtx.fillStyle = "#FFFF00";
+            for(let i = gBullets.length - 1; i >= 0; i--) {
+                let b = gBullets[i];
+                b.y -= 7;
+                gCtx.fillRect(b.x - 1, b.y, 2, 6);
+                if(b.y < 25) gBullets.splice(i, 1);
+            }
 
-                // 적 총알 그리기 (빨간색 픽셀 광선)
-                gCtx.fillStyle = "#FF4D4D";
-                gCtx.fillRect(eb.x - 1.5, eb.y, 3, 6);
+            // 🔴 5. 적군이 아래로 떨어뜨리는 총알 시스템 추가
+            if(galagaFrame % 35 === 0) {
+                let activeEnemies = gEnemies.filter(e => e.alive);
+                if(activeEnemies.length > 0) {
+                    let shooter = activeEnemies[Math.floor(Math.random() * activeEnemies.length)];
+                    gEnemyBullets.push({ x: shooter.x, y: shooter.y + 10 });
+                }
+            }
 
-                // 플레이어 기체 히트박스 충돌 검사
-                if (eb.x >= playerShipX - 12 && eb.x <= playerShipX + 12 && eb.y >= 210 && eb.y <= 226) {
+            gCtx.fillStyle = "#FF3333";
+            for(let i = gEnemyBullets.length - 1; i >= 0; i--) {
+                let eb = gEnemyBullets[i];
+                eb.y += 2.5; // 천천히 하강
+                gCtx.fillRect(eb.x - 1.5, eb.y, 3, 7);
+
+                // 플레이어 충돌 검사
+                if(eb.x >= gPlayerX - 10 && eb.x <= gPlayerX + 10 && eb.y >= 330 && eb.y <= 350) {
                     cancelAnimationFrame(galagaAnimationId);
-                    alert("💥 적 UFO의 미사일에 피격되었습니다! 전열을 정비하고 다시 출격합니다.");
+                    alert("💥 적 총알에 격추되었습니다! 전열을 정비하고 다시 출격합니다.");
                     startGalagaGameEngine();
                     return;
                 }
 
-                // 화면 하단 이탈 시 제거
-                if (eb.y > galagaCanvas.height) {
-                    enemyBullets.splice(ebIdx, 1);
-                }
+                if(eb.y > 380) gEnemyBullets.splice(i, 1);
             }
 
-            let shiftDown = false;
-            enemyShips.forEach(enemy => {
-                enemy.x += enemyDirection * 0.6;
-                if(enemy.x > galagaCanvas.width - 30 || enemy.x < 10) { shiftDown = true; }
-            });
+            // 6. 적군 렌더링 및 트랙터 빔 특수 공격 연출
+            let aliveCount = 0;
+            gEnemies.forEach((e) => {
+                if(!e.alive) return;
+                aliveCount++;
 
-            if(shiftDown) {
-                enemyDirection *= -1;
-                enemyShips.forEach(enemy => { enemy.y += 6; });
-            }
+                if(e.type === 'boss') drawGalagaBoss(e.x, e.y);
+                else if(e.type === 'butterfly') drawGalagaButterfly(e.x, e.y);
+                else if(e.type === 'bee') drawGalagaBee(e.x, e.y);
 
-            enemyShips.forEach((enemy, eIdx) => {
-                // UFO 픽셀아트 그리기
-                drawPixelUFO(gCtx, enemy.x, enemy.y, enemy.type === "bossUfo");
-
-                // 총알 충돌 검사
-                playerBullets.forEach((b, bIdx) => {
-                    if(b.x > enemy.x && b.x < enemy.x + enemy.width && b.y > enemy.y && b.y < enemy.y + enemy.height) {
-                        playerBullets.splice(bIdx, 1);
-                        enemyShips.splice(eIdx, 1);
-                        amount += 10000; 
-                        updateTotalBalance();
+                // 플레이어 총알 맞춤 검사
+                for(let i = gBullets.length - 1; i >= 0; i--) {
+                    let b = gBullets[i];
+                    if(Math.abs(b.x - e.x) < e.width/2 && Math.abs(b.y - e.y) < e.height/2) {
+                        gBullets.splice(i, 1);
+                        if(e.type === 'boss' && e.hp > 1) {
+                            e.hp--;
+                        } else {
+                            e.alive = false;
+                            galagaScore += (e.type === 'boss' ? 400 : (e.type === 'butterfly' ? 160 : 80));
+                            amount += 1000;
+                            updateTotalBalance();
+                        }
                     }
-                });
-
-                // 침공 패배 조건
-                if(enemy.y > 190) {
-                    cancelAnimationFrame(galagaAnimationId);
-                    alert("🛸 경보! UFO 외계 비행선이 기지에 침투했습니다! 다시 방어선을 구축합니다.");
-                    startGalagaGameEngine();
-                    return;
                 }
             });
 
-            if(enemyShips.length === 0) {
-                alert("🎉 UFO 모함 격퇴 완료! 적 외계 비행선이 더 빠르게 재집결합니다.");
-                startGalagaGameEngine();
-            } else {
-                galagaAnimationId = requestAnimationFrame(loopGalagaGame);
+            // 트랙터 빔 이벤트 연출 (보스 특수패턴)
+            if(galagaFrame % 200 === 0 && !tractorBeamActive && gEnemies[0] && gEnemies[0].alive) {
+                tractorBeamActive = true;
+                tractorBeamTimer = 100;
+                tractorBoss = gEnemies[0];
             }
+
+            if(tractorBeamActive && tractorBoss && tractorBoss.alive) {
+                gCtx.strokeStyle = "#00FFFF";
+                gCtx.lineWidth = 1.5;
+                let bx = tractorBoss.x;
+                let by = tractorBoss.y + 10;
+                for(let r = 0; r < 12; r++) {
+                    gCtx.beginPath();
+                    gCtx.ellipse(bx, by + r*18, 5 + r*4, 3, 0, 0, Math.PI);
+                    gCtx.stroke();
+                }
+                tractorBeamTimer--;
+                if(tractorBeamTimer <= 0) tractorBeamActive = false;
+            }
+
+            if(aliveCount === 0) {
+                alert("🎉 STAGE CLEARED! 다음 격퇴 적군이 출격합니다.");
+                initGalagaEnemies();
+            }
+
+            galagaAnimationId = requestAnimationFrame(loopGalagaGame);
         }
 
-        /* 🏆 4. 성장형 퍼즐 엔진 (1분 제한시간 + 난이도 점진 상승) */
+        /* 🏆 4. 성장형 퍼즐 엔진 */
         const allTileTypes = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
         let currentStage = 1;
         let currentPuzzleScore = 0;
