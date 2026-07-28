@@ -163,7 +163,7 @@
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
         .game-display-panel canvas { background: #0B0E14; border-radius: 10px; display: block; margin: 0 auto; touch-action: none; width: 100%; max-width: 320px; height: auto; }
         
-        /* 🆕 전체화면 모드 시 최상단 고정 컨트롤 바 */
+        /* 전체화면 모드 시 최상단 고정 컨트롤 바 */
         .fullscreen-control-bar {
             display: none;
             width: 100%;
@@ -177,7 +177,7 @@
             backdrop-filter: blur(5px);
         }
 
-        /* 🆕 전체화면 실행 모드 스타일 확장 */
+        /* 전체화면 실행 모드 스타일 확장 */
         .game-display-panel.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -216,7 +216,7 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 🧩 새로운 성장형 스테이지 퍼즐 보드 스타일 */
+        /* 성장형 스테이지 퍼즐 보드 스타일 */
         .match3-grid { 
             display: grid; 
             grid-template-columns: repeat(6, 1fr); 
@@ -403,7 +403,7 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🏆 성장형 스테이지 퍼즐 패널 (개선된 New 퍼즐) -->
+            <!-- 🏆 성장형 스테이지 퍼즐 패널 -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -698,7 +698,7 @@
             routeTabs(tabName); 
         }
 
-        /* 🆕 전체화면 실행/해제 제어 기능 */
+        /* 전체화면 실행/해제 제어 기능 */
         let currentActiveGameAreaId = 'galagaGameArea';
 
         function toggleFullScreenGame() {
@@ -717,7 +717,6 @@
             panels.forEach(p => p.classList.remove('fullscreen-mode'));
         }
 
-        /* 🆕 전체화면에서 홈으로 바로 빠져나가는 함수 */
         function goHomeFromFullScreen() {
             exitFullScreenGame();
             changeTabUrl('home');
@@ -806,6 +805,7 @@
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
         }
 
+        /* 🛠️ [수정 완료!] 미니게임 전환 함수 버그 해결 */
         function switchMiniGame(gameType) {
             exitFullScreenGame();
             document.getElementById('btnSelectBrick').classList.remove('active'); 
@@ -1001,7 +1001,7 @@
             }
         }
 
-        /* 🏆 4. 완전히 개편된 성장형 퍼즐 엔진 (1분 제한시간 + 난이도 점진 상승) */
+        /* 🏆 4. 성장형 퍼즐 엔진 */
         const allTileTypes = ['🍓', '🍌', '🥕', '☘️', '⭐', '🧹'];
         let currentStage = 1;
         let currentPuzzleScore = 0;
@@ -1020,7 +1020,6 @@
             currentPuzzleScore = 0;
             puzzleTimeLeft = 60;
             
-            // 난이도 설계: 단계가 오를수록 타일 종류 증가 및 목표점수 상승
             let activeTypeCount = Math.min(4 + Math.floor((currentStage - 1) / 2), allTileTypes.length);
             pActiveTypes = allTileTypes.slice(0, activeTypeCount);
             targetPuzzleScore = currentStage * 1200;
@@ -1061,7 +1060,6 @@
                         pBoard[r][c] = pActiveTypes[Math.floor(Math.random() * pActiveTypes.length)];
                     }
                 }
-                // 시작 시 맞춰진 터짐이 없고, 유효한 이동(Match 가능 수)이 남아있는지 확인
                 if (checkPMatches().length === 0 && checkPossibleMoves()) {
                     hasMoves = true;
                 }
@@ -1181,7 +1179,6 @@
             let matches = checkPMatches();
             if (matches.length === 0) {
                 isPProcessing = false;
-                // 더 이상 맞출 수 있는 수가 없다면 섞어주기
                 if (!checkPossibleMoves()) {
                     reShuffleBoard();
                 }
@@ -1194,7 +1191,7 @@
 
             let gainedPoints = matchCount * 100;
             currentPuzzleScore += gainedPoints;
-            amount += gainedPoints * 5; // 보상금 수령
+            amount += gainedPoints * 5;
             updateTotalBalance();
 
             document.getElementById('pScore').innerText = currentPuzzleScore;
@@ -1203,7 +1200,6 @@
                 pBoard[m.r][m.c] = null;
             });
 
-            // 타일 떨어뜨리기 및 빈자리 새로 채우기
             for (let c = 0; c < pSize; c++) {
                 let emptyRow = pSize - 1;
                 for (let r = pSize - 1; r >= 0; r--) {
@@ -1220,7 +1216,6 @@
 
             renderPBoard();
 
-            // 클리어 조건 달성 검사
             if (currentPuzzleScore >= targetPuzzleScore) {
                 clearInterval(puzzleTimerId);
                 let rewardBonus = currentStage * 50000;
