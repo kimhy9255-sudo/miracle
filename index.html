@@ -215,7 +215,7 @@
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
-        /* 🧩 3매치 퍼즐 스타일 (이미지 반영) */
+        /* 🧩 3매치 퍼즐 스타일 */
         .match3-header-card {
             background: #FFFFFF;
             border: 1px solid #EAEAEA;
@@ -404,7 +404,7 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
-            <!-- 🎯 3매치 퍼즐 패널 (신규 구현) -->
+            <!-- 🎯 3매치 퍼즐 패널 (자동 매치업 및 블록 낙하 기능 탑재) -->
             <div id="match3GameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
@@ -422,7 +422,7 @@
 
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-action" style="background:#E67E22; flex:1;" onclick="shuffleMatch3Board()">🔀 판 섞기</button>
-                    <button class="btn-action btn-engine" style="background:#2ECC71; flex:1;" onclick="startMatch3GameEngine()">🔄 STAGE 1 리셋</button>
+                    <button class="btn-action btn-engine" style="background:#2ECC71; flex:1;" onclick="startMatch3GameEngine()">🔄 게임 리셋</button>
                 </div>
             </div>
         </div>
@@ -980,32 +980,36 @@
             }
         }
 
-        /* 🎯 3. 3매치 퍼즐 엔진 (신규 구현 - 이미지 디자인 반영) */
+        /* 🎯 3. 실제 작동하는 3매치 퍼즐 엔진 (3개/4개 매치 성공 시 자동 터짐 및 블록 낙하 구현) */
         let match3BoardData = [];
         let match3SelectedTile = null;
         let match3Score = 0;
         let match3Seconds = 56;
         let match3TimerInterval = null;
-        const match3Icons = ['🍌', '🍓', '🥕', '🍀'];
+        let isProcessingMatch = false;
+        const match3Icons = ['🍌', '🍓', '🥕', '🍀', '🍇'];
 
         function startMatch3GameEngine() {
             clearInterval(match3TimerInterval);
             match3Score = 0;
             match3Seconds = 56;
             match3SelectedTile = null;
+            isProcessingMatch = false;
             document.getElementById('match3ScoreText').innerText = match3Score;
             document.getElementById('match3TimerText').innerText = match3Seconds + '초';
 
-            // 6x6 그리드 생성
-            match3BoardData = [];
-            for(let r=0; r<6; r++) {
-                let row = [];
-                for(let c=0; c<6; c++) {
-                    let randomIcon = match3Icons[Math.floor(Math.random() * match3Icons.length)];
-                    row.push(randomIcon);
+            // 초기 보드 생성 (시작할 때 3매치 이상이 미리 만들어져 있지 않도록 유도)
+            do {
+                match3BoardData = [];
+                for(let r=0; r<6; r++) {
+                    let row = [];
+                    for(let c=0; c<6; c++) {
+                        let randomIcon = match3Icons[Math.floor(Math.random() * match3Icons.length)];
+                        row.push(randomIcon);
+                    }
+                    match3BoardData.push(row);
                 }
-                match3BoardData.push(row);
-            }
+            } while(findMatches().length > 0);
 
             renderMatch3Board();
 
@@ -1015,7 +1019,7 @@
                 document.getElementById('match3TimerText').innerText = match3Seconds + '초';
                 if(match3Seconds <= 0) {
                     clearInterval(match3TimerInterval);
-                    alert("⏰ 시간이 종료되었습니다! 점수: " + match3Score + "점");
+                    alert("⏰ 시간이 종료되었습니다! 총 점수: " + match3Score + "점");
                 }
             }, 1000);
         }
@@ -1037,8 +1041,8 @@
             }
         }
 
-        function handleMatch3Click(r, c) {
-            if(match3Seconds <= 0) return;
+        async function handleMatch3Click(r, c) {
+            if(match3Seconds <= 0 || isProcessingMatch) return;
 
             if(!match3SelectedTile) {
                 match3SelectedTile = { r, c };
@@ -1051,28 +1055,135 @@
                 let isAdjacent = (Math.abs(prevR - r) + Math.abs(prevC - c)) === 1;
 
                 if(isAdjacent) {
-                    // 자리 스와이프
+                    highlightMatch3Tile(prevR, prevC, false);
+                    
+                    // 자리 스와이프 시도
                     let temp = match3BoardData[prevR][prevC];
                     match3BoardData[prevR][prevC] = match3BoardData[r][c];
                     match3BoardData[r][c] = temp;
+                    renderMatch3Board();
 
-                    // 점수 획득 및 리프레시 시뮬레이션
-                    match3Score += 150;
-                    amount += 150;
-                    updateTotalBalance();
-                    document.getElementById('match3ScoreText').innerText = match3Score;
+                    // 매치 확인
+                    let matches = findMatches();
+                    if(matches.length > 0) {
+                        // 매치가 성공했으므로 연쇄 터짐 및 낙하 처리 시작
+                        isProcessingMatch = true;
+                        match3SelectedTile = null;
+                        await processMatchesAndDrop(matches);
+                        isProcessingMatch = false;
+                    } else {
+                        // 매치가 안 되면 원위치로 되돌림
+                        setTimeout(() => {
+                            let temp2 = match3BoardData[prevR][prevC];
+                            match3BoardData[prevR][prevC] = match3BoardData[r][c];
+                            match3BoardData[r][c] = temp2;
+                            renderMatch3Board();
+                        }, 250);
+                    }
+                } else {
+                    highlightMatch3Tile(prevR, prevC, false);
+                    match3SelectedTile = { r, c };
+                    highlightMatch3Tile(r, c, true);
+                    return;
+                }
+                match3SelectedTile = null;
+            }
+        }
 
-                    if(match3Score >= 1200) {
-                        clearInterval(match3TimerInterval);
-                        alert("🎉 목표 점수 1,200점 달성! 스테이지 클리어 보너스 +3,000원이 지급되었습니다!");
-                        amount += 3000;
-                        updateTotalBalance();
+        // 보드판 전체에서 가로/세로 3개 이상 연속된 블록(3매치, 4매치 등)을 찾아내는 함수
+        function findMatches() {
+            let matchedCoords = new Set();
+
+            // 가로 검사
+            for(let r=0; r<6; r++) {
+                for(let c=0; c<4; c++) {
+                    let icon = match3BoardData[r][c];
+                    if(icon && icon === match3BoardData[r][c+1] && icon === match3BoardData[r][c+2]) {
+                        matchedCoords.add(`${r},${c}`);
+                        matchedCoords.add(`${r},${c+1}`);
+                        matchedCoords.add(`${r},${c+2}`);
+                        // 4개 이상 연결된 경우도 확장 포함
+                        let nextC = c + 3;
+                        while(nextC < 6 && match3BoardData[r][nextC] === icon) {
+                            matchedCoords.add(`${r},${nextC}`);
+                            nextC++;
+                        }
+                    }
+                }
+            }
+
+            // 세로 검사
+            for(let c=0; c<6; c++) {
+                for(let r=0; r<4; r++) {
+                    let icon = match3BoardData[r][c];
+                    if(icon && icon === match3BoardData[r+1][c] && icon === match3BoardData[r+2][c]) {
+                        matchedCoords.add(`${r},${c}`);
+                        matchedCoords.add(`${r+1},${c}`);
+                        matchedCoords.add(`${r+2},${c}`);
+                        // 4개 이상 연결된 경우 확장 포함
+                        let nextR = r + 3;
+                        while(nextR < 6 && match3BoardData[nextR][c] === icon) {
+                            matchedCoords.add(`${nextR},${c}`);
+                            nextR++;
+                        }
+                    }
+                }
+            }
+
+            let result = [];
+            matchedCoords.forEach(coord => {
+                let parts = coord.split(',');
+                result.push({ r: parseInt(parts[0]), c: parseInt(parts[1]) });
+            });
+            return result;
+        }
+
+        // 매치된 블록을 터뜨리고 위에서 새 블록이 떨어지도록 처리하는 연쇄 함수
+        async function processMatchesAndDrop(matches) {
+            while(matches.length > 0) {
+                // 점수 및 자산 반영 (터진 블록 개수당 점수 및 포인트 적립)
+                let earnedScore = matches.length * 100;
+                match3Score += earnedScore;
+                amount += earnedScore;
+                updateTotalBalance();
+                document.getElementById('match3ScoreText').innerText = match3Score;
+
+                // 매치된 위치 빈 칸('')으로 비우기
+                matches.forEach(m => {
+                    match3BoardData[m.r][m.c] = '';
+                });
+                renderMatch3Board();
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // 위쪽 블록 아래로 내리기 (Gravity)
+                for(let c=0; c<6; c++) {
+                    let writeRow = 5;
+                    for(let r=5; r>=0; r--) {
+                        if(match3BoardData[r][c] !== '') {
+                            let temp = match3BoardData[r][c];
+                            match3BoardData[r][c] = '';
+                            match3BoardData[writeRow][c] = temp;
+                            writeRow--;
+                        }
+                    }
+                    // 빈 공간(상단)에는 새로운 무작위 블록 채우기
+                    for(let r=writeRow; r>=0; r--) {
+                        match3BoardData[r][c] = match3Icons[Math.floor(Math.random() * match3Icons.length)];
                     }
                 }
 
-                highlightMatch3Tile(prevR, prevC, false);
-                match3SelectedTile = null;
                 renderMatch3Board();
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // 연쇄(Cascade) 매치가 또 발생하는지 재확인
+                matches = findMatches();
+            }
+
+            if(match3Score >= 1200) {
+                clearInterval(match3TimerInterval);
+                alert("🎉 목표 점수 1,200점 달성! 스테이지 클리어 보너스 +3,000원이 지급되었습니다!");
+                amount += 3000;
+                updateTotalBalance();
             }
         }
 
