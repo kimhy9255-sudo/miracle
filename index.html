@@ -388,7 +388,7 @@
                 </div>
                 <div id="puzzleBoard"></div>
                 <button class="btn-action" style="margin-top:10px; width:100%; background: #27AE60;" onclick="shufflePuzzle()">🍓 판 섞기 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3매칭 성공 시 점수가 총잔고로 자동 적립!</p>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3매칭/4매칭 성공 시 다른 그림으로 변환 & 적립!</p>
             </div>
         </div>
 
@@ -944,7 +944,7 @@
             }
         }
 
-        /* 🍓 3. 성장 퍼즐 (3매칭) 엔진 */
+        /* 🍓 3. 성장 퍼즐 (3매칭) 엔진 - 다른 그림으로 자동 변환 반영 완료 */
         const PUZZLE_SIZE = 6;
         const puzzleItems = ["🍌", "🍓", "🥕", "🍀"];
         let puzzleBoardData = [];
@@ -1003,41 +1003,71 @@
         }
 
         function checkPuzzleMatches() {
-            let matchedCountSum = 0;
+            let matchedCoords = [];
 
-            // 가로 매칭 검사
+            // 1. 가로 방향 3개 이상 매칭 검사
             for (let r = 0; r < PUZZLE_SIZE; r++) {
-                let count = 1;
+                let matchLength = 1;
                 for (let c = 1; c < PUZZLE_SIZE; c++) {
                     if (puzzleBoardData[r][c] === puzzleBoardData[r][c - 1]) {
-                        count++;
+                        matchLength++;
                     } else {
-                        if (count >= 3) matchedCountSum += count;
-                        count = 1;
+                        if (matchLength >= 3) {
+                            for (let i = 0; i < matchLength; i++) {
+                                matchedCoords.push({ r: r, c: c - 1 - i });
+                            }
+                        }
+                        matchLength = 1;
                     }
                 }
-                if (count >= 3) matchedCountSum += count;
+                if (matchLength >= 3) {
+                    for (let i = 0; i < matchLength; i++) {
+                        matchedCoords.push({ r: r, c: PUZZLE_SIZE - 1 - i });
+                    }
+                }
             }
 
-            // 세로 매칭 검사
+            // 2. 세로 방향 3개 이상 매칭 검사
             for (let c = 0; c < PUZZLE_SIZE; c++) {
-                let count = 1;
+                let matchLength = 1;
                 for (let r = 1; r < PUZZLE_SIZE; r++) {
                     if (puzzleBoardData[r][c] === puzzleBoardData[r - 1][c]) {
-                        count++;
+                        matchLength++;
                     } else {
-                        if (count >= 3) matchedCountSum += count;
-                        count = 1;
+                        if (matchLength >= 3) {
+                            for (let i = 0; i < matchLength; i++) {
+                                matchedCoords.push({ r: r - 1 - i, c: c });
+                            }
+                        }
+                        matchLength = 1;
                     }
                 }
-                if (count >= 3) matchedCountSum += count;
+                if (matchLength >= 3) {
+                    for (let i = 0; i < matchLength; i++) {
+                        matchedCoords.push({ r: PUZZLE_SIZE - 1 - i, c: c });
+                    }
+                }
             }
 
-            if (matchedCountSum > 0) {
-                let earnedPoints = matchedCountSum * 100; // 3매칭 당 포인트 연동
+            // 중복 좌표 제거
+            let uniqueMatches = Array.from(new Set(matchedCoords.map(item => JSON.stringify(item)))).map(string => JSON.parse(string));
+
+            if (uniqueMatches.length > 0) {
+                // 매칭된 칸들을 다른 그림(새로운 랜덤 이모지)으로 변환
+                uniqueMatches.forEach(coord => {
+                    let newEmoji;
+                    do {
+                        newEmoji = puzzleItems[Math.floor(Math.random() * puzzleItems.length)];
+                    } while (newEmoji === puzzleBoardData[coord.r][coord.c]); // 기존 그림과 겹치지 않게 설정
+                    
+                    puzzleBoardData[coord.r][coord.c] = newEmoji;
+                });
+
+                let earnedPoints = uniqueMatches.length * 100;
                 amount += earnedPoints;
                 updateTotalBalance();
-                alert(`🍓 매칭 성공! +${earnedPoints.toLocaleString()}원이 누적 총잔고에 적립되었습니다!`);
+                updatePuzzleView();
+                alert(`🍓 매칭 성공! 다른 그림으로 변환되며 +${earnedPoints.toLocaleString()}원이 적립되었습니다!`);
             }
         }
 
