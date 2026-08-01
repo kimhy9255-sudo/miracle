@@ -155,9 +155,9 @@
             gap: 4px;
         }
 
-        /* 🎮 기적 게임 창 레이아웃 (3개 메뉴 설정) */
-        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
-        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
+        /* 🎮 기적 게임 창 레이아웃 (4개 메뉴 설정) */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
@@ -204,7 +204,8 @@
             height: 60vh !important;
             object-fit: contain;
         }
-        .game-display-panel.fullscreen-mode .card-grid {
+        .game-display-panel.fullscreen-mode .card-grid,
+        .game-display-panel.fullscreen-mode .puzzle-grid {
             max-width: 95vw !important;
         }
 
@@ -213,6 +214,16 @@
         .memory-card { height: 65px; background: #34495E; border-radius: 8px; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
         .memory-card.flipped { background: #ECF0F1; color: initial; }
         .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
+
+        /* 🧩 성장 퍼즐 게임 보드 스타일 */
+        .puzzle-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 280px; margin: 10px auto; }
+        .puzzle-tile { height: 75px; background: #2C3E50; border-radius: 10px; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.1s; user-select: none; }
+        .puzzle-tile:active { transform: scale(0.95); }
+        .puzzle-tile.level-1 { background: linear-gradient(135deg, #3498DB, #2980B9); }
+        .puzzle-tile.level-2 { background: linear-gradient(135deg, #2ECC71, #27AE60); }
+        .puzzle-tile.level-3 { background: linear-gradient(135deg, #F39C12, #D35400); }
+        .puzzle-tile.level-4 { background: linear-gradient(135deg, #9B59B6, #8E44AD); }
+        .puzzle-tile.level-5 { background: linear-gradient(135deg, #E74C3C, #C0392B); }
 
         /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
@@ -319,6 +330,7 @@
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
+                <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🧩 성장퍼즐</button>
             </div>
 
             <!-- 🚀 원본 갤러그 패널 -->
@@ -354,6 +366,19 @@
                 <div id="cardBoard" class="card-grid"></div>
                 <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
+            </div>
+
+            <!-- 🧩 성장 퍼즐 패널 (신규 추가) -->
+            <div id="puzzleGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧩 성장 퍼즐</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                <div style="font-size:12px; color:#2C3E50; font-weight:bold; margin-bottom:5px;">같은 단계 블록을 터치해 성장시키세요!</div>
+                <div id="puzzleBoard" class="puzzle-grid"></div>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #27AE60, #2ECC71);" onclick="startPuzzleGameEngine()">🧩 퍼즐 판 새로고침</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">블록 합성 시 보상 <b>+500원~</b></p>
             </div>
         </div>
 
@@ -738,10 +763,12 @@
             document.getElementById('btnSelectBrick').classList.remove('active'); 
             document.getElementById('btnSelectMemory').classList.remove('active'); 
             document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectPuzzle').classList.remove('active');
 
             document.getElementById('brickGameArea').style.display = 'none'; 
             document.getElementById('memoryGameArea').style.display = 'none'; 
             document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('puzzleGameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
@@ -763,6 +790,12 @@
                 document.getElementById('galagaGameArea').style.display = 'block'; 
                 startGalagaGameEngine(); 
             }
+            else if(gameType === 'puzzle') {
+                currentActiveGameAreaId = 'puzzleGameArea';
+                document.getElementById('btnSelectPuzzle').classList.add('active');
+                document.getElementById('puzzleGameArea').style.display = 'block';
+                startPuzzleGameEngine();
+            }
         }
 
         /* 🧱 1. 알록달록 무지개 칼라 벽돌깨기 엔진 */
@@ -773,12 +806,11 @@
         let paddleHeight = 12, paddleWidth = 65, paddleX; 
         let bricks = [];
         
-        // 줄별 알록달록 비비드 칼라 배열
         const rowColors = [
-            { top: "#FF4E50", bottom: "#F9D423" }, // 1줄: 레드/옐로우 그라데이션
-            { top: "#FF007F", bottom: "#7928CA" }, // 2줄: 핑크/퍼플 그라데이션
-            { top: "#00F2FE", bottom: "#4FACFE" }, // 3줄: 시원한 네온 시안
-            { top: "#43E97B", bottom: "#38F9D7" }  // 4줄: 에메랄드 그린
+            { top: "#FF4E50", bottom: "#F9D423" },
+            { top: "#FF007F", bottom: "#7928CA" },
+            { top: "#00F2FE", bottom: "#4FACFE" },
+            { top: "#43E97B", bottom: "#38F9D7" }
         ];
 
         function startBrickGameEngine() {
@@ -789,7 +821,6 @@
             dy = -2; 
             paddleX = (gameCanvas.width - paddleWidth) / 2;
 
-            // 6열 4행 벽돌 구성
             for (let c = 0; c < 6; c++) { 
                 bricks[c] = []; 
                 for (let r = 0; r < 4; r++) { 
@@ -811,7 +842,6 @@
         function drawBrickGame() {
             ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
             
-            // 1. 공 (화려한 네온 골드 비주얼)
             ctx.beginPath(); 
             ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); 
             ctx.fillStyle = "#FFD700"; 
@@ -819,9 +849,8 @@
             ctx.shadowColor = "#FFD700";
             ctx.fill(); 
             ctx.closePath();
-            ctx.shadowBlur = 0; // 그림자 초기화
+            ctx.shadowBlur = 0;
 
-            // 2. 알록달록 무지개 빛깔 패널(판) 드로잉
             ctx.beginPath(); 
             let paddleGradient = ctx.createLinearGradient(paddleX, 0, paddleX + paddleWidth, 0);
             paddleGradient.addColorStop(0, '#FF007F');
@@ -831,12 +860,10 @@
             ctx.roundRect ? ctx.roundRect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight, 6) : ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight);
             ctx.fill(); 
             
-            // 패들 상단 하이라이트 라인
             ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
             ctx.fillRect(paddleX + 4, gameCanvas.height - paddleHeight - 4, paddleWidth - 8, 2);
             ctx.closePath();
 
-            // 3. 알록달록 입체 칼라 벽돌 드로잉
             for (let c = 0; c < 6; c++) {
                 for (let r = 0; r < 4; r++) {
                     if (bricks[c][r] && bricks[c][r].status === 1) {
@@ -846,7 +873,6 @@
                         bricks[c][r].y = brickY;
 
                         ctx.beginPath(); 
-                        // 각 줄마다 다채로운 그라데이션 적용
                         let brickGradient = ctx.createLinearGradient(brickX, brickY, brickX, brickY + 13);
                         brickGradient.addColorStop(0, rowColors[r].top);
                         brickGradient.addColorStop(1, rowColors[r].bottom);
@@ -855,12 +881,10 @@
                         ctx.roundRect ? ctx.roundRect(brickX, brickY, 41, 14, 3) : ctx.rect(brickX, brickY, 41, 14);
                         ctx.fill(); 
 
-                        // 벽돌 테두리 입체감 효과
                         ctx.strokeStyle = "rgba(255,255,255,0.4)";
                         ctx.stroke();
                         ctx.closePath();
 
-                        // 공 충돌 검사
                         if (ballX > brickX && ballX < brickX + 41 && ballY > brickY && ballY < brickY + 14) { 
                             dy = -dy; 
                             bricks[c][r].status = 0; 
@@ -871,7 +895,6 @@
                 }
             }
 
-            // 벽면 충돌 검사
             if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
             if (ballY + dy < ballRadius) dy = -dy;
             else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
@@ -889,7 +912,7 @@
             gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 2. 카드 매칭 */
+        /* 🃏 2. 카드 짝맞추기 */
         let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
         function startMemoryGameEngine() {
             const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
@@ -905,13 +928,60 @@
                 let c1 = flippedCards[0]; let c2 = flippedCards[1];
                 if (c1.dataset.emoji === c2.dataset.emoji) {
                     c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
-
                     if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
                 } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
         }
 
-        /* 🚀 3. 원본 갤러그 엔진 */
+        /* 🧩 3. 성장 퍼즐 엔진 (신규 추가) */
+        let puzzleTiles = [];
+        const puzzleIcons = ['🌱', '🌿', '🌳', '🏡', '🏰'];
+
+        function startPuzzleGameEngine() {
+            const board = document.getElementById('puzzleBoard');
+            board.innerHTML = '';
+            puzzleTiles = [];
+            
+            // 3x3 (9칸) 퍼즐 판 초기화 (1단계 또는 2단계 랜덤 생성)
+            for(let i=0; i<9; i++) {
+                let level = Math.random() < 0.7 ? 1 : 2;
+                puzzleTiles.push(level);
+            }
+            renderPuzzleBoard();
+        }
+
+        function renderPuzzleBoard() {
+            const board = document.getElementById('puzzleBoard');
+            board.innerHTML = '';
+            
+            puzzleTiles.forEach((level, index) => {
+                const tile = document.createElement('div');
+                tile.className = `puzzle-tile level-${level}`;
+                tile.innerHTML = `<span>${puzzleIcons[level-1] || '👑'}</span><span style="font-size:10px; opacity:0.8;">Lv.${level}</span>`;
+                tile.onclick = () => handlePuzzleClick(index);
+                board.appendChild(tile);
+            });
+        }
+
+        function handlePuzzleClick(index) {
+            // 터치한 블록의 레벨을 1 성장시키고 보상 지급
+            puzzleTiles[index]++;
+            let earned = puzzleTiles[index] * 250;
+            amount += earned;
+            updateTotalBalance();
+
+            // 만약 최고 단계(Lv.5)를 넘어가면 초기화 후 보너스 지급
+            if(puzzleTiles[index] > 5) {
+                puzzleTiles[index] = 1;
+                amount += 2000;
+                updateTotalBalance();
+                alert("🎉 만렙 달성! 특별 보너스 +2,000원이 지급되었습니다!");
+            }
+
+            renderPuzzleBoard();
+        }
+
+        /* 🚀 4. 원본 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
