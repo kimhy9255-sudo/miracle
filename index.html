@@ -155,9 +155,9 @@
             gap: 4px;
         }
 
-        /* 🎮 게임 메뉴 설정 (2개 메뉴: 갤러그, 벽돌깨기/파이썬슈팅) */
-        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
-        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 13px; cursor: pointer; }
+        /* 🎮 기적 게임 창 레이아웃 (3개 메뉴 설정) */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
@@ -204,6 +204,15 @@
             height: 60vh !important;
             object-fit: contain;
         }
+        .game-display-panel.fullscreen-mode .card-grid {
+            max-width: 95vw !important;
+        }
+
+        /* 카드 짝맞추기 게임 보드 */
+        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 10px auto; }
+        .memory-card { height: 65px; background: #34495E; border-radius: 8px; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
+        .memory-card.flipped { background: #ECF0F1; color: initial; }
+        .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
         /* 금고 & 상점 */
         .vault-card { background: linear-gradient(135deg, #2C3E50, #34495E); color: white; border-radius: 20px; padding: 18px 15px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); margin-bottom: 10px; text-align: center; }
@@ -308,7 +317,8 @@
 
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
-                <button id="btnSelectPythonShoot" class="btn-game-select" onclick="switchMiniGame('pythonShoot')">🛸 미니 슈팅 게임</button>
+                <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
+                <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
             </div>
 
             <!-- 🚀 원본 갤러그 패널 -->
@@ -322,16 +332,28 @@
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
             </div>
 
-            <!-- 🛸 파이썬 슈팅 게임 웹 이식 패널 -->
-            <div id="pythonShootGameArea" class="game-display-panel" style="display:none;">
+            <!-- 🧱 무지개 칼라 벽돌깨기 패널 -->
+            <div id="brickGameArea" class="game-display-panel" style="display:none;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🛸 미니 슈팅 게임</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧱 벽돌깨기</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
-                <canvas id="pythonShootCanvas" width="320" height="380"></canvas>
-                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startPythonShootEngine()">🕹️ 슈팅 게임 재시작</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 터치/드래그 또는 좌우 이동 (적 처치시 +100원)</p>
+                <canvas id="gameCanvas" width="300" height="240"></canvas>
+                <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
+            </div>
+
+            <!-- 🃏 카드 짝맞추기 패널 -->
+            <div id="memoryGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🃏 짝맞추기</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
+                </div>
+                <div id="cardBoard" class="card-grid"></div>
+                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
         </div>
 
@@ -633,7 +655,7 @@
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
-            cancelAnimationFrame(pythonShootAnimId); cancelAnimationFrame(galagaAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -713,160 +735,180 @@
 
         function switchMiniGame(gameType) {
             exitFullScreenGame();
-            document.getElementById('btnSelectGalaga').classList.remove('active'); 
-            document.getElementById('btnSelectPythonShoot').classList.remove('active'); 
+            document.getElementById('btnSelectBrick').classList.remove('active'); 
+            document.getElementById('btnSelectMemory').classList.remove('active'); 
+            document.getElementById('btnSelectGalaga').classList.remove('active');
 
-            document.getElementById('galagaGameArea').style.display = 'none'; 
-            document.getElementById('pythonShootGameArea').style.display = 'none'; 
+            document.getElementById('brickGameArea').style.display = 'none'; 
+            document.getElementById('memoryGameArea').style.display = 'none'; 
+            document.getElementById('galagaGameArea').style.display = 'none';
             
-            cancelAnimationFrame(pythonShootAnimId); cancelAnimationFrame(galagaAnimationId);
+            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
 
-            if(gameType === 'galaga') { 
+            if(gameType === 'brick') { 
+                currentActiveGameAreaId = 'brickGameArea';
+                document.getElementById('btnSelectBrick').classList.add('active'); 
+                document.getElementById('brickGameArea').style.display = 'block'; 
+                startBrickGameEngine(); 
+            } 
+            else if(gameType === 'memory') { 
+                currentActiveGameAreaId = 'memoryGameArea';
+                document.getElementById('btnSelectMemory').classList.add('active'); 
+                document.getElementById('memoryGameArea').style.display = 'block'; 
+                startMemoryGameEngine(); 
+            } 
+            else if(gameType === 'galaga') { 
                 currentActiveGameAreaId = 'galagaGameArea';
                 document.getElementById('btnSelectGalaga').classList.add('active'); 
                 document.getElementById('galagaGameArea').style.display = 'block'; 
                 startGalagaGameEngine(); 
-            } 
-            else if(gameType === 'pythonShoot') { 
-                currentActiveGameAreaId = 'pythonShootGameArea';
-                document.getElementById('btnSelectPythonShoot').classList.add('active'); 
-                document.getElementById('pythonShootGameArea').style.display = 'block'; 
-                startPythonShootEngine(); 
             }
         }
 
-        /* 🛸 파이썬 슈팅 게임 웹 이식 버전 엔진 */
-        const pythonCanvas = document.getElementById("pythonShootCanvas");
-        const pCtx = pythonCanvas.getContext("2d");
-        let pythonShootAnimId = null;
+        /* 🧱 1. 알록달록 무지개 칼라 벽돌깨기 엔진 */
+        let gameCanvas = document.getElementById("gameCanvas"); 
+        let ctx = gameCanvas.getContext("2d");
+        let gameAnimationId = null; 
+        let ballRadius = 6, ballX, ballY, dx, dy; 
+        let paddleHeight = 12, paddleWidth = 65, paddleX; 
+        let bricks = [];
+        
+        // 줄별 알록달록 비비드 칼라 배열
+        const rowColors = [
+            { top: "#FF4E50", bottom: "#F9D423" }, // 1줄: 레드/옐로우 그라데이션
+            { top: "#FF007F", bottom: "#7928CA" }, // 2줄: 핑크/퍼플 그라데이션
+            { top: "#00F2FE", bottom: "#4FACFE" }, // 3줄: 시원한 네온 시안
+            { top: "#43E97B", bottom: "#38F9D7" }  // 4줄: 에메랄드 그린
+        ];
 
-        let pWidth = 320;
-        let pHeight = 380;
-        let pPlayerWidth = 40;
-        let pPlayerHeight = 32;
-        let pPlayerX = pWidth / 2 - pPlayerWidth / 2;
-        let pPlayerY = pHeight - pPlayerHeight - 20;
-        let pPlayerSpeed = 5;
+        function startBrickGameEngine() {
+            cancelAnimationFrame(gameAnimationId); if(!gameCanvas) return;
+            ballX = gameCanvas.width / 2; 
+            ballY = gameCanvas.height - 35; 
+            dx = 2; 
+            dy = -2; 
+            paddleX = (gameCanvas.width - paddleWidth) / 2;
 
-        let pBullets = [];
-        let pBulletSpeed = 7;
-        let pEnemies = [];
-        let pEnemyWidth = 32;
-        let pEnemyHeight = 32;
-        let pEnemySpeed = 2.5;
-        let pScore = 0;
-
-        let pKeys = {};
-        window.addEventListener('keydown', (e) => {
-            pKeys[e.code] = true;
-            if(e.code === 'Space') {
-                pBullets.push([pPlayerX + pPlayerWidth / 2 - 2, pPlayerY]);
-                e.preventDefault();
+            // 6열 4행 벽돌 구성
+            for (let c = 0; c < 6; c++) { 
+                bricks[c] = []; 
+                for (let r = 0; r < 4; r++) { 
+                    bricks[c][r] = { x: 0, y: 0, status: 1 }; 
+                } 
             }
-        });
-        window.addEventListener('keyup', (e) => { pKeys[e.code] = false; });
-
-        // 터치/마우스 드래그 조종 지원
-        function setPythonPlayerX(clientX) {
-            let rect = pythonCanvas.getBoundingClientRect();
-            let relX = clientX - rect.left;
-            if(relX >= 0 && relX <= pWidth) {
-                pPlayerX = relX - pPlayerWidth / 2;
-            }
-        }
-        pythonCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setPythonPlayerX(e.touches[0].clientX); });
-        pythonCanvas.addEventListener("mousemove", (e) => { setPythonPlayerX(e.clientX); });
-        pythonCanvas.addEventListener("click", () => {
-            // 터치/클릭 시 총알 발사
-            pBullets.push([pPlayerX + pPlayerWidth / 2 - 2, pPlayerY]);
-        });
-
-        let pSpawnCounter = 0;
-
-        function startPythonShootEngine() {
-            cancelAnimationFrame(pythonShootAnimId);
-            pPlayerX = pWidth / 2 - pPlayerWidth / 2;
-            pBullets = [];
-            pEnemies = [];
-            pScore = 0;
-            pSpawnCounter = 0;
-            loopPythonShoot();
+            drawBrickGame();
         }
 
-        function loopPythonShoot() {
-            pCtx.fillStyle = "#000000";
-            pCtx.fillRect(0, 0, pWidth, pHeight);
+        function setPaddleX(clientX) { 
+            let rect = gameCanvas.getBoundingClientRect(); 
+            let relativeX = clientX - rect.left; 
+            if(relativeX > 0 && relativeX < gameCanvas.width) paddleX = relativeX - paddleWidth / 2; 
+        }
 
-            // 키보드 좌우 이동 처리
-            if(pKeys['ArrowLeft'] && pPlayerX > 0) pPlayerX -= pPlayerSpeed;
-            if(pKeys['ArrowRight'] && pPlayerX < pWidth - pPlayerWidth) pPlayerX += pPlayerSpeed;
+        gameCanvas.addEventListener("touchmove", (e) => setPaddleX(e.touches[0].clientX));
+        gameCanvas.addEventListener("mousemove", (e) => setPaddleX(e.clientX));
+        
+        function drawBrickGame() {
+            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            
+            // 1. 공 (화려한 네온 골드 비주얼)
+            ctx.beginPath(); 
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2); 
+            ctx.fillStyle = "#FFD700"; 
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = "#FFD700";
+            ctx.fill(); 
+            ctx.closePath();
+            ctx.shadowBlur = 0; // 그림자 초기화
 
-            // 주기적 적 생성 (약 1초마다)
-            pSpawnCounter++;
-            if(pSpawnCounter > 45) {
-                let ex = Math.random() * (pWidth - pEnemyWidth);
-                pEnemies.push([ex, -pEnemyHeight]);
-                pSpawnCounter = 0;
-            }
+            // 2. 알록달록 무지개 빛깔 패널(판) 드로잉
+            ctx.beginPath(); 
+            let paddleGradient = ctx.createLinearGradient(paddleX, 0, paddleX + paddleWidth, 0);
+            paddleGradient.addColorStop(0, '#FF007F');
+            paddleGradient.addColorStop(0.5, '#7928CA');
+            paddleGradient.addColorStop(1, '#00F2FE');
+            ctx.fillStyle = paddleGradient; 
+            ctx.roundRect ? ctx.roundRect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight, 6) : ctx.rect(paddleX, gameCanvas.height - paddleHeight - 5, paddleWidth, paddleHeight);
+            ctx.fill(); 
+            
+            // 패들 상단 하이라이트 라인
+            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+            ctx.fillRect(paddleX + 4, gameCanvas.height - paddleHeight - 4, paddleWidth - 8, 2);
+            ctx.closePath();
 
-            // 총알 이동
-            for(let i = pBullets.length - 1; i >= 0; i--) {
-                pBullets[i][1] -= pBulletSpeed;
-                if(pBullets[i][1] < 0) {
-                    pBullets.splice(i, 1);
-                }
-            }
+            // 3. 알록달록 입체 칼라 벽돌 드로잉
+            for (let c = 0; c < 6; c++) {
+                for (let r = 0; r < 4; r++) {
+                    if (bricks[c][r] && bricks[c][r].status === 1) {
+                        let brickX = c * 46 + 13; 
+                        let brickY = r * 18 + 15; 
+                        bricks[c][r].x = brickX; 
+                        bricks[c][r].y = brickY;
 
-            // 적 이동
-            for(let i = pEnemies.length - 1; i >= 0; i--) {
-                pEnemies[i][1] += pEnemySpeed;
-                if(pEnemies[i][1] > pHeight) {
-                    pEnemies.splice(i, 1);
-                }
-            }
+                        ctx.beginPath(); 
+                        // 각 줄마다 다채로운 그라데이션 적용
+                        let brickGradient = ctx.createLinearGradient(brickX, brickY, brickX, brickY + 13);
+                        brickGradient.addColorStop(0, rowColors[r].top);
+                        brickGradient.addColorStop(1, rowColors[r].bottom);
 
-            // 충돌 체크 (총알 <-> 적)
-            for(let b = pBullets.length - 1; b >= 0; b--) {
-                let bx = pBullets[b][0];
-                let by = pBullets[b][1];
-                for(let e = pEnemies.length - 1; e >= 0; e--) {
-                    let ex = pEnemies[e][0];
-                    let ey = pEnemies[e][1];
-                    if(bx > ex && bx < ex + pEnemyWidth && by > ey && by < ey + pEnemyHeight) {
-                        pBullets.splice(b, 1);
-                        pEnemies.splice(e, 1);
-                        pScore += 10;
-                        amount += 100; // 적 처치 시 재단 포인트 지급 연동
-                        updateTotalBalance();
-                        break;
+                        ctx.fillStyle = brickGradient; 
+                        ctx.roundRect ? ctx.roundRect(brickX, brickY, 41, 14, 3) : ctx.rect(brickX, brickY, 41, 14);
+                        ctx.fill(); 
+
+                        // 벽돌 테두리 입체감 효과
+                        ctx.strokeStyle = "rgba(255,255,255,0.4)";
+                        ctx.stroke();
+                        ctx.closePath();
+
+                        // 공 충돌 검사
+                        if (ballX > brickX && ballX < brickX + 41 && ballY > brickY && ballY < brickY + 14) { 
+                            dy = -dy; 
+                            bricks[c][r].status = 0; 
+                            amount += 100; 
+                            updateTotalBalance(); 
+                        }
                     }
                 }
             }
 
-            // 1. 플레이어 그리기 (초록색 우주선 형태)
-            pCtx.fillStyle = "#00FF00";
-            pCtx.fillRect(pPlayerX, pPlayerY, pPlayerWidth, pPlayerHeight);
-            pCtx.fillStyle = "#FFFFFF";
-            pCtx.fillRect(pPlayerX + pPlayerWidth/2 - 3, pPlayerY - 6, 6, 6);
-
-            // 2. 총알 그리기 (하얀색 선)
-            pCtx.fillStyle = "#FFFFFF";
-            for(let b of pBullets) {
-                pCtx.fillRect(b[0], b[1], 4, 10);
+            // 벽면 충돌 검사
+            if (ballX + dx > gameCanvas.width - ballRadius || ballX + dx < ballRadius) dx = -dx;
+            if (ballY + dy < ballRadius) dy = -dy;
+            else if (ballY + dy > gameCanvas.height - ballRadius - paddleHeight - 5) {
+                if (ballX > paddleX && ballX < paddleX + paddleWidth) { 
+                    dy = -dy; 
+                } 
+                else if (ballY + dy > gameCanvas.height - ballRadius) { 
+                    cancelAnimationFrame(gameAnimationId); 
+                    alert("🧱 게임 오버! 다시 시작합니다."); 
+                    startBrickGameEngine(); 
+                    return; 
+                }
             }
+            ballX += dx; ballY += dy; 
+            gameAnimationId = requestAnimationFrame(drawBrickGame);
+        }
 
-            // 3. 적 그리기 (빨간색 네모)
-            pCtx.fillStyle = "#FF0000";
-            for(let e of pEnemies) {
-                pCtx.fillRect(e[0], e[1], pEnemyWidth, pEnemyHeight);
+        /* 🃏 2. 카드 매칭 */
+        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
+        function startMemoryGameEngine() {
+            const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
+            let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
+            shuffled.forEach((emoji) => {
+                const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
+            });
+        }
+        function handleCardClick() {
+            if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
+            this.classList.add('flipped'); flippedCards.push(this);
+            if (flippedCards.length === 2) {
+                let c1 = flippedCards[0]; let c2 = flippedCards[1];
+                if (c1.dataset.emoji === c2.dataset.emoji) {
+                    c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
+
+                    if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
+                } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
             }
-
-            // 4. 점수 표시
-            pCtx.fillStyle = "#FFFFFF";
-            pCtx.font = "bold 14px monospace";
-            pCtx.fillText(`Score: ${pScore}`, 10, 20);
-
-            pythonShootAnimId = requestAnimationFrame(loopPythonShoot);
         }
 
         /* 🚀 3. 원본 갤러그 엔진 */
