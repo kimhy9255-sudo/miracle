@@ -944,7 +944,7 @@
             }
         }
 
-        /* 🍓 3. 성장 퍼즐 (3매칭) 엔진 - 다른 그림으로 자동 변환 반영 완료 */
+        /* 🍓 3. 성장 퍼즐 (3매칭) 엔진 - 알림창 제거 완료 */
         const PUZZLE_SIZE = 6;
         const puzzleItems = ["🍌", "🍓", "🥕", "🍀"];
         let puzzleBoardData = [];
@@ -1058,7 +1058,7 @@
                     let newEmoji;
                     do {
                         newEmoji = puzzleItems[Math.floor(Math.random() * puzzleItems.length)];
-                    } while (newEmoji === puzzleBoardData[coord.r][coord.c]); // 기존 그림과 겹치지 않게 설정
+                    } while (newEmoji === puzzleBoardData[coord.r][coord.c]);
                     
                     puzzleBoardData[coord.r][coord.c] = newEmoji;
                 });
@@ -1067,7 +1067,7 @@
                 amount += earnedPoints;
                 updateTotalBalance();
                 updatePuzzleView();
-                alert(`🍓 매칭 성공! 다른 그림으로 변환되며 +${earnedPoints.toLocaleString()}원이 적립되었습니다!`);
+                // alert 창 제거 완료
             }
         }
 
