@@ -331,20 +331,20 @@
             </div>
 
             <div class="game-menu-container">
-                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
+                <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 탄막슈팅</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
                 <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🍓 성장퍼즐</button>
             </div>
 
-            <!-- 🚀 원본 갤러그 패널 -->
+            <!-- 🚀 아케이드 탄막 슈팅 게임 패널 -->
             <div id="galagaGameArea" class="game-display-panel">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🚀 갤러그</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🚀 아케이드 탄막 슈팅</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
                 </div>
                 <canvas id="galagaCanvas" width="320" height="380"></canvas>
-                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 갤러그 출격 / 리셋</button>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 슈팅 게임 시작 / 리셋</button>
             </div>
 
             <!-- 🧱 무지개 칼라 벽돌깨기 패널 -->
@@ -1019,38 +1019,24 @@
             createPuzzleBoard();
         }
 
-        /* 🚀 3. 원본 갤러그 엔진 */
+        /* 🚀 3. 아케이드 탄막 슈팅 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
         
         let gPlayerX = 160;
+        let gPlayerY = 340;
         let gBullets = [];
         let gEnemyBullets = [];
         let gEnemies = [];
         let gStars = [];
         let galagaScore = 2360;
         let galagaFrame = 0;
-        let tractorBeamActive = false;
-        let tractorBeamTimer = 0;
-        let tractorBoss = null;
+        let bossEnemy = null;
 
         function initGalagaEnemies() {
             gEnemies = [];
-            gEnemies.push({ x: 130, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
-            gEnemies.push({ x: 170, y: 50, type: 'boss', width: 22, height: 18, alive: true, hp: 2 });
-
-            for(let i=0; i<8; i++) {
-                if(i === 3 || i === 4) continue;
-                gEnemies.push({ x: 35 + i*32, y: 80, type: 'butterfly', width: 20, height: 16, alive: true });
-                gEnemies.push({ x: 35 + i*32, y: 100, type: 'butterfly', width: 20, height: 16, alive: true });
-            }
-
-            for(let i=0; i<10; i++) {
-                if(i === 4 || i === 5) continue;
-                gEnemies.push({ x: 20 + i*29, y: 125, type: 'bee', width: 18, height: 14, alive: true });
-                gEnemies.push({ x: 20 + i*29, y: 145, type: 'bee', width: 18, height: 14, alive: true });
-            }
+            bossEnemy = { x: 160, y: 70, width: 40, height: 30, alive: true, hp: 50, maxHp: 50, angle: 0 };
         }
 
         function startGalagaGameEngine() {
@@ -1058,59 +1044,51 @@
             gBullets = [];
             gEnemyBullets = [];
             gPlayerX = 160;
+            gPlayerY = 340;
             galagaScore = 2360;
             galagaFrame = 0;
-            tractorBeamActive = false;
             
             gStars = [];
-            for(let i=0; i<40; i++) {
-                gStars.push({ x: Math.random()*320, y: Math.random()*380, speed: Math.random()*1.5 + 0.5 });
+            for(let i=0; i<50; i++) {
+                gStars.push({ x: Math.random()*320, y: Math.random()*380, speed: Math.random()*2 + 1 });
             }
 
             initGalagaEnemies();
             loopGalagaGame();
         }
 
-        function setGalagaPlayerX(clientX) {
+        function setGalagaPlayerPos(clientX, clientY) {
             let rect = galagaCanvas.getBoundingClientRect();
             let relativeX = clientX - rect.left;
+            let relativeY = clientY - rect.top;
             if(relativeX > 15 && relativeX < galagaCanvas.width - 15) gPlayerX = relativeX;
-        }
-        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setGalagaPlayerX(e.touches[0].clientX); });
-        galagaCanvas.addEventListener("mousemove", (e) => { setGalagaPlayerX(e.clientX); });
-
-        function drawGalagaPlayer(x, y) {
-            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-1, y-10, 2, 6);
-            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-4, y-4, 8, 4);
-            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-10, y, 20, 6);
-            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-12, y+4, 4, 6); gCtx.fillRect(x+8, y+4, 4, 6);
-            gCtx.fillStyle = "#0000FF"; gCtx.fillRect(x-6, y+2, 12, 4);
+            if(relativeY > 30 && relativeY < galagaCanvas.height - 15) gPlayerY = relativeY;
         }
 
-        function drawGalagaBoss(x, y) {
-            gCtx.fillStyle = "#00FF00"; gCtx.fillRect(x-8, y-6, 16, 4);
-            gCtx.fillStyle = "#008800"; gCtx.fillRect(x-10, y-2, 20, 6);
-            gCtx.fillStyle = "#00FFFF"; gCtx.fillRect(x-6, y+4, 12, 4);
-            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-2, y-4, 4, 4);
-        }
+        galagaCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setGalagaPlayerPos(e.touches[0].clientX, e.touches[0].clientY); });
+        galagaCanvas.addEventListener("mousemove", (e) => { setGalagaPlayerPos(e.clientX, e.clientY); });
 
-        function drawGalagaButterfly(x, y) {
-            gCtx.fillStyle = "#FF0000"; gCtx.fillRect(x-8, y-5, 16, 4);
-            gCtx.fillStyle = "#0000FF"; gCtx.fillRect(x-6, y-1, 12, 6);
-            gCtx.fillStyle = "#FFFFFF"; gCtx.fillRect(x-10, y-3, 4, 4); gCtx.fillRect(x+6, y-3, 4, 4);
-        }
-
-        function drawGalagaBee(x, y) {
-            gCtx.fillStyle = "#FFFF00"; gCtx.fillRect(x-7, y-4, 14, 4);
-            gCtx.fillStyle = "#00FF00"; gCtx.fillRect(x-5, y, 10, 4);
-            gCtx.fillStyle = "#FF8800"; gCtx.fillRect(x-8, y-2, 3, 3); gCtx.fillRect(x+5, y-2, 3, 3);
+        function drawBulletPattern(bx, by) {
+            let count = 16;
+            let speed = 2.2;
+            for(let i=0; i<count; i++) {
+                let angle = (Math.PI * 2 / count) * i + (galagaFrame * 0.03);
+                gEnemyBullets.push({
+                    x: bx,
+                    y: by,
+                    dx: Math.cos(angle) * speed,
+                    dy: Math.sin(angle) * speed,
+                    type: 'circle'
+                });
+            }
         }
 
         function loopGalagaGame() {
-            gCtx.fillStyle = "#000000";
+            gCtx.fillStyle = "#111118";
             gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
+            // 배경 별 그리기
             gCtx.fillStyle = "#FFFFFF";
             gStars.forEach(star => {
                 star.y += star.speed;
@@ -1118,97 +1096,113 @@
                 gCtx.fillRect(star.x, star.y, 1.5, 1.5);
             });
 
-            gCtx.fillStyle = "#FF0000"; gCtx.font = "bold 13px monospace"; gCtx.fillText("1UP", 30, 20);
-            gCtx.fillStyle = "#FFFFFF"; gCtx.fillText(galagaScore.toString(), 220, 20);
+            // 스코어 및 UI 표시
+            gCtx.fillStyle = "#FF0055"; gCtx.font = "bold 12px monospace"; gCtx.fillText("PI SCORE", 15, 20);
+            gCtx.fillStyle = "#FFFFFF"; gCtx.fillText(galagaScore.toString(), 85, 20);
 
-            drawGalagaPlayer(gPlayerX, 340);
-            drawGalagaPlayer(20, 365); drawGalagaPlayer(38, 365);
-
-            if(galagaFrame % 10 === 0) {
-                gBullets.push({ x: gPlayerX - 4, y: 330 });
-                gBullets.push({ x: gPlayerX + 4, y: 330 });
+            // 보스 체력바 표시
+            if(bossEnemy && bossEnemy.alive) {
+                gCtx.fillStyle = "#444";
+                gCtx.fillRect(80, 28, 160, 6);
+                gCtx.fillStyle = "#FF0055";
+                gCtx.fillRect(80, 28, (bossEnemy.hp / bossEnemy.maxHp) * 160, 6);
             }
 
-            gCtx.fillStyle = "#FFFF00";
+            // 플레이어 비행기 그리기 (하얀색 원형 코어 포함)
+            gCtx.fillStyle = "#00F2FE";
+            gCtx.beginPath();
+            gCtx.moveTo(gPlayerX, gPlayerY - 12);
+            gCtx.lineTo(gPlayerX - 8, gPlayerY + 8);
+            gCtx.lineTo(gPlayerX + 8, gPlayerY + 8);
+            gCtx.fill();
+            gCtx.closePath();
+
+            // 플레이어 탄환 발사
+            if(galagaFrame % 6 === 0) {
+                gBullets.push({ x: gPlayerX, y: gPlayerY - 12 });
+            }
+
+            // 플레이어 탄환 이동
+            gCtx.fillStyle = "#00F2FE";
             for(let i = gBullets.length - 1; i >= 0; i--) {
                 let b = gBullets[i];
-                b.y -= 7;
-                gCtx.fillRect(b.x - 1, b.y, 2, 6);
+                b.y -= 8;
+                gCtx.fillRect(b.x - 1.5, b.y, 3, 8);
                 if(b.y < 25) gBullets.splice(i, 1);
             }
 
-            if(galagaFrame % 35 === 0) {
-                let activeEnemies = gEnemies.filter(e => e.alive);
-                if(activeEnemies.length > 0) {
-                    let shooter = activeEnemies[Math.floor(Math.random() * activeEnemies.length)];
-                    gEnemyBullets.push({ x: shooter.x, y: shooter.y + 10 });
+            // 보스 움직임 및 탄막 패턴 생성
+            if(bossEnemy && bossEnemy.alive) {
+                bossEnemy.angle += 0.03;
+                bossEnemy.x = 160 + Math.sin(bossEnemy.angle) * 90;
+                
+                // 보스 본체 그리기 (외계 전함 스타일)
+                gCtx.fillStyle = "#7928CA";
+                gCtx.beginPath();
+                gCtx.arc(bossEnemy.x, bossEnemy.y, 22, 0, Math.PI * 2);
+                gCtx.fill();
+                gCtx.closePath();
+                gCtx.fillStyle = "#FF007F";
+                gCtx.beginPath();
+                gCtx.arc(bossEnemy.x, bossEnemy.y, 10, 0, Math.PI * 2);
+                gCtx.fill();
+                gCtx.closePath();
+
+                // 원형 탄막 발사 패턴 주기
+                if(galagaFrame % 45 === 0) {
+                    drawBulletPattern(bossEnemy.x, bossEnemy.y);
+                }
+
+                // 플레이어 탄환과 보스 충돌 체크
+                for(let i = gBullets.length - 1; i >= 0; i--) {
+                    let b = gBullets[i];
+                    let dist = Math.hypot(b.x - bossEnemy.x, b.y - bossEnemy.y);
+                    if(dist < 22) {
+                        gBullets.splice(i, 1);
+                        bossEnemy.hp -= 1;
+                        galagaScore += 50;
+                        amount += 200;
+                        updateTotalBalance();
+
+                        if(bossEnemy.hp <= 0) {
+                            bossEnemy.alive = false;
+                            alert("🎉 보스 격파 성공! 대단합니다!");
+                            startGalagaGameEngine();
+                            return;
+                        }
+                    }
                 }
             }
 
-            gCtx.fillStyle = "#FF3333";
+            // 적 탄막(원형 링 탄환) 업데이트 및 충돌 체크
             for(let i = gEnemyBullets.length - 1; i >= 0; i--) {
                 let eb = gEnemyBullets[i];
-                eb.y += 2.5;
-                gCtx.fillRect(eb.x - 1.5, eb.y, 3, 7);
+                eb.x += eb.dx;
+                eb.y += eb.dy;
 
-                if(eb.x >= gPlayerX - 10 && eb.x <= gPlayerX + 10 && eb.y >= 330 && eb.y <= 350) {
+                // 탄환 그리기 (이미지 참고: 보라빛 외곽선과 노란/핑크 코어의 화려한 탄막)
+                gCtx.beginPath();
+                gCtx.arc(eb.x, eb.y, 6, 0, Math.PI * 2);
+                gCtx.fillStyle = "#FF00FF";
+                gCtx.fill();
+                gCtx.lineWidth = 1.5;
+                gCtx.strokeStyle = "#FFFF00";
+                gCtx.stroke();
+                gCtx.closePath();
+
+                // 플레이어와 탄환 충돌 판정 (중심 코어 피격)
+                let pDist = Math.hypot(eb.x - gPlayerX, eb.y - gPlayerY);
+                if(pDist < 8) {
                     cancelAnimationFrame(galagaAnimationId);
-                    alert("💥 적 총알에 격추되었습니다! 다시 출격합니다.");
+                    alert("💥 탄막에 피격되었습니다! 다시 도전하세요.");
                     startGalagaGameEngine();
                     return;
                 }
 
-                if(eb.y > 380) gEnemyBullets.splice(i, 1);
-            }
-
-            let aliveCount = 0;
-            gEnemies.forEach((e) => {
-                if(!e.alive) return;
-                aliveCount++;
-
-                if(e.type === 'boss') drawGalagaBoss(e.x, e.y);
-                else if(e.type === 'butterfly') drawGalagaButterfly(e.x, e.y);
-                else if(e.type === 'bee') drawGalagaBee(e.x, e.y);
-
-                for(let i = gBullets.length - 1; i >= 0; i--) {
-                    let b = gBullets[i];
-                    if(Math.abs(b.x - e.x) < e.width/2 && Math.abs(b.y - e.y) < e.height/2) {
-                        gBullets.splice(i, 1);
-                        if(e.type === 'boss' && e.hp > 1) {
-                            e.hp--;
-                        } else {
-                            e.alive = false;
-                            galagaScore += (e.type === 'boss' ? 400 : (e.type === 'butterfly' ? 160 : 80));
-                            amount += 1000;
-                            updateTotalBalance();
-                        }
-                    }
+                // 화면 밖으로 나가면 제거
+                if(eb.x < 0 || eb.x > 320 || eb.y < 0 || eb.y > 380) {
+                    gEnemyBullets.splice(i, 1);
                 }
-            });
-
-            if(galagaFrame % 200 === 0 && !tractorBeamActive && gEnemies[0] && gEnemies[0].alive) {
-                tractorBeamActive = true;
-                tractorBeamTimer = 100;
-                tractorBoss = gEnemies[0];
-            }
-
-            if(tractorBeamActive && tractorBoss && tractorBoss.alive) {
-                gCtx.strokeStyle = "#00FFFF";
-                gCtx.lineWidth = 1.5;
-                let bx = tractorBoss.x;
-                let by = tractorBoss.y + 10;
-                for(let r = 0; r < 12; r++) {
-                    gCtx.beginPath();
-                    gCtx.ellipse(bx, by + r*18, 5 + r*4, 3, 0, 0, Math.PI);
-                    gCtx.stroke();
-                }
-                tractorBeamTimer--;
-                if(tractorBeamTimer <= 0) tractorBeamActive = false;
-            }
-
-            if(aliveCount === 0) {
-                alert("🎉 STAGE CLEARED! 다음 격퇴 적군이 출격합니다.");
-                initGalagaEnemies();
             }
 
             galagaAnimationId = requestAnimationFrame(loopGalagaGame);
