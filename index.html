@@ -155,9 +155,9 @@
             gap: 4px;
         }
 
-        /* 🎮 기적 게임 창 레이아웃 (4개 메뉴 설정) */
-        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
+        /* 🎮 기적 게임 창 레이아웃 (3개 메뉴 설정) */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 4px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 11px; cursor: pointer; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
@@ -204,16 +204,9 @@
             height: 60vh !important;
             object-fit: contain;
         }
-        .game-display-panel.fullscreen-mode .card-grid,
         .game-display-panel.fullscreen-mode #puzzleBoard {
             max-width: 95vw !important;
         }
-
-        /* 카드 짝맞추기 게임 보드 */
-        .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 340px; margin: 10px auto; }
-        .memory-card { height: 65px; background: #34495E; border-radius: 8px; font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; user-select: none; }
-        .memory-card.flipped { background: #ECF0F1; color: initial; }
-        .memory-card.matched { background: #2ECC71; color: initial; visibility: hidden; }
 
         /* 🍓 성장 퍼즐 게임 보드 스타일 */
         #puzzleBoard {
@@ -340,7 +333,6 @@
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 갤러그</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌깨기</button>
-                <button id="btnSelectMemory" class="btn-game-select" onclick="switchMiniGame('memory')">🃏 짝맞추기</button>
                 <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🍓 성장퍼즐</button>
             </div>
 
@@ -365,18 +357,6 @@
                 <canvas id="gameCanvas" width="300" height="240"></canvas>
                 <button class="btn-action btn-engine" style="margin-top:10px; width:100%;" onclick="startBrickGameEngine()">🕹️ 게임 시작 / 리셋</button>
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">화면 드래그로 조작 (벽돌당 +100원)</p>
-            </div>
-
-            <!-- 🃏 카드 짝맞추기 패널 -->
-            <div id="memoryGameArea" class="game-display-panel" style="display:none;">
-                <div class="fullscreen-control-bar">
-                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🃏 짝맞추기</span>
-                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 화면 축소</button>
-                </div>
-                <div id="cardBoard" class="card-grid"></div>
-                <button class="btn-action btn-ad-reward" style="margin-top:10px; width:100%;" onclick="startMemoryGameEngine()">🃏 카드 섞기 / 리셋</button>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">전부 맞추면 보상 <b>+1,000원</b>!</p>
             </div>
 
             <!-- 🍓 성장 퍼즐 (3매칭) 패널 -->
@@ -771,13 +751,11 @@
         function switchMiniGame(gameType) {
             exitFullScreenGame();
             document.getElementById('btnSelectBrick').classList.remove('active'); 
-            document.getElementById('btnSelectMemory').classList.remove('active'); 
             document.getElementById('btnSelectGalaga').classList.remove('active');
             document.getElementById('btnSelectPuzzle').classList.remove('active');
 
             document.getElementById('brickGameArea').style.display = 'none'; 
-            document.getElementById('memoryGameArea').style.display = 'none'; 
-            document.getElementById('galagaGameArea').style.display = 'none';
+            document.getElementById('galagaGameArea').style.display = 'none'; 
             document.getElementById('puzzleGameArea').style.display = 'none';
             
             cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
@@ -787,12 +765,6 @@
                 document.getElementById('btnSelectBrick').classList.add('active'); 
                 document.getElementById('brickGameArea').style.display = 'block'; 
                 startBrickGameEngine(); 
-            } 
-            else if(gameType === 'memory') { 
-                currentActiveGameAreaId = 'memoryGameArea';
-                document.getElementById('btnSelectMemory').classList.add('active'); 
-                document.getElementById('memoryGameArea').style.display = 'block'; 
-                startMemoryGameEngine(); 
             } 
             else if(gameType === 'galaga') { 
                 currentActiveGameAreaId = 'galagaGameArea';
@@ -922,29 +894,7 @@
             gameAnimationId = requestAnimationFrame(drawBrickGame);
         }
 
-        /* 🃏 2. 카드 매칭 */
-        let cardEmojis = ['🍎', '🍌', '🍙', '⭐', '🍎', '🍌', '🍙', '⭐']; let flippedCards = []; let matchedPairs = 0;
-        function startMemoryGameEngine() {
-            const board = document.getElementById('cardBoard'); board.innerHTML = ''; flippedCards = []; matchedPairs = 0;
-            let shuffled = cardEmojis.sort(() => 0.5 - Math.random());
-            shuffled.forEach((emoji) => {
-                const card = document.createElement('div'); card.classList.add('memory-card'); card.dataset.emoji = emoji; card.innerText = emoji; card.onclick = handleCardClick; board.appendChild(card);
-            });
-        }
-        function handleCardClick() {
-            if (flippedCards.length >= 2 || this.classList.contains('flipped')) return;
-            this.classList.add('flipped'); flippedCards.push(this);
-            if (flippedCards.length === 2) {
-                let c1 = flippedCards[0]; let c2 = flippedCards[1];
-                if (c1.dataset.emoji === c2.dataset.emoji) {
-                    c1.classList.add('matched'); c2.classList.add('matched'); flippedCards = []; matchedPairs++;
-
-                    if (matchedPairs === 4) { amount += 1000; updateTotalBalance(); alert("🃏 짝맞추기 보상금 지급 완료!"); }
-                } else { setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); flippedCards = []; }, 500); }
-            }
-        }
-
-        /* 🍓 3. 성장 퍼즐 (3매칭) 엔진 - 알림창 제거 완료 */
+        /* 🍓 2. 성장 퍼즐 (3매칭) 엔진 */
         const PUZZLE_SIZE = 6;
         const puzzleItems = ["🍌", "🍓", "🥕", "🍀"];
         let puzzleBoardData = [];
@@ -982,7 +932,6 @@
                 return;
             }
 
-            // 스왑 처리
             let temp = puzzleBoardData[firstSelectedPuzzleCell.row][firstSelectedPuzzleCell.col];
             puzzleBoardData[firstSelectedPuzzleCell.row][firstSelectedPuzzleCell.col] = puzzleBoardData[row][col];
             puzzleBoardData[row][col] = temp;
@@ -1005,7 +954,6 @@
         function checkPuzzleMatches() {
             let matchedCoords = [];
 
-            // 1. 가로 방향 3개 이상 매칭 검사
             for (let r = 0; r < PUZZLE_SIZE; r++) {
                 let matchLength = 1;
                 for (let c = 1; c < PUZZLE_SIZE; c++) {
@@ -1027,7 +975,6 @@
                 }
             }
 
-            // 2. 세로 방향 3개 이상 매칭 검사
             for (let c = 0; c < PUZZLE_SIZE; c++) {
                 let matchLength = 1;
                 for (let r = 1; r < PUZZLE_SIZE; r++) {
@@ -1049,11 +996,9 @@
                 }
             }
 
-            // 중복 좌표 제거
             let uniqueMatches = Array.from(new Set(matchedCoords.map(item => JSON.stringify(item)))).map(string => JSON.parse(string));
 
             if (uniqueMatches.length > 0) {
-                // 매칭된 칸들을 다른 그림(새로운 랜덤 이모지)으로 변환
                 uniqueMatches.forEach(coord => {
                     let newEmoji;
                     do {
@@ -1067,7 +1012,6 @@
                 amount += earnedPoints;
                 updateTotalBalance();
                 updatePuzzleView();
-                // alert 창 제거 완료
             }
         }
 
@@ -1075,7 +1019,7 @@
             createPuzzleBoard();
         }
 
-        /* 🚀 4. 원본 갤러그 엔진 */
+        /* 🚀 3. 원본 갤러그 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
