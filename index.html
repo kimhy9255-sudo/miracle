@@ -245,6 +245,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
         }
         .photo-puzzle-piece {
             background-size: 330px 330px;
@@ -254,6 +255,19 @@
         }
         .photo-puzzle-piece:active {
             transform: scale(0.95);
+        }
+
+        /* 🪙 금화 낙하 애니메이션 스타일 */
+        .falling-coin {
+            position: absolute;
+            font-size: 24px;
+            animation: fallCoin linear forwards;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        @keyframes fallCoin {
+            0% { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(350px) rotate(360deg); opacity: 0; }
         }
 
         /* 금고 & 상점 */
@@ -1075,9 +1089,9 @@
             createPuzzleBoard();
         }
 
-        /* 🧩 4. 고품질 사진 직소 퍼즐 엔진 (신규 추가) */
+        /* 🧩 4. 고품질 사진 직소 퍼즐 엔진 (카지노 축하 효과 포함) */
         const PHOTO_GRID = 4;
-        let currentPhotoUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60"; // 기본 풍경 사진
+        let currentPhotoUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60"; 
         let photoPuzzlePieces = [];
         let selectedPhotoPieceIndex = null;
 
@@ -1103,7 +1117,6 @@
         }
 
         function shufflePhotoPuzzle() {
-            // 무작위 섞기 (풀 수 있는 상태 보장 위해 랜덤 셔플)
             for (let i = photoPuzzlePieces.length - 1; i > 0; i--) {
                 let j = Math.floor(Math.random() * (i + 1));
                 let temp = photoPuzzlePieces[i];
@@ -1144,7 +1157,6 @@
                 selectedPhotoPieceIndex = clickedIndex;
                 this.style.border = "2px solid #FFEB00";
             } else {
-                // 두 조각 교환
                 let temp = photoPuzzlePieces[selectedPhotoPieceIndex];
                 photoPuzzlePieces[selectedPhotoPieceIndex] = photoPuzzlePieces[clickedIndex];
                 photoPuzzlePieces[clickedIndex] = temp;
@@ -1155,11 +1167,69 @@
             }
         }
 
+        /* 🎰 카지노 축하 음악 재생 함수 (Web Audio API 활용) */
+        let casinoAudioCtx = null;
+        function playCasinoCelebrationMusic() {
+            try {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                casinoAudioCtx = new AudioContext();
+
+                // 승리 팡파레 멜로디 노트 주파수 배열
+                const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50]; // 도, 미, 솔, 고음도, 솔, 고음도
+                const times = [0, 0.15, 0.3, 0.45, 0.65, 0.8];
+                const durations = [0.12, 0.12, 0.12, 0.18, 0.12, 0.4];
+
+                notes.forEach((freq, idx) => {
+                    let osc = casinoAudioCtx.createOscillator();
+                    let gain = casinoAudioCtx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, casinoAudioCtx.currentTime + times[idx]);
+
+                    gain.gain.setValueAtTime(0.3, casinoAudioCtx.currentTime + times[idx]);
+                    gain.gain.exponentialRampToValueAtTime(0.001, casinoAudioCtx.currentTime + times[idx] + durations[idx]);
+
+                    osc.connect(gain);
+                    gain.connect(casinoAudioCtx.destination);
+
+                    osc.start(casinoAudioCtx.currentTime + times[idx]);
+                    osc.stop(casinoAudioCtx.currentTime + times[idx] + durations[idx]);
+                });
+            } catch(e) {
+                console.log("Audio play error", e);
+            }
+        }
+
+        /* 🪙 금화 낙하 효과 생성 함수 */
+        function triggerCoinRain() {
+            const board = document.getElementById("photoPuzzleBoard");
+            if(!board) return;
+
+            for (let i = 0; i < 35; i++) {
+                let coin = document.createElement("div");
+                coin.className = "falling-coin";
+                coin.innerText = "🪙";
+                coin.style.left = Math.random() * 90 + "%";
+                coin.style.animationDuration = (Math.random() * 1.2 + 0.8) + "s";
+                coin.style.animationDelay = (Math.random() * 0.5) + "s";
+                board.appendChild(coin);
+
+                setTimeout(() => {
+                    coin.remove();
+                }, 2000);
+            }
+        }
+
         function checkPhotoPuzzleComplete() {
             let isComplete = photoPuzzlePieces.every((val, idx) => val === idx);
             if (isComplete) {
                 amount += 500;
                 updateTotalBalance();
+                
+                // 카지노 음악 및 금화 낙하 효과 실행
+                playCasinoCelebrationMusic();
+                triggerCoinRain();
+
                 alert("🎉 축하합니다! 사진 퍼즐을 완성하여 +500원이 적립되었습니다! 🏆");
                 shufflePhotoPuzzle();
             }
@@ -1234,7 +1304,6 @@
             gCtx.fillRect(0, 0, galagaCanvas.width, galagaCanvas.height);
             galagaFrame++;
 
-            // 배경 별 그리기
             gCtx.fillStyle = "#FFFFFF";
             gStars.forEach(star => {
                 star.y += star.speed;
@@ -1242,11 +1311,9 @@
                 gCtx.fillRect(star.x, star.y, 1.5, 1.5);
             });
 
-            // 스코어 및 UI 표시
             gCtx.fillStyle = "#FF0055"; gCtx.font = "bold 12px monospace"; gCtx.fillText("PI SCORE", 15, 20);
             gCtx.fillStyle = "#FFFFFF"; gCtx.fillText(galagaScore.toString(), 85, 20);
 
-            // 보스 체력바 표시
             if(bossEnemy && bossEnemy.alive) {
                 gCtx.fillStyle = "#444";
                 gCtx.fillRect(80, 28, 160, 6);
@@ -1254,7 +1321,6 @@
                 gCtx.fillRect(80, 28, (bossEnemy.hp / bossEnemy.maxHp) * 160, 6);
             }
 
-            // 플레이어 비행기 그리기
             gCtx.fillStyle = "#00F2FE";
             gCtx.beginPath();
             gCtx.moveTo(gPlayerX, gPlayerY - 12);
@@ -1263,12 +1329,10 @@
             gCtx.fill();
             gCtx.closePath();
 
-            // 플레이어 탄환 발사
             if(galagaFrame % 6 === 0) {
                 gBullets.push({ x: gPlayerX, y: gPlayerY - 12 });
             }
 
-            // 플레이어 탄환 이동
             gCtx.fillStyle = "#00F2FE";
             for(let i = gBullets.length - 1; i >= 0; i--) {
                 let b = gBullets[i];
@@ -1277,7 +1341,6 @@
                 if(b.y < 25) gBullets.splice(i, 1);
             }
 
-            // 보스 움직임 및 탄막 패턴 생성
             if(bossEnemy && bossEnemy.alive) {
                 bossEnemy.angle += 0.03;
                 bossEnemy.x = 160 + Math.sin(bossEnemy.angle) * 90;
@@ -1317,7 +1380,6 @@
                 }
             }
 
-            // 적 탄환 업데이트 및 충돌 체크
             for(let i = gEnemyBullets.length - 1; i >= 0; i--) {
                 let eb = gEnemyBullets[i];
                 eb.x += eb.dx;
