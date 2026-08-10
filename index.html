@@ -257,6 +257,30 @@
             transform: scale(0.95);
         }
 
+        /* 🖼️ 원본 사진 보기 오버레이 모달 스타일 */
+        .original-preview-modal {
+            display: none;
+            position: absolute;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #FFEB00;
+            border-radius: 12px;
+            padding: 10px;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+        .original-preview-modal img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
         /* 🪙 금화 낙하 애니메이션 스타일 */
         .falling-coin {
             position: absolute;
@@ -413,20 +437,30 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3매칭 성공 시 다른 그림으로 변환 & 적립!</p>
             </div>
 
-            <!-- 🧩 고품질 사진 직소 퍼즐 패널 (신규 추가) -->
-            <div id="photoPuzzleGameArea" class="game-display-panel" style="display:none;">
+            <!-- 🧩 고품질 사진 직소 퍼즐 패널 (원본 사진 ON/OFF 기능 추가) -->
+            <div id="photoPuzzleGameArea" class="game-display-panel" style="display:none; position:relative;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
                     <span style="color:white; font-size:13px; font-weight:bold;">🧩 고품질 사진 퍼즐</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 축소</button>
                 </div>
                 
-                <div style="margin-bottom: 8px; display: flex; gap: 6px; justify-content: center;">
-                    <label class="btn-action" style="background:#E67E22; font-size:12px; padding:8px 12px; cursor:pointer; flex:1; margin:0;">
-                        📁 내 사진 퍼즐 추가하기
+                <div style="margin-bottom: 8px; display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+                    <label class="btn-action" style="background:#E67E22; font-size:11px; padding:8px 6px; cursor:pointer; flex:1; margin:0; min-width:90px;">
+                        📁 사진 추가
                         <input type="file" id="puzzleImageUpload" accept="image/*" style="display:none;" onchange="loadCustomPuzzleImage(event)">
                     </label>
-                    <button class="btn-action" style="background:#3498DB; font-size:12px; padding:8px 12px; flex:1;" onclick="shufflePhotoPuzzle()">🔄 퍼즐 섞기</button>
+                    <button class="btn-action" style="background:#9B59B6; font-size:11px; padding:8px 6px; flex:1; min-width:90px;" onclick="toggleOriginalPreview()">👁️ 원본사진 ON</button>
+                    <button class="btn-action" style="background:#3498DB; font-size:11px; padding:8px 6px; flex:1; min-width:90px;" onclick="shufflePhotoPuzzle()">🔄 섞기</button>
+                </div>
+
+                <!-- 🖼️ 원본 사진 보기 창 모달 (토글 형식) -->
+                <div id="originalPreviewModal" class="original-preview-modal">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="color: #FFEB00; font-size: 12px; font-weight: bold;">🖼️ 원본 사진 미리보기</span>
+                        <span style="color: white; font-size: 14px; cursor: pointer; padding: 0 4px;" onclick="toggleOriginalPreview()">✕</span>
+                    </div>
+                    <img id="originalPreviewImg" src="" alt="원본 사진">
                 </div>
 
                 <div id="photoPuzzleBoard"></div>
@@ -1089,11 +1123,12 @@
             createPuzzleBoard();
         }
 
-        /* 🧩 4. 고품질 사진 직소 퍼즐 엔진 (카지노 축하 효과 포함) */
+        /* 🧩 4. 고품질 사진 직소 퍼즐 엔진 (원본 사진 ON/OFF 기능 포함) */
         const PHOTO_GRID = 4;
         let currentPhotoUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60"; 
         let photoPuzzlePieces = [];
         let selectedPhotoPieceIndex = null;
+        let isOriginalPreviewOpen = false;
 
         function initPhotoPuzzle() {
             photoPuzzlePieces = [];
@@ -1113,6 +1148,19 @@
                     alert("✨ 새로운 사진이 퍼즐에 적용되었습니다!");
                 }
                 reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleOriginalPreview() {
+            const modal = document.getElementById("originalPreviewModal");
+            const previewImg = document.getElementById("originalPreviewImg");
+            
+            isOriginalPreviewOpen = !isOriginalPreviewOpen;
+            if (isOriginalPreviewOpen) {
+                previewImg.src = currentPhotoUrl;
+                modal.style.display = "block";
+            } else {
+                modal.style.display = "none";
             }
         }
 
@@ -1174,8 +1222,7 @@
                 window.AudioContext = window.AudioContext || window.webkitAudioContext;
                 casinoAudioCtx = new AudioContext();
 
-                // 승리 팡파레 멜로디 노트 주파수 배열
-                const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50]; // 도, 미, 솔, 고음도, 솔, 고음도
+                const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
                 const times = [0, 0.15, 0.3, 0.45, 0.65, 0.8];
                 const durations = [0.12, 0.12, 0.12, 0.18, 0.12, 0.4];
 
@@ -1226,7 +1273,6 @@
                 amount += 500;
                 updateTotalBalance();
                 
-                // 카지노 음악 및 금화 낙하 효과 실행
                 playCasinoCelebrationMusic();
                 triggerCoinRain();
 
