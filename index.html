@@ -2,22 +2,23 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>킹샷 스타일 미니 게임</title>
+    <title>킹샷 스타일 미니 게임 - 업그레이드</title>
     <style>
         body {
             margin: 0;
-            background: #1a1a1a;
+            background: #111;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: white;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
         canvas {
-            background: #2e4d2e;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            background: #283e51;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -29,65 +30,78 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// 게임 상태 변수
 let score = 0;
 let gameOver = false;
 
-// 타워 (플레이어 방어선)
+// 타워 (석궁/성채 느낌)
 const towers = [
-    { x: 150, y: 150, range: 120, damage: 1, coolTime: 0 },
-    { x: 150, y: 300, range: 120, damage: 1, coolTime: 0 },
-    { x: 150, y: 450, range: 120, damage: 1, coolTime: 0 }
+    { x: 120, y: 150, range: 150, damage: 2, coolTime: 0 },
+    { x: 120, y: 300, range: 150, damage: 2, coolTime: 0 },
+    { x: 120, y: 450, range: 150, damage: 2, coolTime: 0 }
 ];
 
-// 적 (몰려오는 군중) 배열
 let enemies = [];
+let particles = [];
 let spawnTimer = 0;
 
 function spawnEnemy() {
-    // 화면 우측에서 무작위 길을 따라 생성
     enemies.push({
-        x: 800,
-        y: 200 + Math.random() * 250,
-        hp: 5,
-        maxHp: 5,
-        speed: 1.5,
-        radius: 12
+        x: 850,
+        y: 150 + Math.random() * 300,
+        hp: 6,
+        maxHp: 6,
+        speed: 1.8,
+        radius: 18
     });
 }
 
 function update() {
     if (gameOver) return;
 
-    // 적 생성 주기
     spawnTimer++;
-    if (spawnTimer > 60) {
+    if (spawnTimer > 45) {
         spawnEnemy();
         spawnTimer = 0;
     }
 
-    // 적 이동 및 처리
+    // 파티클 업데이트
+    for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        if (p.life <= 0) particles.splice(i, 1);
+    }
+
+    // 적 이동
     for (let i = enemies.length - 1; i >= 0; i--) {
         let e = enemies[i];
-        e.x -= e.speed; // 왼쪽 타워 쪽으로 이동
+        e.x -= e.speed;
 
-        // 기지(좌측 끝)에 도달하면 게임 오버 조건
-        if (e.x < 50) {
+        if (e.x < 40) {
             gameOver = true;
         }
 
-        // 적이 죽었을 때
         if (e.hp <= 0) {
+            // 폭발 파티클 생성
+            for (let k = 0; k < 8; k++) {
+                particles.push({
+                    x: e.x, y: e.y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 20,
+                    color: '#ffd700'
+                });
+            }
             enemies.splice(i, 1);
-            score += 10;
+            score += 100;
         }
     }
 
-    // 타워 공격 로직
+    // 타워 공격
     towers.forEach(tower => {
         if (tower.coolTime > 0) tower.coolTime--;
 
-        // 사정거리 내의 가장 가까운 적 찾기
         let target = null;
         let minDist = tower.range;
 
@@ -99,13 +113,19 @@ function update() {
             }
         });
 
-        // 공격 발사
         if (target && tower.coolTime === 0) {
             target.hp -= tower.damage;
-            tower.coolTime = 25; // 공격 딜레이
-            
-            // 간단한 공격 효과 저장을 위해 선 그리기에 활용 가능
+            tower.coolTime = 20;
             tower.lastTarget = target;
+
+            // 화살/발사체 효과 파티클
+            particles.push({
+                x: target.x, y: target.y,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: 10,
+                color: '#00ffff'
+            });
         } else if (!target) {
             tower.lastTarget = null;
         }
@@ -113,32 +133,51 @@ function update() {
 }
 
 function draw() {
-    // 배경 (필드)
-    ctx.fillStyle = '#3a5f3a';
+    // 배경 (필드 그라데이션)
+    let grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#134e5e');
+    grad.addColorStop(1, '#71b280');
+    ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 길 표현
-    ctx.fillStyle = '#5c4033';
+    // 길(로드) 배경
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
     ctx.fillRect(0, 100, 800, 400);
 
-    // 타워 그리기
+    // 길 무늬선
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 10]);
+    ctx.beginPath();
+    ctx.moveTo(0, 300); ctx.lineTo(800, 300);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 타워 그리기 (이모지 및 베이스)
     towers.forEach(tower => {
-        // 사정거리 표시 (연한 원)
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        // 사정거리
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.arc(tower.x, tower.y, tower.range, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 타워 본체
-        ctx.fillStyle = '#888';
-        ctx.fillRect(tower.x - 20, tower.y - 20, 40, 40);
-        ctx.fillStyle = '#ffcc00';
-        ctx.fillRect(tower.x - 10, tower.y - 10, 20, 20);
+        // 타워 베이스 기둥
+        ctx.fillStyle = '#333';
+        ctx.fillRect(tower.x - 22, tower.y - 22, 44, 44);
+        ctx.strokeStyle = '#666';
+        ctx.strokeRect(tower.x - 22, tower.y - 22, 44, 44);
 
-        // 공격 레이저/투사체 흉내
-        if (tower.lastTarget && tower.coolTime > 15) {
+        // 타워 아이콘 (석궁/성채)
+        ctx.font = '28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🏹', tower.x, tower.y);
+
+        // 공격 레이저 빔
+        if (tower.lastTarget && tower.coolTime > 10) {
             ctx.strokeStyle = '#00ffff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(tower.x, tower.y);
             ctx.lineTo(tower.lastTarget.x, tower.lastTarget.y);
@@ -146,34 +185,47 @@ function draw() {
         }
     });
 
-    // 적 그리기 (몰려오는 군중)
+    // 적 그리기 (오크/적 군중 이모지)
     enemies.forEach(e => {
-        ctx.fillStyle = '#ff3333';
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.font = '28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('👹', e.x, e.y);
 
-        // 적 체력바
-        ctx.fillStyle = 'black';
-        ctx.fillRect(e.x - 15, e.y - 22, 30, 4);
-        ctx.fillStyle = 'lime';
-        ctx.fillRect(e.x - 15, e.y - 22, (30 * (e.hp / e.maxHp)), 4);
+        // 체력바
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(e.x - 18, e.y - 24, 36, 5);
+        ctx.fillStyle = '#ff3333';
+        ctx.fillRect(e.x - 18, e.y - 24, (36 * (e.hp / e.maxHp)), 5);
     });
 
-    // UI 점수 표시
-    ctx.fillStyle = 'white';
-    ctx.font = '20px sans-serif';
-    ctx.fillText("점수: " + score, 20, 40);
+    // 파티클 그리기
+    particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, 4, 4);
+    });
 
+    // 상단 UI 박스
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(20, 20, 160, 50);
+    ctx.fillStyle = '#ffcc00';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText("💰 점수: " + score, 35, 52);
+
+    // 게임 오버 화면
     if (gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'white';
-        ctx.font = '40px sans-serif';
+        
+        ctx.fillStyle = '#ff4444';
+        ctx.font = 'bold 45px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText("게임 오버!", canvas.width / 2, canvas.height / 2);
+        ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 20);
+        
+        ctx.fillStyle = 'white';
         ctx.font = '20px sans-serif';
-        ctx.fillText("새로고침(F5)하여 다시 시작하세요", canvas.width / 2, canvas.height / 2 + 50);
+        ctx.fillText("방어선이 뚫렸습니다! 새로고침(F5)하여 재도전하세요.", canvas.width / 2, canvas.height / 2 + 40);
         ctx.textAlign = 'left';
     }
 }
