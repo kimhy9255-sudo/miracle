@@ -155,9 +155,9 @@
             gap: 4px;
         }
 
-        /* 🎮 기적 게임 창 레이아웃 (4개 메뉴 설정) */
-        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-        .btn-game-select { padding: 10px 2px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 10px; cursor: pointer; text-align: center; }
+        /* 🎮 기적 게임 창 레이아웃 (5개 메뉴 설정: 5분할 grid) */
+        .game-menu-container { width: 100%; max-width: 360px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-bottom: 10px; }
+        .btn-game-select { padding: 10px 1px; border-radius: 8px; border: none; background: #34495E; color: white; font-weight: bold; font-size: 9px; cursor: pointer; text-align: center; }
         .btn-game-select.active { background: #3498DB; }
         
         .game-display-panel { background: white; border-radius: 20px; padding: 12px; width: 100%; max-width: 360px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center; position: relative; }
@@ -395,11 +395,13 @@
                 <button class="btn-nav-top" onclick="toggleFullScreenGame()" style="background:#2ECC71;">📱 전체화면 플레이</button>
             </div>
 
+            <!-- 5개 메뉴 버튼 컨테이너 -->
             <div class="game-menu-container">
                 <button id="btnSelectGalaga" class="btn-game-select active" style="background:#8E44AD;" onclick="switchMiniGame('galaga')">🚀 슈팅</button>
+                <button id="btnSelectAvoid" class="btn-game-select" style="background:#E67E22;" onclick="switchMiniGame('avoid')">⚡ 회피</button>
                 <button id="btnSelectBrick" class="btn-game-select" onclick="switchMiniGame('brick')">🧱 벽돌</button>
                 <button id="btnSelectPuzzle" class="btn-game-select" onclick="switchMiniGame('puzzle')">🍓 성장</button>
-                <button id="btnSelectPhotoPuzzle" class="btn-game-select" style="background:#E67E22;" onclick="switchMiniGame('photoPuzzle')">🧩 사진퍼즐</button>
+                <button id="btnSelectPhotoPuzzle" class="btn-game-select" style="background:#16A085;" onclick="switchMiniGame('photoPuzzle')">🧩 퍼즐</button>
             </div>
 
             <!-- 🚀 아케이드 탄막 슈팅 게임 패널 -->
@@ -411,6 +413,18 @@
                 </div>
                 <canvas id="galagaCanvas" width="320" height="380"></canvas>
                 <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #8E44AD, #9B59B6);" onclick="startGalagaGameEngine()">🚀 슈팅 게임 시작 / 리셋</button>
+            </div>
+
+            <!-- ⚡ 새로 추가된 회피 기동 게임 패널 -->
+            <div id="avoidGameArea" class="game-display-panel" style="display:none;">
+                <div class="fullscreen-control-bar">
+                    <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
+                    <span style="color:white; font-size:13px; font-weight:bold;">⚡ 쏟아지는 보석 회피</span>
+                    <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 축소</button>
+                </div>
+                <canvas id="avoidCanvas" width="320" height="380"></canvas>
+                <button class="btn-action" style="margin-top:10px; width:100%; background:linear-gradient(135deg, #D35400, #E67E22);" onclick="startAvoidGameEngine()">⚡ 회피 게임 시작 / 리셋</button>
+                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">좌우로 드래그하여 장애물을 피하고 보석(+300원)을 수집하세요!</p>
             </div>
 
             <!-- 🧱 무지개 칼라 벽돌깨기 패널 -->
@@ -766,7 +780,7 @@
             document.getElementById('homeTab').classList.remove('active'); document.getElementById('gameTab').classList.remove('active'); document.getElementById('vaultTab').classList.remove('active'); document.getElementById('shopTab').classList.remove('active');
             document.getElementById('navHome').classList.remove('active'); document.getElementById('navGame').classList.remove('active'); document.getElementById('navVault').classList.remove('active'); document.getElementById('navShop').classList.remove('active');
             
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            cancelAllGameAnimations();
 
             if(tabName === 'game') { 
                 document.getElementById('gameTab').classList.add('active'); 
@@ -844,19 +858,27 @@
             if(!isNaN(witAmt) && witAmt > 0 && witAmt <= vaultAsset) { vaultAsset -= witAmt; amount += witAmt; updateTotalBalance(); }
         }
 
+        function cancelAllGameAnimations() {
+            cancelAnimationFrame(gameAnimationId); 
+            cancelAnimationFrame(galagaAnimationId);
+            cancelAnimationFrame(avoidAnimationId);
+        }
+
         function switchMiniGame(gameType) {
             exitFullScreenGame();
             document.getElementById('btnSelectBrick').classList.remove('active'); 
             document.getElementById('btnSelectGalaga').classList.remove('active');
+            document.getElementById('btnSelectAvoid').classList.remove('active');
             document.getElementById('btnSelectPuzzle').classList.remove('active');
             document.getElementById('btnSelectPhotoPuzzle').classList.remove('active');
 
             document.getElementById('brickGameArea').style.display = 'none'; 
             document.getElementById('galagaGameArea').style.display = 'none'; 
+            document.getElementById('avoidGameArea').style.display = 'none'; 
             document.getElementById('puzzleGameArea').style.display = 'none';
             document.getElementById('photoPuzzleGameArea').style.display = 'none';
             
-            cancelAnimationFrame(gameAnimationId); cancelAnimationFrame(galagaAnimationId);
+            cancelAllGameAnimations();
 
             if(gameType === 'brick') { 
                 currentActiveGameAreaId = 'brickGameArea';
@@ -869,6 +891,12 @@
                 document.getElementById('btnSelectGalaga').classList.add('active'); 
                 document.getElementById('galagaGameArea').style.display = 'block'; 
                 startGalagaGameEngine(); 
+            }
+            else if(gameType === 'avoid') { 
+                currentActiveGameAreaId = 'avoidGameArea';
+                document.getElementById('btnSelectAvoid').classList.add('active'); 
+                document.getElementById('avoidGameArea').style.display = 'block'; 
+                startAvoidGameEngine(); 
             }
             else if(gameType === 'puzzle') {
                 currentActiveGameAreaId = 'puzzleGameArea';
@@ -1123,7 +1151,7 @@
             createPuzzleBoard();
         }
 
-        /* 🧩 4. 고품질 사진 직소 퍼즐 엔진 (원본 사진 ON/OFF 기능 포함) */
+        /* 🧩 3. 고품질 사진 직소 퍼즐 엔진 (원본 사진 ON/OFF 기능 포함) */
         const PHOTO_GRID = 4;
         let currentPhotoUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60"; 
         let photoPuzzlePieces = [];
@@ -1281,7 +1309,7 @@
             }
         }
 
-        /* 🚀 3. 아케이드 탄막 슈팅 엔진 */
+        /* 🚀 4. 아케이드 탄막 슈팅 엔진 */
         let galagaCanvas = document.getElementById("galagaCanvas"); 
         let gCtx = galagaCanvas.getContext("2d");
         let galagaAnimationId = null;
@@ -1454,6 +1482,132 @@
             }
 
             galagaAnimationId = requestAnimationFrame(loopGalagaGame);
+        }
+
+        /* ⚡ 5. 새로 추가된 '쏟아지는 보석 회피' 미니게임 엔진 */
+        let avoidCanvas = document.getElementById("avoidCanvas");
+        let aCtx = avoidCanvas.getContext("2d");
+        let avoidAnimationId = null;
+        let avoidPlayerX = 160;
+        let avoidPlayerY = 340;
+        let avoidObstacles = [];
+        let avoidGems = [];
+        let avoidScore = 0;
+        let avoidFrame = 0;
+
+        function startAvoidGameEngine() {
+            cancelAnimationFrame(avoidAnimationId);
+            if(!avoidCanvas) return;
+            avoidPlayerX = 160;
+            avoidPlayerY = 340;
+            avoidObstacles = [];
+            avoidGems = [];
+            avoidScore = 0;
+            avoidFrame = 0;
+            loopAvoidGame();
+        }
+
+        function setAvoidPlayerPos(clientX, clientY) {
+            let rect = avoidCanvas.getBoundingClientRect();
+            let relativeX = clientX - rect.left;
+            let relativeY = clientY - rect.top;
+            if(relativeX > 15 && relativeX < avoidCanvas.width - 15) avoidPlayerX = relativeX;
+            if(relativeY > 30 && relativeY < avoidCanvas.height - 15) avoidPlayerY = relativeY;
+        }
+
+        avoidCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); setAvoidPlayerPos(e.touches[0].clientX, e.touches[0].clientY); });
+        avoidCanvas.addEventListener("mousemove", (e) => { setAvoidPlayerPos(e.clientX, e.clientY); });
+
+        function loopAvoidGame() {
+            aCtx.fillStyle = "#0f172a";
+            aCtx.fillRect(0, 0, avoidCanvas.width, avoidCanvas.height);
+            avoidFrame++;
+
+            // 상단 점수 표시
+            aCtx.fillStyle = "#E67E22"; aCtx.font = "bold 12px monospace"; aCtx.fillText("AVOID SCORE", 15, 20);
+            aCtx.fillStyle = "#FFFFFF"; aCtx.fillText(avoidScore.toString(), 110, 20);
+
+            // 플레이어 그리기 (귀여운 노란색 원형 비행체)
+            aCtx.fillStyle = "#F1C40F";
+            aCtx.beginPath();
+            aCtx.arc(avoidPlayerX, avoidPlayerY, 12, 0, Math.PI * 2);
+            aCtx.fill();
+            aCtx.strokeStyle = "#E67E22";
+            aCtx.lineWidth = 2;
+            aCtx.stroke();
+            aCtx.closePath();
+
+            // 장애물 생성 (위에서 아래로 떨어짐)
+            if(avoidFrame % 25 === 0) {
+                avoidObstacles.push({
+                    x: Math.random() * (avoidCanvas.width - 30) + 15,
+                    y: -20,
+                    size: Math.random() * 12 + 10,
+                    speed: Math.random() * 2 + 2.5
+                });
+            }
+
+            // 보석 생성 (먹으면 포인트 적립)
+            if(avoidFrame % 40 === 0) {
+                avoidGems.push({
+                    x: Math.random() * (avoidCanvas.width - 20) + 10,
+                    y: -20,
+                    speed: 2
+                });
+            }
+
+            // 장애물 업데이트 및 충돌 체크
+            aCtx.fillStyle = "#E74C3C";
+            for(let i = avoidObstacles.length - 1; i >= 0; i--) {
+                let obs = avoidObstacles[i];
+                obs.y += obs.speed;
+                
+                aCtx.beginPath();
+                aCtx.arc(obs.x, obs.y, obs.size, 0, Math.PI * 2);
+                aCtx.fill();
+                aCtx.closePath();
+
+                // 충돌 판정 (플레이어 vs 장애물)
+                let dist = Math.hypot(obs.x - avoidPlayerX, obs.y - avoidPlayerY);
+                if(dist < obs.size + 10) {
+                    cancelAnimationFrame(avoidAnimationId);
+                    alert("💥 장애물에 부딪혔습니다! 게임 오버.\n획득 점수: " + avoidScore);
+                    startAvoidGameEngine();
+                    return;
+                }
+
+                if(obs.y > avoidCanvas.height + 30) {
+                    avoidObstacles.splice(i, 1);
+                }
+            }
+
+            // 보석 업데이트 및 수집 체크
+            aCtx.fillStyle = "#2ECC71";
+            for(let i = avoidGems.length - 1; i >= 0; i--) {
+                let gem = avoidGems[i];
+                gem.y += gem.speed;
+
+                aCtx.beginPath();
+                aCtx.arc(gem.x, gem.y, 8, 0, Math.PI * 2);
+                aCtx.fill();
+                aCtx.closePath();
+
+                // 수집 판정 (플레이어 vs 보석)
+                let dist = Math.hypot(gem.x - avoidPlayerX, gem.y - avoidPlayerY);
+                if(dist < 20) {
+                    avoidGems.splice(i, 1);
+                    avoidScore += 100;
+                    amount += 300; // 보석 획득 시 재단 잔고 +300원
+                    updateTotalBalance();
+                    continue;
+                }
+
+                if(gem.y > avoidCanvas.height + 30) {
+                    avoidGems.splice(i, 1);
+                }
+            }
+
+            avoidAnimationId = requestAnimationFrame(loopAvoidGame);
         }
 
         window.onload = loadSavedData;
