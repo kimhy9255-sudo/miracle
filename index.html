@@ -204,12 +204,19 @@
             height: 60vh !important;
             object-fit: contain;
         }
-        .game-display-panel.fullscreen-mode #puzzleBoard,
-        .game-display-panel.fullscreen-mode #photoPuzzleBoard {
+        .game-display-panel.fullscreen-mode #puzzleBoard {
             width: min(85vw, 85vh) !important;
             max-width: min(85vw, 85vh) !important;
             height: min(85vw, 85vh) !important;
             aspect-ratio: 1 / 1 !important;
+        }
+        
+        /* 🧩 전체화면 사진 퍼즐 3x5 비율 전용 스타일 (요청 반영) */
+        .game-display-panel.fullscreen-mode #photoPuzzleBoard {
+            width: min(85vw, 56.67vw) !important;
+            max-width: 340px !important;
+            height: calc(min(85vw, 56.67vw) * (5 / 3)) !important;
+            aspect-ratio: 3 / 5 !important;
         }
 
         /* 🍓 성장 퍼즐 게임 보드 스타일 */
@@ -233,15 +240,15 @@
             user-select: none;
         }
 
-        /* 🧩 사진 직소 퍼즐 스타일 (정사각형 비율 고정 및 업로드 사진 크롭 대응) */
+        /* 🧩 고품질 사진 직소 퍼즐 스타일 (3x5 비율 및 하단 4개 버튼 레이아웃 고정) */
         #photoPuzzleBoard {
             width: 100%;
-            max-width: 330px;
-            aspect-ratio: 1 / 1;
+            max-width: 270px;
+            aspect-ratio: 3 / 5;
             margin: 10px auto;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(5, 1fr);
             gap: 2px;
             background: #111;
             padding: 2px;
@@ -268,7 +275,7 @@
             top: 55px;
             left: 50%;
             transform: translateX(-50%);
-            width: 240px;
+            width: 220px;
             background: rgba(0, 0, 0, 0.85);
             border: 2px solid #FFEB00;
             border-radius: 12px;
@@ -279,7 +286,7 @@
         }
         .original-preview-modal img {
             width: 100%;
-            aspect-ratio: 1;
+            aspect-ratio: 3 / 5;
             object-fit: cover;
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.3);
@@ -455,23 +462,14 @@
                 <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">3매칭 성공 시 다른 그림으로 변환 & 적립!</p>
             </div>
 
-            <!-- 🧩 고품질 사진 직소 퍼즐 패널 (원본 사진 ON/OFF 기능 추가) -->
+            <!-- 🧩 고품질 사진 직소 퍼즐 패널 (3x5 비율 및 하단 4개 버튼 레이아웃 적용) -->
             <div id="photoPuzzleGameArea" class="game-display-panel" style="display:none; position:relative;">
                 <div class="fullscreen-control-bar">
                     <button class="btn-nav-top" onclick="goHomeFromFullScreen()" style="background:#E74C3C;">🏠 홈으로</button>
-                    <span style="color:white; font-size:13px; font-weight:bold;">🧩 고품질 사진 퍼즐</span>
+                    <span style="color:white; font-size:13px; font-weight:bold;">🧩 3x5 고품질 사진 퍼즐</span>
                     <button class="btn-nav-top" onclick="exitFullScreenGame()" style="background:#7F8C8D;">↙️ 축소</button>
                 </div>
                 
-                <div style="margin-bottom: 8px; display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
-                    <label class="btn-action" style="background:#E67E22; font-size:11px; padding:8px 6px; cursor:pointer; flex:1; margin:0; min-width:90px;">
-                        📁 사진 추가
-                        <input type="file" id="puzzleImageUpload" accept="image/*" style="display:none;" onchange="loadCustomPuzzleImage(event)">
-                    </label>
-                    <button class="btn-action" style="background:#9B59B6; font-size:11px; padding:8px 6px; flex:1; min-width:90px;" onclick="toggleOriginalPreview()">👁️ 원본사진 ON</button>
-                    <button class="btn-action" style="background:#3498DB; font-size:11px; padding:8px 6px; flex:1; min-width:90px;" onclick="shufflePhotoPuzzle()">🔄 섞기</button>
-                </div>
-
                 <!-- 🖼️ 원본 사진 보기 창 모달 (토글 형식) -->
                 <div id="originalPreviewModal" class="original-preview-modal">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -482,7 +480,17 @@
                 </div>
 
                 <div id="photoPuzzleBoard"></div>
-                <p style="font-size:11px; color:#7F8C8D; margin:6px 0 0 0;">인접한 조각을 터치하여 위치를 바꾸며 완성하세요! (+500원)</p>
+
+                <!-- 🎨 요청하신 이미지 스타일과 동일한 하단 4개의 버튼 한 줄 배치 -->
+                <div style="margin-top: 10px; display: flex; gap: 6px; justify-content: center; width: 100%;">
+                    <label style="flex: 1; background: #E67E22; color: white; border: none; border-radius: 20px; padding: 10px 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+                        사진 가져오기
+                        <input type="file" id="puzzleImageUpload" accept="image/*" style="display:none;" onchange="loadCustomPuzzleImage(event)">
+                    </label>
+                    <button style="flex: 1; background: #8E44AD; color: white; border: none; border-radius: 20px; padding: 10px 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.15);" onclick="toggleOriginalPreview()">원본 사진 보기</button>
+                    <button style="flex: 1; background: #2980B9; color: white; border: none; border-radius: 20px; padding: 10px 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.15);" onclick="shufflePhotoPuzzle()">사진 섞기</button>
+                    <button style="flex: 1; background: #E74C3C; color: white; border: none; border-radius: 20px; padding: 10px 4px; font-size: 11px; font-weight: bold; cursor: pointer; text-align: center; box-shadow: 0 3px 8px rgba(0,0,0,0.15);" onclick="goHomeFromFullScreen()">전 화면으로 돌아가기</button>
+                </div>
             </div>
         </div>
 
@@ -1155,8 +1163,9 @@
             createPuzzleBoard();
         }
 
-        /* 🧩 3. 고품질 사진 직소 퍼즐 엔진 (직사각형 이미지 왜곡 방지 및 크롭 대응) */
-        const PHOTO_GRID = 4;
+        /* 🧩 3. 3x5 사진 직소 퍼즐 엔진 */
+        const PHOTO_COLS = 3;
+        const PHOTO_ROWS = 5;
         let currentPhotoUrl = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=60"; 
         let photoPuzzlePieces = [];
         let selectedPhotoPieceIndex = null;
@@ -1164,7 +1173,7 @@
 
         function initPhotoPuzzle() {
             photoPuzzlePieces = [];
-            for (let i = 0; i < PHOTO_GRID * PHOTO_GRID; i++) {
+            for (let i = 0; i < PHOTO_COLS * PHOTO_ROWS; i++) {
                 photoPuzzlePieces.push(i);
             }
             shufflePhotoPuzzle();
@@ -1177,28 +1186,27 @@
                 reader.onload = function(e) {
                     const img = new Image();
                     img.onload = function() {
-                        // 업로드된 이미지를 정사각형 캔버스에 중앙 정렬 크롭하여 왜곡 방지
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
                         canvas.width = 600;
-                        canvas.height = 600;
+                        canvas.height = 1000; // 3:5 비율 유지
                         
                         let sWidth = img.width;
                         let sHeight = img.height;
                         let sX = 0, sY = 0;
                         
-                        if (sWidth > sHeight) {
-                            sX = (sWidth - sHeight) / 2;
-                            sWidth = sHeight;
+                        if (sWidth / sHeight > 3 / 5) {
+                            sWidth = sHeight * (3 / 5);
+                            sX = (img.width - sWidth) / 2;
                         } else {
-                            sY = (sHeight - sWidth) / 2;
-                            sHeight = sWidth;
+                            sHeight = sWidth / (3 / 5);
+                            sY = (img.height - sHeight) / 2;
                         }
                         
-                        ctx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, 600, 600);
+                        ctx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, 600, 1000);
                         currentPhotoUrl = canvas.toDataURL('image/jpeg');
                         initPhotoPuzzle();
-                        alert("✨ 사진이 정사각형 규격에 맞게 최적화되었습니다!");
+                        alert("✨ 사진이 3x5 비율 규격에 맞게 최적화되었습니다!");
                     };
                     img.src = e.target.result;
                 }
@@ -1239,12 +1247,15 @@
                 const pieceDiv = document.createElement("div");
                 pieceDiv.className = "photo-puzzle-piece";
                 
-                let xPos = (pieceIndex % PHOTO_GRID) * (100 / (PHOTO_GRID - 1));
-                let yPos = Math.floor(pieceIndex / PHOTO_GRID) * (100 / (PHOTO_GRID - 1));
+                let colIdx = pieceIndex % PHOTO_COLS;
+                let rowIdx = Math.floor(pieceIndex / PHOTO_COLS);
+
+                let xPos = (colIdx / (PHOTO_COLS - 1)) * 100;
+                let yPos = (rowIdx / (PHOTO_ROWS - 1)) * 100;
                 
                 pieceDiv.style.backgroundImage = `url('${currentPhotoUrl}')`;
                 pieceDiv.style.backgroundPosition = `${xPos}% ${yPos}%`;
-                pieceDiv.style.backgroundSize = `${PHOTO_GRID * 100}% ${PHOTO_GRID * 100}%`;
+                pieceDiv.style.backgroundSize = `${PHOTO_COLS * 100}% ${PHOTO_ROWS * 100}%`;
                 
                 pieceDiv.dataset.index = currentIndex;
                 pieceDiv.addEventListener("click", handlePhotoPieceClick);
@@ -1331,7 +1342,7 @@
                 playCasinoCelebrationMusic();
                 triggerCoinRain();
 
-                alert("🎉 축하합니다! 사진 퍼즐을 완성하여 +500원이 적립되었습니다! 🏆");
+                alert("🎉 축하합니다! 3x5 사진 퍼즐을 완성하여 +500원이 적립되었습니다! 🏆");
                 shufflePhotoPuzzle();
             }
         }
