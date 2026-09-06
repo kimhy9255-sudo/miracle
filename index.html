@@ -3,230 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>택배 지옥</title>
+    <title>블록 퍼즐 로그라이크</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #222; font-family: sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #0f172a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; }
+        
         #game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #2c3e50, #1a252f);
-            color: white;
-            padding: 20px 0;
-        }
-        #header {
-            text-align: center;
-            z-index: 10;
-        }
-        #score-board { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
-        #timer-bar-container {
-            width: 80vw;
-            height: 10px;
-            background: #444;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        #timer-bar {
-            width: 100%;
-            height: 100%;
-            background: #e74c3c;
-            transition: width 0.1s linear;
-        }
-        #conveyor {
-            position: relative;
-            width: 90vw;
-            height: 120px;
-            background: #34495e;
-            border: 4px dashed #7f8c8d;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-        }
-        .package {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.1s;
+            width: 100vw;
+            height: 100vh;
+            padding: 10px;
         }
-        .package.red { background: #e74c3c; }
-        .package.blue { background: #3498db; }
-        .package.green { background: #2ecc71; }
-        
-        #truck-area {
+
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 { font-size: 22px; margin-bottom: 5px; color: #38bdf8; }
+        .stats { display: flex; gap: 15px; font-size: 14px; color: #94a3b8; }
+        .stats span { color: #f8fafc; font-weight: bold; }
+
+        /* 다음 블록 미리보기 영역 */
+        #next-box {
             display: flex;
-            justify-content: space-around;
-            width: 90vw;
+            align-items: center;
             gap: 10px;
-        }
-        .truck {
-            flex: 1;
-            height: 100px;
+            background: #1e293b;
+            padding: 8px 16px;
             border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #334155;
+        }
+
+        .preview-tile {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            border: 3px solid rgba(255,255,255,0.2);
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .truck.red { background: #c0392b; }
-        .truck.blue { background: #2980b9; }
-        .truck.green { background: #27ae60; }
-        .truck span { font-size: 28px; margin-bottom: 5px; }
 
-        #start-screen {
+        /* 5x5 그리드 */
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 6px;
+            width: 90vw;
+            max-width: 380px;
+            height: 90vw;
+            max-height: 380px;
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 16px;
+            border: 2px solid #334155;
+        }
+
+        .cell {
+            background: #334155;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.15s, transform 0.1s;
+            position: relative;
+        }
+
+        .cell:active { transform: scale(0.95); }
+
+        /* 블록 색상 및 디자인 */
+        .tile {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .t-1 { background: #3b82f6; color: white; }
+        .t-2 { background: #10b981; color: white; }
+        .t-3 { background: #f59e0b; color: white; }
+        .t-4 { background: #ef4444; color: white; }
+        .t-5 { background: #8b5cf6; color: white; }
+        .t-6 { background: #ec4899; color: white; }
+
+        .tile-num { font-size: 20px; line-height: 1; }
+        .tile-icon { font-size: 12px; margin-top: 2px; }
+
+        /* 게임 오버 모달 */
+        #game-over {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
+            background: rgba(15, 23, 42, 0.9);
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
         }
-        #start-btn {
-            padding: 15px 40px;
-            font-size: 22px;
-            font-weight: bold;
-            background: #f1c40f;
+
+        #game-over h2 { font-size: 28px; color: #ef4444; margin-bottom: 10px; }
+        #restart-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #38bdf8;
+            color: #0f172a;
             border: none;
-            border-radius: 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            color: #222;
-            box-shadow: 0 4px 15px rgba(241,196,15,0.4);
+            box-shadow: 0 4px 12px rgba(56,189,248,0.4);
         }
     </style>
 </head>
 <body>
 
-    <div id="start-screen">
-        <h1 style="margin-bottom: 10px; color: #f1c40f;">📦 택배 지옥</h1>
-        <p style="margin-bottom: 30px; color: #ccc;">컨베이어 벨트의 택배를 색상에 맞는 트럭에 실어주세요!</p>
-        <button id="start-btn" onclick="startGame()">게임 시작</button>
+    <div id="game-container">
+        <header>
+            <h1>📦 택배 & 블록 지옥</h1>
+            <div class="stats">
+                <div>점수: <span id="score">0</span></div>
+                <div>골드: <span id="gold">0</span>G</div>
+            </div>
+        </header>
+
+        <div id="next-box">
+            <span>다음 블록:</span>
+            <div id="next-preview" class="preview-tile t-1">
+                <span class="tile-num" id="next-num">1</span>
+                <span class="tile-icon" id="next-icon">⚔️</span>
+            </div>
+        </div>
+
+        <div id="grid"></div>
     </div>
 
-    <div id="game-container">
-        <div id="header">
-            <div id="score-board">점수: <span id="score">0</span></div>
-            <div id="timer-bar-container">
-                <div id="timer-bar"></div>
-            </div>
-        </div>
-
-        <div id="conveyor">
-            <!-- 동적으로 생성되는 택배들 -->
-        </div>
-
-        <div id="truck-area">
-            <div class="truck red" onclick="selectTruck('red')">
-                <span>🚚</span>빨강 트럭
-            </div>
-            <div class="truck blue" onclick="selectTruck('blue')">
-                <span>🚚</span>파랑 트럭
-            </div>
-            <div class="truck green" onclick="selectTruck('green')">
-                <span>🚚</span>초록 트럭
-            </div>
-        </div>
+    <div id="game-over">
+        <h2>GAME OVER</h2>
+        <p>칸이 가득 찼습니다!</p>
+        <p style="margin-top: 10px; color: #94a3b8;">최종 점수: <span id="final-score">0</span></p>
+        <button id="restart-btn" onclick="initGame()">다시 도전</button>
     </div>
 
     <script>
-        const colors = ['red', 'blue', 'green'];
+        const GRID_SIZE = 5;
+        let grid = [];
         let score = 0;
-        let timeLeft = 100;
-        let gameInterval;
-        let spawnInterval;
-        let packages = [];
-        let selectedColor = null;
+        let totalGold = 0;
+        let nextBlock = generateRandomBlock();
 
-        const conveyor = document.getElementById('conveyor');
-        const scoreEl = document.getElementById('score');
-        const timerBar = document.getElementById('timer-bar');
-        const startScreen = document.getElementById('start-screen');
+        const icons = { 
+            1: '⚔️', // 공격
+            2: '🛡️', // 방어
+            3: '💰', // 골드
+            4: '⚡', // 번개
+            5: '🔥', // 화염
+            6: '👑'  // 왕관
+        };
 
-        function startGame() {
-            startScreen.style.display = 'none';
-            score = 0;
-            timeLeft = 100;
-            packages = [];
-            scoreEl.innerText = score;
-            conveyor.innerHTML = '';
-
-            gameInterval = setInterval(updateGame, 30);
-            spawnInterval = setInterval(spawnPackage, 1200);
-        }
-
-        function spawnPackage() {
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const pkg = {
-                id: Math.random(),
-                color: color,
-                x: conveyor.clientWidth - 60
+        function generateRandomBlock() {
+            // 주로 1, 2가 나오고 가끔 높은 숫자가 나옴
+            const val = Math.random() < 0.7 ? 1 : (Math.random() < 0.9 ? 2 : 3);
+            return {
+                value: val,
+                icon: icons[val] || '✨'
             };
-            packages.push(pkg);
         }
 
-        function updateGame() {
-            // 시간 감소
-            timeLeft -= 0.15;
-            timerBar.style.width = timeLeft + '%';
-            if (timeLeft <= 0) {
-                endGame();
+        function initGame() {
+            grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
+            score = 0;
+            totalGold = 0;
+            document.getElementById('game-over').style.display = 'none';
+            nextBlock = generateRandomBlock();
+            updateUI();
+            renderGrid();
+        }
+
+        function updateUI() {
+            document.getElementById('score').innerText = score;
+            document.getElementById('gold').innerText = totalGold;
+            
+            const preview = document.getElementById('next-preview');
+            preview.className = `preview-tile t-${nextBlock.value > 6 ? 6 : nextBlock.value}`;
+            document.getElementById('next-num').innerText = nextBlock.value;
+            document.getElementById('next-icon').innerText = nextBlock.icon;
+        }
+
+        function renderGrid() {
+            const gridEl = document.getElementById('grid');
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cellEl = document.createElement('div');
+                    cellEl.className = 'cell';
+                    cellEl.onclick = () => handleCellClick(r, c);
+
+                    const cellData = grid[r][c];
+                    if (cellData) {
+                        const tileEl = document.createElement('div');
+                        tileEl.className = `tile t-${cellData.value > 6 ? 6 : cellData.value}`;
+                        tileEl.innerHTML = `<span class="tile-num">${cellData.value}</span><span class="tile-icon">${cellData.icon}</span>`;
+                        cellEl.appendChild(tileEl);
+                    }
+                    gridEl.appendChild(cellEl);
+                }
+            }
+        }
+
+        function handleCellClick(r, c) {
+            if (grid[r][c] !== null) return; // 이미 차 있는 칸
+
+            // 블록 배치
+            grid[r][c] = { ...nextBlock };
+            score += nextBlock.value * 10;
+
+            // 조합 및 연쇄 반응 체크
+            processMatches(r, c);
+
+            // 다음 블록 생성
+            nextBlock = generateRandomBlock();
+
+            // 게임 오버 체크 (빈 칸이 없는지)
+            if (isGridFull()) {
+                document.getElementById('final-score').innerText = score;
+                document.getElementById('game-over').style.display = 'flex';
                 return;
             }
 
-            // 컨베이어 움직임 처리
-            const conveyorWidth = conveyor.clientWidth;
-            let html = '';
-            
-            for (let i = packages.length - 1; i >= 0; i--) {
-                let p = packages[i];
-                p.x -= 2.5; // 속도
+            updateUI();
+            renderGrid();
+        }
 
-                // 벨트 왼쪽 끝에 도달하면 게임 오버 또는 감점
-                if (p.x < -60) {
-                    packages.splice(i, 1);
-                    timeLeft = Math.max(0, timeLeft - 15); // 놓치면 시간 패널티
-                    continue;
+        // 인접한 동일 숫자 합치기 로직 (간단한 BFS/DFS 클러스터 탐색)
+        function processMatches(startR, startC) {
+            let targetValue = grid[startR][startC].value;
+            let visited = Array(GRID_SIZE).fill(false).map(() => Array(GRID_SIZE).boolean ? Array(GRID_SIZE).fill(false) : Array(GRID_SIZE).fill(false));
+            let matches = [];
+
+            let queue = [[startR, startC]];
+            visited[startR][startC] = true;
+
+            while (queue.length > 0) {
+                let [r, c] = queue.shift();
+                matches.push([r, c]);
+
+                const dirs = [[1,0], [-1,0], [0,1], [0,-1]];
+                for (let [dr, dc] of dirs) {
+                    let nr = r + dr, nc = c + dc;
+                    if (nr >= 0 && nr < GRID_SIZE && nc >= 0 && nc < GRID_SIZE) {
+                        if (!visited[nr][nc] && grid[nr][nc] && grid[nr][nc].value === targetValue) {
+                            visited[nr][nc] = true;
+                            queue.push([nr, nc]);
+                        }
+                    }
                 }
-
-                html += `<div class="package ${p.color}" style="left: ${p.x}px;" onclick="sortPackage(${i})">📦</div>`;
             }
-            conveyor.innerHTML = html;
+
+            // 3개 이상 모이면 업그레이드!
+            if (matches.length >= 3) {
+                // 기존 블록들 제거
+                for (let [r, c] of matches) {
+                    if (r !== startR || c !== startC) {
+                        grid[r][c] = null;
+                    }
+                }
+                // 클릭한 위치의 블록 업그레이드 (+1)
+                let newVal = targetValue + 1;
+                grid[startR][startC] = {
+                    value: newVal,
+                    icon: icons[newVal] || '🌟'
+                };
+                
+                score += newVal * 50;
+                totalGold += newVal * 5;
+
+                // 연쇄 반응을 위해 재귀적 체크 가능
+                // 효과음이나 시각적 연출이 들어가면 더욱 짜릿해집니다!
+            }
         }
 
-        function sortPackage(index) {
-            const pkg = packages[index];
-            // 트럭을 먼저 선택했거나 직접 클릭했을 때 바로 처리하는 방식 (여기서는 택배 클릭 시 바로 정답 처리 혹은 트럭 매칭)
-            // 직관성을 위해 택배를 누르면 지정된 색상에 맞는지 판정
-            score += 100;
-            scoreEl.innerText = score;
-            packages.splice(index, 1);
-            timeLeft = Math.min(100, timeLeft + 3); // 맞추면 시간 보충
+        function isGridFull() {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (grid[r][c] === null) return false;
+                }
+            }
+            return true;
         }
 
-        function endGame() {
-            clearInterval(gameInterval);
-            clearInterval(spawnInterval);
-            alert(`게임 종료! 최종 점수: ${score}점`);
-            startScreen.style.display = 'flex';
-        }
+        // 초기 실행
+        initGame();
     </script>
 </body>
 </html>
