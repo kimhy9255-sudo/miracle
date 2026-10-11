@@ -5,24 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whale Dump Monitor - 세력 탈출 실시간 감시기</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #12161f; color: #ffffff; margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
         h1 { color: #f0b90b; text-align: center; margin-bottom: 20px; font-size: 24px; }
         
-        /* 종목 선택 드롭다운 스타일 */
         .select-box { text-align: center; margin-bottom: 25px; }
         select { background: #1e232d; color: #f0b90b; border: 1px solid #f0b90b; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; font-weight: bold; outline: none; }
         
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .card { background: #1e232d; border-radius: 12px; padding: 18px; border: 1px solid #2b313a; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .card { background: #1e232d; border-radius: 12px; padding: 18px; border: 1px solid #2b313a; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s ease; }
         .card h3 { margin-top: 0; color: #848e9c; font-size: 13px; }
         .card .value { font-size: 24px; font-weight: bold; margin: 8px 0; }
+        
         .status-danger { color: #f6465d; }
         .status-warning { color: #f0b90b; }
         .status-safe { color: #0ecb81; }
+        
+        /* 🚨 위험 신호 시 깜빡이는 경보 애니메이션 */
+        @keyframes pulse-danger {
+            0% { background-color: rgba(246, 70, 93, 0.1); border-color: #f6465d; box-shadow: 0 0 10px rgba(246, 70, 93, 0.5); }
+            50% { background-color: rgba(246, 70, 93, 0.4); border-color: #ff0022; box-shadow: 0 0 25px rgba(246, 70, 93, 0.9); }
+            100% { background-color: rgba(246, 70, 93, 0.1); border-color: #f6465d; box-shadow: 0 0 10px rgba(246, 70, 93, 0.5); }
+        }
+        
+        .alarm-active {
+            animation: pulse-danger 1.2s infinite ease-in-out !important;
+        }
+
         .chart-container { background: #1e232d; border-radius: 12px; padding: 20px; border: 1px solid #2b313a; position: relative; height: 380px; margin-bottom: 20px; }
-        .alert-box { background: rgba(246, 70, 93, 0.1); border-left: 4px solid #f6465d; padding: 15px; border-radius: 4px; }
+        .alert-box { background: rgba(246, 70, 93, 0.1); border: 1px solid #f6465d; padding: 15px; border-radius: 8px; transition: all 0.3s ease; }
     </style>
 </head>
 <body>
@@ -30,7 +43,6 @@
 <div class="container">
     <h1 id="titleText">🐋 세력 탈출 실시간 감시기</h1>
 
-    <!-- 1. 종목 선택 드롭다운 (원하는 코인으로 즉시 전환) -->
     <div class="select-box">
         <label for="coinSelect" style="color: #848e9c; margin-right: 10px;">감시 종목 선택:</label>
         <select id="coinSelect" onchange="changeSymbol(this.value)">
@@ -43,9 +55,8 @@
         </select>
     </div>
 
-    <!-- 2. 핵심 실시간 지표 -->
     <div class="grid">
-        <div class="card">
+        <div class="card" id="dangerCard">
             <h3>세력 덤핑 위험도</h3>
             <div class="value status-safe" id="dumpIndex">계산 중...</div>
             <p style="font-size: 11px; color: #848e9c;" id="dumpDesc">실시간 펀딩비 & OI 기반 분석</p>
@@ -67,14 +78,13 @@
         </div>
     </div>
 
-    <!-- 3. 실시간 가격 vs 미결제약정(OI) 차트 -->
     <div class="chart-container">
         <canvas id="whaleChart"></canvas>
     </div>
 
-    <div class="alert-box">
-        <strong style="color: #f6465d;">⚠️ 세력 상태 요약:</strong>
-        <p id="statusSummary" style="margin: 5px 0 0 0; font-size: 14px; color: #ffffff;">바이낸스 실시간 데이터를 수신 중입니다...</p>
+    <div class="alert-box" id="alertBox">
+        <strong style="color: #f6465d; font-size: 16px;">⚠️ 세력 상태 및 경보 요약:</strong>
+        <p id="statusSummary" style="margin: 8px 0 0 0; font-size: 14px; color: #ffffff;">바이낸스 실시간 데이터를 수신 중입니다...</p>
     </div>
 </div>
 
@@ -82,7 +92,6 @@
     let currentSymbol = "MINAUSDT";
     let whaleChart = null;
 
-    // 차트 초기화
     function initChart() {
         const ctx = document.getElementById('whaleChart').getContext('2d');
         whaleChart = new Chart(ctx, {
@@ -134,57 +143,57 @@
         });
     }
 
-    // 바이낸스 공식 API에서 실제 실시간 데이터 불러오기
     async function fetchRealBinanceData(symbol) {
         try {
-            // 1. 현재 선물 가격
             const priceRes = await fetch(`https://fapi.binance.com/fapi/v1/ticker/price?symbol=${symbol}`);
             const priceData = await priceRes.json();
             const price = parseFloat(priceData.price);
 
-            // 2. 미결제약정 (OI)
             const oiRes = await fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbol}`);
             const oiData = await oiRes.json();
             const oi = parseFloat(oiData.openInterest);
 
-            // 3. 펀딩비 (Funding Rate)
             const fundRes = await fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${symbol}`);
             const fundData = await fundRes.json();
-            const fundRate = parseFloat(fundData.lastFundingRate) * 100; // 백분율 환산
+            const fundRate = parseFloat(fundData.lastFundingRate) * 100;
 
-            // 화면 데이터 업데이트
             document.getElementById('currentPrice').innerText = `$${price < 1 ? price.toFixed(4) : price.toLocaleString()}`;
             document.getElementById('openInterest').innerText = `${Math.round(oi).toLocaleString()} 개`;
             
             const fundElem = document.getElementById('fundingRate');
             fundElem.innerText = `${fundRate.toFixed(4)}%`;
-            if(fundRate < 0) {
-                fundElem.className = "value status-danger";
-                document.getElementById('fundDesc').innerText = "음수 (세력 숏 베팅 우세)";
-            } else {
-                fundElem.className = "value status-safe";
-                document.getElementById('fundDesc').innerText = "양수 (롱 포지션 우세)";
-            }
 
-            // 세력 덤핑 위험도 계산 알고리즘
+            const dangerCard = document.getElementById('dangerCard');
+            const alertBox = document.getElementById('alertBox');
             const dumpIndexElem = document.getElementById('dumpIndex');
             const summaryElem = document.getElementById('statusSummary');
-            
+
+            // 🚨 경보 시스템 및 비주얼 이벤트 제어 (깜빡임 애니메이션)
             if (fundRate < -0.01) {
-                dumpIndexElem.innerText = "위험 (HIGH)";
+                dumpIndexElem.innerText = "위험 (DANGER)";
                 dumpIndexElem.className = "value status-danger";
-                summaryElem.innerHTML = `🚨 <strong>주의!</strong> 펀딩비가 음수(-${Math.abs(fundRate).toFixed(4)}%)로 전환되었습니다. 세력이 선물 시장에서 하락(숏) 포지션을 대량 구축 중일 수 있습니다.`;
+                summaryElem.innerHTML = `🚨 <strong>[위험 경보!]</strong> 펀딩비가 음수(-${Math.abs(fundRate).toFixed(4)}%)로 급락했습니다! 세력이 숏 포지션을 대량 집결 중입니다.`;
+                
+                // 경보등 깜빡임 시작
+                dangerCard.classList.add('alarm-active');
+                alertBox.classList.add('alarm-active');
             } else if (fundRate < 0) {
                 dumpIndexElem.innerText = "주의 (WARN)";
                 dumpIndexElem.className = "value status-warning";
-                summaryElem.innerHTML = `⚠️ 펀딩비가 약한 음수입니다. 가격 변동 및 미결제약정(OI) 증가 추이를 관망하세요.`;
+                summaryElem.innerHTML = `⚠️ <strong>[관망 주의]</strong> 펀딩비가 약한 음수입니다. 세력의 선물 숏 포지션 누적 여부를 유의 깊게 관찰하세요.`;
+                
+                dangerCard.classList.remove('alarm-active');
+                alertBox.classList.remove('alarm-active');
             } else {
-                dumpIndexElem.innerText = "안전 (NORMAL)";
+                dumpIndexElem.innerText = "안전 (SAFE)";
                 dumpIndexElem.className = "value status-safe";
-                summaryElem.innerHTML = `✅ 현재 선물 시장 수급은 정상적인 범주 내에 있습니다.`;
+                summaryElem.innerHTML = `✅ 정상 구간입니다. 세력의 기습 덤핑 징후가 감지되지 않았습니다.`;
+                
+                dangerCard.classList.remove('alarm-active');
+                alertBox.classList.remove('alarm-active');
             }
 
-            // 차트에 데이터 추가 (최대 10개 지점 유지)
+            // 차트 갱신
             const now = new Date();
             const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
@@ -204,10 +213,8 @@
         }
     }
 
-    // 종목 변경 함수
     function changeSymbol(newSymbol) {
         currentSymbol = newSymbol;
-        // 차트 초기화
         whaleChart.data.labels = [];
         whaleChart.data.datasets[0].data = [];
         whaleChart.data.datasets[1].data = [];
@@ -217,11 +224,9 @@
         fetchRealBinanceData(currentSymbol);
     }
 
-    // 페이지 로드 시 실행
     window.onload = function() {
         initChart();
         fetchRealBinanceData(currentSymbol);
-        // 10초마다 바이낸스 실제 데이터 자동 갱신
         setInterval(() => fetchRealBinanceData(currentSymbol), 10000);
     };
 </script>
