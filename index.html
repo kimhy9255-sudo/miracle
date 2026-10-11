@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whale Dump Monitor - 세력 탈출 실시간 감시기</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #12161f; color: #ffffff; margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -43,10 +42,13 @@
 <div class="container">
     <h1 id="titleText">🐋 세력 탈출 실시간 감시기</h1>
 
+    <!-- 1. 종목 선택 드롭다운 (온도 파이낸스 & 체인링크 추가) -->
     <div class="select-box">
         <label for="coinSelect" style="color: #848e9c; margin-right: 10px;">감시 종목 선택:</label>
         <select id="coinSelect" onchange="changeSymbol(this.value)">
             <option value="MINAUSDT" selected>미나 (MINA / USDT)</option>
+            <option value="ONDOUSDT">온도 파이낸스 (ONDO / USDT)</option>
+            <option value="LINKUSDT">체인링크 (LINK / USDT)</option>
             <option value="BTCUSDT">비트코인 (BTC / USDT)</option>
             <option value="ETHUSDT">이더리움 (ETH / USDT)</option>
             <option value="XRPUSDT">리플 (XRP / USDT)</option>
@@ -55,6 +57,7 @@
         </select>
     </div>
 
+    <!-- 2. 핵심 실시간 지표 -->
     <div class="grid">
         <div class="card" id="dangerCard">
             <h3>세력 덤핑 위험도</h3>
@@ -78,10 +81,12 @@
         </div>
     </div>
 
+    <!-- 3. 차트 영역 -->
     <div class="chart-container">
         <canvas id="whaleChart"></canvas>
     </div>
 
+    <!-- 4. 실시간 경보 요약 박스 -->
     <div class="alert-box" id="alertBox">
         <strong style="color: #f6465d; font-size: 16px;">⚠️ 세력 상태 및 경보 요약:</strong>
         <p id="statusSummary" style="margin: 8px 0 0 0; font-size: 14px; color: #ffffff;">바이낸스 실시간 데이터를 수신 중입니다...</p>
@@ -168,13 +173,12 @@
             const dumpIndexElem = document.getElementById('dumpIndex');
             const summaryElem = document.getElementById('statusSummary');
 
-            // 🚨 경보 시스템 및 비주얼 이벤트 제어 (깜빡임 애니메이션)
+            // 🚨 경보 제어 알고리즘
             if (fundRate < -0.01) {
                 dumpIndexElem.innerText = "위험 (DANGER)";
                 dumpIndexElem.className = "value status-danger";
                 summaryElem.innerHTML = `🚨 <strong>[위험 경보!]</strong> 펀딩비가 음수(-${Math.abs(fundRate).toFixed(4)}%)로 급락했습니다! 세력이 숏 포지션을 대량 집결 중입니다.`;
                 
-                // 경보등 깜빡임 시작
                 dangerCard.classList.add('alarm-active');
                 alertBox.classList.add('alarm-active');
             } else if (fundRate < 0) {
@@ -193,7 +197,7 @@
                 alertBox.classList.remove('alarm-active');
             }
 
-            // 차트 갱신
+            // 차트 실시간 갱신
             const now = new Date();
             const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
