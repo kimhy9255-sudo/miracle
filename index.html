@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국민의 약속 - 대한민국 시민 주권 프로젝트</title>
     <style>
-        /* 기본 리셋 및 모바일 최적화 (가벼운 로딩을 위한 스타일) */
+        /* 기본 리셋 및 모바일 최적화 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
         body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 20px; text-align: center; }
 
@@ -15,12 +15,32 @@
         .main-title { font-size: 1.8rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
         .sub-title { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
 
-        /* 중앙 핵심 구호 카드 영역 */
+        /* 중앙 핵심 구호 카드 영역 (클릭 링크형 카드) */
         .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
-        .slogan-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 2px solid #3b82f6; border-radius: 12px; padding: 15px 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .slogan-card.highlight { border-color: #ef4444; background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
-        .slogan-text { font-size: 1.25rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+        
+        .slogan-card { 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
+            border: 2px solid #3b82f6; 
+            border-radius: 12px; 
+            padding: 15px 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+            text-decoration: none; 
+            display: block; 
+            transition: transform 0.1s, background 0.2s;
+        }
+        .slogan-card:active { transform: scale(0.98); }
+        
+        .slogan-card.highlight { 
+            border-color: #ef4444; 
+            background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); 
+        }
+
+        .slogan-text { font-size: 1.2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
+        
+        /* 링크 안내 작은 텍스트 추가 */
+        .slogan-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+        .slogan-card.highlight .slogan-desc { color: #fca5a5; }
 
         /* 📱 전화번호 참여(가입) 입력 섹션 */
         .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
@@ -51,17 +71,25 @@
         <p class="sub-title">공정한 정치를 위한 우리의 요구</p>
     </header>
 
-    <!-- 2. 핵심 요구 문구 카드 3개 -->
+    <!-- 2. 핵심 요구 문구 카드 3개 (유튜브/참고자료 링크 연결) -->
     <main class="slogan-container">
-        <div class="slogan-card">
+        <!-- 1번 카드: 일하는 국회의원 (독일 정치 문화 관련 영상 링크 예시) -->
+        <a href="https://www.youtube.com/results?search_query=독일+정치+문화+의회" target="_blank" class="slogan-card">
             <div class="slogan-text">⚖️ 일하는 국회의원</div>
-        </div>
-        <div class="slogan-card highlight">
+            <div class="slogan-desc">📺 독일 의회 및 정치 문화 사례 보기 ➔</div>
+        </a>
+
+        <!-- 2번 카드: 불체포 특권 폐지 -->
+        <a href="https://www.youtube.com/results?search_query=국회의원+불체포특권+폐지" target="_blank" class="slogan-card highlight">
             <div class="slogan-text">🚫 불체포 특권 폐지</div>
-        </div>
-        <div class="slogan-card">
+            <div class="slogan-desc">📺 불체포 특권 개혁 토론 및 사례 보기 ➔</div>
+        </a>
+
+        <!-- 3번 카드: 국회의원 특권 폐지 -->
+        <a href="https://www.youtube.com/results?search_query=국회의원+특권+폐지" target="_blank" class="slogan-card">
             <div class="slogan-text">💥 국회의원 특권 폐지</div>
-        </div>
+            <div class="slogan-desc">📺 특권 내려놓기 관련 영상 보기 ➔</div>
+        </a>
     </main>
 
     <!-- 3. 전화번호 기반 참여(가입) 섹션 -->
