@@ -26,12 +26,12 @@
         .action-container { width: 100%; max-width: 380px; margin: 10px 0; }
         .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1.1rem; font-weight: 800; padding: 14px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
 
-        /* 🆕 이메일 / 전화번호 간편 가입 섹션 */
+        /* 간편 회원가입 섹션 */
         .signup-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
         .signup-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .signup-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
         
-        /* 이메일 / 전화번호 선택 탭 버튼 */
+        /* 탭 버튼 */
         .tab-group { display: flex; gap: 6px; margin-bottom: 12px; }
         .tab-btn { flex: 1; padding: 8px; font-size: 0.85rem; font-weight: 700; background-color: #0f172a; color: #94a3b8; border: 1px solid #334155; border-radius: 8px; cursor: pointer; text-align: center; }
         .tab-btn.active { background-color: #3b82f6; color: #ffffff; border-color: #3b82f6; }
@@ -43,12 +43,17 @@
         .signup-submit { width: 100%; background-color: #f1f5f9; color: #000000; font-size: 1rem; font-weight: 700; padding: 12px; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; }
         .signup-submit:hover { background-color: #e2e8f0; }
 
-        .footer-note { font-size: 0.78rem; color: #64748b; margin-top: 12px; text-align: center; width: 100%; }
-        
         /* 알림 메시지 스타일 */
         #signup-message { margin-top: 10px; font-size: 0.85rem; display: none; padding: 10px; border-radius: 6px; word-break: keep-all; line-height: 1.4; }
         #signup-message.success { display: block; background-color: #065f46; color: #a7f3d0; border: 1px solid #10b981; }
         #signup-message.error { display: block; background-color: #7f1d1d; color: #fecaca; border: 1px solid #ef4444; }
+
+        /* 📢 🆕 맨 밑 실시간 모임 공지사항 전광판 영역 */
+        .notice-container { width: 100%; max-width: 380px; background-color: #0284c7; border: 1px solid #38bdf8; border-radius: 12px; padding: 14px; margin-top: 15px; text-align: left; }
+        .notice-header { font-size: 0.9rem; font-weight: 800; color: #f0f9ff; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+        .notice-list { font-size: 0.82rem; color: #e0f2fe; line-height: 1.5; list-style-type: none; padding-left: 0; }
+        .notice-list li { margin-bottom: 4px; display: flex; gap: 6px; align-items: flex-start; }
+        .notice-list li span { color: #fef08a; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -80,24 +85,20 @@
         </button>
     </section>
 
-    <!-- 4. 간편 회원가입 섹션 (이메일 / 전화번호 선택 지원) -->
+    <!-- 4. 간편 회원가입 섹션 -->
     <section class="signup-container">
         <div class="signup-title">
             ✍️ 간편 가입으로 연대하기
             <span>실시간 즉시 완료</span>
         </div>
 
-        <!-- 가입 방식 선택 탭 -->
         <div class="tab-group">
             <button type="button" class="tab-btn active" id="tab-phone" onclick="switchTab('phone')">📱 전화번호 가입</button>
             <button type="button" class="tab-btn" id="tab-email" onclick="switchTab('email')">✉️ 이메일 가입</button>
         </div>
 
         <form class="signup-form" id="easy-signup-form" onsubmit="handleSignup(event)">
-            <!-- 전화번호 입력창 (기본값) -->
             <input type="tel" id="signup-phone" class="signup-input" placeholder="전화번호를 입력하세요 (예: 010-1234-5678)" oninput="autoHyphen(this)" maxlength="13" required>
-            
-            <!-- 이메일 입력창 (숨김 처리 상태로 출발) -->
             <input type="email" id="signup-email" class="signup-input" placeholder="이메일을 입력하세요 (예: kookmin@email.com)" style="display: none;">
             
             <button type="submit" class="signup-submit">가입 및 서명 완료</button>
@@ -105,15 +106,21 @@
         </form>
     </section>
 
-    <!-- 5. 최하단 안내 -->
-    <footer>
-        <p class="footer-note">※ 가입하신 정보는 주말 모임 안내 및 미션 소식 전달 용도로만 안전하게 사용됩니다.</p>
+    <!-- 📢 5. 맨 밑 실시간 모임 공지사항 전광판 -->
+    <footer class="notice-container">
+        <div class="notice-header">
+            📢 [실시간 국민의 약속 공지사항]
+        </div>
+        <ul class="notice-list">
+            <li><span>[시간]</span> 매주 토요일/일요일 점심 1시간 (13:00 ~ 14:00)</li>
+            <li><span>[장소]</span> 전국 주요 도심 거점 광장 (앱 내 지도 참조)</li>
+            <li><span>[안내]</span> 가입 후 아래 공지를 통해 최신 미션과 일정을 직접 확인하실 수 있습니다.</li>
+        </ul>
     </footer>
 
     <script>
-        let currentMode = 'phone'; // 기본 방식: 전화번호
+        let currentMode = 'phone';
 
-        // 탭 전환 (전화번호 vs 이메일)
         function switchTab(mode) {
             currentMode = mode;
             const phoneInput = document.getElementById('signup-phone');
@@ -122,7 +129,7 @@
             const emailTab = document.getElementById('tab-email');
             const messageDiv = document.getElementById('signup-message');
 
-            messageDiv.style.display = 'none'; // 메시지 초기화
+            messageDiv.style.display = 'none';
 
             if (mode === 'phone') {
                 phoneTab.classList.add('active');
@@ -141,7 +148,6 @@
             }
         }
 
-        // 전화번호 하이픈(-) 자동 입력 로직
         function autoHyphen(target) {
             target.value = target.value
                 .replace(/[^0-9]/g, '')
@@ -149,7 +155,6 @@
                 .replace(/(\-{1,2})$/g, "");
         }
 
-        // 가입 완료 제출 처리 함수
         function handleSignup(event) {
             event.preventDefault();
             const messageDiv = document.getElementById('signup-message');
@@ -161,12 +166,13 @@
                     messageDiv.className = "error";
                     return;
                 }
-                messageDiv.textContent = `✅ [${phone}] 번호로 서명이 완료되었습니다! 문자로 모임 안내를 보내드립니다.`;
+                // 문자 보낸다는 메시지 삭제 및 정상 가입 완결 안내로 수정
+                messageDiv.textContent = `✅ [${phone}] 번호로 서명이 정상적으로 완료되었습니다!`;
                 messageDiv.className = "success";
                 document.getElementById('signup-phone').value = '';
             } else {
                 const email = document.getElementById('signup-email').value.trim();
-                messageDiv.textContent = `✅ [${email}] 이메일로 서명이 완료되었습니다! 확인 메일을 발송했습니다.`;
+                messageDiv.textContent = `✅ [${email}] 이메일로 서명이 정상적으로 완료되었습니다!`;
                 messageDiv.className = "success";
                 document.getElementById('signup-email').value = '';
             }
