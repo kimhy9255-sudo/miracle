@@ -55,19 +55,26 @@
         .notice-list li { margin-bottom: 4px; display: flex; gap: 6px; align-items: flex-start; }
         .notice-list li span { color: #fef08a; font-weight: 700; }
 
-        /* 팝업 모달 스타일 */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background-color: #1e293b; border: 1px solid #3b82f6; border-radius: 16px; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; padding: 20px; text-align: left; position: relative; }
+        /* 팝업 모달 공통 스타일 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background-color: #1e293b; border: 1px solid #3b82f6; border-radius: 16px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; padding: 20px; text-align: left; position: relative; }
         .close-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; }
-        .modal-title { font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; }
+        .modal-title { font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
 
-        /* 이미지 카드 스타일 */
+        /* 이미지 박스 스타일 */
         .img-box { width: 100%; background-color: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 1px solid #334155; }
         .img-box img { width: 100%; display: block; height: auto; }
         .img-caption { font-size: 0.75rem; color: #94a3b8; padding: 8px 10px; text-align: center; }
 
-        /* 지도 버튼 스타일 */
-        .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 1rem; font-weight: 800; padding: 12px; border: none; border-radius: 10px; cursor: pointer; text-decoration: none; display: block; text-align: center; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3); }
+        /* 지도 버튼 그룹 */
+        .map-btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        .map-btn.monthly { background-color: #ef4444; color: #ffffff; }
+
+        /* 📋 현장 행동 준칙 카드 스타일 */
+        .rule-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .rule-card-title { font-size: 0.95rem; font-weight: 800; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .rule-card-desc { font-size: 0.82rem; color: #cbd5e1; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -117,35 +124,78 @@
             📢 [실시간 국민의 약속 공지사항]
         </div>
         <ul class="notice-list">
-            <li><span>[시간]</span> 매주 토요일/일요일 점심 1시간 (13:00 ~ 14:00)</li>
-            <li><span>[장소]</span> 전국 주요 도심 거점 광장</li>
-            <li><span>[안내]</span> 동참 신청 시 모임 장소 지도 및 알림 로드맵이 안내됩니다.</li>
+            <li><span>[매주 주말]</span> 각 지역 중심지 거점 모임 (13:00~14:00)</li>
+            <li><span>[월 1회]</span> 광화문 광장 / 여의도 광장 대규모 총결집</li>
+            <li><span>[안내]</span> 신청 시 지도 안내 및 현장 행동 준칙이 제공됩니다.</li>
         </ul>
     </footer>
 
-    <!-- 5. [팝업 모달] 휴대폰 알림 로드맵 및 모임 장소 지도 연결 -->
+    <!-- 5. [팝업 모달 1] 휴대폰 알림 로드맵 & 모임 장소 지도 연결 -->
     <div id="roadmapModal" class="modal-overlay">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <button class="close-btn" onclick="closeModal('roadmapModal')">&times;</button>
             <div class="modal-title">📱 참여 안내 및 모임 장소</div>
             
-            <!-- (1) 휴대폰 알림 / 로드맵 이미지 영역 -->
+            <!-- (1) 알림 로드맵 이미지 영역 -->
             <div class="img-box">
-                <!-- 실제 보관 중이신 로드맵/알림 이미지 경로(src)로 수정해서 사용하시면 됩니다 -->
-                <img id="roadmapImg" src="https://via.placeholder.com/380x200/0f172a/ffffff?text=Notification+Roadmap+Image" alt="휴대폰 알림 로드맵 예시">
-                <div class="img-caption">▲ 참여 신청 시 전달되는 안내 알림 메시지 로드맵</div>
+                <img id="roadmapImg" src="https://via.placeholder.com/380x180/0f172a/ffffff?text=Notification+Roadmap+Image" alt="알림 로드맵 이미지">
+                <div class="img-caption">▲ 동참 완료 후 휴대폰으로 발송되는 안내 로드맵</div>
             </div>
 
-            <!-- (2) 모임 장소 핵심 위치 안내 및 지도 버튼 -->
-            <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px; line-height: 1.4;">
-                📍 <strong>이번 주 핵심 모임 장소:</strong> 광화문 광장 이순신 장군 동상 앞<br>
-                아래 버튼을 누르시면 모임 장소 위치 지도로 이동합니다.
-            </p>
+            <!-- (2) 장소 구분 및 지도 링크 -->
+            <p style="font-size: 0.85rem; color: #f1f5f9; font-weight: 700; margin-bottom: 6px;">📍 모임 장소 지도 바로가기</p>
+            <div class="map-btn-group">
+                <a href="https://map.kakao.com/link/search/광화문광장" target="_blank" class="map-btn monthly">
+                    🏛️ [월 1회 대규모 총결집] 광화문/여의도 광장
+                </a>
+                <a href="https://map.kakao.com/link/search/전국거점광장" target="_blank" class="map-btn">
+                    🏙️ [매주 주말] 내 지역 중심지 거점 모임
+                </a>
+            </div>
 
-            <!-- 지도 링크 (카카오맵 예시 주소 / 원하시는 장소 URL로 변경 가능) -->
-            <a href="https://map.kakao.com/link/search/광화문광장" target="_blank" class="map-btn" id="mapLink">
-                🗺️ 모임 장소 위치 보기 (지도 연결)
-            </a>
+            <!-- (3) 행동 준칙 보기 버튼 -->
+            <button onclick="openModal('rulesModal')" style="width:100%; margin-top:15px; background-color:#2563eb; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;">
+                📜 현장 행동 준칙 확인하기 ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- 6. [팝업 모달 2] 현장 행동 준칙 안내 창 -->
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('rulesModal')">&times;</button>
+            <div class="modal-title">📜 국민의 약속 현장 행동 준칙</div>
+            
+            <!-- 행동 준칙 이미지 영역 (필요시 이미지로 대체 가능) -->
+            <div class="img-box">
+                <img id="rulesImg" src="https://via.placeholder.com/380x150/1e293b/38bdf8?text=Action+Rules+Graphic" alt="행동 준칙 인포그래픽">
+                <div class="img-caption">▲ 성숙하고 평화로운 시민 주권 행사 가이드</div>
+            </div>
+
+            <!-- 행동 준칙 수칙 리스트 -->
+            <div class="rule-card">
+                <div class="rule-card-title">1. ⏰ 정확한 시간 준수 (주말 1시간)</div>
+                <div class="rule-card-desc">약속된 1시간 동안 집중하여 정중하고 강력하게 시민의 요구를 전달합니다.</div>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-card-title">2. 🕊️ 평화적·비폭력 시민 연대</div>
+                <div class="rule-card-desc">어떠한 마찰이나 물리적 충돌 없이 질서정연하게 우리의 목소리를 냅니다.</div>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-card-title">3. 🧹 클린 현장 문화 만들기</div>
+                <div class="rule-card-desc">모임이 끝난 후 머물던 자리를 깨끗이 정리하고 자율적으로 퇴장합니다.</div>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-card-title">4. 📣 통일된 핵심 구호 전달</div>
+                <div class="rule-card-desc">일하는 국회의원, 특권 폐지 등 핵심 메시지에 집중하여 표현합니다.</div>
+            </div>
+
+            <button onclick="closeModal('rulesModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer;">
+                닫기
+            </button>
         </div>
     </div>
 
@@ -160,13 +210,16 @@
                 return;
             }
             
-            // 입력창 초기화 후 모달 팝업 열기
             phoneInput.value = '';
-            document.getElementById('roadmapModal').style.display = 'flex';
+            openModal('roadmapModal');
         }
 
-        function closeModal() {
-            document.getElementById('roadmapModal').style.display = 'none';
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
     </script>
 
