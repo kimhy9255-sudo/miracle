@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국민의 약속 - 대한민국 시민 주권 프로젝트</title>
     <style>
-        /* 기본 리셋 및 모바일 최적화 */
+        /* 기본 리셋 및 모바일 최적화 (가벼운 로딩을 위한 스타일) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
         body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 20px; text-align: center; }
 
@@ -22,24 +22,17 @@
         .slogan-text { font-size: 1.25rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
 
-        /* 하단 주요 참여 버튼 */
-        .action-container { width: 100%; max-width: 380px; margin: 10px 0; }
-        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1.1rem; font-weight: 800; padding: 14px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
-
-        /* 🆕 텔레그램 / 카카오톡 소통방 연대 섹션 */
-        .community-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
-        .community-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .community-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+        /* 📱 전화번호 참여(가입) 입력 섹션 */
+        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
+        .join-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .join-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
         
-        .chat-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .phone-input { width: 100%; padding: 12px 14px; font-size: 1rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; color: #ffffff; outline: none; }
+        .phone-input:focus { border-color: #3b82f6; }
         
-        /* 텔레그램 버튼 스타일 */
-        .chat-btn.telegram { background-color: #229ed9; color: #ffffff; }
-        /* 카카오톡 버튼 스타일 */
-        .chat-btn.kakao { background-color: #fee500; color: #191919; }
-
-        .chat-btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; text-align: center; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.1s; }
-        .chat-btn:active { transform: scale(0.98); }
+        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1.05rem; font-weight: 800; padding: 13px; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
+        .action-btn:active { transform: scale(0.98); }
 
         /* 📢 맨 밑 실시간 모임 공지사항 전광판 */
         .notice-container { width: 100%; max-width: 380px; background-color: #0284c7; border: 1px solid #38bdf8; border-radius: 12px; padding: 14px; margin-top: 15px; text-align: left; }
@@ -71,43 +64,47 @@
         </div>
     </main>
 
-    <!-- 3. 하단 참여 버튼 -->
-    <section class="action-container">
-        <button class="action-btn" onclick="alert('게임 미션 및 주말 모임 장소 안내로 이동합니다!')">
-            주말 1시간 약속 참여하기 ➔
-        </button>
-    </section>
-
-    <!-- 4. 텔레그램 / 카카오톡 소통방 연대 섹션 -->
-    <section class="community-container">
-        <div class="community-title">
-            🤝 실시간 시민 소통방 참여
-            <span>즉시 입장 가능</span>
+    <!-- 3. 전화번호 기반 참여(가입) 섹션 -->
+    <section class="join-container">
+        <div class="join-title">
+            ✍️ 국민의 약속 참여 신청
+            <span>간편 접수</span>
         </div>
-
-        <div class="chat-btn-group">
-            <!-- 텔레그램 링크 (주소만 실제 링크로 변경하시면 됩니다) -->
-            <a href="https://t.me/your_telegram_room" target="_blank" class="chat-btn telegram">
-                ✈️ 텔레그램 공식 소통방 입장하기
-            </a>
-            <!-- 카카오톡 오픈채팅방 링크 (주소만 실제 링크로 변경하시면 됩니다) -->
-            <a href="https://open.kakao.com/o/your_kakao_room" target="_blank" class="chat-btn kakao">
-                💬 카카오톡 오픈채팅방 입장하기
-            </a>
+        <div class="form-group">
+            <input type="tel" id="userPhone" class="phone-input" placeholder="휴대전화 번호 (- 제외)" maxlength="11">
+            <button class="action-btn" onclick="submitParticipation()">
+                주말 1시간 약속 동참하기 ➔
+            </button>
         </div>
     </section>
 
-    <!-- 📢 5. 맨 밑 실시간 모임 공지사항 전광판 -->
+    <!-- 📢 4. 맨 밑 실시간 모임 공지사항 전광판 -->
     <footer class="notice-container">
         <div class="notice-header">
             📢 [실시간 국민의 약속 공지사항]
         </div>
         <ul class="notice-list">
             <li><span>[시간]</span> 매주 토요일/일요일 점심 1시간 (13:00 ~ 14:00)</li>
-            <li><span>[장소]</span> 전국 주요 도심 거점 광장 (소통방 공지 참조)</li>
-            <li><span>[안내]</span> 위 소통방에 입장하시면 실시간 장소 안내와 미션을 받아보실 수 있습니다.</li>
+            <li><span>[장소]</span> 전국 주요 도심 거점 광장</li>
+            <li><span>[안내]</span> 참여 신청을 완료하시면 안내 문자를 발송해 드립니다.</li>
         </ul>
     </footer>
+
+    <script>
+        function submitParticipation() {
+            const phoneInput = document.getElementById('userPhone');
+            const phoneVal = phoneInput.value.trim();
+            
+            if(phoneVal.length < 10) {
+                alert('올바른 휴대전화 번호를 입력해주세요.');
+                phoneInput.focus();
+                return;
+            }
+            
+            alert('국민의 약속 참여가 정상적으로 접수되었습니다. 감사합니다!');
+            phoneInput.value = '';
+        }
+    </script>
 
 </body>
 </html>
