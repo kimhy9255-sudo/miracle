@@ -88,18 +88,50 @@
         .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center; }
         .map-btn.monthly { background-color: #ef4444; color: #ffffff; }
 
-        /* 📋 현장 행동 준칙 카드 스타일 */
+        /* 📱 [신규] 현장 스마트폰 웹 피켓 스타일 (가로로 들고 다니기 좋은 큰 글자 피켓) */
+        .web-picket-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border: 4px solid #38bdf8;
+            border-radius: 16px;
+            padding: 16px 12px;
+            margin-bottom: 14px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+        }
+        .picket-guide-top {
+            font-size: 0.75rem;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .picket-item {
+            background-color: #1e293b;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            padding: 12px 8px;
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .picket-item.red {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            color: #fef08a;
+        }
+        .picket-guide-bottom {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        /* 📋 간소화된 행동 준칙 카드 스타일 */
         .rule-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
         .rule-card-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
         .rule-card-desc { font-size: 0.78rem; color: #cbd5e1; line-height: 1.3; }
-
-        /* 📱 휴대폰을 든 시민 일러스트 상단 카드 스타일 */
-        .campaign-banner { background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%); border: 1px solid #3b82f6; border-radius: 10px; padding: 12px; margin-bottom: 12px; text-align: center; }
-        .campaign-banner-img { font-size: 2rem; margin-bottom: 4px; }
-        .campaign-banner-title { font-size: 0.95rem; font-weight: 800; color: #f8fafc; margin-bottom: 6px; }
-        .campaign-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
-        .campaign-tag { background-color: #2563eb; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
-        .campaign-tag.highlight { background-color: #ef4444; }
     </style>
 </head>
 <body>
@@ -164,7 +196,7 @@
                     🗺️ 모임 장소 & 알림 로드맵 보기
                 </button>
                 <button class="user-menu-btn" style="background-color:#0284c7;" onclick="openModal('rulesModal')">
-                    📜 현장 행동 준칙 확인하기
+                    📱 현장 행동 웹 피켓 & 준칙
                 </button>
                 <button class="logout-btn" onclick="logout()">
                     다른 번호로 변경 (로그아웃)
@@ -187,7 +219,7 @@
         <ul class="notice-list">
             <li><span>[매주 주말]</span> 각 지역 중심지 거점 모임 (13:00~14:00)</li>
             <li><span>[월 1회]</span> 광화문 광장 / 여의도 광장 대규모 총결집</li>
-            <li><span>[안내]</span> 한 번 등록된 로그인 상태는 지속적으로 유지됩니다.</li>
+            <li><span>[안내]</span> 현장에서는 스마트폰 화면을 켜서 피켓으로 활용하세요!</li>
         </ul>
     </footer>
 
@@ -213,26 +245,24 @@
             </div>
 
             <button onclick="closeModal('roadmapModal'); openModal('rulesModal');" style="width:100%; margin-top:15px; background-color:#2563eb; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;">
-                📜 현장 행동 준칙 확인하기 ➔
+                📱 현장 행동 웹 피켓 확인하기 ➔
             </button>
         </div>
     </div>
 
-    <!-- 8. [팝업 모달 2] 현장 행동 준칙 안내 창 (휴대폰 든 시민 일러스트 및 핵심 요구 포함) -->
+    <!-- 8. [팝업 모달 2] 현장 행동 웹 피켓 & 준칙 안내 창 -->
     <div id="rulesModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('rulesModal')">&times;</button>
-            <div class="modal-title">📜 국민의 약속 현장 행동 준칙</div>
+            <div class="modal-title">📱 현장 행동 웹 피켓 & 준칙</div>
             
-            <!-- 📱 맨 위: 휴대폰을 든 시민 일러스트 및 3대 핵심 요구 배너 -->
-            <div class="campaign-banner">
-                <div class="campaign-banner-img">📱🙋‍♂️</div>
-                <div class="campaign-banner-title">시민 주권 실천의 3대 핵심 요구</div>
-                <div class="campaign-tags">
-                    <span class="campaign-tag">⚖️ 일하는 국회의원</span>
-                    <span class="campaign-tag highlight">🚫 불체포 특권 폐지</span>
-                    <span class="campaign-tag highlight">💥 국회의원 특권 폐지</span>
-                </div>
+            <!-- 📱 [핵심] 스마트폰 안에 3대 핵심 구호가 가로로 꽉 차게 들어간 웹 피켓 디자인 -->
+            <div class="web-picket-box">
+                <div class="picket-guide-top">🚨 현장 필수 지참 웹 피켓 (스마트폰 가로 모드 권장)</div>
+                <div class="picket-item">⚖️ 일하는 국회의원</div>
+                <div class="picket-item red">🚫 불체포 특권 폐지</div>
+                <div class="picket-item red">💥 국회의원 특권 폐지</div>
+                <div class="picket-guide-bottom">▲ 이 화면을 켜고 스마트폰을 들어 올려주세요!</div>
             </div>
 
             <!-- 압축된 행동 준칙 수칙 -->
