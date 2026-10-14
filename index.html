@@ -11,9 +11,9 @@
 
         /* 상단 타이틀 영역 */
         header { margin-top: 5px; width: 100%; margin-bottom: 15px; }
-        .badge { display: inline-block; background-color: #2563eb; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; }
+        .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(147,51,234,0.3); }
         .main-title { font-size: 1.8rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
-        .sub-title { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+        .sub-title { font-size: 0.85rem; color: #38bdf8; margin-top: 4px; font-weight: 600; }
 
         /* 📊 실시간 동참 시민 카운터 전광판 */
         .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
@@ -88,44 +88,92 @@
         .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center; }
         .map-btn.monthly { background-color: #ef4444; color: #ffffff; }
 
-        /* 📱 [신규] 현장 스마트폰 웹 피켓 스타일 (가로로 들고 다니기 좋은 큰 글자 피켓) */
+        /* 📱 웹 피켓 박스 (클릭 시 전체 화면으로 확대됨) */
         .web-picket-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            border: 4px solid #38bdf8;
-            border-radius: 16px;
-            padding: 16px 12px;
-            margin-bottom: 14px;
+            border: 3px solid #38bdf8;
+            border-radius: 12px;
+            padding: 14px 10px;
+            margin-bottom: 12px;
             text-align: center;
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.3);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
         }
-        .picket-guide-top {
-            font-size: 0.75rem;
-            color: #38bdf8;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
+        .web-picket-box:active { transform: scale(0.98); }
+        .picket-guide-top { font-size: 0.75rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px; }
         .picket-item {
             background-color: #1e293b;
             border: 2px solid #475569;
-            border-radius: 10px;
-            padding: 12px 8px;
-            margin-bottom: 8px;
-            font-size: 1.15rem;
+            border-radius: 8px;
+            padding: 10px 6px;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
             font-weight: 900;
             color: #ffffff;
-            letter-spacing: -0.5px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
         .picket-item.red {
             border-color: #ef4444;
             background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
             color: #fef08a;
         }
-        .picket-guide-bottom {
-            font-size: 0.72rem;
-            color: #94a3b8;
-            margin-top: 6px;
+        .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
+
+        /* 🔍 [전체 화면 풀스크린 웹 피켓 모드] */
+        #fullscreenPicket {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0f172a;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .fs-picket-container {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .fs-picket-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fef08a;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+        .fs-picket-btn {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 4px solid #3b82f6;
+            border-radius: 16px;
+            padding: 24px 10px;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #ffffff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .fs-picket-btn.red {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+            color: #fef08a;
+        }
+        .fs-close-btn {
+            margin-top: 25px;
+            background-color: #334155;
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
         }
 
         /* 📋 간소화된 행동 준칙 카드 스타일 */
@@ -136,16 +184,16 @@
 </head>
 <body>
 
-    <!-- 1. 상단 타이틀 -->
+    <!-- 1. 상단 타이틀 (주말 축제 문화 승화 강조) -->
     <header>
-        <span class="badge">대한민국 시민 주권 프로젝트</span>
+        <span class="badge">🎉 주말 시민 문화 축제 프로젝트</span>
         <h1 class="main-title">국민의 약속</h1>
-        <p class="sub-title">공정한 정치를 위한 우리의 요구</p>
+        <p class="sub-title">길거리에서 펼치는 즐거운 민주주의 축제!</p>
     </header>
 
     <!-- 📊 2. 실시간 동참 시민 카운터 -->
     <section class="counter-container">
-        <div class="counter-label">현재 약속에 동참한 대한민국 시민</div>
+        <div class="counter-label">현재 축제에 동참한 대한민국 시민</div>
         <div class="counter-number"><span id="participantCount">1,248</span> 명</div>
     </section>
 
@@ -178,7 +226,7 @@
             <div class="form-group">
                 <input type="tel" id="userPhone" class="phone-input" placeholder="휴대전화 번호 (- 제외)" maxlength="11">
                 <button class="action-btn" onclick="submitParticipation()">
-                    주말 1시간 약속 동참하기 ➔
+                    주말 1시간 축제 동참하기 ➔
                 </button>
             </div>
         </div>
@@ -186,17 +234,17 @@
         <!-- (2) 로그인 완료 상태 화면 -->
         <div id="userInfo" style="display: none;">
             <div class="join-title">
-                ✅ 참여 동참 완료
+                ✅ 축제 동참 완료
                 <span>로그인 중</span>
             </div>
             <div class="user-info-box">
                 <div class="user-phone-text">📱 <span id="displayPhone"></span> 님</div>
-                <div class="user-status">국민의 약속에 성공적으로 동참하셨습니다.</div>
+                <div class="user-status">국민의 약속 주말 문화 축제에 동참하셨습니다.</div>
                 <button class="user-menu-btn" onclick="openModal('roadmapModal')">
                     🗺️ 모임 장소 & 알림 로드맵 보기
                 </button>
                 <button class="user-menu-btn" style="background-color:#0284c7;" onclick="openModal('rulesModal')">
-                    📱 현장 행동 웹 피켓 & 준칙
+                    📱 현장 웹 피켓 & 준칙 보기
                 </button>
                 <button class="logout-btn" onclick="logout()">
                     다른 번호로 변경 (로그아웃)
@@ -211,15 +259,15 @@
         <div class="chat-preview-desc">동참한 시민들과 실시간으로 의견을 나누는 소통 기능이 곧 연결될 예정입니다.</div>
     </div>
 
-    <!-- 📢 6. 실시간 공지사항 -->
+    <!-- 📢 6. 실시간 공지사항 (축제 문화 강조) -->
     <footer class="notice-container">
         <div class="notice-header">
-            📢 [실시간 국민의 약속 공지사항]
+            📢 [국민의 약속 주말 문화 축제 공지]
         </div>
         <ul class="notice-list">
-            <li><span>[매주 주말]</span> 각 지역 중심지 거점 모임 (13:00~14:00)</li>
-            <li><span>[월 1회]</span> 광화문 광장 / 여의도 광장 대규모 총결집</li>
-            <li><span>[안내]</span> 현장에서는 스마트폰 화면을 켜서 피켓으로 활용하세요!</li>
+            <li><span>[주말축제]</span> 매주 주말 길거리에서 즐기는 1시간의 민주주의 축제 (13:00~14:00)</li>
+            <li><span>[총결집]</span> 월 1회 광화문 광장 / 여의도 광장 대규모 축제 한마당</li>
+            <li><span>[안내]</span> 현장에서 웹 피켓을 전체 화면으로 켜고 축제를 즐겨보세요!</li>
         </ul>
     </footer>
 
@@ -227,25 +275,25 @@
     <div id="roadmapModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('roadmapModal')">&times;</button>
-            <div class="modal-title">📱 참여 안내 및 모임 장소</div>
+            <div class="modal-title">📱 축제 참여 안내 및 모임 장소</div>
             
             <div class="img-box">
                 <img id="roadmapImg" src="https://via.placeholder.com/380x180/0f172a/ffffff?text=Notification+Roadmap+Image" alt="알림 로드맵 이미지">
-                <div class="img-caption">▲ 동참 완료 후 휴대폰으로 발송되는 안내 로드맵</div>
+                <div class="img-caption">▲ 동참 완료 후 발송되는 축제 안내 로드맵</div>
             </div>
 
-            <p style="font-size: 0.85rem; color: #f1f5f9; font-weight: 700; margin-bottom: 6px;">📍 모임 장소 지도 바로가기</p>
+            <p style="font-size: 0.85rem; color: #f1f5f9; font-weight: 700; margin-bottom: 6px;">📍 축제 장소 지도 바로가기</p>
             <div class="map-btn-group">
                 <a href="https://map.kakao.com/link/search/광화문광장" target="_blank" class="map-btn monthly">
-                    🏛️ [월 1회 대규모 총결집] 광화문/여의도 광장
+                    🏛️ [월 1회 대규모 축제] 광화문/여의도 광장
                 </a>
                 <a href="https://map.kakao.com/link/search/전국거점광장" target="_blank" class="map-btn">
-                    🏙️ [매주 주말] 내 지역 중심지 거점 모임
+                    🏙️ [매주 주말 축제] 내 지역 중심지 거점 광장
                 </a>
             </div>
 
             <button onclick="closeModal('roadmapModal'); openModal('rulesModal');" style="width:100%; margin-top:15px; background-color:#2563eb; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;">
-                📱 현장 행동 웹 피켓 확인하기 ➔
+                📱 현장 웹 피켓 확인하기 ➔
             </button>
         </div>
     </div>
@@ -254,31 +302,31 @@
     <div id="rulesModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('rulesModal')">&times;</button>
-            <div class="modal-title">📱 현장 행동 웹 피켓 & 준칙</div>
+            <div class="modal-title">📱 현장 웹 피켓 & 행동 준칙</div>
             
-            <!-- 📱 [핵심] 스마트폰 안에 3대 핵심 구호가 가로로 꽉 차게 들어간 웹 피켓 디자인 -->
-            <div class="web-picket-box">
-                <div class="picket-guide-top">🚨 현장 필수 지참 웹 피켓 (스마트폰 가로 모드 권장)</div>
+            <!-- 📱 [클릭 시 전체 화면으로 열리는 웹 피켓 미리보기 박스] -->
+            <div class="web-picket-box" onclick="openFullscreenPicket()">
+                <div class="picket-guide-top">🔍 [터치하면 전체 화면 피켓으로 확대됩니다]</div>
                 <div class="picket-item">⚖️ 일하는 국회의원</div>
                 <div class="picket-item red">🚫 불체포 특권 폐지</div>
                 <div class="picket-item red">💥 국회의원 특권 폐지</div>
-                <div class="picket-guide-bottom">▲ 이 화면을 켜고 스마트폰을 들어 올려주세요!</div>
+                <div class="picket-guide-bottom">✨ 터치해서 풀스크린 피켓 켜기!</div>
             </div>
 
             <!-- 압축된 행동 준칙 수칙 -->
             <div class="rule-card">
-                <div class="rule-card-title">1. ⏰ 주말 딱 1시간 집중</div>
-                <div class="rule-card-desc">매주 주말 점심시간 1시간 동안 질서정연하게 뜻을 모읍니다.</div>
+                <div class="rule-card-title">1. 🎉 주말 축제 1시간 즐기기</div>
+                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 즐겁게 참여합니다.</div>
             </div>
 
             <div class="rule-card">
-                <div class="rule-card-title">2. 🕊️ 평화적 비폭력 연대</div>
-                <div class="rule-card-desc">성숙하고 평화로운 태도로 우리의 목소리를 확실하게 전달합니다.</div>
+                <div class="rule-card-title">2. 🕊️ 평화적 문화 연대</div>
+                <div class="rule-card-desc">성숙하고 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
             </div>
 
             <div class="rule-card">
-                <div class="rule-card-title">3. 🧹 클린 현장 및 자율 퇴장</div>
-                <div class="rule-card-desc">주변 정리를 깨끗이 마치고 안전하게 마무리합니다.</div>
+                <div class="rule-card-title">3. 🧹 클린 축제 현장 만들기</div>
+                <div class="rule-card-desc">주변을 깨끗이 정리하고 아름답게 마무리합니다.</div>
             </div>
 
             <button onclick="closeModal('rulesModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer;">
@@ -287,10 +335,20 @@
         </div>
     </div>
 
+    <!-- 🔍 9. [전체 화면 풀스크린 웹 피켓 뷰] -->
+    <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
+        <div class="fs-picket-container" onclick="event.stopPropagation();">
+            <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
+            <div class="fs-picket-btn">⚖️ 일하는 국회의원</div>
+            <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
+            <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
+            <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
+        </div>
+    </div>
+
     <script>
         const BASE_COUNT = 1248; // 기본 참여자 수 설정
 
-        // 페이지 로드 시 상태 확인
         window.onload = function() {
             checkLoginStatus();
         };
@@ -348,6 +406,15 @@
 
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
+        }
+
+        /* 풀스크린 웹 피켓 제어 함수 */
+        function openFullscreenPicket() {
+            document.getElementById('fullscreenPicket').style.display = 'flex';
+        }
+
+        function closeFullscreenPicket() {
+            document.getElementById('fullscreenPicket').style.display = 'none';
         }
     </script>
 
