@@ -22,33 +22,23 @@
 
         /* 중앙 핵심 구호 카드 영역 */
         .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
-        
         .slogan-card { 
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            border: 2px solid #3b82f6; 
-            border-radius: 12px; 
-            padding: 15px 10px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-            text-decoration: none; 
-            display: block; 
-            transition: transform 0.1s;
+            border: 2px solid #3b82f6; border-radius: 12px; padding: 15px 10px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s;
         }
         .slogan-card:active { transform: scale(0.98); }
         .slogan-card.highlight { border-color: #ef4444; background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
-
         .slogan-text { font-size: 1.2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
         .slogan-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
         .slogan-card.highlight .slogan-desc { color: #fca5a5; }
 
-        /* 🎮 대기실 및 축제 게임방 바로가기 버튼 */
+        /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 */
         .arcade-banner {
-            width: 100%; max-width: 380px;
-            background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
-            border: 2px solid #a78bfa; border-radius: 16px;
-            padding: 16px; margin: 10px 0;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
-            cursor: pointer; transition: transform 0.1s;
+            width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+            border: 2px solid #a78bfa; border-radius: 16px; padding: 16px; margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); cursor: pointer; transition: transform 0.1s;
         }
         .arcade-banner:active { transform: scale(0.98); }
         .arcade-title { font-size: 1.1rem; font-weight: 900; color: #fef08a; margin-bottom: 4px; }
@@ -58,11 +48,9 @@
         .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
         .join-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .join-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-        
         .form-group { display: flex; flex-direction: column; gap: 8px; }
         .phone-input { width: 100%; padding: 12px 14px; font-size: 1rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; color: #ffffff; outline: none; }
         .phone-input:focus { border-color: #3b82f6; }
-        
         .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1.05rem; font-weight: 800; padding: 13px; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
         .action-btn:active { transform: scale(0.98); }
 
@@ -114,7 +102,7 @@
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
 
-        /* 🔍 [전체 화면 풀스크린 웹 피켓 뷰] */
+        /* 🔍 풀스크린 웹 피켓 뷰 */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
@@ -125,7 +113,7 @@
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .fs-close-btn { margin-top: 25px; background-color: #334155; color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
 
-        /* 🕹️ 전체 화면 미니 게임방 모달 */
+        /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: flex-start; align-items: center; padding: 15px; overflow-y: auto; text-align: center;
@@ -140,7 +128,7 @@
         .game-panel.active { display: block; }
         .game-sub-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; }
 
-        /* 🧩 [개선] 틈새 없이 딱 붙은 3x3 퍼즐 보드 디자인 */
+        /* 🧩 3x3 퍼즐 보드 디자인 */
         .puzzle-board-container {
             width: 300px; height: 300px; margin: 0 auto 12px auto;
             display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px);
@@ -155,7 +143,7 @@
         }
         .puzzle-tile.empty { background: #0f172a !important; border: 1px dashed #334155; }
 
-        /* 💎 [개선] 3개 연속 맞추기 퍼즐 디자인 */
+        /* 💎 3개 연속 맞추기 퍼즐 디자인 */
         .match-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
         .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 8px; height: 65px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; cursor: pointer; transition: all 0.2s; }
         .match-tile.selected { border-color: #fef08a; background-color: #475569; transform: scale(0.92); }
@@ -167,7 +155,7 @@
             100% { transform: scale(1); }
         }
 
-        .game-btn { background-color: #2563eb; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; margin: 3px; }
+        .game-btn { background-color: #2563eb; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; margin: 3px; display: inline-flex; align-items: center; justify-content: center; }
         .game-btn.secondary { background-color: #475569; }
 
         /* 간소화된 행동 준칙 카드 */
@@ -363,10 +351,12 @@
             <div style="display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;">
                 <button class="game-btn" onclick="shufflePuzzle()">🔀 퍼즐 섞기</button>
                 <button class="game-btn secondary" onmousedown="showOriginal(true)" onmouseup="showOriginal(false)" ontouchstart="showOriginal(true)" ontouchend="showOriginal(false)">👀 본 그림 보기</button>
-                <label class="game-btn" style="background-color:#7c3aed; display:inline-block; margin:3px;">
-                    📁 내 사진으로 퍼즐 만들기
-                    <input type="file" id="imageUploader" accept="image/*" style="display:none;" onchange="loadCustomImage(event)">
-                </label>
+                
+                <!-- 📁 [수정] 파일 클릭 이벤트가 확실히 전달되는 파일 업로드 레이블 -->
+                <button class="game-btn" style="background-color:#7c3aed;" onclick="document.getElementById('imageUploader').click();">
+                    📁 내 사진 선택하기
+                </button>
+                <input type="file" id="imageUploader" accept="image/*" style="display:none;" onchange="loadCustomImage(this)">
             </div>
             <p id="puzzleMsg" style="font-size: 0.8rem; color: #38bdf8; margin-top: 8px;"></p>
         </div>
@@ -442,10 +432,10 @@
         }
 
         /* -------------------------------------------------------------
-         * 🧩 [게임 1] 내 사진으로 즐기는 밀착형 퍼즐 맞추기 로직
+         * 🧩 [게임 1] 내 사진 첨부 & 밀착형 퍼즐 맞추기 로직
          * ------------------------------------------------------------- */
-        let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8]; // 8번이 빈칸
-        let currentImgUrl = 'https://picsum.photos/300/300'; // 기본 이미지
+        let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+        let currentImgUrl = 'https://picsum.photos/300/300'; // 기본 sample 이미지
 
         function initPuzzleGame() {
             renderPuzzle();
@@ -462,7 +452,6 @@
                 } else {
                     tile.className = 'puzzle-tile';
                     tile.style.backgroundImage = `url('${currentImgUrl}')`;
-                    // 원본 이미지에서 각 위치에 맞는 보정 위치 설정
                     let row = Math.floor(posVal / 3);
                     let col = posVal % 3;
                     tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
@@ -477,7 +466,6 @@
             let row = Math.floor(idx / 3), col = idx % 3;
             let emptyRow = Math.floor(emptyIdx / 3), emptyCol = emptyIdx % 3;
 
-            // 상하좌우 인접 판단
             if ((Math.abs(row - emptyRow) === 1 && col === emptyCol) || (Math.abs(col - emptyCol) === 1 && row === emptyRow)) {
                 let temp = puzzleState[emptyIdx];
                 puzzleState[emptyIdx] = puzzleState[idx];
@@ -489,7 +477,7 @@
 
         function shufflePuzzle() {
             puzzleState.sort(() => Math.random() - 0.5);
-            document.getElementById('puzzleMsg').innerText = '퍼즐이 마구 섞였습니다! 제자리를 찾아 맞춰보세요.';
+            document.getElementById('puzzleMsg').innerText = '퍼즐이 마구 섞렸습니다! 제자리를 찾아 맞춰보세요.';
             renderPuzzle();
         }
 
@@ -512,16 +500,19 @@
             }
         }
 
-        function loadCustomImage(e) {
-            const file = e.target.files[0];
-            if (file) {
+        /* 📁 [수정] 파일 첨부 시 내 사진을 퍼즐 이미지로 즉시 바꾸는 함수 */
+        function loadCustomImage(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
                 const reader = new FileReader();
+                
                 reader.onload = function(evt) {
                     currentImgUrl = evt.target.result;
                     puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
                     shufflePuzzle();
                     document.getElementById('puzzleMsg').innerText = '📸 내 사진이 등록되었습니다! 즐겁게 맞춰보세요!';
                 };
+                
                 reader.readAsDataURL(file);
             }
         }
@@ -549,7 +540,7 @@
                 matchBoardData.push(matchIcons[Math.floor(Math.random() * matchIcons.length)]);
             }
             renderMatchBoard();
-            checkAndClearMatches(); // 초기 실행 시 연쇄 제거 체크
+            checkAndClearMatches();
         }
 
         function renderMatchBoard() {
@@ -569,7 +560,6 @@
                 firstSelected = idx;
                 tile.classList.add('selected');
             } else {
-                // 두 타일 교환
                 let prevIdx = firstSelected;
                 firstSelected = null;
 
@@ -579,10 +569,8 @@
 
                 renderMatchBoard();
 
-                // 3개 연속 매칭 검사
                 let matched = checkAndClearMatches();
                 if (!matched) {
-                    // 매칭 실패 시 원래 위치로 되돌림
                     setTimeout(() => {
                         let temp2 = matchBoardData[prevIdx];
                         matchBoardData[prevIdx] = matchBoardData[idx];
@@ -593,11 +581,10 @@
             }
         }
 
-        /* 가로/세로 3개 이상 연속된 그림 찾아서 터뜨리고 새 그림으로 교체하는 핵심 함수 */
         function checkAndClearMatches() {
             let toRemove = new Set();
 
-            // 1. 가로 3개 체크 (4x4 기준)
+            // 가로 3개 체크
             for (let r = 0; r < 4; r++) {
                 for (let c = 0; c < 2; c++) {
                     let idx = r * 4 + c;
@@ -607,7 +594,7 @@
                 }
             }
 
-            // 2. 세로 3개 체크
+            // 세로 3개 체크
             for (let c = 0; c < 4; c++) {
                 for (let r = 0; r < 2; r++) {
                     let idx = r * 4 + c;
@@ -617,7 +604,6 @@
                 }
             }
 
-            // 3개 이상 맞춰진 그림이 있다면 터뜨리고 새로운 무작위 그림으로 교체!
             if (toRemove.size > 0) {
                 comboScore += 1;
                 document.getElementById('matchScore').innerText = `터뜨린 콤보: ${comboScore} 회`;
@@ -625,14 +611,12 @@
                 const tiles = document.querySelectorAll('.match-tile');
                 toRemove.forEach(i => {
                     if (tiles[i]) tiles[i].classList.add('matched');
-                    // 새 그림으로 전격 교체!
                     matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)];
                 });
 
-                // 0.3초 후 새 그림이 적용된 보드 재선파
                 setTimeout(() => {
                     renderMatchBoard();
-                    checkAndClearMatches(); // 연속 콤보 자동 실행
+                    checkAndClearMatches();
                 }, 400);
 
                 return true;
