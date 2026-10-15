@@ -102,7 +102,7 @@
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
 
-        /* 🔍 풀스크린 웹 피켓 뷰 (유튜브 실제 음악 연결 버튼 포함) */
+        /* 🔍 풀스크린 웹 피켓 뷰 (오 필승 코리아 축제 음원 연결) */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
@@ -116,10 +116,9 @@
         .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.5rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         
-        /* 🎵 진짜 유튜브 음악 연결 버튼 스타일 */
-        .music-link-btn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; border: 2px solid #fca5a5; padding: 14px; border-radius: 12px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
-        .music-link-btn:active { transform: scale(0.98); }
-
+        /* 🎵 오 필승 코리아 응원가 버튼 */
+        .music-toggle-btn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; border: 2px solid #fca5a5; padding: 12px; border-radius: 12px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        
         .fs-close-btn { background-color: #334155; color: #ffffff; border: none; padding: 12px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
 
         /* 🕹️ 미니 게임방 모달 */
@@ -198,7 +197,7 @@
         <div class="counter-number"><span id="participantCount">1,248</span> 명</div>
     </section>
 
-    <!-- 🎮 3. 시민 대기실 & 축제 게임방 바로가기 배너 -->
+    <!-- 🎮 3. 시민 대기실 & 축제 게임방 입장 배너 -->
     <div class="arcade-banner" onclick="openArcadeModal()">
         <div class="arcade-title">🕹️ 시민 축제 미니 게임방 입장하기</div>
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
@@ -336,7 +335,7 @@
         </div>
     </div>
 
-    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 - '오 필승 코리아' 유튜브 진짜 음악 연결] -->
+    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 - '오 필승 코리아' 축제 음악 지원] -->
     <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
         <div class="fs-picket-container" onclick="event.stopPropagation();">
             <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
@@ -350,10 +349,10 @@
             <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
             <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
 
-            <!-- 🎵 유튜브 '오 필승 코리아' 공식/흥겨운 음원 바로가기 버튼 -->
-            <a href="https://www.youtube.com/results?search_query=오+필승+코리아" target="_blank" class="music-link-btn">
-                🔥 유튜브에서 진짜 '오 필승 코리아' 음악 틀기 🎵
-            </a>
+            <!-- 🎵 '오 필승 코리아' 신나는 축제 음악 버튼 -->
+            <button class="music-toggle-btn" id="musicBtn" onclick="toggleFestMusic()">
+                🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)
+            </button>
 
             <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
         </div>
@@ -412,6 +411,8 @@
 
     <script>
         const BASE_COUNT = 1248;
+        let isMusicPlaying = false;
+        let musicTimeout = null;
 
         window.onload = function() {
             checkLoginStatus();
@@ -464,6 +465,7 @@
         
         function closeFullscreenPicket() { 
             document.getElementById('fullscreenPicket').style.display = 'none'; 
+            stopFestMusic();
         }
 
         function openArcadeModal() { document.getElementById('arcadeModal').style.display = 'flex'; }
@@ -474,6 +476,112 @@
             document.getElementById('tab2').classList.toggle('active', num === 2);
             document.getElementById('panel1').classList.toggle('active', num === 1);
             document.getElementById('panel2').classList.toggle('active', num === 2);
+        }
+
+        /* -------------------------------------------------------------
+         * 🎵 '오 필승 코리아' 축제 신나는 멜로디 & 리듬 루프 엔진
+         * ------------------------------------------------------------- */
+        function toggleFestMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (!isMusicPlaying) {
+                isMusicPlaying = true;
+                btn.innerText = "🎶 '오 필승 코리아' 축제 음악 재생 중! (ON)";
+                btn.style.background = "linear-gradient(135deg, #22c55e 0%, #15803d 100%)";
+                btn.style.borderColor = "#86efac";
+                playKoreaAnthemLoop();
+            } else {
+                stopFestMusic();
+            }
+        }
+
+        function playKoreaAnthemLoop() {
+            if (!isMusicPlaying) return;
+            
+            if (!window.audioCtx) {
+                window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (window.audioCtx.state === 'suspended') {
+                window.audioCtx.resume();
+            }
+
+            // '오~ 필승 코리아!' 음계 구성 (Hz)
+            // 오(미) ~ (솔) 필(라)승(라) 코(솔)리(라)아(솔) ~ !
+            const melody = [
+                { f: 329.63, d: 0.4 }, // 오~ (E4)
+                { f: 392.00, d: 0.2 }, // 솔 (G4)
+                { f: 440.00, d: 0.4 }, // 필~ (A4)
+                { f: 440.00, d: 0.3 }, // 승! (A4)
+                { f: 392.00, d: 0.25 }, // 코 (G4)
+                { f: 440.00, d: 0.25 }, // 리 (A4)
+                { f: 392.00, d: 0.5 }, // 아~ (G4)
+                { f: 0,      d: 0.2 }, // (쉬움)
+                
+                // 오~ 필승 코리아! (고음 클라이맥스)
+                { f: 440.00, d: 0.35 }, // 오~
+                { f: 523.25, d: 0.2 },  // 필
+                { f: 587.33, d: 0.4 },  // 승~
+                { f: 587.33, d: 0.3 },  // 코!
+                { f: 523.25, d: 0.25 }, // 리
+                { f: 587.33, d: 0.25 }, // 아
+                { f: 523.25, d: 0.6 },  // ~~~
+                { f: 0,      d: 0.3 }
+            ];
+
+            let currentTime = window.audioCtx.currentTime;
+
+            melody.forEach((note) => {
+                if (!isMusicPlaying) return;
+                
+                if (note.f > 0) {
+                    // 메인 멜로디 오실레이터
+                    let osc = window.audioCtx.createOscillator();
+                    let gain = window.audioCtx.createGain();
+                    
+                    osc.type = 'sawtooth'; // 웅장한 트럼펫/치어리딩 음색
+                    osc.frequency.setValueAtTime(note.f, currentTime);
+                    
+                    gain.gain.setValueAtTime(0.12, currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d);
+                    
+                    osc.connect(gain);
+                    gain.connect(window.audioCtx.destination);
+                    
+                    osc.start(currentTime);
+                    osc.stop(currentTime + note.d);
+
+                    // 신나는 킥 베이스 비트 동시 추가
+                    let bassOsc = window.audioCtx.createOscillator();
+                    let bassGain = window.audioCtx.createGain();
+                    bassOsc.type = 'sine';
+                    bassOsc.frequency.setValueAtTime(120, currentTime);
+                    bassOsc.frequency.exponentialRampToValueAtTime(30, currentTime + 0.15);
+                    bassGain.gain.setValueAtTime(0.2, currentTime);
+                    bassGain.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.15);
+                    bassOsc.connect(bassGain);
+                    bassGain.connect(window.audioCtx.destination);
+                    bassOsc.start(currentTime);
+                    bassOsc.stop(currentTime + 0.15);
+                }
+                currentTime += note.d;
+            });
+
+            // 곡이 끝나면 자동으로 반복
+            const totalDuration = melody.reduce((sum, n) => sum + n.d, 0) * 1000;
+            musicTimeout = setTimeout(() => {
+                if (isMusicPlaying) playKoreaAnthemLoop();
+            }, totalDuration);
+        }
+
+        function stopFestMusic() {
+            isMusicPlaying = false;
+            if (musicTimeout) clearTimeout(musicTimeout);
+            
+            const btn = document.getElementById('musicBtn');
+            if (btn) {
+                btn.innerText = "🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)";
+                btn.style.background = "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)";
+                btn.style.borderColor = "#fca5a5";
+            }
         }
 
         /* -------------------------------------------------------------
@@ -585,4 +693,94 @@
             document.getElementById('matchScore').innerText = `터뜨린 콤보: 0 회`;
             matchBoardData = [];
             for (let i = 0; i < COLS * ROWS; i++) {
-                matchBoardData.push(match
+                matchBoardData.push(matchIcons[Math.floor(Math.random() * matchIcons.length)]);
+            }
+            renderMatchBoard();
+            checkAndClearMatches();
+        }
+
+        function renderMatchBoard() {
+            const board = document.getElementById('matchBoard');
+            board.innerHTML = '';
+            matchBoardData.forEach((icon, idx) => {
+                const tile = document.createElement('div');
+                tile.className = 'match-tile' + (firstSelected === idx ? ' selected' : '');
+                tile.innerText = icon;
+                tile.onclick = () => handleTileClick(idx);
+                board.appendChild(tile);
+            });
+        }
+
+        function handleTileClick(idx) {
+            if (firstSelected === null) {
+                firstSelected = idx;
+                renderMatchBoard();
+            } else if (firstSelected === idx) {
+                firstSelected = null;
+                renderMatchBoard();
+            } else {
+                let prevIdx = firstSelected;
+                firstSelected = null;
+
+                let temp = matchBoardData[prevIdx];
+                matchBoardData[prevIdx] = matchBoardData[idx];
+                matchBoardData[idx] = temp;
+
+                renderMatchBoard();
+
+                let matched = checkAndClearMatches();
+                if (!matched) {
+                    setTimeout(() => {
+                        let temp2 = matchBoardData[prevIdx];
+                        matchBoardData[prevIdx] = matchBoardData[idx];
+                        matchBoardData[idx] = temp2;
+                        renderMatchBoard();
+                    }, 250);
+                }
+            }
+        }
+
+        function checkAndClearMatches() {
+            let toRemove = new Set();
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS - 2; c++) {
+                    let idx = r * COLS + c;
+                    if (matchBoardData[idx] === matchBoardData[idx + 1] && matchBoardData[idx] === matchBoardData[idx + 2]) {
+                        toRemove.add(idx); toRemove.add(idx + 1); toRemove.add(idx + 2);
+                    }
+                }
+            }
+
+            for (let c = 0; c < COLS; c++) {
+                for (let r = 0; r < ROWS - 2; r++) {
+                    let idx = r * COLS + c;
+                    if (matchBoardData[idx] === matchBoardData[idx + COLS] && matchBoardData[idx] === matchBoardData[idx + COLS * 2]) {
+                        toRemove.add(idx); toRemove.add(idx + COLS); toRemove.add(idx + COLS * 2);
+                    }
+                }
+            }
+
+            if (toRemove.size > 0) {
+                comboScore += 1;
+                document.getElementById('matchScore').innerText = `터뜨린 콤보: ${comboScore} 회`;
+
+                const tiles = document.querySelectorAll('.match-tile');
+                toRemove.forEach(i => {
+                    if (tiles[i]) tiles[i].classList.add('matched');
+                    matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)];
+                });
+
+                setTimeout(() => {
+                    renderMatchBoard();
+                    checkAndClearMatches();
+                }, 350);
+
+                return true;
+            }
+            return false;
+        }
+    </script>
+
+</body>
+</html>
