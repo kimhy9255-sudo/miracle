@@ -102,16 +102,19 @@
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
 
-        /* 🔍 풀스크린 웹 피켓 뷰 */
+        /* 🔍 풀스크린 웹 피켓 뷰 (음악 및 파티 체크인 기능 추가) */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
         }
-        .fs-picket-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 16px; }
-        .fs-picket-title { font-size: 1.4rem; font-weight: 900; color: #fef08a; margin-bottom: 5px; }
-        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 24px 10px; font-size: 1.6rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .fs-picket-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 14px; }
+        .fs-picket-title { font-size: 1.3rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
+        .fs-party-status { font-size: 0.85rem; color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 6px; border-radius: 8px; }
+        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.5rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
-        .fs-close-btn { margin-top: 25px; background-color: #334155; color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
+        
+        .music-toggle-btn { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: #fff; border: 2px solid #a78bfa; padding: 12px; border-radius: 12px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(124,58,237,0.4); }
+        .fs-close-btn { background-color: #334155; color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
 
         /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
@@ -153,7 +156,7 @@
             border: 3px solid #fef08a; border-radius: 12px; margin-bottom: 15px;
         }
 
-        /* 💎 [수정] 5x6 (가로5 x 세로6) 연쇄 팡팡 맞추기 퍼즐 보드 */
+        /* 💎 5x5 연쇄 팡팡 맞추기 퍼즐 보드 */
         .match-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 12px; }
         .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 6px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.2s; }
         .match-tile.selected { border-color: #fef08a; background-color: #475569; transform: scale(0.92); }
@@ -263,7 +266,7 @@
         <ul class="notice-list">
             <li><span>[주말축제]</span> 매주 주말 길거리에서 즐기는 1시간의 민주주의 축제 (13:00~14:00)</li>
             <li><span>[총결집]</span> 월 1회 광화문 광장 / 여의도 광장 대규모 축제 한마당</li>
-            <li><span>[안내]</span> 현장에서 웹 피켓을 켜고, 지루할 땐 게임방도 즐겨보세요!</li>
+            <li><span>[안내]</span> 평일엔 게임으로 연습하고, 주말엔 집 앞에서 음악 틀고 파티를 즐겨보세요!</li>
         </ul>
     </footer>
 
@@ -309,12 +312,12 @@
             </div>
 
             <div class="rule-card">
-                <div class="rule-card-title">1. 🎉 주말 축제 1시간 즐기기</div>
-                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 즐겁게 참여합니다.</div>
+                <div class="rule-card-title">1. 🎉 주말 파티 1시간 즐기기</div>
+                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 음악과 함께 즐겁게 참여합니다.</div>
             </div>
             <div class="rule-card">
                 <div class="rule-card-title">2. 🕊️ 평화적 문화 연대</div>
-                <div class="rule-card-desc">성숙하고 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
+                <div class="rule-card-desc">서로 눈인사를 나누며 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
             </div>
             <div class="rule-card">
                 <div class="rule-card-title">3. 🧹 클린 축제 현장 만들기</div>
@@ -327,13 +330,21 @@
         </div>
     </div>
 
-    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰] -->
+    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 (음악 + 실시간 체크인 포함)] -->
     <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
         <div class="fs-picket-container" onclick="event.stopPropagation();">
             <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
+            <div class="fs-party-status">📍 지금 전국 도로에서 함께 손 흔드는 파티 중!</div>
+            
             <div class="fs-picket-btn">⚖️ 일하는 국회의원</div>
             <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
             <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
+            
+            <!-- 🎵 신나는 축제 음악 토글 버튼 -->
+            <button class="music-toggle-btn" id="musicBtn" onclick="toggleFestMusic()">
+                🎵 신나는 축제 음악 켜기 (OFF)
+            </button>
+
             <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
         </div>
     </div>
@@ -389,8 +400,11 @@
         <button class="fs-close-btn" style="margin-top:15px; width:100%; max-width:420px;" onclick="closeArcadeModal()">게임방 나가기</button>
     </div>
 
+    <!-- 🎵 브라우저 내장 음향 효과를 위한 오디오 합성용 스크립트 (가상 비트 생성) -->
     <script>
         const BASE_COUNT = 1248;
+        let isMusicPlaying = false;
+        let musicInterval = null;
 
         window.onload = function() {
             checkLoginStatus();
@@ -434,8 +448,15 @@
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'flex'; }
-        function closeFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'none'; }
+        
+        function openFullscreenPicket() { 
+            document.getElementById('fullscreenPicket').style.display = 'flex'; 
+        }
+        function closeFullscreenPicket() { 
+            document.getElementById('fullscreenPicket').style.display = 'none'; 
+            stopFestMusic();
+        }
+
         function openArcadeModal() { document.getElementById('arcadeModal').style.display = 'flex'; }
         function closeArcadeModal() { document.getElementById('arcadeModal').style.display = 'none'; }
 
@@ -444,6 +465,66 @@
             document.getElementById('tab2').classList.toggle('active', num === 2);
             document.getElementById('panel1').classList.toggle('active', num === 1);
             document.getElementById('panel2').classList.toggle('active', num === 2);
+        }
+
+        /* 🎵 축제 음악 토글 및 가상 비트 재생 함수 (웹 오디오 API 활용) */
+        function toggleFestMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (!isMusicPlaying) {
+                startFestMusic();
+                isMusicPlaying = true;
+                btn.innerText = "🎶 신나는 축제 음악 재생 중! (ON)";
+                btn.style.background = "linear-gradient(135deg, #22c55e 0%, #15803d 100%)";
+                btn.style.borderColor = "#86efac";
+            } else {
+                stopFestMusic();
+                isMusicPlaying = false;
+                btn.innerText = "🎵 신나는 축제 음악 켜기 (OFF)";
+                btn.style.background = "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)";
+                btn.style.borderColor = "#a78bfa";
+            }
+        }
+
+        function startFestMusic() {
+            if (window.audioCtx) return;
+            window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [261.63, 329.63, 392.00, 523.25, 587.33]; // 도, 미, 솔, 고음도, 고음레
+            let noteIdx = 0;
+            
+            musicInterval = setInterval(() => {
+                if (!window.audioCtx) return;
+                try {
+                    let osc = window.audioCtx.createOscillator();
+                    let gain = window.audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(notes[noteIdx % notes.length], window.audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, window.audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, window.audioCtx.currentTime + 0.3);
+                    osc.connect(gain);
+                    gain.connect(window.audioCtx.destination);
+                    osc.start();
+                    osc.stop(window.audioCtx.currentTime + 0.3);
+                    noteIdx++;
+                } catch(e) {}
+            }, 250); // 신나는 템포의 비트
+        }
+
+        function stopFestMusic() {
+            if (musicInterval) {
+                clearInterval(musicInterval);
+                musicInterval = null;
+            }
+            if (window.audioCtx) {
+                window.audioCtx.close();
+                window.audioCtx = null;
+            }
+            isMusicPlaying = false;
+            const btn = document.getElementById('musicBtn');
+            if (btn) {
+                btn.innerText = "🎵 신나는 축제 음악 켜기 (OFF)";
+                btn.style.background = "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)";
+                btn.style.borderColor = "#a78bfa";
+            }
         }
 
         /* -------------------------------------------------------------
@@ -534,7 +615,6 @@
         function checkPuzzleWin() {
             let isWin = puzzleState.every((val, index) => val === index);
             if (isWin) {
-                // 🎉 퍼즐 완성 시 하단에 눈에 띄게 나타나는 축하 메시지
                 const msgEl = document.getElementById('puzzleMsg');
                 msgEl.style.color = '#22c55e';
                 msgEl.innerHTML = '🎉 축하합니다! 퍼즐을 완벽히 맞추셨습니다!';
@@ -542,7 +622,7 @@
         }
 
         /* -------------------------------------------------------------
-         * 💎 [게임 2] 난이도가 수월하고 콤보가 잘 터지는 연속 팡팡 폭발 퍼즐 (5x6 확장, 5종 아이콘)
+         * 💎 [게임 2] 연속 팡팡 폭발 퍼즐 (5x6 확장, 5종 아이콘)
          * ------------------------------------------------------------- */
         let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
         let matchBoardData = [];
