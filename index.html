@@ -128,7 +128,7 @@
         .game-panel.active { display: block; }
         .game-sub-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; }
 
-        /* 🧩 3x3 퍼즐 보드 디자인 (검은 빈칸 제거 및 전체 사진 꽉 채우기) */
+        /* 🧩 3x3 퍼즐 보드 디자인 */
         .puzzle-board-container {
             width: 300px; height: 300px; margin: 0 auto 12px auto;
             display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px);
@@ -136,13 +136,13 @@
             background-color: #0f172a; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative;
         }
         .puzzle-tile {
-            width: 100px; height: 100px; border: 1px solid rgba(255,255,255,0.2);
+            width: 100px; height: 100px; border: 1px solid rgba(255,255,255,0.3);
             box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: center;
             font-size: 1.2rem; font-weight: 900; text-shadow: 0 0 4px #000;
-            background-size: 300px 300px; transition: transform 0.1s;
+            background-size: 300px 300px; transition: all 0.2s;
         }
-        /* 빈칸을 검은색 대신 투명 또는 동일한 사진 조각으로 처리하여 검은 칸 완전 제거 */
-        .puzzle-tile.empty { border: 1px dashed #38bdf8; opacity: 0.4; }
+        /* 선택된 조각 강조 표시 */
+        .puzzle-tile.selected { border: 3px solid #fef08a !important; transform: scale(0.95); z-index: 10; }
 
         /* 👀 본 그림 보기 모달(팝업) */
         #originalModal {
@@ -361,7 +361,7 @@
 
         <!-- [게임 1] 내 사진 그림 퍼즐 맞추기 -->
         <div class="game-panel active" id="panel1">
-            <div class="game-sub-title">조각을 자유롭게 터치하여 빈칸과 자리를 바꿔 그림을 완성하세요!</div>
+            <div class="game-sub-title">조각 2개를 순서대로 클릭하면 대각선, 상하좌우 자유롭게 위치가 교환됩니다!</div>
             
             <div class="puzzle-board-container" id="puzzleBoard"></div>
 
@@ -447,10 +447,11 @@
         }
 
         /* -------------------------------------------------------------
-         * 🧩 [게임 1] 내 사진 퍼즐 맞추기 로직 (검은 칸 제거 및 부드러운 이동)
+         * 🧩 [게임 1] 내 사진 퍼즐 맞추기 로직 (대각선, 상하좌우 완전 자유 교환)
          * ------------------------------------------------------------- */
         let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
         let currentImgUrl = 'https://picsum.photos/300/300';
+        let selectedPuzzleIndex = null; // 선택한 퍼즐 조각의 인덱스 보관
 
         function initPuzzleGame() {
             renderPuzzle();
@@ -462,49 +463,43 @@
 
             puzzleState.forEach((posVal, currentIdx) => {
                 const tile = document.createElement('div');
-                tile.className = 'puzzle-tile' + (posVal === 8 ? ' empty' : '');
+                tile.className = 'puzzle-tile' + (selectedPuzzleIndex === currentIdx ? ' selected' : '');
                 tile.style.backgroundImage = `url('${currentImgUrl}')`;
                 let row = Math.floor(posVal / 3);
                 let col = posVal % 3;
                 tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
                 
-                tile.onclick = () => moveTile(currentIdx);
+                tile.onclick = () => selectAndSwapTile(currentIdx);
                 board.appendChild(tile);
             });
         }
 
-        function moveTile(idx) {
-            let emptyIdx = puzzleState.indexOf(8);
-            let row = Math.floor(idx / 3), col = idx % 3;
-            let emptyRow = Math.floor(emptyIdx / 3), emptyCol = emptyIdx % 3;
-
-            // 상하좌우 인접한 칸일 때만 빈칸과 자리 교환 (부드러운 이동)
-            if ((Math.abs(row - emptyRow) === 1 && col === emptyCol) || (Math.abs(col - emptyCol) === 1 && row === emptyRow)) {
-                let temp = puzzleState[emptyIdx];
-                puzzleState[emptyIdx] = puzzleState[idx];
+        /* 클릭한 두 조각의 위치를 대각선/상하좌우 구분 없이 무조건 자유 교환하는 핵심 함수 */
+        function selectAndSwapTile(idx) {
+            if (selectedPuzzleIndex === null) {
+                // 첫 번째 조각 선택
+                selectedPuzzleIndex = idx;
+                renderPuzzle();
+            } else if (selectedPuzzleIndex === idx) {
+                // 동일한 조각을 다시 누르면 선택 해제
+                selectedPuzzleIndex = null;
+                renderPuzzle();
+            } else {
+                // 두 번째 조각 선택 시 대각선/상하좌우 상관없이 위치 즉시 교환!
+                let temp = puzzleState[selectedPuzzleIndex];
+                puzzleState[selectedPuzzleIndex] = puzzleState[idx];
                 puzzleState[idx] = temp;
+
+                selectedPuzzleIndex = null; // 선택 초기화
                 renderPuzzle();
                 checkPuzzleWin();
             }
         }
 
         function shufflePuzzle() {
-            // 풀 수 있는 상태로 무작위 섞기 수행
-            for (let i = 0; i < 100; i++) {
-                let emptyIdx = puzzleState.indexOf(8);
-                let validMoves = [];
-                let r = Math.floor(emptyIdx / 3), c = emptyIdx % 3;
-                if (r > 0) validMoves.push(emptyIdx - 3);
-                if (r < 2) validMoves.push(emptyIdx + 3);
-                if (c > 0) validMoves.push(emptyIdx - 1);
-                if (c < 2) validMoves.push(emptyIdx + 1);
-                
-                let targetIdx = validMoves[Math.floor(Math.random() * validMoves.length)];
-                let temp = puzzleState[emptyIdx];
-                puzzleState[emptyIdx] = puzzleState[targetIdx];
-                puzzleState[targetIdx] = temp;
-            }
-            document.getElementById('puzzleMsg').innerText = '퍼즐이 섞였습니다! 슬라이드하여 맞춰보세요.';
+            puzzleState.sort(() => Math.random() - 0.5);
+            selectedPuzzleIndex = null;
+            document.getElementById('puzzleMsg').innerText = '퍼즐이 마구 섞였습니다! 조각 2개를 눌러 위치를 맞춰보세요.';
             renderPuzzle();
         }
 
@@ -524,7 +519,6 @@
                 reader.onload = function(evt) {
                     const img = new Image();
                     img.onload = function() {
-                        // 업로드한 이미지를 300x300 캔버스에 꽉 채우도록 리사이징 처리
                         const canvas = document.createElement('canvas');
                         canvas.width = 300; canvas.height = 300;
                         const ctx = canvas.getContext('2d');
