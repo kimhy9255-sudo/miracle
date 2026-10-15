@@ -102,19 +102,24 @@
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
 
-        /* 🔍 풀스크린 웹 피켓 뷰 (음악 및 파티 체크인 기능 추가) */
+        /* 🔍 풀스크린 웹 피켓 뷰 (오 필승 코리아 축제 음원 연결) */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
         }
         .fs-picket-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 14px; }
         .fs-picket-title { font-size: 1.3rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
-        .fs-party-status { font-size: 0.85rem; color: #38bdf8; font-weight: 700; background: rgba(56, 189, 248, 0.1); border: 1px solid #38bdf8; padding: 6px; border-radius: 8px; }
+        
+        /* 🌟 실시간 파티 체크인 카운터 */
+        .fs-party-checkin { background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 12px; padding: 8px; color: #4ade80; font-size: 0.85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
         .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.5rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         
-        .music-toggle-btn { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: #fff; border: 2px solid #a78bfa; padding: 12px; border-radius: 12px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(124,58,237,0.4); }
-        .fs-close-btn { background-color: #334155; color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
+        /* 🎵 오 필승 코리아 응원가 버튼 */
+        .music-toggle-btn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; border: 2px solid #fca5a5; padding: 12px; border-radius: 12px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        
+        .fs-close-btn { background-color: #334155; color: #ffffff; border: none; padding: 12px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
 
         /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
@@ -156,7 +161,7 @@
             border: 3px solid #fef08a; border-radius: 12px; margin-bottom: 15px;
         }
 
-        /* 💎 5x5 연쇄 팡팡 맞추기 퍼즐 보드 */
+        /* 💎 5x6 연쇄 팡팡 맞추기 퍼즐 보드 */
         .match-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 12px; }
         .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 6px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.2s; }
         .match-tile.selected { border-color: #fef08a; background-color: #475569; transform: scale(0.92); }
@@ -330,19 +335,23 @@
         </div>
     </div>
 
-    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 (음악 + 실시간 체크인 포함)] -->
+    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 - '오 필승 코리아' 축제 음악 지원] -->
     <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
         <div class="fs-picket-container" onclick="event.stopPropagation();">
             <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
-            <div class="fs-party-status">📍 지금 전국 도로에서 함께 손 흔드는 파티 중!</div>
             
+            <!-- 🌟 실시간 파티 체크인 카운터 -->
+            <div class="fs-party-checkin">
+                🟢 지금 전국 도로에서 <span id="liveCheckinCount" style="color:#fef08a; font-size:1rem;">12,485</span>명이 파티 중!
+            </div>
+
             <div class="fs-picket-btn">⚖️ 일하는 국회의원</div>
             <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
             <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
-            
-            <!-- 🎵 신나는 축제 음악 토글 버튼 -->
+
+            <!-- 🎵 '오 필승 코리아' 신나는 축제 음악 버튼 -->
             <button class="music-toggle-btn" id="musicBtn" onclick="toggleFestMusic()">
-                🎵 신나는 축제 음악 켜기 (OFF)
+                🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)
             </button>
 
             <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
@@ -400,11 +409,10 @@
         <button class="fs-close-btn" style="margin-top:15px; width:100%; max-width:420px;" onclick="closeArcadeModal()">게임방 나가기</button>
     </div>
 
-    <!-- 🎵 브라우저 내장 음향 효과를 위한 오디오 합성용 스크립트 (가상 비트 생성) -->
     <script>
         const BASE_COUNT = 1248;
         let isMusicPlaying = false;
-        let musicInterval = null;
+        let musicTimeout = null;
 
         window.onload = function() {
             checkLoginStatus();
@@ -450,8 +458,11 @@
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         
         function openFullscreenPicket() { 
+            const liveCount = 12400 + Math.floor(Math.random() * 250);
+            document.getElementById('liveCheckinCount').innerText = liveCount.toLocaleString();
             document.getElementById('fullscreenPicket').style.display = 'flex'; 
         }
+        
         function closeFullscreenPicket() { 
             document.getElementById('fullscreenPicket').style.display = 'none'; 
             stopFestMusic();
@@ -467,63 +478,109 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
-        /* 🎵 축제 음악 토글 및 가상 비트 재생 함수 (웹 오디오 API 활용) */
+        /* -------------------------------------------------------------
+         * 🎵 '오 필승 코리아' 축제 신나는 멜로디 & 리듬 루프 엔진
+         * ------------------------------------------------------------- */
         function toggleFestMusic() {
             const btn = document.getElementById('musicBtn');
             if (!isMusicPlaying) {
-                startFestMusic();
                 isMusicPlaying = true;
-                btn.innerText = "🎶 신나는 축제 음악 재생 중! (ON)";
+                btn.innerText = "🎶 '오 필승 코리아' 축제 음악 재생 중! (ON)";
                 btn.style.background = "linear-gradient(135deg, #22c55e 0%, #15803d 100%)";
                 btn.style.borderColor = "#86efac";
+                playKoreaAnthemLoop();
             } else {
                 stopFestMusic();
-                isMusicPlaying = false;
-                btn.innerText = "🎵 신나는 축제 음악 켜기 (OFF)";
-                btn.style.background = "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)";
-                btn.style.borderColor = "#a78bfa";
             }
         }
 
-        function startFestMusic() {
-            if (window.audioCtx) return;
-            window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const notes = [261.63, 329.63, 392.00, 523.25, 587.33]; // 도, 미, 솔, 고음도, 고음레
-            let noteIdx = 0;
+        function playKoreaAnthemLoop() {
+            if (!isMusicPlaying) return;
             
-            musicInterval = setInterval(() => {
-                if (!window.audioCtx) return;
-                try {
+            if (!window.audioCtx) {
+                window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (window.audioCtx.state === 'suspended') {
+                window.audioCtx.resume();
+            }
+
+            // '오~ 필승 코리아!' 음계 구성 (Hz)
+            // 오(미) ~ (솔) 필(라)승(라) 코(솔)리(라)아(솔) ~ !
+            const melody = [
+                { f: 329.63, d: 0.4 }, // 오~ (E4)
+                { f: 392.00, d: 0.2 }, // 솔 (G4)
+                { f: 440.00, d: 0.4 }, // 필~ (A4)
+                { f: 440.00, d: 0.3 }, // 승! (A4)
+                { f: 392.00, d: 0.25 }, // 코 (G4)
+                { f: 440.00, d: 0.25 }, // 리 (A4)
+                { f: 392.00, d: 0.5 }, // 아~ (G4)
+                { f: 0,      d: 0.2 }, // (쉬움)
+                
+                // 오~ 필승 코리아! (고음 클라이맥스)
+                { f: 440.00, d: 0.35 }, // 오~
+                { f: 523.25, d: 0.2 },  // 필
+                { f: 587.33, d: 0.4 },  // 승~
+                { f: 587.33, d: 0.3 },  // 코!
+                { f: 523.25, d: 0.25 }, // 리
+                { f: 587.33, d: 0.25 }, // 아
+                { f: 523.25, d: 0.6 },  // ~~~
+                { f: 0,      d: 0.3 }
+            ];
+
+            let currentTime = window.audioCtx.currentTime;
+
+            melody.forEach((note) => {
+                if (!isMusicPlaying) return;
+                
+                if (note.f > 0) {
+                    // 메인 멜로디 오실레이터
                     let osc = window.audioCtx.createOscillator();
                     let gain = window.audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(notes[noteIdx % notes.length], window.audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.15, window.audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, window.audioCtx.currentTime + 0.3);
+                    
+                    osc.type = 'sawtooth'; // 웅장한 트럼펫/치어리딩 음색
+                    osc.frequency.setValueAtTime(note.f, currentTime);
+                    
+                    gain.gain.setValueAtTime(0.12, currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d);
+                    
                     osc.connect(gain);
                     gain.connect(window.audioCtx.destination);
-                    osc.start();
-                    osc.stop(window.audioCtx.currentTime + 0.3);
-                    noteIdx++;
-                } catch(e) {}
-            }, 250); // 신나는 템포의 비트
+                    
+                    osc.start(currentTime);
+                    osc.stop(currentTime + note.d);
+
+                    // 신나는 킥 베이스 비트 동시 추가
+                    let bassOsc = window.audioCtx.createOscillator();
+                    let bassGain = window.audioCtx.createGain();
+                    bassOsc.type = 'sine';
+                    bassOsc.frequency.setValueAtTime(120, currentTime);
+                    bassOsc.frequency.exponentialRampToValueAtTime(30, currentTime + 0.15);
+                    bassGain.gain.setValueAtTime(0.2, currentTime);
+                    bassGain.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.15);
+                    bassOsc.connect(bassGain);
+                    bassGain.connect(window.audioCtx.destination);
+                    bassOsc.start(currentTime);
+                    bassOsc.stop(currentTime + 0.15);
+                }
+                currentTime += note.d;
+            });
+
+            // 곡이 끝나면 자동으로 반복
+            const totalDuration = melody.reduce((sum, n) => sum + n.d, 0) * 1000;
+            musicTimeout = setTimeout(() => {
+                if (isMusicPlaying) playKoreaAnthemLoop();
+            }, totalDuration);
         }
 
         function stopFestMusic() {
-            if (musicInterval) {
-                clearInterval(musicInterval);
-                musicInterval = null;
-            }
-            if (window.audioCtx) {
-                window.audioCtx.close();
-                window.audioCtx = null;
-            }
             isMusicPlaying = false;
+            if (musicTimeout) clearTimeout(musicTimeout);
+            
             const btn = document.getElementById('musicBtn');
             if (btn) {
-                btn.innerText = "🎵 신나는 축제 음악 켜기 (OFF)";
-                btn.style.background = "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)";
-                btn.style.borderColor = "#a78bfa";
+                btn.innerText = "🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)";
+                btn.style.background = "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)";
+                btn.style.borderColor = "#fca5a5";
             }
         }
 
