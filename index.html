@@ -5,155 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국민의 약속 - 대한민국 시민 주권 프로젝트 & 국민 개헌</title>
     <style>
-        /* 기본 리셋 및 모바일 최적화 */
+        /* 기본 리셋 및 모바일 최적화 (여백 슬림화) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
-        body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 20px; text-align: center; }
+        body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 12px; text-align: center; }
 
         /* 상단 타이틀 영역 */
-        header { margin-top: 5px; width: 100%; margin-bottom: 15px; }
-        .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; box-shadow: 0 2px 8px rgba(147,51,234,0.3); }
-        .main-title { font-size: 1.8rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
-        .sub-title { font-size: 0.85rem; color: #38bdf8; margin-top: 4px; font-weight: 600; }
+        header { margin-top: 2px; width: 100%; margin-bottom: 8px; }
+        .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; box-shadow: 0 2px 8px rgba(147,51,234,0.3); }
+        .main-title { font-size: 1.5rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
+        .sub-title { font-size: 0.78rem; color: #38bdf8; margin-top: 2px; font-weight: 600; }
 
         /* 📊 실시간 동참 시민 카운터 전광판 */
-        .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
-        .counter-label { font-size: 0.8rem; font-weight: 700; color: #a5b4fc; margin-bottom: 4px; }
-        .counter-number { font-size: 2rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px; }
+        .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 12px; padding: 10px; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .counter-label { font-size: 0.75rem; font-weight: 700; color: #a5b4fc; margin-bottom: 2px; }
+        .counter-number { font-size: 1.6rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px; }
 
         /* 중앙 핵심 구호 카드 영역 */
-        .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+        .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 8px; margin: 6px 0; }
         .slogan-card { 
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            border: 2px solid #3b82f6; border-radius: 12px; padding: 15px 10px; 
+            border: 2px solid #3b82f6; border-radius: 10px; padding: 10px 8px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s; cursor: pointer;
         }
         .slogan-card:active { transform: scale(0.98); }
         .slogan-card.highlight { border-color: #ef4444; background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
         .slogan-card.constitution { border-color: #eab308; background: linear-gradient(135deg, #422006 0%, #713f12 100%); }
-        .slogan-text { font-size: 1.2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+        .slogan-text { font-size: 1.05rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
         .slogan-card.constitution .slogan-text { color: #fde047; }
-        .slogan-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
+        .slogan-desc { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
         .slogan-card.highlight .slogan-desc { color: #fca5a5; }
         .slogan-card.constitution .slogan-desc { color: #fef08a; font-weight: 700; }
 
         /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 */
         .arcade-banner {
             width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
-            border: 2px solid #a78bfa; border-radius: 16px; padding: 16px; margin: 10px 0;
+            border: 2px solid #a78bfa; border-radius: 14px; padding: 12px; margin: 6px 0;
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); cursor: pointer; transition: transform 0.1s;
         }
         .arcade-banner:active { transform: scale(0.98); }
-        .arcade-title { font-size: 1.1rem; font-weight: 900; color: #fef08a; margin-bottom: 4px; }
-        .arcade-desc { font-size: 0.8rem; color: #e0e7ff; }
+        .arcade-title { font-size: 1rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
+        .arcade-desc { font-size: 0.75rem; color: #e0e7ff; }
 
         /* 📱 전화번호 로그인 / 참여 상태 영역 */
-        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
-        .join-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .join-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .phone-input { width: 100%; padding: 12px 14px; font-size: 1rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; color: #ffffff; outline: none; }
+        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 14px; margin-top: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
+        .join-title { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .join-title span { background-color: #2563eb; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; font-weight: 600; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .phone-input { width: 100%; padding: 10px 12px; font-size: 0.95rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #ffffff; outline: none; }
         .phone-input:focus { border-color: #3b82f6; }
-        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1.05rem; font-weight: 800; padding: 13px; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
+        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 1rem; font-weight: 800; padding: 11px; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
         .action-btn:active { transform: scale(0.98); }
 
-        /* 🔑 로그인 유지 성공 시 나타나는 대시보드 */
-        .user-info-box { display: flex; flex-direction: column; gap: 8px; }
-        .user-phone-text { font-size: 1.05rem; font-weight: 800; color: #38bdf8; }
-        .user-status { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 4px; }
-        .user-menu-btn { width: 100%; background-color: #2563eb; color: #fff; font-size: 0.95rem; font-weight: 700; padding: 11px; border: none; border-radius: 8px; cursor: pointer; margin-top: 4px; }
-        .logout-btn { width: 100%; background-color: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 0.8rem; padding: 8px; border-radius: 8px; cursor: pointer; margin-top: 4px; text-align: center; }
+        /* 🔑 로그인 유지 성공 시 나타나는 대시보드 (버튼 2개 삭제 완료) */
+        .user-info-box { display: flex; flex-direction: column; gap: 6px; }
+        .user-phone-text { font-size: 1rem; font-weight: 800; color: #38bdf8; }
+        .user-status { font-size: 0.8rem; color: #cbd5e1; margin-bottom: 2px; }
+        .logout-btn { width: 100%; background-color: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 0.78rem; padding: 8px; border-radius: 8px; cursor: pointer; margin-top: 2px; text-align: center; }
 
         /* 팝업 모달 공통 스타일 */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background-color: #1e293b; border: 1px solid #3b82f6; border-radius: 16px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; padding: 20px; text-align: left; position: relative; }
-        .close-btn { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; }
-        .modal-title { font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
-
-        /* 이미지 박스 스타일 */
-        .img-box { width: 100%; background-color: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 1px solid #334155; }
-        .img-box img { width: 100%; display: block; height: auto; }
-        .img-caption { font-size: 0.75rem; color: #94a3b8; padding: 8px 10px; text-align: center; }
-
-        /* 지도 버튼 그룹 */
-        .map-btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center; }
-        .map-btn.monthly { background-color: #ef4444; color: #ffffff; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+        .modal-content { background-color: #1e293b; border: 1px solid #3b82f6; border-radius: 14px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; padding: 16px; text-align: left; position: relative; }
+        .close-btn { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.4rem; color: #94a3b8; cursor: pointer; }
+        .modal-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
         /* 개헌 프로젝트 모달 내부 스타일 */
-        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .step-title { font-size: 0.9rem; font-weight: 800; color: #fde047; margin-bottom: 4px; }
-        .step-desc { font-size: 0.78rem; color: #cbd5e1; line-height: 1.4; }
+        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .step-title { font-size: 0.85rem; font-weight: 800; color: #fde047; margin-bottom: 2px; }
+        .step-desc { font-size: 0.75rem; color: #cbd5e1; line-height: 1.3; }
 
         /* 웹 피켓 박스 */
         .web-picket-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            border: 3px solid #38bdf8; border-radius: 12px; padding: 14px 10px; margin-bottom: 12px;
+            border: 2px solid #38bdf8; border-radius: 10px; padding: 10px 8px; margin-bottom: 10px;
             text-align: center; cursor: pointer; transition: transform 0.1s;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
         }
         .web-picket-box:active { transform: scale(0.98); }
-        .picket-guide-top { font-size: 0.75rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px; }
-        .picket-item { background-color: #1e293b; border: 2px solid #475569; border-radius: 8px; padding: 10px 6px; margin-bottom: 6px; font-size: 1.1rem; font-weight: 900; color: #ffffff; }
+        .picket-guide-top { font-size: 0.72rem; color: #38bdf8; font-weight: 700; margin-bottom: 4px; }
+        .picket-item { background-color: #1e293b; border: 1px solid #475569; border-radius: 6px; padding: 8px 4px; margin-bottom: 4px; font-size: 1rem; font-weight: 900; color: #ffffff; }
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .picket-item.yellow { border-color: #eab308; background: linear-gradient(135deg, #713f12 0%, #422006 100%); color: #fde047; }
-        .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
+        .picket-guide-bottom { font-size: 0.68rem; color: #fbbf24; margin-top: 2px; font-weight: 700; }
 
         /* 🔍 풀스크린 웹 피켓 뷰 */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
+            background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center;
         }
-        .fs-picket-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 14px; }
-        .fs-picket-title { font-size: 1.3rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
-        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.4rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .fs-picket-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+        .fs-picket-title { font-size: 1.2rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
+        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 3px solid #3b82f6; border-radius: 12px; padding: 16px 8px; font-size: 1.25rem; font-weight: 900; color: #ffffff; }
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
         .fs-picket-btn.yellow { border-color: #eab308; background: linear-gradient(135deg, #713f12 0%, #422006 100%); color: #fde047; }
-        .fs-close-btn { margin-top: 20px; background-color: #334155; color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
+        .fs-close-btn { margin-top: 15px; background-color: #334155; color: #ffffff; border: none; padding: 12px 24px; border-radius: 10px; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
 
         /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: flex-start; align-items: center; padding: 15px; overflow-y: auto; text-align: center;
+            background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: flex-start; align-items: center; padding: 12px; overflow-y: auto; text-align: center;
         }
-        .arcade-header { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
-        .arcade-header h2 { font-size: 1.2rem; color: #f8fafc; font-weight: 900; }
-        .arcade-tab-group { display: flex; gap: 6px; width: 100%; max-width: 420px; margin-bottom: 12px; }
-        .arcade-tab { flex: 1; background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.9rem; }
+        .arcade-header { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+        .arcade-header h2 { font-size: 1.1rem; color: #f8fafc; font-weight: 900; }
+        .arcade-tab-group { display: flex; gap: 6px; width: 100%; max-width: 400px; margin-bottom: 10px; }
+        .arcade-tab { flex: 1; background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 8px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.85rem; }
         .arcade-tab.active { background-color: #7c3aed; color: #fff; border-color: #a78bfa; }
         
-        .game-panel { display: none; width: 100%; max-width: 420px; background-color: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+        .game-panel { display: none; width: 100%; max-width: 400px; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px; margin-bottom: 15px; }
         .game-panel.active { display: block; }
-        .game-sub-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px; }
+        .game-sub-title { font-size: 0.82rem; font-weight: 800; color: #38bdf8; margin-bottom: 8px; }
 
         /* 🧩 3x3 퍼즐 보드 디자인 */
         .puzzle-board-container {
-            width: 300px; height: 300px; margin: 0 auto 12px auto;
-            display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px);
-            border: 3px solid #38bdf8; border-radius: 10px; overflow: hidden;
-            background-color: #0f172a; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative;
+            width: 270px; height: 270px; margin: 0 auto 10px auto;
+            display: grid; grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px);
+            border: 3px solid #38bdf8; border-radius: 8px; overflow: hidden;
+            background-color: #0f172a; position: relative;
         }
         .puzzle-tile {
-            width: 100px; height: 100px; border: 1px solid rgba(255,255,255,0.3);
+            width: 90px; height: 90px; border: 1px solid rgba(255,255,255,0.3);
             box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: 900; text-shadow: 0 0 4px #000;
-            background-size: 300px 300px; transition: all 0.2s;
+            font-size: 1.1rem; font-weight: 900; background-size: 270px 270px; transition: all 0.2s;
         }
         .puzzle-tile.selected { border: 3px solid #fef08a !important; transform: scale(0.95); z-index: 10; }
 
         /* 👀 본 그림 보기 모달(팝업) */
         #originalModal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; padding: 20px;
+            background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; flex-direction: column; padding: 15px;
         }
         #originalImgDisplay {
-            width: 280px; height: 280px; background-size: cover; background-position: center;
-            border: 3px solid #fef08a; border-radius: 12px; margin-bottom: 15px;
+            width: 260px; height: 260px; background-size: cover; background-position: center;
+            border: 3px solid #fef08a; border-radius: 10px; margin-bottom: 12px;
         }
 
         /* 💎 연쇄 팡팡 맞추기 퍼즐 보드 */
-        .match-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 12px; }
-        .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 6px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.2s; }
+        .match-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
+        .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 6px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; transition: all 0.2s; }
         .match-tile.selected { border-color: #fef08a; background-color: #475569; transform: scale(0.92); }
         .match-tile.matched { animation: pop 0.3s ease-out; background-color: #22c55e; border-color: #86efac; }
 
@@ -163,13 +150,8 @@
             100% { transform: scale(1); }
         }
 
-        .game-btn { background-color: #2563eb; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 0.85rem; margin: 3px; display: inline-flex; align-items: center; justify-content: center; }
+        .game-btn { background-color: #2563eb; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.8rem; margin: 2px; display: inline-flex; align-items: center; justify-content: center; }
         .game-btn.secondary { background-color: #475569; }
-
-        /* 간소화된 행동 준칙 카드 */
-        .rule-card { background-color: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; text-align: left; }
-        .rule-card-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-        .rule-card-desc { font-size: 0.78rem; color: #cbd5e1; line-height: 1.3; }
     </style>
 </head>
 <body>
@@ -193,7 +175,7 @@
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
     </div>
 
-    <!-- 4. 핵심 요구 구호 카드 영역 (국민 개헌 프로젝트 포함) -->
+    <!-- 4. 핵심 요구 구호 카드 영역 -->
     <main class="slogan-container">
         <div class="slogan-card constitution" onclick="openModal('constitutionModal')">
             <div class="slogan-text">⚡ 국민 직접 개헌 & 소환법 입법</div>
@@ -216,7 +198,7 @@
         </a>
     </main>
 
-    <!-- 5. 전화번호 로그인 / 동참 상태 섹션 -->
+    <!-- 5. 전화번호 로그인 / 동참 상태 섹션 (요청하신 버튼 2개 삭제 완료) -->
     <section class="join-container">
         <div id="loginForm">
             <div class="join-title">
@@ -239,12 +221,6 @@
             <div class="user-info-box">
                 <div class="user-phone-text">📱 <span id="displayPhone"></span> 님</div>
                 <div class="user-status">국민의 약속 주말 문화 축제에 동참하셨습니다.</div>
-                <button class="user-menu-btn" onclick="openModal('roadmapModal')">
-                    🗺️ 모임 장소 & 알림 로드맵 보기
-                </button>
-                <button class="user-menu-btn" style="background-color:#0284c7;" onclick="openModal('rulesModal')">
-                    📱 현장 웹 피켓 & 준칙 보기
-                </button>
                 <button class="logout-btn" onclick="logout()">
                     다른 번호로 변경 (로그아웃)
                 </button>
@@ -258,7 +234,7 @@
             <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
             <div class="modal-title">⚡ 국민 직접 개헌 & 소환법 프로젝트</div>
             
-            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; line-height: 1.35;">
                 국민이 사장인데 일 안 하는 직원(국회의원)을 자르지 못하는 현실! 헌법과 법률을 국민의 손으로 직접 바로 세우는 3단계 로드맵입니다.
             </p>
 
@@ -277,88 +253,15 @@
                 <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.</div>
             </div>
 
-            <button onclick="closeModal('constitutionModal'); openModal('rulesModal');" style="width:100%; margin-top:10px; background-color:#eab308; color:#000; border:none; padding:12px; border-radius:8px; font-weight:900; cursor:pointer;">
-                📱 현장 웹 피켓에서 구호 확인하기 ➔
-            </button>
-        </div>
-    </div>
-
-    <!-- 9. [팝업 모달 2] 휴대폰 알림 로드맵 & 모임 장소 지도 연결 -->
-    <div id="roadmapModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('roadmapModal')">&times;</button>
-            <div class="modal-title">📱 축제 참여 안내 및 모임 장소</div>
-            
-            <div class="img-box">
-                <img id="roadmapImg" src="https://via.placeholder.com/380x180/0f172a/ffffff?text=Notification+Roadmap+Image" alt="알림 로드맵 이미지">
-                <div class="img-caption">▲ 동참 완료 후 발송되는 축제 안내 로드맵</div>
-            </div>
-
-            <p style="font-size: 0.85rem; color: #f1f5f9; font-weight: 700; margin-bottom: 6px;">📍 축제 장소 지도 바로가기</p>
-            <div class="map-btn-group">
-                <a href="https://map.kakao.com/link/search/광화문광장" target="_blank" class="map-btn monthly">
-                    🏛️ [월 1회 대규모 축제] 광화문/여의도 광장
-                </a>
-                <a href="https://map.kakao.com/link/search/전국거점광장" target="_blank" class="map-btn">
-                    🏙️ [매주 주말 축제] 내 지역 중심지 거점 광장
-                </a>
-            </div>
-
-            <button onclick="closeModal('roadmapModal'); openModal('rulesModal');" style="width:100%; margin-top:15px; background-color:#2563eb; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:800; cursor:pointer;">
-                📱 현장 웹 피켓 확인하기 ➔
-            </button>
-        </div>
-    </div>
-
-    <!-- 10. [팝업 모달 3] 현장 행동 웹 피켓 & 준칙 안내 창 -->
-    <div id="rulesModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('rulesModal')">&times;</button>
-            <div class="modal-title">📱 현장 웹 피켓 & 행동 준칙</div>
-            
-            <div class="web-picket-box" onclick="openFullscreenPicket()">
-                <div class="picket-guide-top">🔍 [터치하면 전체 화면 피켓으로 확대됩니다]</div>
-                <div class="picket-item yellow">⚡ 국민 직접 개헌 & 소환법</div>
-                <div class="picket-item">⚖️ 일하는 국회의원</div>
-                <div class="picket-item red">🚫 불체포 특권 폐지</div>
-                <div class="picket-item red">💥 국회의원 특권 폐지</div>
-                <div class="picket-guide-bottom">✨ 터치해서 풀스크린 피켓 켜기!</div>
-            </div>
-
-            <div class="rule-card">
-                <div class="rule-card-title">1. 🎉 주말 축제 1시간 즐기기</div>
-                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 즐겁게 참여합니다.</div>
-            </div>
-            <div class="rule-card">
-                <div class="rule-card-title">2. 🕊️ 평화적 문화 연대</div>
-                <div class="rule-card-desc">성숙하고 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
-            </div>
-            <div class="rule-card">
-                <div class="rule-card-title">3. 🧹 클린 축제 현장 만들기</div>
-                <div class="rule-card-desc">주변을 깨끗이 정리하고 아름답게 마무리합니다.</div>
-            </div>
-
-            <button onclick="closeModal('rulesModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:700; cursor:pointer;">
+            <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:8px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;">
                 닫기
             </button>
         </div>
     </div>
 
-    <!-- 🔍 11. [전체 화면 풀스크린 웹 피켓 뷰] -->
-    <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
-        <div class="fs-picket-container" onclick="event.stopPropagation();">
-            <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
-            <div class="fs-picket-btn yellow">⚡ 국민 직접 개헌 & 소환법</div>
-            <div class="fs-picket-btn">⚖️ 일하는 국회의원</div>
-            <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
-            <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
-            <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
-        </div>
-    </div>
-
     <!-- 👀 12. [본 그림 원본 보기 팝업 창] -->
     <div id="originalModal" onclick="hideOriginalModal()">
-        <div style="font-size:1.1rem; font-weight:800; color:#fef08a; margin-bottom:10px;">👀 원본 그림 미리보기</div>
+        <div style="font-size:1rem; font-weight:800; color:#fef08a; margin-bottom:8px;">👀 원본 그림 미리보기</div>
         <div id="originalImgDisplay"></div>
         <button class="game-btn" onclick="hideOriginalModal()">닫기</button>
     </div>
@@ -367,7 +270,7 @@
     <div id="arcadeModal">
         <div class="arcade-header">
             <h2>🕹️ 시민 축제 미니 게임방</h2>
-            <button class="close-btn" style="position:static; font-size:1.3rem;" onclick="closeArcadeModal()">&times;</button>
+            <button class="close-btn" style="position:static; font-size:1.2rem;" onclick="closeArcadeModal()">&times;</button>
         </div>
 
         <!-- 게임 선택 탭 -->
@@ -378,7 +281,7 @@
 
         <!-- [게임 1] 내 사진 그림 퍼즐 맞추기 -->
         <div class="game-panel active" id="panel1">
-            <div class="game-sub-title">조각 2개를 순서대로 클릭하면 대각선, 상하좌우 자유롭게 위치가 교환됩니다!</div>
+            <div class="game-sub-title">조각 2개를 순서대로 클릭하면 위치가 교환됩니다!</div>
             
             <div class="puzzle-board-container" id="puzzleBoard"></div>
 
@@ -386,24 +289,24 @@
                 <button class="game-btn" onclick="shufflePuzzle()">🔀 퍼즐 섞기</button>
                 <button class="game-btn secondary" onclick="showOriginalModal()">👀 본 그림 보기</button>
                 <button class="game-btn" style="background-color:#7c3aed;" onclick="document.getElementById('imageUploader').click();">
-                    📁 내 사진 선택하기
+                    📁 내 사진 선택
                 </button>
                 <input type="file" id="imageUploader" accept="image/*" style="display:none;" onchange="loadCustomImage(this)">
             </div>
-            <p id="puzzleMsg" style="font-size: 0.8rem; color: #38bdf8; margin-top: 8px;"></p>
+            <p id="puzzleMsg" style="font-size: 0.75rem; color: #38bdf8; margin-top: 6px;"></p>
         </div>
 
         <!-- [게임 2] 난이도가 수월하고 콤보가 잘 터지는 연속 팡팡 맞추기 패널 -->
         <div class="game-panel" id="panel2">
-            <div class="game-sub-title">아무 조각이나 2개를 누르면 위치가 바뀌며 3개 이상 모여 팡팡 터집니다! 🎉</div>
+            <div class="game-sub-title">아무 조각이나 2개를 눌러 3개 이상 모아 터뜨려보세요! 🎉</div>
             <div class="match-board" id="matchBoard"></div>
             <div style="display: flex; gap: 6px; justify-content: center;">
-                <button class="game-btn" onclick="initMatchGame()">🔄 새로운 그림판으로 리셋</button>
+                <button class="game-btn" onclick="initMatchGame()">🔄 리셋</button>
             </div>
-            <p id="matchScore" style="font-size: 0.9rem; color: #fef08a; margin-top: 8px; font-weight: 800;">터뜨린 콤보: 0 회</p>
+            <p id="matchScore" style="font-size: 0.85rem; color: #fef08a; margin-top: 6px; font-weight: 800;">터뜨린 콤보: 0 회</p>
         </div>
 
-        <button class="fs-close-btn" style="margin-top:15px; width:100%; max-width:420px;" onclick="closeArcadeModal()">게임방 나가기</button>
+        <button class="fs-close-btn" style="margin-top:10px; width:100%; max-width:400px;" onclick="closeArcadeModal()">게임방 나가기</button>
     </div>
 
     <script>
@@ -437,7 +340,7 @@
             if(phoneVal.length < 10) { alert('올바른 휴대전화 번호를 입력해주세요.'); phoneInput.focus(); return; }
             localStorage.setItem('user_phone', phoneVal);
             phoneInput.value = '';
-            checkLoginStatus(); openModal('roadmapModal');
+            checkLoginStatus();
         }
 
         function logout() {
@@ -451,8 +354,6 @@
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'flex'; }
-        function closeFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'none'; }
         function openArcadeModal() { document.getElementById('arcadeModal').style.display = 'flex'; }
         function closeArcadeModal() { document.getElementById('arcadeModal').style.display = 'none'; }
 
@@ -484,7 +385,7 @@
                 tile.style.backgroundImage = `url('${currentImgUrl}')`;
                 let row = Math.floor(posVal / 3);
                 let col = posVal % 3;
-                tile.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
+                tile.style.backgroundPosition = `-${col * 90}px -${row * 90}px`;
                 
                 tile.onclick = () => selectAndSwapTile(currentIdx);
                 board.appendChild(tile);
@@ -512,7 +413,7 @@
         function shufflePuzzle() {
             puzzleState.sort(() => Math.random() - 0.5);
             selectedPuzzleIndex = null;
-            document.getElementById('puzzleMsg').innerText = '퍼즐이 마구 섞였습니다! 조각 2개를 눌러 위치를 맞춰보세요.';
+            document.getElementById('puzzleMsg').innerText = '퍼즐이 섞였습니다! 조각 2개를 눌러 맞춰보세요.';
             renderPuzzle();
         }
 
@@ -533,14 +434,14 @@
                     const img = new Image();
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
-                        canvas.width = 300; canvas.height = 300;
+                        canvas.width = 270; canvas.height = 270;
                         const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, 300, 300);
+                        ctx.drawImage(img, 0, 0, 270, 270);
                         currentImgUrl = canvas.toDataURL('image/jpeg');
 
                         puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
                         shufflePuzzle();
-                        document.getElementById('puzzleMsg').innerText = '📸 내 사진이 전체 그림으로 등록되었습니다!';
+                        document.getElementById('puzzleMsg').innerText = '📸 사진이 등록되었습니다!';
                     };
                     img.src = evt.target.result;
                 };
@@ -551,12 +452,12 @@
         function checkPuzzleWin() {
             let isWin = puzzleState.every((val, index) => val === index);
             if (isWin) {
-                document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐을 완벽히 맞추셨습니다!';
+                document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐 완성!';
             }
         }
 
         /* -------------------------------------------------------------
-         * 💎 [게임 2] 난이도 하향 & 연속 팡팡 폭발 퍼즐 (5x6 확장, 5종 아이콘)
+         * 💎 [게임 2] 연속 팡팡 맞추기 퍼즐
          * ------------------------------------------------------------- */
         let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
         let matchBoardData = [];
