@@ -9,12 +9,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
         body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 10px; text-align: center; }
 
-        /* 상단 타이틀 영역 (서브 문구 삭제 및 여백 축소) */
+        /* 상단 타이틀 영역 */
         header { margin-top: 2px; width: 100%; margin-bottom: 6px; }
         .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; box-shadow: 0 2px 6px rgba(147,51,234,0.3); }
         .main-title { font-size: 1.35rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
 
-        /* 📊 실시간 회원수 전광판 */
+        /* 📊 실시간 회원수 전광판 (만 단위 반영) */
         .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 10px; padding: 8px; margin-bottom: 6px; box-shadow: 0 3px 10px rgba(99, 102, 241, 0.2); }
         .counter-label { font-size: 0.7rem; font-weight: 700; color: #a5b4fc; margin-bottom: 1px; }
         .counter-number { font-size: 1.35rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px; }
@@ -36,7 +36,7 @@
         .slogan-card.highlight .slogan-desc { color: #fca5a5; }
         .slogan-card.constitution .slogan-desc { color: #fef08a; font-weight: 700; }
 
-        /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 (중앙 배치) */
+        /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 */
         .arcade-banner {
             width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
             border: 2px solid #a78bfa; border-radius: 12px; padding: 10px; margin-bottom: 6px;
@@ -56,7 +56,7 @@
         .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 8px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
         .action-btn:active { transform: scale(0.98); }
 
-        /* 🔑 로그인 완료 상태 대시보드 (설명 문구 삭제 완료) */
+        /* 🔑 로그인 완료 상태 대시보드 */
         .user-info-box { display: flex; flex-direction: column; gap: 5px; }
         .user-phone-text { font-size: 0.95rem; font-weight: 800; color: #38bdf8; }
         .logout-btn { width: 100%; background-color: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 0.75rem; padding: 6px; border-radius: 6px; cursor: pointer; margin-top: 2px; text-align: center; }
@@ -135,10 +135,10 @@
         <h1 class="main-title">국민의 약속</h1>
     </header>
 
-    <!-- 📊 2. 실시간 회원수 전광판 -->
+    <!-- 📊 2. 실시간 회원수 전광판 (만 단위로 변경) -->
     <section class="counter-container">
         <div class="counter-label">현재 가입한 대한민국 시민</div>
-        <div class="counter-number"><span id="participantCount">1,248</span> 명</div>
+        <div class="counter-number"><span id="participantCount">12,480</span> 명</div>
     </section>
 
     <!-- 3. 핵심 요구 구호 카드 영역 -->
@@ -164,13 +164,13 @@
         </a>
     </main>
 
-    <!-- 🎮 4. 시민 대기실 & 축제 게임방 바로가기 배너 (맨 아래로 이동) -->
+    <!-- 🎮 4. 시민 대기실 & 축제 게임방 바로가기 배너 -->
     <div class="arcade-banner" onclick="openArcadeModal()">
         <div class="arcade-title">🕹️ 시민 축제 미니 게임방 입장하기</div>
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
     </div>
 
-    <!-- 👤 5. 회원가입 / 로그인 섹션 (게임방 바로 밑에 배치) -->
+    <!-- 👤 5. 회원가입 / 로그인 섹션 (맨 아래 배치) -->
     <section class="join-container">
         <div id="loginForm">
             <div class="join-title">
@@ -199,7 +199,7 @@
         </div>
     </section>
 
-    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 모달 -->
+    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 및 실행 절차 모달 -->
     <div id="constitutionModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
@@ -222,6 +222,16 @@
             <div class="step-box">
                 <div class="step-title">3단계: 선거 공약 서약 & 거부 운동</div>
                 <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.</div>
+            </div>
+
+            <!-- 새로 추가된 실행 절차 방법 섹션 -->
+            <div class="step-box" style="border-color: #3b82f6; background-color: #1e293b;">
+                <div class="step-title" style="color: #38bdf8;">📌 국민 직접 개헌 구체적 실행 절차</div>
+                <div class="step-desc" style="color: #f8fafc; margin-top: 4px;">
+                    1. <b>온·오프라인 서명 운동:</b> 전국민 100만 명 서명 목표 달성<br>
+                    2. <b>입법 청원 및 공론화:</b> 국회 국민동의청원 및 주말 거리 문화 축제 개최<br>
+                    3. <b>정치권 압박 및 투표 심판:</b> 개헌 서약 거부 의원 낙선 운동 전개
+                </div>
             </div>
 
             <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:8px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;">
@@ -281,7 +291,7 @@
     </div>
 
     <script>
-        const BASE_COUNT = 1248;
+        const BASE_COUNT = 12480; // 만 단위로 기본값 설정
 
         window.onload = function() {
             checkLoginStatus();
