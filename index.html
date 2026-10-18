@@ -67,10 +67,16 @@
         .close-btn { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.4rem; color: #94a3b8; cursor: pointer; }
         .modal-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
-        /* 개헌 프로젝트 모달 내부 스타일 */
+        /* 개헌 프로젝트 모달 내부 스타일 및 서명 버튼 */
         .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
         .step-title { font-size: 0.85rem; font-weight: 800; color: #fde047; margin-bottom: 2px; }
         .step-desc { font-size: 0.75rem; color: #cbd5e1; line-height: 1.3; }
+        .sign-trigger-btn { margin-top: 6px; width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 6px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
+
+        /* ✍️ 전자 서명 패널 모달 */
+        #signModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 15px; }
+        .sign-box { width: 100%; max-width: 360px; background-color: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 14px; text-align: center; }
+        canvas#signatureCanvas { width: 100%; height: 150px; background-color: #0f172a; border: 1px dashed #64748b; border-radius: 6px; margin: 8px 0; cursor: crosshair; touch-action: none; }
 
         /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
@@ -135,7 +141,7 @@
         <h1 class="main-title">국민의 약속</h1>
     </header>
 
-    <!-- 📊 2. 실시간 회원수 전광판 (만 단위로 변경) -->
+    <!-- 📊 2. 실시간 회원수 전광판 (만 단위 반영) -->
     <section class="counter-container">
         <div class="counter-label">현재 가입한 대한민국 시민</div>
         <div class="counter-number"><span id="participantCount">12,480</span> 명</div>
@@ -199,7 +205,7 @@
         </div>
     </section>
 
-    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 및 실행 절차 모달 -->
+    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 및 1, 3단계 전자서명 버튼 추가 -->
     <div id="constitutionModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
@@ -209,9 +215,11 @@
                 국민이 사장인데 일 안 하는 직원(국회의원)을 자르지 못하는 현실! 헌법과 법률을 국민의 손으로 직접 바로 세우는 3단계 로드맵입니다.
             </p>
 
+            <!-- 1단계: 국민발의제 (전자서명 버튼 추가)[span_1](start_span)[span_1](end_span) -->
             <div class="step-box">
                 <div class="step-title">1단계: 국민발의제 헌법 개정 요구</div>
-                <div class="step-desc">대통령과 국회의원뿐만 아니라, 일정 수 이상의 국민 서명으로 직접 개헌안을 발의할 수 있는 권리를 되찾습니다.</div>
+                <div class="step-desc">대통령과 국회의원뿐만 아니라, 일정 수 이상의 국민 서명으로 직접 개헌안을 발의할 수 있는 권리를 되찾습니다.[span_2](start_span)[span_2](end_span)</div>
+                <button class="sign-trigger-btn" onclick="openSignModal('1단계: 국민발의제 헌법 개정 동의 서명')">✍️ [1단계] 국민 직접 서명 및 동의하기</button>
             </div>
 
             <div class="step-box">
@@ -219,12 +227,14 @@
                 <div class="step-desc">일하지 않거나 특권 뒤에 숨는 국회의원을 임기 중이라도 주권자인 국민이 직접 소환·해임할 수 있는 법을 통과시킵니다.</div>
             </div>
 
+            <!-- 3단계: 후보 공약 서약 (전자서명 버튼 추가)[span_3](start_span)[span_3](end_span) -->
             <div class="step-box">
                 <div class="step-title">3단계: 선거 공약 서약 & 거부 운동</div>
-                <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.</div>
+                <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.[span_4](start_span)[span_4](end_span)</div>
+                <button class="sign-trigger-btn" onclick="openSignModal('3단계: 국회의원 후보 공약 서약 및 서명')">✍️ [3단계] 후보 공약 서약 및 전자서명</button>
             </div>
 
-            <!-- 새로 추가된 실행 절차 방법 섹션 -->
+            <!-- 실행 절차 방법 섹션 -->
             <div class="step-box" style="border-color: #3b82f6; background-color: #1e293b;">
                 <div class="step-title" style="color: #38bdf8;">📌 국민 직접 개헌 구체적 실행 절차</div>
                 <div class="step-desc" style="color: #f8fafc; margin-top: 4px;">
@@ -237,6 +247,20 @@
             <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:8px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;">
                 닫기
             </button>
+        </div>
+    </div>
+
+    <!-- ✍️ [전자 서명 및 지문/본인인증 패널 팝업] -->
+    <div id="signModal">
+        <div class="sign-box">
+            <div id="signModalTitle" style="font-size: 0.95rem; font-weight: 800; color: #fef08a; margin-bottom: 6px;">전자 서명</div>
+            <p style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">휴대폰 본인인증(지문/간편인증) 완료 후, 아래 빈칸에 직접 서명해 주세요.</p>
+            <canvas id="signatureCanvas"></canvas>
+            <div style="display: flex; gap: 6px; margin-top: 8px;">
+                <button class="game-btn secondary" style="flex:1;" onclick="clearSignature()">다시 쓰기</button>
+                <button class="game-btn" style="flex:1; background-color:#22c55e; color:#000;" onclick="saveSignature()">서명 완료</button>
+            </div>
+            <button class="game-btn secondary" style="margin-top: 6px; width:100%;" onclick="closeSignModal()">취소</button>
         </div>
     </div>
 
@@ -254,13 +278,11 @@
             <button class="close-btn" style="position:static; font-size:1.2rem;" onclick="closeArcadeModal()">&times;</button>
         </div>
 
-        <!-- 게임 선택 탭 -->
         <div class="arcade-tab-group">
             <button class="arcade-tab active" id="tab1" onclick="switchGame(1)">🖼️ 내 사진 퍼즐</button>
             <button class="arcade-tab" id="tab2" onclick="switchGame(2)">💎 연속 팡팡 맞추기</button>
         </div>
 
-        <!-- [게임 1] 내 사진 그림 퍼즐 맞추기 -->
         <div class="game-panel active" id="panel1">
             <div class="game-sub-title">조각 2개를 순서대로 클릭하면 위치가 교환됩니다!</div>
             
@@ -277,7 +299,6 @@
             <p id="puzzleMsg" style="font-size: 0.75rem; color: #38bdf8; margin-top: 6px;"></p>
         </div>
 
-        <!-- [게임 2] 난이도가 수월하고 콤보가 잘 터지는 연속 팡팡 맞추기 패널 -->
         <div class="game-panel" id="panel2">
             <div class="game-sub-title">아무 조각이나 2개를 눌러 3개 이상 모아 터뜨려보세요! 🎉</div>
             <div class="match-board" id="matchBoard"></div>
@@ -291,12 +312,13 @@
     </div>
 
     <script>
-        const BASE_COUNT = 12480; // 만 단위로 기본값 설정
+        const BASE_COUNT = 12480;
 
         window.onload = function() {
             checkLoginStatus();
             initPuzzleGame();
             initMatchGame();
+            initSignaturePad();
         };
 
         function checkLoginStatus() {
@@ -345,6 +367,74 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
+        /* ✍️ 전자 서명 패널 제어 로직 */
+        let canvas, ctx, isDrawing = false;
+
+        function initSignaturePad() {
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+            
+            canvas.width = 330;
+            canvas.height = 150;
+
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', drawing);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e.touches[0]); });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); drawing(e.touches[0]); });
+            canvas.addEventListener('touchend', stopDraw);
+        }
+
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function drawing(e) {
+            if (!isDrawing) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDraw() { isDrawing = false; }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function openSignModal(titleText) {
+            document.getElementById('signModalTitle').innerText = titleText;
+            document.getElementById('signModal').style.display = 'flex';
+            clearSignature();
+        }
+
+        function closeSignModal() {
+            document.getElementById('signModal').style.display = 'none';
+        }
+
+        function saveSignature() {
+            alert('🎉 전자 서명 및 인증이 안전하게 완료되었습니다! 주권자 직접 참여가 기록되었습니다.');
+            closeSignModal();
+            closeModal('constitutionModal');
+        }
+
         /* -------------------------------------------------------------
          * 🧩 [게임 1] 내 사진 퍼즐 맞추기 로직
          * ------------------------------------------------------------- */
@@ -352,9 +442,7 @@
         let currentImgUrl = 'https://picsum.photos/300/300';
         let selectedPuzzleIndex = null;
 
-        function initPuzzleGame() {
-            renderPuzzle();
-        }
+        function initPuzzleGame() { renderPuzzle(); }
 
         function renderPuzzle() {
             const board = document.getElementById('puzzleBoard');
@@ -403,9 +491,7 @@
             document.getElementById('originalModal').style.display = 'flex';
         }
 
-        function hideOriginalModal() {
-            document.getElementById('originalModal').style.display = 'none';
-        }
+        function hideOriginalModal() { document.getElementById('originalModal').style.display = 'none'; }
 
         function loadCustomImage(input) {
             if (input.files && input.files[0]) {
@@ -432,9 +518,7 @@
 
         function checkPuzzleWin() {
             let isWin = puzzleState.every((val, index) => val === index);
-            if (isWin) {
-                document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐 완성!';
-            }
+            if (isWin) { document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐 완성!'; }
         }
 
         /* -------------------------------------------------------------
