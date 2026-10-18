@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>국민의 약속 - 대한민국 시민 주권 프로젝트 & 게임방</title>
+    <title>국민의 약속 - 대한민국 시민 주권 프로젝트 & 국민 개헌</title>
     <style>
         /* 기본 리셋 및 모바일 최적화 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
@@ -25,14 +25,17 @@
         .slogan-card { 
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
             border: 2px solid #3b82f6; border-radius: 12px; padding: 15px 10px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s; cursor: pointer;
         }
         .slogan-card:active { transform: scale(0.98); }
         .slogan-card.highlight { border-color: #ef4444; background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
+        .slogan-card.constitution { border-color: #eab308; background: linear-gradient(135deg, #422006 0%, #713f12 100%); }
         .slogan-text { font-size: 1.2rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
+        .slogan-card.constitution .slogan-text { color: #fde047; }
         .slogan-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 4px; }
         .slogan-card.highlight .slogan-desc { color: #fca5a5; }
+        .slogan-card.constitution .slogan-desc { color: #fef08a; font-weight: 700; }
 
         /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 */
         .arcade-banner {
@@ -44,7 +47,7 @@
         .arcade-title { font-size: 1.1rem; font-weight: 900; color: #fef08a; margin-bottom: 4px; }
         .arcade-desc { font-size: 0.8rem; color: #e0e7ff; }
 
-        /* 📱 전화번호 로그인 / 참여 상태 섹션 */
+        /* 📱 전화번호 로그인 / 참여 상태 영역 */
         .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 18px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
         .join-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .join-title span { background-color: #2563eb; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
@@ -89,6 +92,11 @@
         .map-btn { width: 100%; background-color: #eab308; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: block; text-align: center; }
         .map-btn.monthly { background-color: #ef4444; color: #ffffff; }
 
+        /* 개헌 프로젝트 모달 내부 스타일 */
+        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+        .step-title { font-size: 0.9rem; font-weight: 800; color: #fde047; margin-bottom: 4px; }
+        .step-desc { font-size: 0.78rem; color: #cbd5e1; line-height: 1.4; }
+
         /* 웹 피켓 박스 */
         .web-picket-box {
             background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
@@ -100,26 +108,20 @@
         .picket-guide-top { font-size: 0.75rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px; }
         .picket-item { background-color: #1e293b; border: 2px solid #475569; border-radius: 8px; padding: 10px 6px; margin-bottom: 6px; font-size: 1.1rem; font-weight: 900; color: #ffffff; }
         .picket-item.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
+        .picket-item.yellow { border-color: #eab308; background: linear-gradient(135deg, #713f12 0%, #422006 100%); color: #fde047; }
         .picket-guide-bottom { font-size: 0.72rem; color: #fbbf24; margin-top: 4px; font-weight: 700; }
 
-        /* 🔍 풀스크린 웹 피켓 뷰 (오 필승 코리아 축제 음원 연결) */
+        /* 🔍 풀스크린 웹 피켓 뷰 */
         #fullscreenPicket {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;
         }
         .fs-picket-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 14px; }
         .fs-picket-title { font-size: 1.3rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
-        
-        /* 🌟 실시간 파티 체크인 카운터 */
-        .fs-party-checkin { background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 12px; padding: 8px; color: #4ade80; font-size: 0.85rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px; }
-
-        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.5rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .fs-picket-btn { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 4px solid #3b82f6; border-radius: 16px; padding: 20px 10px; font-size: 1.4rem; font-weight: 900; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         .fs-picket-btn.red { border-color: #ef4444; background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); color: #fef08a; }
-        
-        /* 🎵 오 필승 코리아 응원가 버튼 */
-        .music-toggle-btn { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; border: 2px solid #fca5a5; padding: 12px; border-radius: 12px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
-        
-        .fs-close-btn { background-color: #334155; color: #ffffff; border: none; padding: 12px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
+        .fs-picket-btn.yellow { border-color: #eab308; background: linear-gradient(135deg, #713f12 0%, #422006 100%); color: #fde047; }
+        .fs-close-btn { margin-top: 20px; background-color: #334155; color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; font-size: 1rem; font-weight: 800; cursor: pointer; }
 
         /* 🕹️ 미니 게임방 모달 */
         #arcadeModal {
@@ -161,7 +163,7 @@
             border: 3px solid #fef08a; border-radius: 12px; margin-bottom: 15px;
         }
 
-        /* 💎 5x6 연쇄 팡팡 맞추기 퍼즐 보드 */
+        /* 💎 연쇄 팡팡 맞추기 퍼즐 보드 */
         .match-board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 12px; }
         .match-tile { background-color: #334155; border: 2px solid #64748b; border-radius: 6px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.2s; }
         .match-tile.selected { border-color: #fef08a; background-color: #475569; transform: scale(0.92); }
@@ -203,8 +205,14 @@
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
     </div>
 
-    <!-- 4. 핵심 요구 문구 카드 3개 -->
+    <!-- 4. 핵심 요구 구호 카드 영역 (국민 개헌 프로젝트 추가) -->
     <main class="slogan-container">
+        <!-- [신규 추가] 국민 직접 개헌 및 소환법 프로젝트 배너 -->
+        <div class="slogan-card constitution" onclick="openModal('constitutionModal')">
+            <div class="slogan-text">⚡ 국민 직접 개헌 & 소환법 입법</div>
+            <div class="slogan-desc">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
+        </div>
+
         <a href="https://www.youtube.com/results?search_query=독일+정치+문화+의회" target="_blank" class="slogan-card">
             <div class="slogan-text">⚖️ 일하는 국회의원</div>
             <div class="slogan-desc">📺 독일 의회 및 정치 문화 사례 보기 ➔</div>
@@ -271,11 +279,42 @@
         <ul class="notice-list">
             <li><span>[주말축제]</span> 매주 주말 길거리에서 즐기는 1시간의 민주주의 축제 (13:00~14:00)</li>
             <li><span>[총결집]</span> 월 1회 광화문 광장 / 여의도 광장 대규모 축제 한마당</li>
-            <li><span>[안내]</span> 평일엔 게임으로 연습하고, 주말엔 집 앞에서 음악 틀고 파티를 즐겨보세요!</li>
+            <li><span>[국민개헌]</span> 국회의원이 안 하면 국민이 직접 만드는 개헌 및 소환법 운동 전개!</li>
         </ul>
     </footer>
 
-    <!-- 8. [팝업 모달 1] 휴대폰 알림 로드맵 & 모임 장소 지도 연결 -->
+    <!-- 8. [신규 팝업] 국민 직접 개헌 및 소환법 상세 안내 모달 -->
+    <div id="constitutionModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
+            <div class="modal-title">⚡ 국민 직접 개헌 & 소환법 프로젝트</div>
+            
+            <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
+                국민이 사장인데 일 안 하는 직원(국회의원)을 자르지 못하는 현실! 헌법과 법률을 국민의 손으로 직접 바로 세우는 3단계 로드맵입니다.
+            </p>
+
+            <div class="step-box">
+                <div class="step-title">1단계: 국민발의제 헌법 개정 요구</div>
+                <div class="step-desc">대통령과 국회의원뿐만 아니라, 일정 수 이상의 국민 서명으로 직접 개헌안을 발의할 수 있는 권리를 되찾습니다.</div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">2단계: 국회의원 국민소환제 법제화</div>
+                <div class="step-desc">일하지 않거나 특권 뒤에 숨는 국회의원을 임기 중이라도 주권자인 국민이 직접 소환·해임할 수 있는 법을 통과시킵니다.</div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">3단계: 선거 공약 서약 & 거부 운동</div>
+                <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.</div>
+            </div>
+
+            <button onclick="closeModal('constitutionModal'); openModal('rulesModal');" style="width:100%; margin-top:10px; background-color:#eab308; color:#000; border:none; padding:12px; border-radius:8px; font-weight:900; cursor:pointer;">
+                📱 현장 웹 피켓에서 구호 확인하기 ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- 9. [팝업 모달 2] 휴대폰 알림 로드맵 & 모임 장소 지도 연결 -->
     <div id="roadmapModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('roadmapModal')">&times;</button>
@@ -302,7 +341,7 @@
         </div>
     </div>
 
-    <!-- 9. [팝업 모달 2] 현장 행동 웹 피켓 & 준칙 안내 창 -->
+    <!-- 10. [팝업 모달 3] 현장 행동 웹 피켓 & 준칙 안내 창 -->
     <div id="rulesModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('rulesModal')">&times;</button>
@@ -310,6 +349,7 @@
             
             <div class="web-picket-box" onclick="openFullscreenPicket()">
                 <div class="picket-guide-top">🔍 [터치하면 전체 화면 피켓으로 확대됩니다]</div>
+                <div class="picket-item yellow">⚡ 국민 직접 개헌 & 소환법</div>
                 <div class="picket-item">⚖️ 일하는 국회의원</div>
                 <div class="picket-item red">🚫 불체포 특권 폐지</div>
                 <div class="picket-item red">💥 국회의원 특권 폐지</div>
@@ -317,12 +357,12 @@
             </div>
 
             <div class="rule-card">
-                <div class="rule-card-title">1. 🎉 주말 파티 1시간 즐기기</div>
-                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 음악과 함께 즐겁게 참여합니다.</div>
+                <div class="rule-card-title">1. 🎉 주말 축제 1시간 즐기기</div>
+                <div class="rule-card-desc">매주 주말 길거리에서 가벼운 마음으로 즐겁게 참여합니다.</div>
             </div>
             <div class="rule-card">
                 <div class="rule-card-title">2. 🕊️ 평화적 문화 연대</div>
-                <div class="rule-card-desc">서로 눈인사를 나누며 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
+                <div class="rule-card-desc">성숙하고 밝은 축제 분위기 속에서 뜻을 모읍니다.</div>
             </div>
             <div class="rule-card">
                 <div class="rule-card-title">3. 🧹 클린 축제 현장 만들기</div>
@@ -335,37 +375,26 @@
         </div>
     </div>
 
-    <!-- 🔍 10. [전체 화면 풀스크린 웹 피켓 뷰 - '오 필승 코리아' 축제 음악 지원] -->
+    <!-- 🔍 11. [전체 화면 풀스크린 웹 피켓 뷰] -->
     <div id="fullscreenPicket" onclick="closeFullscreenPicket()">
         <div class="fs-picket-container" onclick="event.stopPropagation();">
             <div class="fs-picket-title">🎉 국민의 약속 현장 웹 피켓</div>
-            
-            <!-- 🌟 실시간 파티 체크인 카운터 -->
-            <div class="fs-party-checkin">
-                🟢 지금 전국 도로에서 <span id="liveCheckinCount" style="color:#fef08a; font-size:1rem;">12,485</span>명이 파티 중!
-            </div>
-
+            <div class="fs-picket-btn yellow">⚡ 국민 직접 개헌 & 소환법</div>
             <div class="fs-picket-btn">⚖️ 일하는 국회의원</div>
             <div class="fs-picket-btn red">🚫 불체포 특권 폐지</div>
             <div class="fs-picket-btn red">💥 국회의원 특권 폐지</div>
-
-            <!-- 🎵 '오 필승 코리아' 신나는 축제 음악 버튼 -->
-            <button class="music-toggle-btn" id="musicBtn" onclick="toggleFestMusic()">
-                🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)
-            </button>
-
             <button class="fs-close-btn" onclick="closeFullscreenPicket()">✕ 전체 화면 닫기</button>
         </div>
     </div>
 
-    <!-- 👀 11. [본 그림 원본 보기 팝업 창] -->
+    <!-- 👀 12. [본 그림 원본 보기 팝업 창] -->
     <div id="originalModal" onclick="hideOriginalModal()">
         <div style="font-size:1.1rem; font-weight:800; color:#fef08a; margin-bottom:10px;">👀 원본 그림 미리보기</div>
         <div id="originalImgDisplay"></div>
         <button class="game-btn" onclick="hideOriginalModal()">닫기</button>
     </div>
 
-    <!-- 🕹️ 12. [전체 화면 미니 게임방 모달] -->
+    <!-- 🕹️ 13. [전체 화면 미니 게임방 모달] -->
     <div id="arcadeModal">
         <div class="arcade-header">
             <h2>🕹️ 시민 축제 미니 게임방</h2>
@@ -392,8 +421,7 @@
                 </button>
                 <input type="file" id="imageUploader" accept="image/*" style="display:none;" onchange="loadCustomImage(this)">
             </div>
-            <!-- 🎉 퍼즐 완성 시 눈에 띄게 나타나는 축하 메시지 공간 -->
-            <p id="puzzleMsg" style="font-size: 0.95rem; color: #38bdf8; margin-top: 10px; font-weight: 800; min-height: 24px;"></p>
+            <p id="puzzleMsg" style="font-size: 0.8rem; color: #38bdf8; margin-top: 8px;"></p>
         </div>
 
         <!-- [게임 2] 난이도가 수월하고 콤보가 잘 터지는 연속 팡팡 맞추기 패널 -->
@@ -411,8 +439,6 @@
 
     <script>
         const BASE_COUNT = 1248;
-        let isMusicPlaying = false;
-        let musicTimeout = null;
 
         window.onload = function() {
             checkLoginStatus();
@@ -456,18 +482,8 @@
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function openFullscreenPicket() { 
-            const liveCount = 12400 + Math.floor(Math.random() * 250);
-            document.getElementById('liveCheckinCount').innerText = liveCount.toLocaleString();
-            document.getElementById('fullscreenPicket').style.display = 'flex'; 
-        }
-        
-        function closeFullscreenPicket() { 
-            document.getElementById('fullscreenPicket').style.display = 'none'; 
-            stopFestMusic();
-        }
-
+        function openFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'flex'; }
+        function closeFullscreenPicket() { document.getElementById('fullscreenPicket').style.display = 'none'; }
         function openArcadeModal() { document.getElementById('arcadeModal').style.display = 'flex'; }
         function closeArcadeModal() { document.getElementById('arcadeModal').style.display = 'none'; }
 
@@ -476,112 +492,6 @@
             document.getElementById('tab2').classList.toggle('active', num === 2);
             document.getElementById('panel1').classList.toggle('active', num === 1);
             document.getElementById('panel2').classList.toggle('active', num === 2);
-        }
-
-        /* -------------------------------------------------------------
-         * 🎵 '오 필승 코리아' 축제 신나는 멜로디 & 리듬 루프 엔진
-         * ------------------------------------------------------------- */
-        function toggleFestMusic() {
-            const btn = document.getElementById('musicBtn');
-            if (!isMusicPlaying) {
-                isMusicPlaying = true;
-                btn.innerText = "🎶 '오 필승 코리아' 축제 음악 재생 중! (ON)";
-                btn.style.background = "linear-gradient(135deg, #22c55e 0%, #15803d 100%)";
-                btn.style.borderColor = "#86efac";
-                playKoreaAnthemLoop();
-            } else {
-                stopFestMusic();
-            }
-        }
-
-        function playKoreaAnthemLoop() {
-            if (!isMusicPlaying) return;
-            
-            if (!window.audioCtx) {
-                window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (window.audioCtx.state === 'suspended') {
-                window.audioCtx.resume();
-            }
-
-            // '오~ 필승 코리아!' 음계 구성 (Hz)
-            // 오(미) ~ (솔) 필(라)승(라) 코(솔)리(라)아(솔) ~ !
-            const melody = [
-                { f: 329.63, d: 0.4 }, // 오~ (E4)
-                { f: 392.00, d: 0.2 }, // 솔 (G4)
-                { f: 440.00, d: 0.4 }, // 필~ (A4)
-                { f: 440.00, d: 0.3 }, // 승! (A4)
-                { f: 392.00, d: 0.25 }, // 코 (G4)
-                { f: 440.00, d: 0.25 }, // 리 (A4)
-                { f: 392.00, d: 0.5 }, // 아~ (G4)
-                { f: 0,      d: 0.2 }, // (쉬움)
-                
-                // 오~ 필승 코리아! (고음 클라이맥스)
-                { f: 440.00, d: 0.35 }, // 오~
-                { f: 523.25, d: 0.2 },  // 필
-                { f: 587.33, d: 0.4 },  // 승~
-                { f: 587.33, d: 0.3 },  // 코!
-                { f: 523.25, d: 0.25 }, // 리
-                { f: 587.33, d: 0.25 }, // 아
-                { f: 523.25, d: 0.6 },  // ~~~
-                { f: 0,      d: 0.3 }
-            ];
-
-            let currentTime = window.audioCtx.currentTime;
-
-            melody.forEach((note) => {
-                if (!isMusicPlaying) return;
-                
-                if (note.f > 0) {
-                    // 메인 멜로디 오실레이터
-                    let osc = window.audioCtx.createOscillator();
-                    let gain = window.audioCtx.createGain();
-                    
-                    osc.type = 'sawtooth'; // 웅장한 트럼펫/치어리딩 음색
-                    osc.frequency.setValueAtTime(note.f, currentTime);
-                    
-                    gain.gain.setValueAtTime(0.12, currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d);
-                    
-                    osc.connect(gain);
-                    gain.connect(window.audioCtx.destination);
-                    
-                    osc.start(currentTime);
-                    osc.stop(currentTime + note.d);
-
-                    // 신나는 킥 베이스 비트 동시 추가
-                    let bassOsc = window.audioCtx.createOscillator();
-                    let bassGain = window.audioCtx.createGain();
-                    bassOsc.type = 'sine';
-                    bassOsc.frequency.setValueAtTime(120, currentTime);
-                    bassOsc.frequency.exponentialRampToValueAtTime(30, currentTime + 0.15);
-                    bassGain.gain.setValueAtTime(0.2, currentTime);
-                    bassGain.gain.exponentialRampToValueAtTime(0.001, currentTime + 0.15);
-                    bassOsc.connect(bassGain);
-                    bassGain.connect(window.audioCtx.destination);
-                    bassOsc.start(currentTime);
-                    bassOsc.stop(currentTime + 0.15);
-                }
-                currentTime += note.d;
-            });
-
-            // 곡이 끝나면 자동으로 반복
-            const totalDuration = melody.reduce((sum, n) => sum + n.d, 0) * 1000;
-            musicTimeout = setTimeout(() => {
-                if (isMusicPlaying) playKoreaAnthemLoop();
-            }, totalDuration);
-        }
-
-        function stopFestMusic() {
-            isMusicPlaying = false;
-            if (musicTimeout) clearTimeout(musicTimeout);
-            
-            const btn = document.getElementById('musicBtn');
-            if (btn) {
-                btn.innerText = "🔥 신나는 '오 필승 코리아' 축제 음악 켜기 (OFF)";
-                btn.style.background = "linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)";
-                btn.style.borderColor = "#fca5a5";
-            }
         }
 
         /* -------------------------------------------------------------
@@ -672,21 +582,19 @@
         function checkPuzzleWin() {
             let isWin = puzzleState.every((val, index) => val === index);
             if (isWin) {
-                const msgEl = document.getElementById('puzzleMsg');
-                msgEl.style.color = '#22c55e';
-                msgEl.innerHTML = '🎉 축하합니다! 퍼즐을 완벽히 맞추셨습니다!';
+                document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐을 완벽히 맞추셨습니다!';
             }
         }
 
         /* -------------------------------------------------------------
-         * 💎 [게임 2] 연속 팡팡 폭발 퍼즐 (5x6 확장, 5종 아이콘)
+         * 💎 [게임 2] 난이도 하향 & 연속 팡팡 폭발 퍼즐 (5x6 확장, 5종 아이콘)
          * ------------------------------------------------------------- */
         let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
         let matchBoardData = [];
         let firstSelected = null;
         let comboScore = 0;
         const COLS = 5;
-        const ROWS = 6; 
+        const ROWS = 6;
 
         function initMatchGame() {
             comboScore = 0;
