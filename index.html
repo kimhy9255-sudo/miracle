@@ -20,19 +20,34 @@
         .counter-number { font-size: 1.35rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px; }
 
         /* 중앙 핵심 구호 카드 영역 */
-        .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; }
+        .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 6px; }
+        
+        /* 새로 추가된 통합 참여 및 명단 확인 상위 패널 */
+        .participate-panel {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            border: 2px solid #34d399; border-radius: 10px; padding: 9px 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2); text-align: left;
+        }
+        .participate-title { font-size: 0.9rem; font-weight: 900; color: #ecfdf5; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
+        .participate-btn-group { display: flex; gap: 5px; }
+        .sub-action-btn {
+            flex: 1; background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
+            padding: 6px 4px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer; text-align: center;
+        }
+        .sub-action-btn:active { transform: scale(0.98); background-color: #064e3b; }
+
         .slogan-card { 
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            border: 2px solid #3b82f6; border-radius: 10px; padding: 9px 8px; 
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s; cursor: pointer;
+            border: 1px solid #3b82f6; border-radius: 8px; padding: 7px 8px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s; cursor: pointer;
         }
         .slogan-card:active { transform: scale(0.98); }
         .slogan-card.highlight { border-color: #ef4444; background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
         .slogan-card.constitution { border-color: #eab308; background: linear-gradient(135deg, #422006 0%, #713f12 100%); }
-        .slogan-text { font-size: 1rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+        .slogan-text { font-size: 0.9rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
         .slogan-card.highlight .slogan-text { color: #fef08a; }
         .slogan-card.constitution .slogan-text { color: #fde047; }
-        .slogan-desc { font-size: 0.68rem; color: #94a3b8; margin-top: 2px; }
+        .slogan-desc { font-size: 0.62rem; color: #94a3b8; margin-top: 1px; }
         .slogan-card.highlight .slogan-desc { color: #fca5a5; }
         .slogan-card.constitution .slogan-desc { color: #fef08a; font-weight: 700; }
 
@@ -67,11 +82,16 @@
         .close-btn { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.4rem; color: #94a3b8; cursor: pointer; }
         .modal-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
-        /* 개헌 프로젝트 모달 내부 스타일 및 서명 버튼 */
-        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
-        .step-title { font-size: 0.85rem; font-weight: 800; color: #fde047; margin-bottom: 2px; }
-        .step-desc { font-size: 0.75rem; color: #cbd5e1; line-height: 1.3; }
-        .sign-trigger-btn { margin-top: 6px; width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 6px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
+        /* 개헌 프로젝트 모달 내부 스타일 및 서명 버튼 (불필요한 설명 및 여백 완전 삭제) */
+        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 8px; margin-bottom: 6px; }
+        .step-title { font-size: 0.8rem; font-weight: 800; color: #fde047; margin-bottom: 2px; }
+        .sign-trigger-btn { margin-top: 4px; width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 5px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+
+        /* 명단 테이블 스타일 */
+        .list-table { width: 100%; font-size: 0.75rem; border-collapse: collapse; margin-top: 6px; }
+        .list-table th, .list-table td { border: 1px solid #334155; padding: 5px; text-align: center; }
+        .list-table th { background-color: #0f172a; color: #38bdf8; }
+        .list-table td { color: #cbd5e1; }
 
         /* ✍️ 전자 서명 패널 모달 */
         #signModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 15px; }
@@ -149,24 +169,30 @@
 
     <!-- 3. 핵심 요구 구호 카드 영역 -->
     <main class="slogan-container">
+        <!-- 💡 일하는 국회의원 창 바로 위에 추가된 통합 참여 및 명단 확인 창 -->
+        <div class="participate-panel">
+            <div class="participate-title">📋 주권자 참여 및 명단 열람</div>
+            <div class="participate-btn-group">
+                <button class="sub-action-btn" onclick="openModal('signListModal')">✍️ 국민 참여 서명 명단</button>
+                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 국회의원 동의 명단</button>
+            </div>
+        </div>
+
         <div class="slogan-card constitution" onclick="openModal('constitutionModal')">
             <div class="slogan-text">⚡ 국민 직접 개헌 & 소환법 입법</div>
             <div class="slogan-desc">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
         </div>
 
         <a href="https://www.youtube.com/results?search_query=독일+정치+문화+의회" target="_blank" class="slogan-card">
-            <div class="slogan-text">⚖️ 일하는 국회의원</div>
-            <div class="slogan-desc">📺 독일 의회 및 정치 문화 사례 보기 ➔</div>
+            <div class="slogan-text" style="font-size:0.82rem;">⚖️ 일하는 국회의원</div>
         </a>
 
         <a href="https://www.youtube.com/results?search_query=국회의원+불체포특권+폐지" target="_blank" class="slogan-card highlight">
-            <div class="slogan-text">🚫 불체포 특권 폐지</div>
-            <div class="slogan-desc">📺 불체포 특권 개혁 토론 및 사례 보기 ➔</div>
+            <div class="slogan-text" style="font-size:0.82rem;">🚫 불체포 특권 폐지</div>
         </a>
 
         <a href="https://www.youtube.com/results?search_query=국회의원+특권+폐지" target="_blank" class="slogan-card">
-            <div class="slogan-text">💥 국회의원 특권 폐지</div>
-            <div class="slogan-desc">📺 특권 내려놓기 관련 영상 보기 ➔</div>
+            <div class="slogan-text" style="font-size:0.82rem;">💥 특권 폐지</div>
         </a>
     </main>
 
@@ -205,48 +231,101 @@
         </div>
     </section>
 
-    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 및 1, 3단계 전자서명 버튼 추가 -->
+    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 (하얀색 가림막 영역 텍스트 및 불필요한 공백 삭제됨) -->
     <div id="constitutionModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
             <div class="modal-title">⚡ 국민 직접 개헌 & 소환법 프로젝트</div>
             
-            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px; line-height: 1.35;">
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; line-height: 1.35;">
                 국민이 사장인데 일 안 하는 직원(국회의원)을 자르지 못하는 현실! 헌법과 법률을 국민의 손으로 직접 바로 세우는 3단계 로드맵입니다.
             </p>
 
-            <!-- 1단계: 국민발의제 (전자서명 버튼 추가)[span_1](start_span)[span_1](end_span) -->
             <div class="step-box">
                 <div class="step-title">1단계: 국민발의제 헌법 개정 요구</div>
-                <div class="step-desc">대통령과 국회의원뿐만 아니라, 일정 수 이상의 국민 서명으로 직접 개헌안을 발의할 수 있는 권리를 되찾습니다.[span_2](start_span)[span_2](end_span)</div>
                 <button class="sign-trigger-btn" onclick="openSignModal('1단계: 국민발의제 헌법 개정 동의 서명')">✍️ [1단계] 국민 직접 서명 및 동의하기</button>
             </div>
 
             <div class="step-box">
                 <div class="step-title">2단계: 국회의원 국민소환제 법제화</div>
-                <div class="step-desc">일하지 않거나 특권 뒤에 숨는 국회의원을 임기 중이라도 주권자인 국민이 직접 소환·해임할 수 있는 법을 통과시킵니다.</div>
             </div>
 
-            <!-- 3단계: 후보 공약 서약 (전자서명 버튼 추가)[span_3](start_span)[span_3](end_span) -->
             <div class="step-box">
                 <div class="step-title">3단계: 선거 공약 서약 & 거부 운동</div>
-                <div class="step-desc">국민소환제와 특권 폐지에 동의하지 않는 후보는 여야를 막론하고 투표로 심판하는 범국민 연대를 구축합니다.[span_4](start_span)[span_4](end_span)</div>
                 <button class="sign-trigger-btn" onclick="openSignModal('3단계: 국회의원 후보 공약 서약 및 서명')">✍️ [3단계] 후보 공약 서약 및 전자서명</button>
             </div>
 
-            <!-- 실행 절차 방법 섹션 -->
             <div class="step-box" style="border-color: #3b82f6; background-color: #1e293b;">
                 <div class="step-title" style="color: #38bdf8;">📌 국민 직접 개헌 구체적 실행 절차</div>
-                <div class="step-desc" style="color: #f8fafc; margin-top: 4px;">
+                <div style="font-size: 0.72rem; color: #f8fafc; margin-top: 3px; line-height: 1.3;">
                     1. <b>온·오프라인 서명 운동:</b> 전국민 100만 명 서명 목표 달성<br>
                     2. <b>입법 청원 및 공론화:</b> 국회 국민동의청원 및 주말 거리 문화 축제 개최<br>
                     3. <b>정치권 압박 및 투표 심판:</b> 개헌 서약 거부 의원 낙선 운동 전개
                 </div>
             </div>
 
-            <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:8px; background-color:#475569; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:800; cursor:pointer;">
+            <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:800; cursor:pointer;">
                 닫기
             </button>
+        </div>
+    </div>
+
+    <!-- [팝업 1] 국민 참여 서명 명단 모달 -->
+    <div id="signListModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
+            <div class="modal-title">✍️ 국민 참여 서명 명단</div>
+            <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:6px;">개헌 및 소환법 입법에 참여한 주권자 시민 명단입니다.</p>
+            <table class="list-table">
+                <tr>
+                    <th>이름</th>
+                    <th>주소지</th>
+                    <th>전화번호</th>
+                </tr>
+                <tr>
+                    <td>김*수</td>
+                    <td>서울특별시 종로구</td>
+                    <td>010-****-1234</td>
+                </tr>
+                <tr>
+                    <td>이*영</td>
+                    <td>부산광역시 해운대구</td>
+                    <td>010-****-5678</td>
+                </tr>
+                <tr>
+                    <td>박*민</td>
+                    <td>경기도 수원시 팔달구</td>
+                    <td>010-****-9876</td>
+                </tr>
+            </table>
+            <button onclick="closeModal('signListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
+        </div>
+    </div>
+
+    <!-- [팝업 2] 국회의원 동의 명단 모달 -->
+    <div id="deputyListModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
+            <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
+            <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:6px;">국민 개헌 및 특권 폐지 서약에 동의한 의원 명단입니다.</p>
+            <table class="list-table">
+                <tr>
+                    <th>의원명</th>
+                    <th>지역구</th>
+                    <th>연락처(의원실)</th>
+                </tr>
+                <tr>
+                    <td>홍길동 의원</td>
+                    <td>서울 영등포구갑</td>
+                    <td>02-784-****</td>
+                </tr>
+                <tr>
+                    <td>김철수 의원</td>
+                    <td>경기 성남시분당구</td>
+                    <td>031-780-****</td>
+                </tr>
+            </table>
+            <button onclick="closeModal('deputyListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
         </div>
     </div>
 
@@ -254,7 +333,7 @@
     <div id="signModal">
         <div class="sign-box">
             <div id="signModalTitle" style="font-size: 0.95rem; font-weight: 800; color: #fef08a; margin-bottom: 6px;">전자 서명</div>
-            <p style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">휴대폰 본인인증(지문/간편인증) 완료 후, 아래 빈칸에 직접 서명해 주세요.</p>
+            <p style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">휴대폰 본인인증 완료 후, 아래 빈칸에 직접 서명해 주세요.</p>
             <canvas id="signatureCanvas"></canvas>
             <div style="display: flex; gap: 6px; margin-top: 8px;">
                 <button class="game-btn secondary" style="flex:1;" onclick="clearSignature()">다시 쓰기</button>
