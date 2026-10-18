@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국민의 약속 - 대한민국 시민 주권 프로젝트 & 국민 개헌</title>
     <style>
-        /* 기본 리셋 및 모바일 최적화 (컴팩트한 여백) */
+        /* 기본 리셋 및 모바일 최적화 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
         body { background-color: #0f172a; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: 10px; text-align: center; }
 
@@ -14,27 +14,27 @@
         .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; box-shadow: 0 2px 6px rgba(147,51,234,0.3); }
         .main-title { font-size: 1.35rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
 
-        /* 📊 실시간 회원수 전광판 (만 단위 반영) */
+        /* 📊 실시간 회원수 전광판 */
         .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 10px; padding: 8px; margin-bottom: 6px; box-shadow: 0 3px 10px rgba(99, 102, 241, 0.2); }
         .counter-label { font-size: 0.7rem; font-weight: 700; color: #a5b4fc; margin-bottom: 1px; }
         .counter-number { font-size: 1.35rem; font-weight: 900; color: #38bdf8; letter-spacing: 1px; }
 
-        /* 중앙 핵심 구호 카드 영역 */
+        /* 메인 상위 패널 (참여하기 & 명단보기) */
         .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 5px; margin-bottom: 6px; }
         
-        /* 새로 추가된 통합 참여 및 명단 확인 상위 패널 */
         .participate-panel {
             background: linear-gradient(135deg, #065f46 0%, #047857 100%);
             border: 2px solid #34d399; border-radius: 10px; padding: 9px 8px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.2); text-align: left;
         }
-        .participate-title { font-size: 0.9rem; font-weight: 900; color: #ecfdf5; margin-bottom: 5px; display: flex; align-items: center; gap: 4px; }
-        .participate-btn-group { display: flex; gap: 5px; }
+        .participate-title { font-size: 0.88rem; font-weight: 900; color: #ecfdf5; margin-bottom: 6px; }
+        .participate-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
         .sub-action-btn {
-            flex: 1; background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
-            padding: 6px 4px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer; text-align: center;
+            background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
+            padding: 7px 4px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; cursor: pointer; text-align: center;
         }
-        .sub-action-btn:active { transform: scale(0.98); background-color: #064e3b; }
+        .sub-action-btn.highlight { background-color: #059669; color: #ffffff; border-color: #a7f3d0; }
+        .sub-action-btn:active { transform: scale(0.98); }
 
         .slogan-card { 
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
@@ -48,10 +48,8 @@
         .slogan-card.highlight .slogan-text { color: #fef08a; }
         .slogan-card.constitution .slogan-text { color: #fde047; }
         .slogan-desc { font-size: 0.62rem; color: #94a3b8; margin-top: 1px; }
-        .slogan-card.highlight .slogan-desc { color: #fca5a5; }
-        .slogan-card.constitution .slogan-desc { color: #fef08a; font-weight: 700; }
 
-        /* 🎮 시민 대기실 & 축제 게임방 바로가기 배너 */
+        /* 🎮 시민 축제 배너 */
         .arcade-banner {
             width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
             border: 2px solid #a78bfa; border-radius: 12px; padding: 10px; margin-bottom: 6px;
@@ -61,44 +59,42 @@
         .arcade-title { font-size: 0.95rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
         .arcade-desc { font-size: 0.72rem; color: #e0e7ff; }
 
-        /* 👤 회원가입 / 로그인 섹션 (맨 아래 배치) */
-        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: left; }
+        /* 회원가입 / 로그인 섹션 */
+        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px; margin-bottom: 6px; text-align: left; }
         .join-title { font-size: 0.9rem; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
         .join-title span { background-color: #2563eb; color: #fff; font-size: 0.68rem; padding: 2px 6px; border-radius: 8px; font-weight: 600; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
         .phone-input { width: 100%; padding: 8px 10px; font-size: 0.9rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #ffffff; outline: none; }
-        .phone-input:focus { border-color: #3b82f6; }
-        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 8px rgba(34, 197, 94, 0.3); transition: transform 0.1s; }
-        .action-btn:active { transform: scale(0.98); }
+        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 0.95rem; font-weight: 800; padding: 10px; border: none; border-radius: 6px; cursor: pointer; }
 
-        /* 🔑 로그인 완료 상태 대시보드 */
-        .user-info-box { display: flex; flex-direction: column; gap: 5px; }
-        .user-phone-text { font-size: 0.95rem; font-weight: 800; color: #38bdf8; }
-        .logout-btn { width: 100%; background-color: transparent; border: 1px solid #475569; color: #94a3b8; font-size: 0.75rem; padding: 6px; border-radius: 6px; cursor: pointer; margin-top: 2px; text-align: center; }
-
-        /* 팝업 모달 공통 스타일 */
+        /* 팝업 모달 공통 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .modal-content { background-color: #1e293b; border: 1px solid #3b82f6; border-radius: 14px; width: 100%; max-width: 380px; max-height: 85vh; overflow-y: auto; padding: 16px; text-align: left; position: relative; }
         .close-btn { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.4rem; color: #94a3b8; cursor: pointer; }
         .modal-title { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
 
-        /* 개헌 프로젝트 모달 내부 스타일 및 서명 버튼 (불필요한 설명 및 여백 완전 삭제) */
-        .step-box { background-color: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 8px; margin-bottom: 6px; }
-        .step-title { font-size: 0.8rem; font-weight: 800; color: #fde047; margin-bottom: 2px; }
-        .sign-trigger-btn { margin-top: 4px; width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 5px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+        /* 모달 입력 폼 스타일 */
+        .input-group { margin-bottom: 8px; text-align: left; }
+        .input-group label { display: block; font-size: 0.72rem; color: #94a3b8; margin-bottom: 3px; font-weight: 700; }
+        .input-field { width: 100%; padding: 7px 9px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; outline: none; }
+        .submit-btn { width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 9px; border-radius: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer; margin-top: 5px; }
 
-        /* 명단 테이블 스타일 */
-        .list-table { width: 100%; font-size: 0.75rem; border-collapse: collapse; margin-top: 6px; }
+        /* 계좌 안내 박스 */
+        .account-box { background-color: #0f172a; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: center; }
+        .account-number { font-size: 0.95rem; font-weight: 900; color: #fde047; letter-spacing: 0.5px; margin: 3px 0; }
+
+        /* 명단 테이블 */
+        .list-table { width: 100%; font-size: 0.72rem; border-collapse: collapse; margin-top: 6px; }
         .list-table th, .list-table td { border: 1px solid #334155; padding: 5px; text-align: center; }
         .list-table th { background-color: #0f172a; color: #38bdf8; }
         .list-table td { color: #cbd5e1; }
 
-        /* ✍️ 전자 서명 패널 모달 */
+        /* ✍️ 전자 서명 패널 */
         #signModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 15px; }
         .sign-box { width: 100%; max-width: 360px; background-color: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 14px; text-align: center; }
-        canvas#signatureCanvas { width: 100%; height: 150px; background-color: #0f172a; border: 1px dashed #64748b; border-radius: 6px; margin: 8px 0; cursor: crosshair; touch-action: none; }
+        canvas#signatureCanvas { width: 100%; height: 150px; background-color: #0f172a; border: 1px dashed #64748b; border-radius: 6px; margin: 8px 0; touch-action: none; cursor: crosshair; }
 
-        /* 🕹️ 미니 게임방 모달 */
+        /* 🕹️ 미니 게임방 모달 스타일 */
         #arcadeModal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #0f172a; z-index: 9999; flex-direction: column; justify-content: flex-start; align-items: center; padding: 12px; overflow-y: auto; text-align: center;
@@ -161,20 +157,22 @@
         <h1 class="main-title">국민의 약속</h1>
     </header>
 
-    <!-- 📊 2. 실시간 회원수 전광판 (만 단위 반영) -->
+    <!-- 📊 2. 실시간 회원수 전광판 -->
     <section class="counter-container">
         <div class="counter-label">현재 가입한 대한민국 시민</div>
         <div class="counter-number"><span id="participantCount">12,480</span> 명</div>
     </section>
 
-    <!-- 3. 핵심 요구 구호 카드 영역 -->
+    <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
-        <!-- 💡 일하는 국회의원 창 바로 위에 추가된 통합 참여 및 명단 확인 창 -->
+        <!-- 💡 주권자 직접 참여 및 서명/동의 확인 상위 패널 -->
         <div class="participate-panel">
-            <div class="participate-title">📋 주권자 참여 및 명단 열람</div>
+            <div class="participate-title">✍️ 국민 서명 & 국회의원 동의 인증 참여</div>
             <div class="participate-btn-group">
-                <button class="sub-action-btn" onclick="openModal('signListModal')">✍️ 국민 참여 서명 명단</button>
-                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 국회의원 동의 명단</button>
+                <button class="sub-action-btn highlight" onclick="openModal('citizenSignFormModal')">📝 국민 서명 작성하기</button>
+                <button class="sub-action-btn" onclick="openModal('signListModal')">📋 국민 서명 명단</button>
+                <button class="sub-action-btn highlight" style="background-color:#0284c7; border-color:#38bdf8;" onclick="openModal('deputyVerifyModal')">🏛️ 의원 10원 송금 동의</button>
+                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 의원 동의 명단</button>
             </div>
         </div>
 
@@ -202,138 +200,149 @@
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
     </div>
 
-    <!-- 👤 5. 회원가입 / 로그인 섹션 (맨 아래 배치) -->
+    <!-- 👤 5. 회원가입 / 로그인 섹션 -->
     <section class="join-container">
         <div id="loginForm">
-            <div class="join-title">
-                ✍️ 국민의 약속 회원가입
-                <span>간편 가입</span>
-            </div>
+            <div class="join-title">✍️ 국민의 약속 간편가입 <span>간편 가입</span></div>
             <div class="form-group">
                 <input type="tel" id="userPhone" class="phone-input" placeholder="휴대전화 번호 입력 (- 제외)" maxlength="11">
-                <button class="action-btn" onclick="submitParticipation()">
-                    회원가입 완료하기 ➔
-                </button>
+                <button class="action-btn" onclick="submitParticipation()">회원가입 완료하기 ➔</button>
             </div>
         </div>
 
         <div id="userInfo" style="display: none;">
-            <div class="join-title">
-                ✅ 회원가입 완료
-                <span>가입(로그인) 중</span>
-            </div>
-            <div class="user-info-box">
-                <div class="user-phone-text">📱 <span id="displayPhone"></span> 님</div>
-                <button class="logout-btn" onclick="logout()">
-                    다른 번호로 변경 (로그아웃)
-                </button>
-            </div>
+            <div class="join-title">✅ 회원가입 완료 <span>가입(로그인) 중</span></div>
+            <div style="font-size:0.95rem; font-weight:800; color:#38bdf8;">📱 <span id="displayPhone"></span> 님</div>
+            <button onclick="logout()" style="width:100%; background:transparent; border:1px solid #475569; color:#94a3b8; font-size:0.75rem; padding:6px; border-radius:6px; margin-top:4px; cursor:pointer;">로그아웃</button>
         </div>
     </section>
 
-    <!-- [팝업] 국민 직접 개헌 및 소환법 상세 안내 (하얀색 가림막 영역 텍스트 및 불필요한 공백 삭제됨) -->
-    <div id="constitutionModal" class="modal-overlay">
+    <!-- -------------------------------------------------------------
+         [모달 1] 📝 국민 직접 서명 작성 창
+         ------------------------------------------------------------- -->
+    <div id="citizenSignFormModal" class="modal-overlay">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
-            <div class="modal-title">⚡ 국민 직접 개헌 & 소환법 프로젝트</div>
+            <button class="close-btn" onclick="closeModal('citizenSignFormModal')">&times;</button>
+            <div class="modal-title">📝 국민 직접 개헌 서명 작성</div>
             
-            <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; line-height: 1.35;">
-                국민이 사장인데 일 안 하는 직원(국회의원)을 자르지 못하는 현실! 헌법과 법률을 국민의 손으로 직접 바로 세우는 3단계 로드맵입니다.
-            </p>
-
-            <div class="step-box">
-                <div class="step-title">1단계: 국민발의제 헌법 개정 요구</div>
-                <button class="sign-trigger-btn" onclick="openSignModal('1단계: 국민발의제 헌법 개정 동의 서명')">✍️ [1단계] 국민 직접 서명 및 동의하기</button>
+            <div class="input-group">
+                <label>이름 (성함)</label>
+                <input type="text" id="signName" class="input-field" placeholder="예: 홍길동">
+            </div>
+            <div class="input-group">
+                <label>주소지 (시/군/구)</label>
+                <input type="text" id="signAddress" class="input-field" placeholder="예: 서울특별시 종로구">
+            </div>
+            <div class="input-group">
+                <label>휴대전화 번호</label>
+                <input type="tel" id="signPhone" class="input-field" placeholder="01012345678 (- 제외)">
             </div>
 
-            <div class="step-box">
-                <div class="step-title">2단계: 국회의원 국민소환제 법제화</div>
-            </div>
-
-            <div class="step-box">
-                <div class="step-title">3단계: 선거 공약 서약 & 거부 운동</div>
-                <button class="sign-trigger-btn" onclick="openSignModal('3단계: 국회의원 후보 공약 서약 및 서명')">✍️ [3단계] 후보 공약 서약 및 전자서명</button>
-            </div>
-
-            <div class="step-box" style="border-color: #3b82f6; background-color: #1e293b;">
-                <div class="step-title" style="color: #38bdf8;">📌 국민 직접 개헌 구체적 실행 절차</div>
-                <div style="font-size: 0.72rem; color: #f8fafc; margin-top: 3px; line-height: 1.3;">
-                    1. <b>온·오프라인 서명 운동:</b> 전국민 100만 명 서명 목표 달성<br>
-                    2. <b>입법 청원 및 공론화:</b> 국회 국민동의청원 및 주말 거리 문화 축제 개최<br>
-                    3. <b>정치권 압박 및 투표 심판:</b> 개헌 서약 거부 의원 낙선 운동 전개
-                </div>
-            </div>
-
-            <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:800; cursor:pointer;">
-                닫기
-            </button>
+            <button class="submit-btn" onclick="openSignCanvasFromForm()">✍️ 전자 서명 및 동의 제출하기</button>
+            <button onclick="closeModal('citizenSignFormModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
         </div>
     </div>
 
-    <!-- [팝업 1] 국민 참여 서명 명단 모달 -->
+    <!-- -------------------------------------------------------------
+         [모달 2] 🏛️ 국회의원 계좌 10원 송금 동의 인증 창
+         ------------------------------------------------------------- -->
+    <div id="deputyVerifyModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
+            <div class="modal-title">🏛️ 국회의원 10원 계좌 송금 동의</div>
+            
+            <div class="account-box">
+                <div style="font-size:0.72rem; color:#a5b4fc;">[공식 동의 검증 전용 계좌]</div>
+                <div class="account-number">농협 301-1234-5678-01</div>
+                <div style="font-size:0.7rem; color:#cbd5e1;">예금주: (사)국민의약속개헌본부</div>
+            </div>
+
+            <p style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px; line-height:1.3;">
+                💡 <b>본인 인증 절차:</b> 국회의원 본인 명의 계좌에서 <b>10원</b>을 송금할 때, 입금자명에 <b>[의원명+지역구]</b>를 입력해주시면 확인 즉시 동의 명단에 정식 등록됩니다.
+            </p>
+
+            <div class="input-group">
+                <label>의원 성명</label>
+                <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동 의원">
+            </div>
+            <div class="input-group">
+                <label>소속 지역구</label>
+                <input type="text" id="deputyRegion" class="input-field" placeholder="예: 서울 영등포구갑">
+            </div>
+            <div class="input-group">
+                <label>의원실 연락처</label>
+                <input type="text" id="deputyContact" class="input-field" placeholder="예: 02-784-1234">
+            </div>
+
+            <button class="submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="submitDeputyVerification()">
+                ✅ 10원 송금 완료 및 동의 신청
+            </button>
+            <button onclick="closeModal('deputyVerifyModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
+        </div>
+    </div>
+
+    <!-- 📋 [모달 3] 국민 참여 서명 명단 -->
     <div id="signListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
             <div class="modal-title">✍️ 국민 참여 서명 명단</div>
-            <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:6px;">개헌 및 소환법 입법에 참여한 주권자 시민 명단입니다.</p>
             <table class="list-table">
-                <tr>
-                    <th>이름</th>
-                    <th>주소지</th>
-                    <th>전화번호</th>
-                </tr>
-                <tr>
-                    <td>김*수</td>
-                    <td>서울특별시 종로구</td>
-                    <td>010-****-1234</td>
-                </tr>
-                <tr>
-                    <td>이*영</td>
-                    <td>부산광역시 해운대구</td>
-                    <td>010-****-5678</td>
-                </tr>
-                <tr>
-                    <td>박*민</td>
-                    <td>경기도 수원시 팔달구</td>
-                    <td>010-****-9876</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>주소지</th>
+                        <th>전화번호</th>
+                    </tr>
+                </thead>
+                <tbody id="citizenSignTableBody">
+                    <tr><td>김*수</td><td>서울특별시 종로구</td><td>010-****-1234</td></tr>
+                    <td>이*영</td><td>부산광역시 해운대구</td><td>010-****-5678</td></tr>
+                    <tr><td>박*민</td><td>경기도 수원시 팔달구</td><td>010-****-9876</td></tr>
+                </tbody>
             </table>
             <button onclick="closeModal('signListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
         </div>
     </div>
 
-    <!-- [팝업 2] 국회의원 동의 명단 모달 -->
+    <!-- 🏛️ [모달 4] 국회의원 동의 명단 -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
-            <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:6px;">국민 개헌 및 특권 폐지 서약에 동의한 의원 명단입니다.</p>
+            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 10원 송금으로 본인 인증을 완료한 의원 목록입니다.</p>
             <table class="list-table">
-                <tr>
-                    <th>의원명</th>
-                    <th>지역구</th>
-                    <th>연락처(의원실)</th>
-                </tr>
-                <tr>
-                    <td>홍길동 의원</td>
-                    <td>서울 영등포구갑</td>
-                    <td>02-784-****</td>
-                </tr>
-                <tr>
-                    <td>김철수 의원</td>
-                    <td>경기 성남시분당구</td>
-                    <td>031-780-****</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>의원명</th>
+                        <th>지역구</th>
+                        <th>연락처(의원실)</th>
+                    </tr>
+                </thead>
+                <tbody id="deputyTableBody">
+                    <tr><td>홍길동 의원</td><td>서울 영등포구갑</td><td>02-784-****</td></tr>
+                    <tr><td>김철수 의원</td><td>경기 성남시분당구</td><td>031-780-****</td></tr>
+                </tbody>
             </table>
             <button onclick="closeModal('deputyListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
         </div>
     </div>
 
-    <!-- ✍️ [전자 서명 및 지문/본인인증 패널 팝업] -->
+    <!-- ⚡ [모달 5] 개헌 프로젝트 안내 -->
+    <div id="constitutionModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
+            <div class="modal-title">⚡ 국민 직접 개헌 & 소환법 프로젝트</div>
+            <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 8px;">
+                헌법과 법률을 국민의 손으로 직접 바로 세우는 로드맵입니다.
+            </p>
+            <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
+        </div>
+    </div>
+
+    <!-- ✍️ [전자 서명 패널 팝업] -->
     <div id="signModal">
         <div class="sign-box">
             <div id="signModalTitle" style="font-size: 0.95rem; font-weight: 800; color: #fef08a; margin-bottom: 6px;">전자 서명</div>
-            <p style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px;">휴대폰 본인인증 완료 후, 아래 빈칸에 직접 서명해 주세요.</p>
             <canvas id="signatureCanvas"></canvas>
             <div style="display: flex; gap: 6px; margin-top: 8px;">
                 <button class="game-btn secondary" style="flex:1;" onclick="clearSignature()">다시 쓰기</button>
@@ -350,7 +359,7 @@
         <button class="game-btn" onclick="hideOriginalModal()">닫기</button>
     </div>
 
-    <!-- 🕹️ [전체 화면 미니 게임방 모달] -->
+    <!-- 🕹️ [미니 게임방 모달] -->
     <div id="arcadeModal">
         <div class="arcade-header">
             <h2>🕹️ 시민 축제 미니 게임방</h2>
@@ -446,13 +455,57 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
+        /* 📝 국민 서명 작성 및 명단 추가 로직 */
+        let tempCitizenData = null;
+
+        function openSignCanvasFromForm() {
+            const name = document.getElementById('signName').value.trim();
+            const addr = document.getElementById('signAddress').value.trim();
+            const phone = document.getElementById('signPhone').value.trim();
+
+            if(!name || !addr || phone.length < 10) {
+                alert('성함, 주소지, 올바른 전화번호를 모두 입력해 주세요.');
+                return;
+            }
+
+            tempCitizenData = { name, addr, phone };
+            closeModal('citizenSignFormModal');
+            openSignModal('✍️ 국민 서명 결의 확인');
+        }
+
+        /* 🏛️ 국회의원 10원 계좌 송금 동의 인증 로직 */
+        function submitDeputyVerification() {
+            const name = document.getElementById('deputyName').value.trim();
+            const region = document.getElementById('deputyRegion').value.trim();
+            const contact = document.getElementById('deputyContact').value.trim();
+
+            if(!name || !region || !contact) {
+                alert('의원 성명, 지역구, 연락처를 정확히 입력해 주세요.');
+                return;
+            }
+
+            // 동의 명단에 즉시 추가
+            const tbody = document.getElementById('deputyTableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td><b>${name}</b></td><td>${region}</td><td>${contact}</td>`;
+            tbody.prepend(tr);
+
+            alert(`🎉 ${name}의 동의 신청이 접수되었습니다!\n지정 계좌(농협 301-1234-5678-01)로 10원 입금 확인 시 최종 동의로 인증됩니다.`);
+            
+            document.getElementById('deputyName').value = '';
+            document.getElementById('deputyRegion').value = '';
+            document.getElementById('deputyContact').value = '';
+            
+            closeModal('deputyVerifyModal');
+            openModal('deputyListModal');
+        }
+
         /* ✍️ 전자 서명 패널 제어 로직 */
         let canvas, ctx, isDrawing = false;
 
         function initSignaturePad() {
             canvas = document.getElementById('signatureCanvas');
             ctx = canvas.getContext('2d');
-            
             canvas.width = 330;
             canvas.height = 150;
 
@@ -509,9 +562,22 @@
         }
 
         function saveSignature() {
-            alert('🎉 전자 서명 및 인증이 안전하게 완료되었습니다! 주권자 직접 참여가 기록되었습니다.');
+            if(tempCitizenData) {
+                const tbody = document.getElementById('citizenSignTableBody');
+                const tr = document.createElement('tr');
+                const maskedName = tempCitizenData.name.length > 2 ? tempCitizenData.name[0] + '*' + tempCitizenData.name.slice(2) : tempCitizenData.name[0] + '*';
+                const maskedPhone = formatPhoneNumber(tempCitizenData.phone);
+                
+                tr.innerHTML = `<td>${maskedName}</td><td>${tempCitizenData.addr}</td><td>${maskedPhone}</td>`;
+                tbody.prepend(tr);
+
+                tempCitizenData = null;
+                alert('🎉 국민 서명이 정상적으로 저장되고 서명 명단에 등록되었습니다!');
+            } else {
+                alert('🎉 전자 서명이 완료되었습니다!');
+            }
             closeSignModal();
-            closeModal('constitutionModal');
+            openModal('signListModal');
         }
 
         /* -------------------------------------------------------------
@@ -601,7 +667,7 @@
         }
 
         /* -------------------------------------------------------------
-         * 💎 [게임 2] 연속 팡팡 맞추기 퍼즐
+         * 💎 [게임 2] 연속 팡팡 맞추기 퍼즐 로직
          * ------------------------------------------------------------- */
         let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
         let matchBoardData = [];
@@ -703,6 +769,5 @@
             return false;
         }
     </script>
-
 </body>
 </html>
