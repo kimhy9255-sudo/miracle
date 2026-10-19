@@ -34,9 +34,9 @@
         .participate-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
         .sub-action-btn {
             background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
-            padding: 7px 4px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; cursor: pointer; text-align: center;
+            padding: 9px 4px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center;
         }
-        .sub-action-btn.highlight { background-color: #059669; color: #ffffff; border-color: #a7f3d0; }
+        .sub-action-btn.highlight { background-color: #0284c7; color: #ffffff; border-color: #38bdf8; }
         .sub-action-btn:active { transform: scale(0.98); }
 
         .slogan-card { 
@@ -92,11 +92,6 @@
         .list-table th { background-color: #0f172a; color: #38bdf8; }
         .list-table td { color: #cbd5e1; }
         .empty-row td { color: #64748b; font-style: italic; background-color: rgba(15, 23, 42, 0.4); }
-
-        /* ✍️ 전자 서명 패널 */
-        #signModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 15px; }
-        .sign-box { width: 100%; max-width: 360px; background-color: #1e293b; border: 2px solid #38bdf8; border-radius: 12px; padding: 14px; text-align: center; }
-        canvas#signatureCanvas { width: 100%; height: 150px; background-color: #0f172a; border: 1px dashed #64748b; border-radius: 6px; margin: 8px 0; touch-action: none; cursor: crosshair; }
 
         /* 🕹️ 미니 게임방 모달 스타일 */
         #arcadeModal {
@@ -161,9 +156,9 @@
         <h1 class="main-title">국민의 약속</h1>
     </header>
 
-    <!-- 📊 2. 실시간 국민 서명 전광판 -->
+    <!-- 📊 2. 실시간 국민 방문 및 서명 전광판 -->
     <section class="counter-container">
-        <div class="counter-label">대한민국 시민 총 서명 참여 현황 (무한정)</div>
+        <div class="counter-label">대한민국 시민 서명 참여 현황</div>
         <div class="counter-number"><span id="participantCount">12,480</span> 명</div>
         <div class="counter-total">(목표: 대한민국 전체 인구수 51,082,431명)</div>
     </section>
@@ -171,12 +166,10 @@
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
         <div class="participate-panel">
-            <div class="participate-title">✍️ 국민 & 국회의원 1원 계좌 송금 인증 참여</div>
+            <div class="participate-title">🏛️ 국회의원 1원 계좌 송금 동의 검증</div>
             <div class="participate-btn-group">
-                <button class="sub-action-btn highlight" onclick="openModal('citizenSignFormModal')">📝 국민 1원 송금 서명</button>
-                <button class="sub-action-btn" onclick="openModal('signListModal')">📋 국민 서명 명단</button>
-                <button class="sub-action-btn highlight" style="background-color:#0284c7; border-color:#38bdf8;" onclick="openModal('deputyVerifyModal')">🏛️ 의원 1원 송금 동의</button>
-                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 의원 동의 명단</button>
+                <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 1원 송금 동의</button>
+                <button class="sub-action-btn" onclick="openModal('deputyListModal')">📋 의원 동의 명단 보기</button>
             </div>
         </div>
 
@@ -221,52 +214,7 @@
         </div>
     </section>
 
-    <!-- [모달 1] 📝 국민 1원 계좌 송금 서명 창 -->
-    <div id="citizenSignFormModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('citizenSignFormModal')">&times;</button>
-            <div class="modal-title">📝 국민 1원 계좌 송금 실명 서명</div>
-            
-            <div class="account-box">
-                <div style="font-size:0.72rem; color:#a5b4fc;">[국민 서명 검증 전용 계좌]</div>
-                <div class="account-number">농협 301-1234-5678-01</div>
-                <div style="font-size:0.7rem; color:#cbd5e1;">예금주: (사)국민의약속개헌본부</div>
-            </div>
-
-            <p style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px; line-height:1.3;">
-                💡 <b>실명 인증 안내:</b> 본인 계좌에서 <b>1원(또는 10원)</b>을 송금할 때 입금자명에 <b>[성함+전화뒤4자리]</b>를 입력해 주세요. (대한민국 전 국민 무한 참여 가능)
-            </p>
-
-            <div class="input-group">
-                <label>성함 (실명)</label>
-                <input type="text" id="signName" class="input-field" placeholder="예: 홍길동" style="cursor:text;">
-            </div>
-            
-            <div class="input-group">
-                <label>주소지 (클릭 시 카카오 자동 검색 🔍)</label>
-                <input type="text" id="signAddress" class="input-field" placeholder="클릭하여 주소 검색하기 🔍" onclick="execDaumPostcode('signAddress')" readonly>
-            </div>
-            
-            <div class="input-group">
-                <label>상세 주소 입력</label>
-                <input type="text" id="signAddressDetail" class="input-field" placeholder="예: 101동 202호 (선택 입력)" style="cursor:text;">
-            </div>
-            <div class="input-group">
-                <label>소속 지역구 / 동(洞) 기재</label>
-                <input type="text" id="signDistrict" class="input-field" placeholder="예: 서울 종로구 사직동" style="cursor:text;">
-            </div>
-
-            <div class="input-group">
-                <label>휴대전화 번호</label>
-                <input type="tel" id="signPhone" class="input-field" placeholder="01012345678 (- 제외)" style="cursor:text;">
-            </div>
-
-            <button class="submit-btn" onclick="openSignCanvasFromForm()">✍️ 1원 송금 완료 및 서명하기</button>
-            <button onclick="closeModal('citizenSignFormModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
-        </div>
-    </div>
-
-    <!-- [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 -->
+    <!-- [모달 1] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
@@ -304,35 +252,7 @@
         </div>
     </div>
 
-    <!-- 📋 [모달 3] 국민 참여 서명 명단 (설명글 삭제 완료) -->
-    <div id="signListModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
-            <div class="modal-title">✍️ 국민 참여 서명 명단</div>
-            <table class="list-table">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>주소지</th>
-                        <th>전화번호</th>
-                    </tr>
-                </thead>
-                <tbody id="citizenSignTableBody">
-                    <tr><td>김*수</td><td>서울특별시 종로구</td><td>010-****-1234</td></tr>
-                    <tr><td>이*영</td><td>부산광역시 해운대구</td><td>010-****-5678</td></tr>
-                    <tr><td>박*민</td><td>경기도 수원시 팔달구</td><td>010-****-9876</td></tr>
-                    <!-- 미작성 빈 행 4개 -->
-                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
-                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
-                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
-                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
-                </tbody>
-            </table>
-            <button onclick="closeModal('signListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
-        </div>
-    </div>
-
-    <!-- 🏛️ [모달 4] 국회의원 동의 명단 (설명글 삭제 완료) -->
+    <!-- 🏛️ [모달 2] 국회의원 동의 명단 -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
@@ -359,7 +279,7 @@
         </div>
     </div>
 
-    <!-- ⚡ [모달 5] 개헌 프로젝트 안내 -->
+    <!-- ⚡ [모달 3] 개헌 프로젝트 안내 -->
     <div id="constitutionModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('constitutionModal')">&times;</button>
@@ -368,19 +288,6 @@
                 헌법과 법률을 국민의 손으로 직접 바로 세우는 로드맵입니다.
             </p>
             <button onclick="closeModal('constitutionModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
-        </div>
-    </div>
-
-    <!-- ✍️ [전자 서명 패널 팝업] -->
-    <div id="signModal">
-        <div class="sign-box">
-            <div id="signModalTitle" style="font-size: 0.95rem; font-weight: 800; color: #fef08a; margin-bottom: 6px;">전자 서명</div>
-            <canvas id="signatureCanvas"></canvas>
-            <div style="display: flex; gap: 6px; margin-top: 8px;">
-                <button class="game-btn secondary" style="flex:1;" onclick="clearSignature()">다시 쓰기</button>
-                <button class="game-btn" style="flex:1; background-color:#22c55e; color:#000;" onclick="saveSignature()">서명 완료</button>
-            </div>
-            <button class="game-btn secondary" style="margin-top: 6px; width:100%;" onclick="closeSignModal()">취소</button>
         </div>
     </div>
 
@@ -431,18 +338,17 @@
 
     <script>
         const BASE_COUNT = 12480;
-        const DEPUTY_MAX_LIMIT = 500; // 국회의원 동의 명단 최대 500명 한정
+        const DEPUTY_MAX_LIMIT = 500;
         let openModalStack = []; 
 
         window.onload = function() {
             checkLoginStatus();
             initPuzzleGame();
             initMatchGame();
-            initSignaturePad();
         };
 
         /* -------------------------------------------------------------
-         * 🔍 다음/카카오 주소 자동검색 연동 함수 (선택 시 자동 입력 완벽 처리)
+         * 🔍 다음/카카오 주소 자동검색 연동 함수
          * ------------------------------------------------------------- */
         function execDaumPostcode(targetInputId) {
             new daum.Postcode({
@@ -456,7 +362,6 @@
                         fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
                     }
 
-                    // 선택한 주소를 타겟 입력창에 주입
                     const inputElement = document.getElementById(targetInputId);
                     if (inputElement) {
                         inputElement.value = fullAddr;
@@ -545,26 +450,7 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
-        /* 📝 국민 서명 작성 및 명단 추가 (무한정) */
-        let tempCitizenData = null;
-
-        function openSignCanvasFromForm() {
-            const name = document.getElementById('signName').value.trim();
-            const addr = document.getElementById('signAddress').value.trim();
-            const detail = document.getElementById('signAddressDetail').value.trim();
-            const phone = document.getElementById('signPhone').value.trim();
-
-            if(!name || !addr || phone.length < 10) {
-                alert('성함, 주소지(카카오검색), 올바른 전화번호를 모두 입력해 주세요.');
-                return;
-            }
-
-            tempCitizenData = { name, addr: addr + (detail ? ' ' + detail : ''), phone };
-            closeModal('citizenSignFormModal');
-            openSignModal('✍️ 국민 1원 송금 실명 서명 확인');
-        }
-
-        /* 🏛️ 국회의원 1원 계좌 송금 동의 신청 (500명 한정) */
+        /* 🏛️ 국회의원 1원 계좌 송금 동의 신청 */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const region = document.getElementById('deputyRegion').value.trim();
@@ -584,7 +470,6 @@
                 return;
             }
 
-            // 미작성 빈 행이 있으면 우선 하나 제거
             const emptyRows = tbody.querySelectorAll('.empty-row');
             if(emptyRows.length > 0) {
                 emptyRows[0].remove();
@@ -604,93 +489,6 @@
             
             closeModal('deputyVerifyModal');
             openModal('deputyListModal');
-        }
-
-        /* ✍️ 전자 서명 패널 제어 로직 */
-        let canvas, ctx, isDrawing = false;
-
-        function initSignaturePad() {
-            canvas = document.getElementById('signatureCanvas');
-            ctx = canvas.getContext('2d');
-            canvas.width = 330;
-            canvas.height = 150;
-
-            ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-
-            canvas.addEventListener('mousedown', startDraw);
-            canvas.addEventListener('mousemove', drawing);
-            canvas.addEventListener('mouseup', stopDraw);
-            canvas.addEventListener('mouseleave', stopDraw);
-
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e.touches[0]); });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); drawing(e.touches[0]); });
-            canvas.addEventListener('touchend', stopDraw);
-        }
-
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: (e.clientX - rect.left) * (canvas.width / rect.width),
-                y: (e.clientY - rect.top) * (canvas.height / rect.height)
-            };
-        }
-
-        function startDraw(e) {
-            isDrawing = true;
-            const pos = getPos(e);
-            ctx.beginPath();
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function drawing(e) {
-            if (!isDrawing) return;
-            const pos = getPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-        }
-
-        function stopDraw() { isDrawing = false; }
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function openSignModal(titleText) {
-            document.getElementById('signModalTitle').innerText = titleText;
-            openModal('signModal');
-            clearSignature();
-        }
-
-        function closeSignModal() {
-            closeModal('signModal');
-        }
-
-        function saveSignature() {
-            if(tempCitizenData) {
-                const tbody = document.getElementById('citizenSignTableBody');
-                
-                // 미작성 빈 행이 있으면 먼저 하나 제거
-                const emptyRows = tbody.querySelectorAll('.empty-row');
-                if(emptyRows.length > 0) {
-                    emptyRows[0].remove();
-                }
-
-                const tr = document.createElement('tr');
-                const maskedName = tempCitizenData.name.length > 2 ? tempCitizenData.name[0] + '*' + tempCitizenData.name.slice(2) : tempCitizenData.name[0] + '*';
-                const maskedPhone = formatPhoneNumber(tempCitizenData.phone);
-                
-                tr.innerHTML = `<td>${maskedName}</td><td>${tempCitizenData.addr}</td><td>${maskedPhone}</td>`;
-                tbody.prepend(tr);
-
-                tempCitizenData = null;
-                alert('🎉 국민 서명이 정상 등록되어 서명 명단에 반영되었습니다!');
-            } else {
-                alert('🎉 전자 서명이 완료되었습니다!');
-            }
-            closeSignModal();
-            openModal('signListModal');
         }
 
         /* -------------------------------------------------------------
