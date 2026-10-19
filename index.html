@@ -16,33 +16,28 @@
         .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; box-shadow: 0 2px 6px rgba(147,51,234,0.3); }
         .main-title { font-size: 1.35rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
 
-        /* 메인 상위 패널 (참여하기 & 명단보기) */
+        /* 메인 상위 패널 컨테이너 */
         .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
         
+        /* [수정 반영] 국회의원 Email 동의 인증 패널 (위아래 확장 + 개헌 문구 통합) */
         .participate-panel {
             background: linear-gradient(135deg, #065f46 0%, #047857 100%);
-            border: 2px solid #34d399; border-radius: 10px; padding: 10px 8px;
+            border: 2px solid #34d399; border-radius: 12px; padding: 14px 10px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.2); text-align: left;
         }
-        .participate-title { font-size: 0.88rem; font-weight: 900; color: #ecfdf5; margin-bottom: 6px; }
-        .participate-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .participate-title { font-size: 0.92rem; font-weight: 900; color: #ecfdf5; margin-bottom: 6px; }
+        
+        /* 패널 내부 개헌 타이틀 및 작은 안내 문구 스타일 */
+        .panel-sub-title { font-size: 0.85rem; font-weight: 900; color: #fde047; margin-top: 6px; margin-bottom: 2px; }
+        .panel-sub-desc { font-size: 0.65rem; color: #a7f3d0; margin-bottom: 10px; cursor: pointer; text-decoration: underline; }
+        
+        .participate-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
         .sub-action-btn {
             background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
             padding: 9px 4px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center;
         }
         .sub-action-btn.highlight { background-color: #0284c7; color: #ffffff; border-color: #38bdf8; }
         .sub-action-btn:active { transform: scale(0.98); }
-
-        .slogan-card { 
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
-            border: 1px solid #3b82f6; border-radius: 8px; padding: 8px; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2); text-decoration: none; display: block; transition: transform 0.1s; cursor: pointer;
-        }
-        .slogan-card:active { transform: scale(0.98); }
-        .slogan-card.constitution { border-color: #eab308; background: linear-gradient(135deg, #422006 0%, #713f12 100%); }
-        .slogan-text { font-size: 0.88rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
-        .slogan-card.constitution .slogan-text { color: #fde047; }
-        .slogan-desc { font-size: 0.62rem; color: #94a3b8; margin-top: 1px; }
 
         /* 가로 병합된 3대 핵심 이슈 버튼 그리드 */
         .grid-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
@@ -57,7 +52,7 @@
         .grid-link-title { font-size: 0.73rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
         .grid-link-btn.highlight .grid-link-title { color: #fef08a; }
 
-        /* [수정 반영] 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 (게임방 배너 위쪽으로 이동) */
+        /* 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 */
         .senior-notice-card {
             width: 100%; max-width: 380px;
             background: linear-gradient(135deg, #1e1b4b 0%, #311b92 100%);
@@ -109,7 +104,7 @@
         /* 검색창 스타일 */
         .search-box { width: 100%; padding: 8px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #3b82f6; border-radius: 6px; color: #fff; outline: none; margin-bottom: 8px; }
 
-        /* 명단 테이블 및 빈 행 스타일 (연락처 -> Email로 통일) */
+        /* 명단 테이블 및 빈 행 스타일 */
         .list-table { width: 100%; font-size: 0.72rem; border-collapse: collapse; margin-top: 4px; }
         .list-table th, .list-table td { border: 1px solid #334155; padding: 5px; text-align: center; }
         .list-table th { background-color: #0f172a; color: #38bdf8; }
@@ -181,17 +176,16 @@
 
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
+        <!-- [수정 반영] 국회의원 Email 동의 인증 패널 (위아래 확장 및 개헌 문구 통합) -->
         <div class="participate-panel">
             <div class="participate-title">🏛️ 국회의원 Email 동의 인증</div>
+            <div class="panel-sub-title">⚡ 국민 직접 개헌 & 소환법 입법</div>
+            <div class="panel-sub-desc" onclick="openModal('constitutionModal')">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
+            
             <div class="participate-btn-group">
                 <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 Email 동의</button>
                 <button class="sub-action-btn" onclick="openModal('deputyListModal')">📋 의원 동의 명단 보기</button>
             </div>
-        </div>
-
-        <div class="slogan-card constitution" onclick="openModal('constitutionModal')">
-            <div class="slogan-text">⚡ 국민 직접 개헌 & 소환법 입법</div>
-            <div class="slogan-desc">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
         </div>
 
         <!-- 가로 병합된 3대 핵심 이슈 버튼 -->
@@ -208,7 +202,7 @@
         </div>
     </main>
 
-    <!-- [수정 반영] 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 (게임방 배너 위쪽으로 이동) -->
+    <!-- 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 -->
     <section class="senior-notice-card">
         <div class="senior-notice-title">
             "일하라고 뽑은 국민의 대표!<br>특권은 내려놓고,"
@@ -244,7 +238,7 @@
         </div>
     </section>
 
-    <!-- [모달 1] 🏛️ 국회의원 Email 동의 인증 창 (계좌 내용 제거, 이메일 중심 간소화) -->
+    <!-- [모달 1] 🏛️ 국회의원 Email 동의 인증 창 -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
@@ -273,7 +267,7 @@
         </div>
     </div>
 
-    <!-- [모달 2] 🏛️ 국회의원 동의 명단 (연락처 -> Email 항목으로 통일 및 검색창 포함) -->
+    <!-- [모달 2] 🏛️ 국회의원 동의 명단 -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
@@ -364,7 +358,6 @@
         const DEPUTY_MAX_LIMIT = 500;
         let openModalStack = []; 
 
-        // 사전 등록된 제22대 국회의원 공식 이메일 데이터베이스 시뮬레이션 샘플
         const OFFICIAL_DEPUTY_DB = [
             { name: "홍길동", email: "gildong@assembly.go.kr" },
             { name: "김철수", email: "chulsu@assembly.go.kr" },
@@ -377,7 +370,6 @@
             initMatchGame();
         };
 
-        /* 토글형 로그인 창 열고 닫기 제어 */
         function toggleLoginBox() {
             const expandBox = document.getElementById('loginExpandBox');
             if (expandBox.style.display === 'block') {
@@ -387,9 +379,6 @@
             }
         }
 
-        /* -------------------------------------------------------------
-         * 🔍 다음/카카오 주소 자동검색 연동 함수
-         * ------------------------------------------------------------- */
         function execDaumPostcode(targetInputId) {
             new daum.Postcode({
                 oncomplete: function(data) {
@@ -410,9 +399,6 @@
             }).open();
         }
 
-        /* -------------------------------------------------------------
-         * 🔄 뒤로 가기(Back) 제어: 사이트가 안 튕기고 모달만 닫힘
-         * ------------------------------------------------------------- */
         window.addEventListener('popstate', function(event) {
             if (openModalStack.length > 0) {
                 let topModalId = openModalStack.pop();
@@ -446,9 +432,6 @@
         function openArcadeModal() { openModal('arcadeModal'); }
         function closeArcadeModal() { closeModal('arcadeModal'); }
 
-        /* -------------------------------------------------------------
-         * 👤 회원 가입 및 로그인 상태 제어
-         * ------------------------------------------------------------- */
         function checkLoginStatus() {
             const savedPhone = localStorage.getItem('user_phone');
             if (savedPhone) {
@@ -487,9 +470,6 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
-        /* -------------------------------------------------------------
-         * 지역구 / 의원명 실시간 검색 필터 함수
-         * ------------------------------------------------------------- */
         function filterDeputyTable() {
             let filter = document.getElementById('deputySearchInput').value.toLowerCase();
             let tbody = document.getElementById('deputyTableBody');
@@ -511,9 +491,6 @@
             }
         }
 
-        /* -------------------------------------------------------------
-         * [수정 반영] 국회의원 이메일 2중 검증 및 동의 신청 (계좌 항목 제거)
-         * ------------------------------------------------------------- */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const email = document.getElementById('deputyEmail').value.trim();
@@ -524,13 +501,11 @@
                 return;
             }
 
-            // 1차 인증: 국회 공식 이메일 형식 체크 (@assembly.go.kr)
             if(!email.endsWith('@assembly.go.kr')) {
                 alert('⚠️ 국회 공식 이메일(@assembly.go.kr 주소)만 인증이 가능합니다.');
                 return;
             }
 
-            // 사전 등록된 의원 이메일 DB 대조 시뮬레이션
             let matchedDeputy = OFFICIAL_DEPUTY_DB.find(d => d.name === name && d.email === email);
             if (!matchedDeputy) {
                 console.log('신규 공식 이메일 감지 및 2중 검증 진행');
@@ -563,9 +538,6 @@
             openModal('deputyListModal');
         }
 
-        /* -------------------------------------------------------------
-         * 🧩 [게임 1] 내 사진 퍼즐 맞추기 로직
-         * ------------------------------------------------------------- */
         let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
         let currentImgUrl = 'https://picsum.photos/300/300';
         let selectedPuzzleIndex = null;
@@ -649,9 +621,6 @@
             if (isWin) { document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐 완성!'; }
         }
 
-        /* -------------------------------------------------------------
-         * 💎 [게임 2] 연속 팡팡 맞추기 퍼즐 로직
-         * ------------------------------------------------------------- */
         let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
         let matchBoardData = [];
         let firstSelected = null;
@@ -737,7 +706,8 @@
                 document.getElementById('matchScore').innerText = `터뜨린 콤보: ${comboScore} 회`;
 
                 const tiles = document.querySelectorAll('.match-tile');
-                toRemove.forEach(i => {
+                let toRemoveArray = Array.from(toRemove);
+                toRemoveArray.forEach(i => {
                     if (tiles[i]) tiles[i].classList.add('matched');
                     matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)];
                 });
