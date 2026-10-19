@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>국민의 약속 - 대한민국 시민 주권 프로젝트 & 국민 개헌</title>
+    <!-- 다음/카카오 주소 검색 공식 API 연동 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
         /* 기본 리셋 및 모바일 최적화 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
@@ -76,18 +78,19 @@
         /* 모달 입력 폼 스타일 */
         .input-group { margin-bottom: 8px; text-align: left; }
         .input-group label { display: block; font-size: 0.72rem; color: #94a3b8; margin-bottom: 3px; font-weight: 700; }
-        .input-field { width: 100%; padding: 7px 9px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; outline: none; cursor: pointer; }
+        .input-field { width: 100%; padding: 7px 9px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; outline: none; }
         .submit-btn { width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 9px; border-radius: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer; margin-top: 5px; }
 
         /* 계좌 안내 박스 */
         .account-box { background-color: #0f172a; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: center; }
         .account-number { font-size: 0.95rem; font-weight: 900; color: #fde047; letter-spacing: 0.5px; margin: 3px 0; }
 
-        /* 명단 테이블 */
+        /* 명단 테이블 및 빈 행 스타일 */
         .list-table { width: 100%; font-size: 0.72rem; border-collapse: collapse; margin-top: 6px; }
         .list-table th, .list-table td { border: 1px solid #334155; padding: 5px; text-align: center; }
         .list-table th { background-color: #0f172a; color: #38bdf8; }
         .list-table td { color: #cbd5e1; }
+        .empty-row td { color: #64748b; font-style: italic; background-color: rgba(15, 23, 42, 0.4); }
 
         /* ✍️ 전자 서명 패널 */
         #signModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; padding: 15px; }
@@ -165,7 +168,6 @@
 
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
-        <!-- 💡 주권자 직접 참여 및 계좌 인증 상위 패널 -->
         <div class="participate-panel">
             <div class="participate-title">✍️ 국민 & 국회의원 1원 계좌 송금 인증 참여</div>
             <div class="participate-btn-group">
@@ -218,7 +220,7 @@
     </section>
 
     <!-- -------------------------------------------------------------
-         [모달 1] 📝 국민 1원 계좌 송금 서명 창 (자동 검색 주소 입력창 포함)
+         [모달 1] 📝 국민 1원 계좌 송금 서명 창 (자동 검색 주소 입력창)
          ------------------------------------------------------------- -->
     <div id="citizenSignFormModal" class="modal-overlay">
         <div class="modal-content">
@@ -240,13 +242,12 @@
                 <input type="text" id="signName" class="input-field" placeholder="예: 홍길동">
             </div>
             
-            <!-- 주소 입력창: 클릭 시 자동 검색 창 작동 -->
+            <!-- 클릭하거나 입력 시 주소 검색 창 연동 -->
             <div class="input-group">
-                <label>주소지 (클릭 시 자동 검색)</label>
-                <input type="text" id="signAddress" class="input-field" placeholder="클릭하여 주소 검색하기 🔍" onclick="openAddressSearch('signAddress')" readonly>
+                <label>주소지 (입력 또는 클릭 시 카카오 주소 검색 🔍)</label>
+                <input type="text" id="signAddress" class="input-field" placeholder="주소 입력 또는 클릭하여 검색 🔍" onclick="execDaumPostcode('signAddress')" oninput="execDaumPostcode('signAddress')">
             </div>
             
-            <!-- 추가된 상세 주소 및 기재란 -->
             <div class="input-group">
                 <label>상세 주소 입력</label>
                 <input type="text" id="signAddressDetail" class="input-field" placeholder="예: 101동 202호 (선택 입력)">
@@ -258,7 +259,7 @@
 
             <div class="input-group">
                 <label>휴대전화 번호</label>
-                <input type="tel" id="signPhone" class="input-field" placeholder="01012345678 (- 제외)" style="cursor:text;">
+                <input type="tel" id="signPhone" class="input-field" placeholder="01012345678 (- 제외)">
             </div>
 
             <button class="submit-btn" onclick="openSignCanvasFromForm()">✍️ 1원 송금 완료 및 서명하기</button>
@@ -267,7 +268,7 @@
     </div>
 
     <!-- -------------------------------------------------------------
-         [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 (자동 검색 주소 포함)
+         [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창
          ------------------------------------------------------------- -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
@@ -286,23 +287,21 @@
 
             <div class="input-group">
                 <label>의원 성명</label>
-                <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동 의원" style="cursor:text;">
+                <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동 의원">
             </div>
             
-            <!-- 의원 지역구 검색 입력창 -->
             <div class="input-group">
-                <label>소속 지역구 (클릭 시 자동 검색)</label>
-                <input type="text" id="deputyRegion" class="input-field" placeholder="클릭하여 지역구 검색하기 🔍" onclick="openAddressSearch('deputyRegion')" readonly>
+                <label>소속 지역구 (입력 또는 클릭 시 카카오 검색 🔍)</label>
+                <input type="text" id="deputyRegion" class="input-field" placeholder="지역구 입력 또는 클릭하여 검색 🔍" onclick="execDaumPostcode('deputyRegion')" oninput="execDaumPostcode('deputyRegion')">
             </div>
 
-            <!-- 추가된 의원실 세부 주소 및 직함 기재란 -->
             <div class="input-group">
                 <label>의원실 상세 위치 (건물명 및 호실)</label>
-                <input type="text" id="deputyOfficeDetail" class="input-field" placeholder="예: 국회의원회관 512호 (추가 기재)" style="cursor:text;">
+                <input type="text" id="deputyOfficeDetail" class="input-field" placeholder="예: 국회의원회관 512호">
             </div>
             <div class="input-group">
                 <label>의원실 연락처</label>
-                <input type="text" id="deputyContact" class="input-field" placeholder="예: 02-784-1234" style="cursor:text;">
+                <input type="text" id="deputyContact" class="input-field" placeholder="예: 02-784-1234">
             </div>
 
             <button class="submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="submitDeputyVerification()">
@@ -312,7 +311,7 @@
         </div>
     </div>
 
-    <!-- 📋 [모달 3] 국민 참여 서명 명단 -->
+    <!-- 📋 [모달 3] 국민 참여 서명 명단 (전체 국민 무제한 참여 + 미작성 대기창 4개 포함) -->
     <div id="signListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
@@ -330,18 +329,23 @@
                     <tr><td>김*수</td><td>서울특별시 종로구</td><td>010-****-1234</td></tr>
                     <tr><td>이*영</td><td>부산광역시 해운대구</td><td>010-****-5678</td></tr>
                     <tr><td>박*민</td><td>경기도 수원시 팔달구</td><td>010-****-9876</td></tr>
+                    <!-- 미작성 대기 창 4개 기본 배치 -->
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
                 </tbody>
             </table>
             <button onclick="closeModal('signListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
         </div>
     </div>
 
-    <!-- 🏛️ [모달 4] 국회의원 동의 명단 -->
+    <!-- 🏛️ [모달 4] 국회의원 동의 명단 (총 500개 수량 한정 + 미작성 대기창 4개 포함) -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
-            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 1원 송금으로 본인 인증을 완료한 의원 목록입니다.</p>
+            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 1원 송금으로 본인 인증을 완료한 의원 목록입니다. (총 500개 한정)</p>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -353,6 +357,11 @@
                 <tbody id="deputyTableBody">
                     <tr><td>홍길동 의원</td><td>서울 영등포구갑</td><td>02-784-****</td></tr>
                     <tr><td>김철수 의원</td><td>경기 성남시분당구</td><td>031-780-****</td></tr>
+                    <!-- 미작성 대기 창 4개 기본 배치 -->
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
+                    <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
                 </tbody>
             </table>
             <button onclick="closeModal('deputyListModal')" style="width:100%; margin-top:10px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
@@ -405,9 +414,7 @@
 
         <div class="game-panel active" id="panel1">
             <div class="game-sub-title">조각 2개를 순서대로 클릭하면 위치가 교환됩니다!</div>
-            
             <div class="puzzle-board-container" id="puzzleBoard"></div>
-
             <div style="display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;">
                 <button class="game-btn" onclick="shufflePuzzle()">🔀 퍼즐 섞기</button>
                 <button class="game-btn secondary" onclick="showOriginalModal()">👀 본 그림 보기</button>
@@ -433,7 +440,8 @@
 
     <script>
         const BASE_COUNT = 12480;
-        let openModalStack = []; // 열려있는 모달을 추적하여 뒤로가기 시 튕김 방지
+        const DEPUTY_MAX_LIMIT = 500; // 국회의원 참여 총 수량 500개 한정
+        let openModalStack = []; 
 
         window.onload = function() {
             checkLoginStatus();
@@ -441,6 +449,34 @@
             initMatchGame();
             initSignaturePad();
         };
+
+        /* -------------------------------------------------------------
+         * 🔍 카카오/다음 주소 자동 검색 연동 (클릭/입력 시 팝업 호출)
+         * ------------------------------------------------------------- */
+        let isPostcodeOpening = false;
+        function execDaumPostcode(targetInputId) {
+            if (isPostcodeOpening) return;
+            isPostcodeOpening = true;
+
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    let fullAddr = data.address; 
+                    let extraAddr = ''; 
+
+                    if(data.addressType === 'R'){
+                        if(data.bname !== ''){ extraAddr += data.bname; }
+                        if(data.buildingName !== ''){ extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName); }
+                        fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                    }
+
+                    document.getElementById(targetInputId).value = fullAddr;
+                    isPostcodeOpening = false;
+                },
+                onclose: function() {
+                    isPostcodeOpening = false;
+                }
+            }).open();
+        }
 
         /* -------------------------------------------------------------
          * 🔄 뒤로 가기(Back) 제어: 사이트가 안 튕기고 모달만 닫힘
@@ -477,19 +513,6 @@
 
         function openArcadeModal() { openModal('arcadeModal'); }
         function closeArcadeModal() { closeModal('arcadeModal'); }
-
-        /* -------------------------------------------------------------
-         * 🔍 주소 입력창 클릭 시 자동 검색 창으로 넘어가게 하는 기능
-         * ------------------------------------------------------------- */
-        let activeAddressInputId = null;
-
-        function openAddressSearch(inputId) {
-            activeAddressInputId = inputId;
-            let sampleAddr = prompt("검색할 주소 또는 지역구 명칭을 입력하세요 (예: 서울 종로구 / 여의도동):", "");
-            if (sampleAddr) {
-                document.getElementById(activeAddressInputId).value = sampleAddr;
-            }
-        }
 
         /* -------------------------------------------------------------
          * 👤 회원 가입 및 로그인 상태 제어
@@ -535,7 +558,7 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
-        /* 📝 국민 서명 작성 및 명단 추가 로직 */
+        /* 📝 국민 서명 작성 및 명단 추가 (대한민국 국민 전체 무제한 수량 참여 가능) */
         let tempCitizenData = null;
 
         function openSignCanvasFromForm() {
@@ -545,7 +568,7 @@
             const phone = document.getElementById('signPhone').value.trim();
 
             if(!name || !addr || phone.length < 10) {
-                alert('성함, 주소지(자동검색), 올바른 전화번호를 모두 입력해 주세요.');
+                alert('성함, 주소지(카카오검색), 올바른 전화번호를 모두 입력해 주세요.');
                 return;
             }
 
@@ -554,7 +577,7 @@
             openSignModal('✍️ 국민 1원 송금 실명 서명 확인');
         }
 
-        /* 🏛️ 국회의원 1원 계좌 송금 동의 신청 및 실시간 명단 반영 로직 */
+        /* 🏛️ 국회의원 1원 계좌 송금 동의 신청 (총 500개 수량 한정) */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const region = document.getElementById('deputyRegion').value.trim();
@@ -567,6 +590,20 @@
             }
 
             const tbody = document.getElementById('deputyTableBody');
+            
+            // 국회의원 동의 총 500개 제한 체크
+            const realRowsCount = tbody.children.length - tbody.querySelectorAll('.empty-row').length;
+            if(realRowsCount >= DEPUTY_MAX_LIMIT) {
+                alert('국회의원 동의 명단이 500개로 한정되어 더 이상 추가할 수 없습니다.');
+                return;
+            }
+
+            // 미작성 빈 행이 있으면 위에서부터 하나 제거
+            const emptyRows = tbody.querySelectorAll('.empty-row');
+            if(emptyRows.length > 0) {
+                emptyRows[0].remove();
+            }
+
             const tr = document.createElement('tr');
             let fullRegion = region + (officeDetail ? ' (' + officeDetail + ')' : '');
             tr.innerHTML = `<td><b>${name}</b></td><td>${fullRegion}</td><td>${contact}</td>`;
@@ -647,6 +684,13 @@
         function saveSignature() {
             if(tempCitizenData) {
                 const tbody = document.getElementById('citizenSignTableBody');
+
+                // 미작성 빈 행이 있으면 하나 제거 후 최신 서명 추가
+                const emptyRows = tbody.querySelectorAll('.empty-row');
+                if(emptyRows.length > 0) {
+                    emptyRows[0].remove();
+                }
+
                 const tr = document.createElement('tr');
                 const maskedName = tempCitizenData.name.length > 2 ? tempCitizenData.name[0] + '*' + tempCitizenData.name.slice(2) : tempCitizenData.name[0] + '*';
                 const maskedPhone = formatPhoneNumber(tempCitizenData.phone);
@@ -736,121 +780,4 @@
 
                         puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
                         shufflePuzzle();
-                        document.getElementById('puzzleMsg').innerText = '📸 사진이 등록되었습니다!';
-                    };
-                    img.src = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function checkPuzzleWin() {
-            let isWin = puzzleState.every((val, index) => val === index);
-            if (isWin) { document.getElementById('puzzleMsg').innerText = '🎉 축하합니다! 퍼즐 완성!'; }
-        }
-
-        /* -------------------------------------------------------------
-         * 💎 [게임 2] 연속 팡팡 맞추기 퍼즐 로직
-         * ------------------------------------------------------------- */
-        let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
-        let matchBoardData = [];
-        let firstSelected = null;
-        let comboScore = 0;
-        const COLS = 5;
-        const ROWS = 6;
-
-        function initMatchGame() {
-            comboScore = 0;
-            document.getElementById('matchScore').innerText = `터뜨린 콤보: 0 회`;
-            matchBoardData = [];
-            for (let i = 0; i < COLS * ROWS; i++) {
-                matchBoardData.push(matchIcons[Math.floor(Math.random() * matchIcons.length)]);
-            }
-            renderMatchBoard();
-            checkAndClearMatches();
-        }
-
-        function renderMatchBoard() {
-            const board = document.getElementById('matchBoard');
-            board.innerHTML = '';
-            matchBoardData.forEach((icon, idx) => {
-                const tile = document.createElement('div');
-                tile.className = 'match-tile' + (firstSelected === idx ? ' selected' : '');
-                tile.innerText = icon;
-                tile.onclick = () => handleTileClick(idx);
-                board.appendChild(tile);
-            });
-        }
-
-        function handleTileClick(idx) {
-            if (firstSelected === null) {
-                firstSelected = idx;
-                renderMatchBoard();
-            } else if (firstSelected === idx) {
-                firstSelected = null;
-                renderMatchBoard();
-            } else {
-                let prevIdx = firstSelected;
-                firstSelected = null;
-
-                let temp = matchBoardData[prevIdx];
-                matchBoardData[prevIdx] = matchBoardData[idx];
-                matchBoardData[idx] = temp;
-
-                renderMatchBoard();
-
-                let matched = checkAndClearMatches();
-                if (!matched) {
-                    setTimeout(() => {
-                        let temp2 = matchBoardData[prevIdx];
-                        matchBoardData[prevIdx] = matchBoardData[idx];
-                        matchBoardData[idx] = temp2;
-                        renderMatchBoard();
-                    }, 250);
-                }
-            }
-        }
-
-        function checkAndClearMatches() {
-            let toRemove = new Set();
-
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS - 2; c++) {
-                    let idx = r * COLS + c;
-                    if (matchBoardData[idx] === matchBoardData[idx + 1] && matchBoardData[idx] === matchBoardData[idx + 2]) {
-                        toRemove.add(idx); toRemove.add(idx + 1); toRemove.add(idx + 2);
-                    }
-                }
-            }
-
-            for (let c = 0; c < COLS; c++) {
-                for (let r = 0; r < ROWS - 2; r++) {
-                    let idx = r * COLS + c;
-                    if (matchBoardData[idx] === matchBoardData[idx + COLS] && matchBoardData[idx] === matchBoardData[idx + COLS * 2]) {
-                        toRemove.add(idx); toRemove.add(idx + COLS); toRemove.add(idx + COLS * 2);
-                    }
-                }
-            }
-
-            if (toRemove.size > 0) {
-                comboScore += 1;
-                document.getElementById('matchScore').innerText = `터뜨린 콤보: ${comboScore} 회`;
-
-                const tiles = document.querySelectorAll('.match-tile');
-                toRemove.forEach(i => {
-                    if (tiles[i]) tiles[i].classList.add('matched');
-                    matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)];
-                });
-
-                setTimeout(() => {
-                    renderMatchBoard();
-                    checkAndClearMatches();
-                }, 350);
-
-                return true;
-            }
-            return false;
-        }
-    </script>
-</body>
-</html>
+                        
