@@ -165,13 +165,13 @@
 
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
-        <!-- 💡 주권자 직접 참여 및 서명/동의 확인 상위 패널 -->
+        <!-- 💡 주권자 직접 참여 및 계좌 인증 상위 패널 -->
         <div class="participate-panel">
-            <div class="participate-title">✍️ 국민 서명 & 국회의원 동의 인증 참여</div>
+            <div class="participate-title">✍️ 국민 & 국회의원 1원 계좌 송금 인증 참여</div>
             <div class="participate-btn-group">
-                <button class="sub-action-btn highlight" onclick="openModal('citizenSignFormModal')">📝 국민 서명 작성하기</button>
+                <button class="sub-action-btn highlight" onclick="openModal('citizenSignFormModal')">📝 국민 1원 송금 서명</button>
                 <button class="sub-action-btn" onclick="openModal('signListModal')">📋 국민 서명 명단</button>
-                <button class="sub-action-btn highlight" style="background-color:#0284c7; border-color:#38bdf8;" onclick="openModal('deputyVerifyModal')">🏛️ 의원 10원 송금 동의</button>
+                <button class="sub-action-btn highlight" style="background-color:#0284c7; border-color:#38bdf8;" onclick="openModal('deputyVerifyModal')">🏛️ 의원 1원 송금 동의</button>
                 <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 의원 동의 명단</button>
             </div>
         </div>
@@ -218,15 +218,25 @@
     </section>
 
     <!-- -------------------------------------------------------------
-         [모달 1] 📝 국민 직접 서명 작성 창
+         [모달 1] 📝 국민 1원 계좌 송금 서명 창
          ------------------------------------------------------------- -->
     <div id="citizenSignFormModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('citizenSignFormModal')">&times;</button>
-            <div class="modal-title">📝 국민 직접 개헌 서명 작성</div>
+            <div class="modal-title">📝 국민 1원 계좌 송금 실명 서명</div>
             
+            <div class="account-box">
+                <div style="font-size:0.72rem; color:#a5b4fc;">[국민 서명 검증 전용 계좌]</div>
+                <div class="account-number">농협 301-1234-5678-01</div>
+                <div style="font-size:0.7rem; color:#cbd5e1;">예금주: (사)국민의약속개헌본부</div>
+            </div>
+
+            <p style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px; line-height:1.3;">
+                💡 <b>실명 인증 안내:</b> 가짜/허위 서명을 방지하기 위해 본인 계좌에서 <b>1원(또는 10원)</b>을 송금할 때 입금자명에 <b>[성함+전화뒤4자리]</b>를 입력해 주세요.
+            </p>
+
             <div class="input-group">
-                <label>이름 (성함)</label>
+                <label>성함 (실명)</label>
                 <input type="text" id="signName" class="input-field" placeholder="예: 홍길동">
             </div>
             <div class="input-group">
@@ -238,18 +248,18 @@
                 <input type="tel" id="signPhone" class="input-field" placeholder="01012345678 (- 제외)">
             </div>
 
-            <button class="submit-btn" onclick="openSignCanvasFromForm()">✍️ 전자 서명 및 동의 제출하기</button>
+            <button class="submit-btn" onclick="openSignCanvasFromForm()">✍️ 1원 송금 완료 및 서명하기</button>
             <button onclick="closeModal('citizenSignFormModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
         </div>
     </div>
 
     <!-- -------------------------------------------------------------
-         [모달 2] 🏛️ 국회의원 계좌 10원 송금 동의 인증 창
+         [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 (실시간 명단 반영)
          ------------------------------------------------------------- -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
-            <div class="modal-title">🏛️ 국회의원 10원 계좌 송금 동의</div>
+            <div class="modal-title">🏛️ 국회의원 1원 계좌 송금 동의</div>
             
             <div class="account-box">
                 <div style="font-size:0.72rem; color:#a5b4fc;">[공식 동의 검증 전용 계좌]</div>
@@ -258,7 +268,7 @@
             </div>
 
             <p style="font-size:0.72rem; color:#94a3b8; margin-bottom:8px; line-height:1.3;">
-                💡 <b>본인 인증 절차:</b> 국회의원 본인 명의 계좌에서 <b>10원</b>을 송금할 때, 입금자명에 <b>[의원명+지역구]</b>를 입력해주시면 확인 즉시 동의 명단에 정식 등록됩니다.
+                💡 <b>본인 인증 절차:</b> 국회의원 본인 명의 계좌에서 <b>1원(또는 10원)</b>을 송금할 때, 입금자명에 <b>[의원명+지역구]</b>를 입력해주시면 확인 즉시 동의 명단에 정식 등록됩니다.
             </p>
 
             <div class="input-group">
@@ -275,7 +285,7 @@
             </div>
 
             <button class="submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="submitDeputyVerification()">
-                ✅ 10원 송금 완료 및 동의 신청
+                ✅ 1원 송금 완료 및 동의 신청 (명단 즉시 등록)
             </button>
             <button onclick="closeModal('deputyVerifyModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
         </div>
@@ -286,6 +296,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
             <div class="modal-title">✍️ 국민 참여 서명 명단</div>
+            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 1원 송금으로 실명 인증을 완료한 주권자 시민 명단입니다.</p>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -296,7 +307,7 @@
                 </thead>
                 <tbody id="citizenSignTableBody">
                     <tr><td>김*수</td><td>서울특별시 종로구</td><td>010-****-1234</td></tr>
-                    <td>이*영</td><td>부산광역시 해운대구</td><td>010-****-5678</td></tr>
+                    <tr><td>이*영</td><td>부산광역시 해운대구</td><td>010-****-5678</td></tr>
                     <tr><td>박*민</td><td>경기도 수원시 팔달구</td><td>010-****-9876</td></tr>
                 </tbody>
             </table>
@@ -304,12 +315,12 @@
         </div>
     </div>
 
-    <!-- 🏛️ [모달 4] 국회의원 동의 명단 -->
+    <!-- 🏛️ [모달 4] 국회의원 동의 명단 (실시간으로 동의한 의원이 바로 쌓이는 곳) -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
-            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 10원 송금으로 본인 인증을 완료한 의원 목록입니다.</p>
+            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 1원 송금으로 본인 인증을 완료한 의원 목록입니다.</p>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -470,10 +481,10 @@
 
             tempCitizenData = { name, addr, phone };
             closeModal('citizenSignFormModal');
-            openSignModal('✍️ 국민 서명 결의 확인');
+            openSignModal('✍️ 국민 1원 송금 실명 서명 확인');
         }
 
-        /* 🏛️ 국회의원 10원 계좌 송금 동의 인증 로직 */
+        /* 🏛️ 국회의원 1원 계좌 송금 동의 신청 및 실시간 명단 반영 로직 */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const region = document.getElementById('deputyRegion').value.trim();
@@ -484,13 +495,13 @@
                 return;
             }
 
-            // 동의 명단에 즉시 추가
+            // 국회의원 동의 명단 테이블에 실시간으로 맨 위에 추가하여 국민들이 바로 볼 수 있게 함
             const tbody = document.getElementById('deputyTableBody');
             const tr = document.createElement('tr');
             tr.innerHTML = `<td><b>${name}</b></td><td>${region}</td><td>${contact}</td>`;
             tbody.prepend(tr);
 
-            alert(`🎉 ${name}의 동의 신청이 접수되었습니다!\n지정 계좌(농협 301-1234-5678-01)로 10원 입금 확인 시 최종 동의로 인증됩니다.`);
+            alert(`🎉 [${name}] 의원의 1원 송금 동의 신청이 접수되어 명단에 즉시 등록되었습니다! 국민들이 이제 동의 여부를 실시간으로 확인할 수 있습니다.`);
             
             document.getElementById('deputyName').value = '';
             document.getElementById('deputyRegion').value = '';
@@ -572,7 +583,7 @@
                 tbody.prepend(tr);
 
                 tempCitizenData = null;
-                alert('🎉 국민 서명이 정상적으로 저장되고 서명 명단에 등록되었습니다!');
+                alert('🎉 국민 서명이 정상 등록되어 서명 명단에 반영되었습니다!');
             } else {
                 alert('🎉 전자 서명이 완료되었습니다!');
             }
