@@ -19,7 +19,7 @@
         /* 메인 상위 패널 컨테이너 */
         .slogan-container { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
         
-        /* [수정 반영] 국회의원 Email 동의 인증 패널 (위아래 확장 + 개헌 문구 통합) */
+        /* 국회의원 Email 동의 인증 패널 */
         .participate-panel {
             background: linear-gradient(135deg, #065f46 0%, #047857 100%);
             border: 2px solid #34d399; border-radius: 12px; padding: 14px 10px;
@@ -32,12 +32,19 @@
         .panel-sub-desc { font-size: 0.65rem; color: #a7f3d0; margin-bottom: 10px; cursor: pointer; text-decoration: underline; }
         
         .participate-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+        
+        /* 버튼과 대상(국회의원/시민)을 묶어주는 래퍼 */
+        .btn-target-wrapper { display: flex; flex-direction: column; gap: 3px; text-align: center; }
+        
         .sub-action-btn {
             background-color: #022c22; color: #34d399; border: 1px solid #34d399; 
-            padding: 9px 4px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center;
+            padding: 9px 4px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center; width: 100%;
         }
         .sub-action-btn.highlight { background-color: #0284c7; color: #ffffff; border-color: #38bdf8; }
         .sub-action-btn:active { transform: scale(0.98); }
+
+        /* [수정 반영] 버튼 하단 대상 명시 라벨 (국회의원 / 시민) */
+        .target-label { font-size: 0.72rem; font-weight: 800; color: #fef08a; letter-spacing: -0.5px; }
 
         /* 가로 병합된 3대 핵심 이슈 버튼 그리드 */
         .grid-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
@@ -176,15 +183,22 @@
 
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
-        <!-- [수정 반영] 국회의원 Email 동의 인증 패널 (위아래 확장 및 개헌 문구 통합) -->
         <div class="participate-panel">
             <div class="participate-title">🏛️ 국회의원 Email 동의 인증</div>
             <div class="panel-sub-title">⚡ 국민 직접 개헌 & 소환법 입법</div>
             <div class="panel-sub-desc" onclick="openModal('constitutionModal')">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
             
             <div class="participate-btn-group">
-                <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 Email 동의</button>
-                <button class="sub-action-btn" onclick="openModal('deputyListModal')">📋 의원 동의 명단 보기</button>
+                <!-- 국회의원 버튼 및 대상 명시 라벨 -->
+                <div class="btn-target-wrapper">
+                    <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 Email 동의</button>
+                    <span class="target-label">[ 국회의원 ]</span>
+                </div>
+                <!-- 시민 버튼 및 대상 명시 라벨 -->
+                <div class="btn-target-wrapper">
+                    <button class="sub-action-btn" onclick="openModal('deputyListModal')">📋 의원 동의 명단 보기</button>
+                    <span class="target-label">[ 시민 ]</span>
+                </div>
             </div>
         </div>
 
