@@ -16,7 +16,7 @@
         .badge { display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #9333ea 100%); color: #fff; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; box-shadow: 0 2px 6px rgba(147,51,234,0.3); }
         .main-title { font-size: 1.35rem; font-weight: 900; color: #f8fafc; letter-spacing: -1px; }
 
-        /* 📊 실시간 회원수 전광판 (국민 무한정, 의원 500명 한정) */
+        /* 📊 실시간 회원수 전광판 */
         .counter-container { width: 100%; max-width: 380px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border: 1px solid #6366f1; border-radius: 10px; padding: 8px; margin-bottom: 6px; box-shadow: 0 3px 10px rgba(99, 102, 241, 0.2); }
         .counter-label { font-size: 0.7rem; font-weight: 700; color: #a5b4fc; margin-bottom: 1px; }
         .counter-number { font-size: 1.25rem; font-weight: 900; color: #38bdf8; letter-spacing: 0.5px; }
@@ -176,7 +176,7 @@
                 <button class="sub-action-btn highlight" onclick="openModal('citizenSignFormModal')">📝 국민 1원 송금 서명</button>
                 <button class="sub-action-btn" onclick="openModal('signListModal')">📋 국민 서명 명단</button>
                 <button class="sub-action-btn highlight" style="background-color:#0284c7; border-color:#38bdf8;" onclick="openModal('deputyVerifyModal')">🏛️ 의원 1원 송금 동의</button>
-                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 의원 동의 명단 (<span id="deputyCount">2</span>/500)</button>
+                <button class="sub-action-btn" onclick="openModal('deputyListModal')">🏛️ 의원 동의 명단</button>
             </div>
         </div>
 
@@ -266,7 +266,7 @@
         </div>
     </div>
 
-    <!-- [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 (문구 및 여백 깔끔히 제거) -->
+    <!-- [모달 2] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
@@ -304,12 +304,11 @@
         </div>
     </div>
 
-    <!-- 📋 [모달 3] 국민 참여 서명 명단 (무한정 + 빈 행 4개) -->
+    <!-- 📋 [모달 3] 국민 참여 서명 명단 (설명글 삭제 완료) -->
     <div id="signListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('signListModal')">&times;</button>
             <div class="modal-title">✍️ 국민 참여 서명 명단</div>
-            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">대한민국 전 국민 참여 실명 서명 명단입니다. (무한 참여 가능)</p>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -333,12 +332,11 @@
         </div>
     </div>
 
-    <!-- 🏛️ [모달 4] 국회의원 동의 명단 (500명 한정 + 빈 행 4개) -->
+    <!-- 🏛️ [모달 4] 국회의원 동의 명단 (설명글 삭제 완료) -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
-            <p style="font-size:0.72rem; color:#a5b4fc; margin-bottom:6px;">계좌 1원 송금으로 본인 인증을 완료한 의원 목록입니다. (최대 500명 한정)</p>
             <table class="list-table">
                 <thead>
                     <tr>
@@ -441,7 +439,6 @@
             initPuzzleGame();
             initMatchGame();
             initSignaturePad();
-            updateDeputyCount();
         };
 
         /* -------------------------------------------------------------
@@ -548,12 +545,6 @@
             document.getElementById('panel2').classList.toggle('active', num === 2);
         }
 
-        function updateDeputyCount() {
-            const tbody = document.getElementById('deputyTableBody');
-            const actualRows = tbody.querySelectorAll('tr:not(.empty-row)').length;
-            document.getElementById('deputyCount').innerText = actualRows;
-        }
-
         /* 📝 국민 서명 작성 및 명단 추가 (무한정) */
         let tempCitizenData = null;
 
@@ -603,7 +594,6 @@
             let fullRegion = region + (officeDetail ? ' (' + officeDetail + ')' : '');
             tr.innerHTML = `<td><b>${name}</b></td><td>${fullRegion}</td><td>${contact}</td>`;
             tbody.prepend(tr);
-            updateDeputyCount();
 
             alert(`🎉 [${name}] 의원의 1원 송금 동의 신청이 접수되어 명단에 즉시 등록되었습니다!`);
             
