@@ -44,7 +44,7 @@
         .slogan-card.constitution .slogan-text { color: #fde047; }
         .slogan-desc { font-size: 0.62rem; color: #94a3b8; margin-top: 1px; }
 
-        /* [항목 4] 가로 병합된 3대 핵심 이슈 버튼 그리드 */
+        /* 가로 병합된 3대 핵심 이슈 버튼 그리드 */
         .grid-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
         .grid-link-btn {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
@@ -57,31 +57,12 @@
         .grid-link-title { font-size: 0.73rem; font-weight: 800; color: #ffffff; line-height: 1.2; }
         .grid-link-btn.highlight .grid-link-title { color: #fef08a; }
 
-        /* 🎮 시민 축제 배너 */
-        .arcade-banner {
-            width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
-            border: 2px solid #a78bfa; border-radius: 12px; padding: 10px; margin-bottom: 8px;
-            box-shadow: 0 3px 12px rgba(124, 58, 237, 0.4); cursor: pointer; transition: transform 0.1s;
-        }
-        .arcade-banner:active { transform: scale(0.98); }
-        .arcade-title { font-size: 0.92rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
-        .arcade-desc { font-size: 0.7rem; color: #e0e7ff; }
-
-        /* [항목 4] 토글형 간소화 로그인 섹션 */
-        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; text-align: left; }
-        .login-toggle-bar { font-size: 0.85rem; font-weight: 800; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .login-toggle-bar span { background-color: #2563eb; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 8px; font-weight: 600; }
-        .login-expand-box { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #334155; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .phone-input { width: 100%; padding: 8px 10px; font-size: 0.88rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #ffffff; outline: none; }
-        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 0.9rem; font-weight: 800; padding: 9px; border: none; border-radius: 6px; cursor: pointer; }
-
-        /* [항목 1] 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 */
+        /* [수정 반영] 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 (게임방 배너 위쪽으로 이동) */
         .senior-notice-card {
             width: 100%; max-width: 380px;
             background: linear-gradient(135deg, #1e1b4b 0%, #311b92 100%);
             border: 2px solid #fbbf24; border-radius: 12px;
-            padding: 14px 12px; margin-bottom: 14px;
+            padding: 14px 12px; margin-bottom: 8px;
             box-shadow: 0 4px 15px rgba(251, 191, 36, 0.25);
             text-align: center;
         }
@@ -93,6 +74,25 @@
             font-size: 0.92rem; font-weight: 800; color: #ffffff;
             margin-top: 8px; line-height: 1.4; word-break: keep-all;
         }
+
+        /* 🎮 시민 축제 배너 */
+        .arcade-banner {
+            width: 100%; max-width: 380px; background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+            border: 2px solid #a78bfa; border-radius: 12px; padding: 10px; margin-bottom: 8px;
+            box-shadow: 0 3px 12px rgba(124, 58, 237, 0.4); cursor: pointer; transition: transform 0.1s;
+        }
+        .arcade-banner:active { transform: scale(0.98); }
+        .arcade-title { font-size: 0.92rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
+        .arcade-desc { font-size: 0.7rem; color: #e0e7ff; }
+
+        /* 토글형 간소화 로그인 섹션 */
+        .join-container { width: 100%; max-width: 380px; background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; text-align: left; }
+        .login-toggle-bar { font-size: 0.85rem; font-weight: 800; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .login-toggle-bar span { background-color: #2563eb; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 8px; font-weight: 600; }
+        .login-expand-box { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #334155; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .phone-input { width: 100%; padding: 8px 10px; font-size: 0.88rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #ffffff; outline: none; }
+        .action-btn { width: 100%; background-color: #22c55e; color: #000000; font-size: 0.9rem; font-weight: 800; padding: 9px; border: none; border-radius: 6px; cursor: pointer; }
 
         /* 팝업 모달 공통 */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
@@ -106,18 +106,14 @@
         .input-field { width: 100%; padding: 7px 9px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #475569; border-radius: 6px; color: #fff; outline: none; cursor: pointer; }
         .submit-btn { width: 100%; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; padding: 9px; border-radius: 6px; font-size: 0.85rem; font-weight: 800; cursor: pointer; margin-top: 5px; }
 
-        /* 계좌 안내 박스 */
-        .account-box { background-color: #0f172a; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 8px; text-align: center; }
-        .account-number { font-size: 0.95rem; font-weight: 900; color: #fde047; letter-spacing: 0.5px; margin: 3px 0; }
-
-        /* [항목 2] 검색창 스타일 */
+        /* 검색창 스타일 */
         .search-box { width: 100%; padding: 8px; font-size: 0.85rem; background-color: #0f172a; border: 1px solid #3b82f6; border-radius: 6px; color: #fff; outline: none; margin-bottom: 8px; }
 
-        /* 명단 테이블 및 빈 행 스타일 */
+        /* 명단 테이블 및 빈 행 스타일 (연락처 -> Email로 통일) */
         .list-table { width: 100%; font-size: 0.72rem; border-collapse: collapse; margin-top: 4px; }
         .list-table th, .list-table td { border: 1px solid #334155; padding: 5px; text-align: center; }
         .list-table th { background-color: #0f172a; color: #38bdf8; }
-        .list-table td { color: #cbd5e1; }
+        .list-table td { color: #cbd5e1; word-break: break-all; }
         .empty-row td { color: #64748b; font-style: italic; background-color: rgba(15, 23, 42, 0.4); }
 
         /* 🕹️ 미니 게임방 모달 스타일 */
@@ -183,12 +179,12 @@
         <h1 class="main-title">국민의 약속</h1>
     </header>
 
-    <!-- 3. 핵심 요구 구호 카드 및 참여 패널 (상단 공간 확보형) -->
+    <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
         <div class="participate-panel">
-            <div class="participate-title">🏛️ 국회의원 1원 계좌 송금 동의 검증</div>
+            <div class="participate-title">🏛️ 국회의원 Email 동의 인증</div>
             <div class="participate-btn-group">
-                <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 1원 송금 동의</button>
+                <button class="sub-action-btn highlight" onclick="openModal('deputyVerifyModal')">🏛️ 의원 Email 동의</button>
                 <button class="sub-action-btn" onclick="openModal('deputyListModal')">📋 의원 동의 명단 보기</button>
             </div>
         </div>
@@ -198,7 +194,7 @@
             <div class="slogan-desc">📖 "대한민국은 민주공화국이다" 주권자 실현 방법 보기 ➔</div>
         </div>
 
-        <!-- [항목 4] 가로 병합된 3대 핵심 이슈 버튼 -->
+        <!-- 가로 병합된 3대 핵심 이슈 버튼 -->
         <div class="grid-links">
             <a href="https://www.youtube.com/results?search_query=독일+정치+문화+의회" target="_blank" class="grid-link-btn">
                 <div class="grid-link-title">⚖️ 일하는<br>국회의원</div>
@@ -212,13 +208,23 @@
         </div>
     </main>
 
+    <!-- [수정 반영] 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 (게임방 배너 위쪽으로 이동) -->
+    <section class="senior-notice-card">
+        <div class="senior-notice-title">
+            "일하라고 뽑은 국민의 대표!<br>특권은 내려놓고,"
+        </div>
+        <div class="senior-notice-sub">
+            이제 진짜 주권자인 국민의 명령에 동참합시다!
+        </div>
+    </section>
+
     <!-- 🎮 4. 시민 대기실 & 축제 게임방 바로가기 배너 -->
     <div class="arcade-banner" onclick="openArcadeModal()">
         <div class="arcade-title">🕹️ 시민 축제 미니 게임방 입장하기</div>
         <div class="arcade-desc">내 사진 퍼즐 & 연속 팡팡 맞추기로 즐거운 대기 시간을 보내세요! ✨</div>
     </div>
 
-    <!-- [항목 4] 👤 토글형 간소화 로그인 섹션 -->
+    <!-- 토글형 간소화 로그인 섹션 -->
     <section class="join-container">
         <div id="loginToggleBar" class="login-toggle-bar" onclick="toggleLoginBox()">
             <div>✍️ 국민의 약속 간편가입 (터치해서 열기)</div>
@@ -238,34 +244,18 @@
         </div>
     </section>
 
-    <!-- [항목 1] 📢 어르신 시니어 맞춤 하단 대형 강조 선언문 박스 -->
-    <section class="senior-notice-card">
-        <div class="senior-notice-title">
-            "일하라고 뽑은 국민의 대표!<br>특권은 내려놓고,"
-        </div>
-        <div class="senior-notice-sub">
-            이제 진짜 주권자인 국민의 명령에 동참합시다!
-        </div>
-    </section>
-
-    <!-- [모달 1] 🏛️ 국회의원 계좌 1원 송금 동의 인증 창 (항목 3 이메일 검증 연동 포함) -->
+    <!-- [모달 1] 🏛️ 국회의원 Email 동의 인증 창 (계좌 내용 제거, 이메일 중심 간소화) -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
-            <div class="modal-title">🏛️ 국회의원 1원 계좌 송금 동의</div>
-            
-            <div class="account-box">
-                <div style="font-size:0.72rem; color:#a5b4fc;">[공식 동의 검증 전용 계좌]</div>
-                <div class="account-number">농협 301-1234-5678-01</div>
-                <div style="font-size:0.7rem; color:#cbd5e1;">예금주: (사)국민의약속개헌본부</div>
-            </div>
+            <div class="modal-title">🏛️ 국회의원 Email 동의 신청</div>
 
             <div class="input-group">
                 <label>의원 성명</label>
-                <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동 의원" style="cursor:text;">
+                <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동" style="cursor:text;">
             </div>
 
-            <!-- [항목 3] 국회 공식 이메일 입력란 -->
+            <!-- 국회 공식 이메일 입력란 -->
             <div class="input-group">
                 <label>국회 공식 이메일 (@assembly.go.kr)</label>
                 <input type="email" id="deputyEmail" class="input-field" placeholder="예: member@assembly.go.kr" style="cursor:text;">
@@ -276,29 +266,20 @@
                 <input type="text" id="deputyRegion" class="input-field" placeholder="클릭하여 지역구 검색하기 🔍" onclick="execDaumPostcode('deputyRegion')" readonly>
             </div>
 
-            <div class="input-group">
-                <label>의원실 상세 위치 (건물명 및 호실)</label>
-                <input type="text" id="deputyOfficeDetail" class="input-field" placeholder="예: 국회의원회관 512호 (추가 기재)" style="cursor:text;">
-            </div>
-            <div class="input-group">
-                <label>의원실 연락처</label>
-                <input type="text" id="deputyContact" class="input-field" placeholder="예: 02-784-1234" style="cursor:text;">
-            </div>
-
             <button class="submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="submitDeputyVerification()">
-                ✅ 이메일 및 1원 송금 검증 후 명단 즉시 등록
+                ✅ 국회 공식 이메일 인증 후 명단 등록
             </button>
             <button onclick="closeModal('deputyVerifyModal')" style="width:100%; margin-top:6px; background-color:#475569; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">취소</button>
         </div>
     </div>
 
-    <!-- [모달 2] 🏛️ 국회의원 동의 명단 (항목 2 검색창 포함) -->
+    <!-- [모달 2] 🏛️ 국회의원 동의 명단 (연락처 -> Email 항목으로 통일 및 검색창 포함) -->
     <div id="deputyListModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
             
-            <!-- [항목 2] 지역구 / 의원명 실시간 검색창 -->
+            <!-- 지역구 / 의원명 실시간 검색창 -->
             <input type="text" id="deputySearchInput" class="search-box" placeholder="🔍 지역구 또는 의원명을 입력하세요 (예: 영등포, 홍길동)" onkeyup="filterDeputyTable()">
 
             <table class="list-table">
@@ -306,12 +287,12 @@
                     <tr>
                         <th>의원명</th>
                         <th>지역구</th>
-                        <th>연락처(의원실)</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody id="deputyTableBody">
-                    <tr><td>홍길동 의원</td><td>서울 영등포구갑</td><td>02-784-****</td></tr>
-                    <tr><td>김철수 의원</td><td>경기 성남시분당구</td><td>031-780-****</td></tr>
+                    <tr><td>홍길동 의원</td><td>서울 영등포구갑</td><td>gildong@assembly.go.kr</td></tr>
+                    <tr><td>김철수 의원</td><td>경기 성남시분당구</td><td>chulsu@assembly.go.kr</td></tr>
                     <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
                     <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
                     <tr class="empty-row"><td>-</td><td>작성 대기 중</td><td>-</td></tr>
@@ -383,7 +364,7 @@
         const DEPUTY_MAX_LIMIT = 500;
         let openModalStack = []; 
 
-        // [항목 3] 사전 등록된 제22대 국회의원 공식 이메일 데이터베이스 시뮬레이션 샘플
+        // 사전 등록된 제22대 국회의원 공식 이메일 데이터베이스 시뮬레이션 샘플
         const OFFICIAL_DEPUTY_DB = [
             { name: "홍길동", email: "gildong@assembly.go.kr" },
             { name: "김철수", email: "chulsu@assembly.go.kr" },
@@ -396,7 +377,7 @@
             initMatchGame();
         };
 
-        /* [항목 4] 토글형 로그인 창 열고 닫기 제어 */
+        /* 토글형 로그인 창 열고 닫기 제어 */
         function toggleLoginBox() {
             const expandBox = document.getElementById('loginExpandBox');
             if (expandBox.style.display === 'block') {
@@ -507,7 +488,7 @@
         }
 
         /* -------------------------------------------------------------
-         * [항목 2] 지역구 / 의원명 실시간 검색 필터 함수
+         * 지역구 / 의원명 실시간 검색 필터 함수
          * ------------------------------------------------------------- */
         function filterDeputyTable() {
             let filter = document.getElementById('deputySearchInput').value.toLowerCase();
@@ -531,17 +512,15 @@
         }
 
         /* -------------------------------------------------------------
-         * [항목 3] 국회의원 이메일 2중 검증 및 1원 계좌 송금 동의 신청
+         * [수정 반영] 국회의원 이메일 2중 검증 및 동의 신청 (계좌 항목 제거)
          * ------------------------------------------------------------- */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const email = document.getElementById('deputyEmail').value.trim();
             const region = document.getElementById('deputyRegion').value.trim();
-            const officeDetail = document.getElementById('deputyOfficeDetail').value.trim();
-            const contact = document.getElementById('deputyContact').value.trim();
 
-            if(!name || !email || !region || !contact) {
-                alert('의원 성명, 국회 공식 이메일, 지역구, 연락처를 모두 입력해 주세요.');
+            if(!name || !email || !region) {
+                alert('의원 성명, 국회 공식 이메일, 소속 지역구를 모두 입력해 주세요.');
                 return;
             }
 
@@ -554,7 +533,6 @@
             // 사전 등록된 의원 이메일 DB 대조 시뮬레이션
             let matchedDeputy = OFFICIAL_DEPUTY_DB.find(d => d.name === name && d.email === email);
             if (!matchedDeputy) {
-                // 테스트를 위해 DB에 등록되지 않은 이름이라도 도메인이 맞으면 임시 통과시키되 안내 팝업 출력 가능
                 console.log('신규 공식 이메일 감지 및 2중 검증 진행');
             }
 
@@ -572,17 +550,14 @@
             }
 
             const tr = document.createElement('tr');
-            let fullRegion = region + (officeDetail ? ' (' + officeDetail + ')' : '');
-            tr.innerHTML = `<td><b>${name} 의원</b></td><td>${fullRegion}</td><td>${contact}</td>`;
+            tr.innerHTML = `<td><b>${name} 의원</b></td><td>${region}</td><td>${email}</td>`;
             tbody.prepend(tr);
 
-            alert(`🎉 [${name}] 의원의 국회 이메일 및 1원 송금 2중 검증이 확인되어 명단에 즉시 자동 등재되었습니다!`);
+            alert(`🎉 [${name}] 의원의 국회 공식 이메일 인증이 확인되어 명단에 즉시 자동 등재되었습니다!`);
             
             document.getElementById('deputyName').value = '';
             document.getElementById('deputyEmail').value = '';
             document.getElementById('deputyRegion').value = '';
-            document.getElementById('deputyOfficeDetail').value = '';
-            document.getElementById('deputyContact').value = '';
             
             closeModal('deputyVerifyModal');
             openModal('deputyListModal');
