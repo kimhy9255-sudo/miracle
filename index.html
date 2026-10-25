@@ -171,6 +171,30 @@
 
         .game-btn { background-color: #2563eb; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.8rem; margin: 2px; display: inline-flex; align-items: center; justify-content: center; }
         .game-btn.secondary { background-color: #475569; }
+
+        /* 🚀 [추가] 전국 전파 클릭 버튼 & 모달 전용 스타일 */
+        .viral-banner {
+            width: 100%; max-width: 380px;
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            border: 2px solid #38bdf8; border-radius: 12px;
+            padding: 12px; margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+            cursor: pointer; transition: transform 0.1s; text-align: center;
+        }
+        .viral-banner:active { transform: scale(0.98); }
+        .viral-title { font-size: 0.95rem; font-weight: 900; color: #fef08a; margin-bottom: 2px; }
+        .viral-desc { font-size: 0.72rem; color: #e0f2fe; font-weight: 600; }
+
+        .viral-btn-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+        .viral-share-btn {
+            width: 100%; padding: 11px; border-radius: 8px; font-size: 0.85rem; font-weight: 800;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+            text-decoration: none; color: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .viral-kakao { background-color: #fee500; color: #191919; }
+        .viral-telegram { background-color: #229ed9; }
+        .viral-sms { background-color: #10b981; }
+        .viral-copy { background-color: #475569; }
     </style>
 </head>
 <body>
@@ -180,6 +204,12 @@
         <span class="badge">🎉 주말 시민 문화 축제 프로젝트</span>
         <h1 class="main-title">국민의 약속</h1>
     </header>
+
+    <!-- 🚀 [추가] 전국 전파 클릭 배너 (최상단 강조) -->
+    <div class="viral-banner" onclick="openModal('viralModal')">
+        <div class="viral-title">🚀 대한민국 전 국민 클릭 전파하기</div>
+        <div class="viral-desc">카카오톡ㆍ텔레그램ㆍ문자로 웹앱 사이트를 자동 전파하세요! ✨</div>
+    </div>
 
     <!-- 3. 핵심 요구 구호 카드 및 참여 패널 -->
     <main class="slogan-container">
@@ -251,6 +281,41 @@
             </div>
         </div>
     </section>
+
+    <!-- 🚀 [추가 모달] 📲 전국 전파 클릭 자동 발송 모달 창 -->
+    <div id="viralModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('viralModal')">&times;</button>
+            <div class="modal-title">🚀 국민의 약속 - 전국 동시 전파하기</div>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
+                버튼 하나만 클릭하면 국민의 약속 영구 웹앱 주소와 메시지가 원터치로 자동 발송됩니다!
+            </p>
+
+            <div class="viral-btn-grid">
+                <!-- 1. 카카오톡 / SNS 클릭 공유 -->
+                <button class="viral-share-btn viral-kakao" onclick="shareKakao()">
+                    💬 카카오톡 / 메신저로 즉시 전파하기
+                </button>
+
+                <!-- 2. 텔레그램 클릭 공유 -->
+                <a id="telegramShareBtn" href="#" target="_blank" class="viral-share-btn viral-telegram">
+                    ✈️ 텔레그램 방에 전파하기
+                </a>
+
+                <!-- 3. 등록 전번 / 전화번호부 SMS 자동 발송 -->
+                <a id="smsShareBtn" href="#" class="viral-share-btn viral-sms">
+                    📱 등록된 스마트폰 문자로 자동 발송하기
+                </a>
+
+                <!-- 4. 웹사이트 IPFS 링크 복사 -->
+                <button class="viral-share-btn viral-copy" onclick="copyShareLink()">
+                    📋 웹앱 사이트 주소(링크) 복사하기
+                </button>
+            </div>
+
+            <button onclick="closeModal('viralModal')" style="width:100%; margin-top:12px; background-color:#334155; color:#fff; border:none; padding:8px; border-radius:6px; font-weight:800; cursor:pointer;">닫기</button>
+        </div>
+    </div>
 
     <!-- [모달 1] 🏛️ 국회의원 Email 동의 인증 창 -->
     <div id="deputyVerifyModal" class="modal-overlay">
@@ -382,6 +447,7 @@
             checkLoginStatus();
             initPuzzleGame();
             initMatchGame();
+            initViralShareLinks(); // 🚀 전파 링크 초기화 실행
         };
 
         function toggleLoginBox() {
@@ -734,6 +800,50 @@
                 return true;
             }
             return false;
+        }
+
+        /* 🚀 [추가] 전국 클릭 전파 자동 발송 시스템 스크립트 */
+        const shareTitle = "🔥 [국민의 약속] 대한민국 시민 주권 프로젝트 & 국민 개헌";
+        const shareDesc = "일하라고 뽑은 국민의 대표! 특권은 내려놓고 국민의 명령에 동참합시다. 웹사이트에서 확인하고 전파해주세요!";
+
+        function initViralShareLinks() {
+            const currentUrl = window.location.href;
+            const fullText = shareTitle + "\n" + shareDesc + "\n" + currentUrl;
+
+            // 텔레그램 연동
+            const tgBtn = document.getElementById('telegramShareBtn');
+            if (tgBtn) tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareTitle + "\n" + shareDesc)}`;
+
+            // 모바일 SMS(문자) 자동 완성 연동 (등록 전번 및 연락처 전송 지원)
+            const smsBtn = document.getElementById('smsShareBtn');
+            if (smsBtn) {
+                const delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
+                smsBtn.href = `sms:${delimiter}body=${encodeURIComponent(fullText)}`;
+            }
+        }
+
+        function shareKakao() {
+            const currentUrl = window.location.href;
+            if (navigator.share) {
+                // 스마트폰 네이티브 공유 (카카오톡, 라인 등 스마트폰 내 전파 앱 전체 호출)
+                navigator.share({
+                    title: shareTitle,
+                    text: shareDesc,
+                    url: currentUrl,
+                }).catch(() => {});
+            } else {
+                copyShareLink();
+                alert('💬 카카오톡 전파 링크가 복사되었습니다! 카카오톡 채팅창에 붙여넣기(Ctrl+V) 하세요.');
+            }
+        }
+
+        function copyShareLink() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                alert('📋 웹앱의 사이트 주소가 클립보드에 복사되었습니다!\n원하는 곳에 붙여넣어 전파해 주세요.');
+            }).catch(err => {
+                console.error('복사 실패:', err);
+            });
         }
     </script>
 </body>
