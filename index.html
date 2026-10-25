@@ -43,7 +43,6 @@
         .sub-action-btn.highlight { background-color: #0284c7; color: #ffffff; border-color: #38bdf8; }
         .sub-action-btn:active { transform: scale(0.98); }
 
-        /* 버튼 하단 대상 명시 라벨 (국회의원 / 시민) */
         .target-label { font-size: 0.72rem; font-weight: 800; color: #fef08a; letter-spacing: -0.5px; }
 
         /* 가로 병합된 3대 핵심 이슈 버튼 그리드 */
@@ -310,7 +309,7 @@
         </div>
     </div>
 
-    <!-- [모달 1] 🏛️ 국회의원 동의 신청 창 (자유 입력 허용) -->
+    <!-- [모달 1] 🏛️ 국회의원 동의 신청 창 (자유 테스트 입력 허용) -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
@@ -336,7 +335,7 @@
                 <input type="text" id="deputyRegion" class="input-field" placeholder="클릭하여 지역구 검색하기 🔍" onclick="execDaumPostcode('deputyRegion')" readonly>
             </div>
 
-            <!-- 메일 & 문자 발송 버튼 -->
+            <!-- 메일 & 문자 발송 버튼 (제한 해제됨) -->
             <button class="submit-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); margin-bottom: 6px;" onclick="sendDeputyInvitation()">
                 📩 의원 공식 메일 & 문자 동의 요청서 발송
             </button>
@@ -355,7 +354,7 @@
             <button class="close-btn" onclick="closeModal('deputyListModal')">&times;</button>
             <div class="modal-title">🏛️ 국회의원 동의 현황 및 명단</div>
             
-            <input type="text" id="deputySearchInput" class="search-box" placeholder="🔍 지역구 또는 의원명을 입력하세요 (예: 영등포, 홍길동)" onkeyup="filterDeputyTable()">
+            <input type="text" id="deputySearchInput" class="search-box" placeholder="🔍 지역구 또는 의원명을 입력하세요 (예: 영등포, 김화연)" onkeyup="filterDeputyTable()">
 
             <table class="list-table">
                 <thead>
