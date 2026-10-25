@@ -343,7 +343,7 @@
 
             <!-- 1. 요청서 발송 버튼 -->
             <button class="submit-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); margin-bottom: 6px;" onclick="sendDeputyInvitation()">
-                📩 승인 코드가 포함된 요청 메일 & 문자 발송
+                📩 웹사이트 링크 & 승인 코드가 포함된 요청 발송
             </button>
 
             <!-- 2. 승인 코드로 최종 동의 완료 처리 버튼 -->
@@ -560,6 +560,7 @@
             }
         }
 
+        /* 🚀 [최종 보완] 메일/문자 본문에 웹사이트 주소 링크와 승인 코드가 모두 포함되도록 수정 */
         function sendDeputyInvitation() {
             var name = document.getElementById('deputyName').value.trim();
             var email = document.getElementById('deputyEmail').value.trim();
@@ -571,20 +572,21 @@
                 return;
             }
 
+            var currentBaseUrl = window.location.href.split('?')[0];
             var mailSubject = `[국민의 약속] 3대 특권 폐지 동의 및 승인 코드 안내의 건`;
-            var mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 전달받으신 [승인 코드: ${CORRECT_AUTH_CODE}]를 웹사이트에 입력하여 최종 동의를 완료해 주십시오.`;
+            var mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 아래 웹사이트 주소로 접속하신 후 [승인 코드: ${CORRECT_AUTH_CODE}]를 입력하여 최종 동의를 완료해 주십시오.\n\n웹사이트 바로가기:\n${currentBaseUrl}`;
 
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
             if(phone.length >= 10) {
-                var smsText = `[국민의 약속] ${name}님, 3대 특권 폐지 동의 승인 코드: [${CORRECT_AUTH_CODE}]를 웹사이트에 입력해 주세요.`;
+                var smsText = `[국민의 약속] ${name}님, 3대 특권 폐지 동의 승인 코드:[${CORRECT_AUTH_CODE}] | 접속 주소: ${currentBaseUrl}`;
                 var delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
                 setTimeout(function() {
                     window.open(`sms:${phone}${delimiter}body=${encodeURIComponent(smsText)}`, '_blank');
                 }, 500);
             }
 
-            alert(`📩 [${name}] 님 앞 승인 코드([${CORRECT_AUTH_CODE}])가 포함된 요청 메일/문자 발송 창이 실행되었습니다!`);
+            alert(`📩 [${name}] 님 앞 웹사이트 주소와 승인 코드([${CORRECT_AUTH_CODE}])가 포함된 요청 발송 창이 실행되었습니다!`);
         }
 
         function verifyAndRegisterDeputy() {
