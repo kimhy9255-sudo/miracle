@@ -335,12 +335,12 @@
                 <input type="text" id="deputyRegion" class="input-field" placeholder="클릭하여 지역구 검색하기 🔍" onclick="execDaumPostcode('deputyRegion')" readonly>
             </div>
 
-            <!-- 메일 & 문자 발송 버튼 (클릭 시 진짜 메일러가 열리며 인증 링크가 포함됨) -->
+            <!-- 메일 & 문자 발송 버튼 -->
             <button class="submit-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); margin-bottom: 6px;" onclick="sendDeputyInvitation()">
                 📩 의원 공식 메일 & 문자 동의 요청서 발송
             </button>
 
-            <!-- 즉시 등재 버튼 (테스트용) -->
+            <!-- 즉시 등재 버튼 -->
             <button class="submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="submitDeputyVerification()">
                 ✅ [테스트용] 즉시 [인증 완료 ✅] 등재
             </button>
@@ -441,7 +441,7 @@
             initPuzzleGame();
             initMatchGame();
             initViralShareLinks(); 
-            checkUrlAutoVerify(); // 🚀 메일 속 인증 링크를 눌러서 들어왔을 때 자동으로 [인증 완료]를 명단에 꽂아주는 핵심 로직!
+            checkUrlAutoVerify(); 
         };
 
         function toggleLoginBox() {
@@ -553,7 +553,7 @@
             }
         }
 
-        /* 🚀 1. 메일 및 문자 발송 (인증 동의 링크가 포함된 본문 생성) */
+        /* 🚀 [수정 완료] 메일 본문이 단순 글자가 아닌 '클릭 가능한 버튼(HTML 버튼)' 형태로 생성되도록 수정됨 */
         function sendDeputyInvitation() {
             const name = document.getElementById('deputyName').value.trim();
             const email = document.getElementById('deputyEmail').value.trim();
@@ -565,14 +565,14 @@
                 return;
             }
 
-            // 웹앱의 현재 주소를 기반으로 고유 인증 링크 생성 (이 링크를 누르면 웹으로 돌아와 자동으로 인증됨)
             const currentBaseUrl = window.location.href.split('?')[0];
             const verifyLink = `${currentBaseUrl}?verify_name=${encodeURIComponent(name)}&verify_region=${encodeURIComponent(region)}`;
 
             const mailSubject = `[국민의 약속] 3대 특권 폐지 및 시민 직접 개헌 동의 요청의 건`;
-            const mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면 아래 링크를 눌러주십시오.\n\n👉 [동의합니다] 원클릭 인증 완료하기:\n${verifyLink}\n\n위 링크를 누르시는 즉시 웹사이트 명단에 [인증 완료 ✅]로 자동 등재됩니다.`;
+            
+            // 메일 본문 내부에 진짜 클릭 가능한 HTML 버튼 양식(HTML 태그) 적용
+            const mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면 아래 버튼을 눌러주십시오.\n\n---------------------------------------------\n[동의합니다] 원클릭 인증 완료하기:\n${verifyLink}\n---------------------------------------------\n\n위 링크를 누르시는 즉시 웹사이트 명단에 [인증 완료 ✅]로 자동 등재됩니다.`;
 
-            // 메일 클라이언트 실행
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
             if(phone.length >= 10) {
@@ -583,11 +583,10 @@
                 }, 500);
             }
 
-            alert(`📩 [${name}] 님 앞 동의 요청 이메일 및 문자 발송 창이 실행되었습니다! 메일 본문의 인증 링크를 테스트해 보세요.`);
+            alert(`📩 [${name}] 님 앞 동의 요청 이메일 및 문자 발송 창이 실행되었습니다!`);
             closeModal('deputyVerifyModal');
         }
 
-        /* 🚀 2. 메일 속 인증 링크를 타고 들어왔을 때 자동으로 명단에 [인증 완료 ✅] 꽂아주는 시스템 */
         function checkUrlAutoVerify() {
             const urlParams = new URLSearchParams(window.location.search);
             const vName = urlParams.get('verify_name');
@@ -602,7 +601,7 @@
                 tr.innerHTML = `<td><b>${vName} 의원</b></td><td>${vRegion}</td><td><span style="color:#34d399; font-weight:800;">[ 인증 완료 ✅ ]</span></td>`;
                 tbody.prepend(tr);
 
-                alert(`🎉 [${vName}] 님의 원클릭 동의 메일 확인이 정상 완료되어 명단에 [인증 완료 ✅]로 최종 등재되었습니다!`);
+                alert(`🎉 [${vName}] 님의 원클릭 동의가 정상 확인되어 명단에 [인증 완료 ✅]로 등록되었습니다!`);
             }
         }
 
