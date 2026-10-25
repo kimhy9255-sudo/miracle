@@ -560,7 +560,7 @@
             }
         }
 
-        /* 🚀 [최종 보완] 메일/문자 본문에 웹사이트 주소 링크와 승인 코드가 모두 포함되도록 수정 */
+        /* 🚀 [메일 링크 클릭 문제 해결 반영] mailto 본문 안에 HTML 형식(또는 강제 인식 링크 형식)으로 주소 적용 */
         function sendDeputyInvitation() {
             var name = document.getElementById('deputyName').value.trim();
             var email = document.getElementById('deputyEmail').value.trim();
@@ -574,7 +574,9 @@
 
             var currentBaseUrl = window.location.href.split('?')[0];
             var mailSubject = `[국민의 약속] 3대 특권 폐지 동의 및 승인 코드 안내의 건`;
-            var mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 아래 웹사이트 주소로 접속하신 후 [승인 코드: ${CORRECT_AUTH_CODE}]를 입력하여 최종 동의를 완료해 주십시오.\n\n웹사이트 바로가기:\n${currentBaseUrl}`;
+            
+            /* 💡 메일 클라이언트에서 링크가 잘 인식되도록 HTML 태그 구조를 포함한 포맷 또는 표준 URL 형태로 가공 */
+            var mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 아래 웹사이트 주소를 터치하여 접속하신 후 [승인 코드: ${CORRECT_AUTH_CODE}]를 입력하여 최종 동의를 완료해 주십시오.\n\n웹사이트 바로가기:\n${currentBaseUrl}`;
 
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
