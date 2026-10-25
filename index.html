@@ -335,13 +335,13 @@
                 <input type="text" id="deputyRegion" class="input-field" placeholder="클릭하여 지역구 검색하기 🔍" onclick="execDaumPostcode('deputyRegion')" readonly>
             </div>
 
-            <!-- 🔑 [추가] 승인 코드 입력란 -->
+            <!-- 🔑 승인 코드 입력란 -->
             <div class="input-group" style="background: rgba(2, 132, 199, 0.1); padding: 8px; border-radius: 8px; border: 1px dashed #38bdf8;">
                 <label style="color: #38bdf8;">🔑 의원 승인 코드 (발급/전달받은 번호 입력)</label>
                 <input type="text" id="deputyAuthCode" class="input-field" placeholder="예: 7777 (테스트 기본값)" style="cursor:text; font-weight:900; letter-spacing: 2px; color: #fef08a;">
             </div>
 
-            <!-- 1. 요청서 발송 버튼 (승인 코드가 포함된 안내 전송) -->
+            <!-- 1. 요청서 발송 버튼 -->
             <button class="submit-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); margin-bottom: 6px;" onclick="sendDeputyInvitation()">
                 📩 승인 코드가 포함된 요청 메일 & 문자 발송
             </button>
@@ -440,9 +440,9 @@
     </div>
 
     <script>
-        const DEPUTY_MAX_LIMIT = 500;
-        let openModalStack = []; 
-        const CORRECT_AUTH_CODE = "7777"; // 🔑 의원 동의를 인증하기 위한 승인 코드 기본값 설정
+        var DEPUTY_MAX_LIMIT = 500;
+        var openModalStack = []; 
+        var CORRECT_AUTH_CODE = "7777"; 
 
         window.onload = function() {
             checkLoginStatus();
@@ -452,21 +452,21 @@
         };
 
         function toggleLoginBox() {
-            const expandBox = document.getElementById('loginExpandBox');
+            var expandBox = document.getElementById('loginExpandBox');
             expandBox.style.display = (expandBox.style.display === 'block') ? 'none' : 'block';
         }
 
         function execDaumPostcode(targetInputId) {
             new daum.Postcode({
                 oncomplete: function(data) {
-                    let fullAddr = data.address;
-                    let extraAddr = ''; 
+                    var fullAddr = data.address;
+                    var extraAddr = ''; 
                     if(data.addressType === 'R'){
                         if(data.bname !== ''){ extraAddr += data.bname; }
                         if(data.buildingName !== ''){ extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName); }
                         fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
                     }
-                    const inputElement = document.getElementById(targetInputId);
+                    var inputElement = document.getElementById(targetInputId);
                     if (inputElement) { inputElement.value = fullAddr; }
                 }
             }).open();
@@ -474,14 +474,14 @@
 
         window.addEventListener('popstate', function(event) {
             if (openModalStack.length > 0) {
-                let topModalId = openModalStack.pop();
-                let modalElem = document.getElementById(topModalId);
+                var topModalId = openModalStack.pop();
+                var modalElem = document.getElementById(topModalId);
                 if (modalElem) { modalElem.style.display = 'none'; }
             }
         });
 
         function openModal(id) {
-            const modal = document.getElementById(id);
+            var modal = document.getElementById(id);
             if (modal) {
                 modal.style.display = 'flex';
                 openModalStack.push(id);
@@ -490,10 +490,10 @@
         }
 
         function closeModal(id) {
-            const modal = document.getElementById(id);
+            var modal = document.getElementById(id);
             if (modal) {
                 modal.style.display = 'none';
-                openModalStack = openModalStack.filter(mId => mId !== id);
+                openModalStack = openModalStack.filter(function(mId) { return mId !== id; });
                 if (history.state && history.state.modalId === id) { history.back(); }
             }
         }
@@ -502,7 +502,7 @@
         function closeArcadeModal() { closeModal('arcadeModal'); }
 
         function checkLoginStatus() {
-            const savedPhone = localStorage.getItem('user_phone');
+            var savedPhone = localStorage.getItem('user_phone');
             if (savedPhone) {
                 document.getElementById('loginForm').style.display = 'none';
                 document.getElementById('userInfo').style.display = 'block';
@@ -514,8 +514,8 @@
         }
 
         function submitParticipation() {
-            const phoneInput = document.getElementById('userPhone');
-            const phoneVal = phoneInput.value.trim();
+            var phoneInput = document.getElementById('userPhone');
+            var phoneVal = phoneInput.value.trim();
             if(phoneVal.length < 10) { alert('올바른 휴대전화 번호를 입력해주세요.'); phoneInput.focus(); return; }
             localStorage.setItem('user_phone', phoneVal);
             phoneInput.value = '';
@@ -540,17 +540,17 @@
         }
 
         function filterDeputyTable() {
-            let filter = document.getElementById('deputySearchInput').value.toLowerCase();
-            let tbody = document.getElementById('deputyTableBody');
-            let trs = tbody.getElementsByTagName('tr');
+            var filter = document.getElementById('deputySearchInput').value.toLowerCase();
+            var tbody = document.getElementById('deputyTableBody');
+            var trs = tbody.getElementsByTagName('tr');
 
-            for (let i = 0; i < trs.length; i++) {
+            for (var i = 0; i < trs.length; i++) {
                 if (trs[i].classList.contains('empty-row')) continue;
-                let nameTd = trs[i].getElementsByTagName('td')[0];
-                let regionTd = trs[i].getElementsByTagName('td')[1];
+                var nameTd = trs[i].getElementsByTagName('td')[0];
+                var regionTd = trs[i].getElementsByTagName('td')[1];
                 if (nameTd && regionTd) {
-                    let nameText = nameTd.textContent || nameTd.innerText;
-                    let regionText = regionTd.textContent || regionTd.innerText;
+                    var nameText = nameTd.textContent || nameTd.innerText;
+                    var regionText = regionTd.textContent || regionTd.innerText;
                     if (nameText.toLowerCase().indexOf(filter) > -1 || regionText.toLowerCase().indexOf(filter) > -1) {
                         trs[i].style.display = "";
                     } else {
@@ -560,27 +560,26 @@
             }
         }
 
-        /* 🚀 1. 승인 코드가 포함된 안내 메일/문자 발송 기능 */
         function sendDeputyInvitation() {
-            const name = document.getElementById('deputyName').value.trim();
-            const email = document.getElementById('deputyEmail').value.trim();
-            const phone = document.getElementById('deputyPhoneNum').value.trim();
-            const region = document.getElementById('deputyRegion').value.trim();
+            var name = document.getElementById('deputyName').value.trim();
+            var email = document.getElementById('deputyEmail').value.trim();
+            var phone = document.getElementById('deputyPhoneNum').value.trim();
+            var region = document.getElementById('deputyRegion').value.trim();
 
             if(!name || !email || !region) {
                 alert('의원 성명, 이메일 주소, 소속 지역구를 모두 입력해 주세요.');
                 return;
             }
 
-            const mailSubject = `[국민의 약속] 3대 특권 폐지 동의 및 승인 코드 안내의 건`;
-            const mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 전달받으신 [승인 코드: ${CORRECT_AUTH_CODE}]를 웹사이트에 입력하여 최종 동의를 완료해 주십시오.`;
+            var mailSubject = `[국민의 약속] 3대 특권 폐지 동의 및 승인 코드 안내의 건`;
+            var mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면, 전달받으신 [승인 코드: ${CORRECT_AUTH_CODE}]를 웹사이트에 입력하여 최종 동의를 완료해 주십시오.`;
 
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
             if(phone.length >= 10) {
-                const smsText = `[국민의 약속] ${name}님, 3대 특권 폐지 동의 승인 코드: [${CORRECT_AUTH_CODE}]를 웹사이트에 입력해 주세요.`;
-                const delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
-                setTimeout(() => {
+                var smsText = `[국민의 약속] ${name}님, 3대 특권 폐지 동의 승인 코드: [${CORRECT_AUTH_CODE}]를 웹사이트에 입력해 주세요.`;
+                var delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
+                setTimeout(function() {
                     window.open(`sms:${phone}${delimiter}body=${encodeURIComponent(smsText)}`, '_blank');
                 }, 500);
             }
@@ -588,12 +587,11 @@
             alert(`📩 [${name}] 님 앞 승인 코드([${CORRECT_AUTH_CODE}])가 포함된 요청 메일/문자 발송 창이 실행되었습니다!`);
         }
 
-        /* 🚀 2. 승인 코드를 검증하고 곧바로 명단에 [인증 완료 ✅] 꽂아주는 핵심 로직 */
         function verifyAndRegisterDeputy() {
-            const name = document.getElementById('deputyName').value.trim();
-            const email = document.getElementById('deputyEmail').value.trim();
-            const region = document.getElementById('deputyRegion').value.trim();
-            const inputCode = document.getElementById('deputyAuthCode').value.trim();
+            var name = document.getElementById('deputyName').value.trim();
+            var email = document.getElementById('deputyEmail').value.trim();
+            var region = document.getElementById('deputyRegion').value.trim();
+            var inputCode = document.getElementById('deputyAuthCode').value.trim();
 
             if(!name || !email || !region) {
                 alert('의원 성명, 이메일 주소, 소속 지역구를 모두 입력해 주세요.');
@@ -606,18 +604,18 @@
                 return;
             }
 
-            const tbody = document.getElementById('deputyTableBody');
-            const totalRows = tbody.querySelectorAll('tr:not(.empty-row)').length;
+            var tbody = document.getElementById('deputyTableBody');
+            var totalRows = tbody.querySelectorAll('tr:not(.empty-row)').length;
             
             if(totalRows >= DEPUTY_MAX_LIMIT) {
                 alert('동의 명단이 최대 수량(500명)에 도달했습니다.');
                 return;
             }
 
-            const emptyRows = tbody.querySelectorAll('.empty-row');
+            var emptyRows = tbody.querySelectorAll('.empty-row');
             if(emptyRows.length > 0) { emptyRows[0].remove(); }
 
-            const tr = document.createElement('tr');
+            var tr = document.createElement('tr');
             tr.innerHTML = `<td><b>${name} 의원</b></td><td>${region}</td><td><span style="color:#34d399; font-weight:800;">[ 인증 완료 ✅ ]</span></td>`;
             tbody.prepend(tr);
 
@@ -633,24 +631,24 @@
             openModal('deputyListModal');
         }
 
-        let puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-        let currentImgUrl = 'https://picsum.photos/300/300';
-        let selectedPuzzleIndex = null;
+        var puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+        var currentImgUrl = 'https://picsum.photos/300/300';
+        var selectedPuzzleIndex = null;
 
         function initPuzzleGame() { renderPuzzle(); }
 
         function renderPuzzle() {
-            const board = document.getElementById('puzzleBoard');
+            var board = document.getElementById('puzzleBoard');
             board.innerHTML = '';
 
-            puzzleState.forEach((posVal, currentIdx) => {
-                const tile = document.createElement('div');
+            puzzleState.forEach(function(posVal, currentIdx) {
+                var tile = document.createElement('div');
                 tile.className = 'puzzle-tile' + (selectedPuzzleIndex === currentIdx ? ' selected' : '');
                 tile.style.backgroundImage = `url('${currentImgUrl}')`;
-                let row = Math.floor(posVal / 3);
-                let col = posVal % 3;
+                var row = Math.floor(posVal / 3);
+                var col = posVal % 3;
                 tile.style.backgroundPosition = `-${col * 90}px -${row * 90}px`;
-                tile.onclick = () => selectAndSwapTile(currentIdx);
+                tile.onclick = function() { selectAndSwapTile(currentIdx); };
                 board.appendChild(tile);
             });
         }
@@ -663,7 +661,7 @@
                 selectedPuzzleIndex = null;
                 renderPuzzle();
             } else {
-                let temp = puzzleState[selectedPuzzleIndex];
+                var temp = puzzleState[selectedPuzzleIndex];
                 puzzleState[selectedPuzzleIndex] = puzzleState[idx];
                 puzzleState[idx] = temp;
                 selectedPuzzleIndex = null;
@@ -673,7 +671,7 @@
         }
 
         function shufflePuzzle() {
-            puzzleState.sort(() => Math.random() - 0.5);
+            puzzleState.sort(function() { return Math.random() - 0.5; });
             selectedPuzzleIndex = null;
             document.getElementById('puzzleMsg').innerText = '퍼즐이 섞였습니다!';
             renderPuzzle();
@@ -688,14 +686,14 @@
 
         function loadCustomImage(input) {
             if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const reader = new FileReader();
+                var file = input.files[0];
+                var reader = new FileReader();
                 reader.onload = function(evt) {
-                    const img = new Image();
+                    var img = new Image();
                     img.onload = function() {
-                        const canvas = document.createElement('canvas');
+                        var canvas = document.createElement('canvas');
                         canvas.width = 270; canvas.height = 270;
-                        const ctx = canvas.getContext('2d');
+                        var ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, 270, 270);
                         currentImgUrl = canvas.toDataURL('image/jpeg');
                         puzzleState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -709,22 +707,22 @@
         }
 
         function checkPuzzleWin() {
-            let isWin = puzzleState.every((val, index) => val === index);
+            var isWin = puzzleState.every(function(val, index) { return val === index; });
             if (isWin) { document.getElementById('puzzleMsg').innerText = '🎉 퍼즐 완성!'; }
         }
 
-        let matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
-        let matchBoardData = [];
-        let firstSelected = null;
-        let comboScore = 0;
-        const COLS = 5;
-        const ROWS = 6;
+        var matchIcons = ['🍎', '🍌', '⭐', '🎈', '💙'];
+        var matchBoardData = [];
+        var firstSelected = null;
+        var comboScore = 0;
+        var COLS = 5;
+        var ROWS = 6;
 
         function initMatchGame() {
             comboScore = 0;
             document.getElementById('matchScore').innerText = `터뜨린 콤보: 0 회`;
             matchBoardData = [];
-            for (let i = 0; i < COLS * ROWS; i++) {
+            for (var i = 0; i < COLS * ROWS; i++) {
                 matchBoardData.push(matchIcons[Math.floor(Math.random() * matchIcons.length)]);
             }
             renderMatchBoard();
@@ -732,13 +730,13 @@
         }
 
         function renderMatchBoard() {
-            const board = document.getElementById('matchBoard');
+            var board = document.getElementById('matchBoard');
             board.innerHTML = '';
-            matchBoardData.forEach((icon, idx) => {
-                const tile = document.createElement('div');
+            matchBoardData.forEach(function(icon, idx) {
+                var tile = document.createElement('div');
                 tile.className = 'match-tile' + (firstSelected === idx ? ' selected' : '');
                 tile.innerText = icon;
-                tile.onclick = () => handleTileClick(idx);
+                tile.onclick = function() { handleTileClick(idx); };
                 board.appendChild(tile);
             });
         }
@@ -751,17 +749,17 @@
                 firstSelected = null;
                 renderMatchBoard();
             } else {
-                let prevIdx = firstSelected;
+                var prevIdx = firstSelected;
                 firstSelected = null;
-                let temp = matchBoardData[prevIdx];
+                var temp = matchBoardData[prevIdx];
                 matchBoardData[prevIdx] = matchBoardData[idx];
                 matchBoardData[idx] = temp;
                 renderMatchBoard();
 
-                let matched = checkAndClearMatches();
+                var matched = checkAndClearMatches();
                 if (!matched) {
-                    setTimeout(() => {
-                        let temp2 = matchBoardData[prevIdx];
+                    setTimeout(function() {
+                        var temp2 = matchBoardData[prevIdx];
                         matchBoardData[prevIdx] = matchBoardData[idx];
                         matchBoardData[idx] = temp2;
                         renderMatchBoard();
@@ -771,18 +769,18 @@
         }
 
         function checkAndClearMatches() {
-            let toRemove = new Set();
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS - 2; c++) {
-                    let idx = r * COLS + c;
+            var toRemove = new Set();
+            for (var r = 0; r < ROWS; r++) {
+                for (var c = 0; c < COLS - 2; c++) {
+                    var idx = r * COLS + c;
                     if (matchBoardData[idx] === matchBoardData[idx + 1] && matchBoardData[idx] === matchBoardData[idx + 2]) {
                         toRemove.add(idx); toRemove.add(idx + 1); toRemove.add(idx + 2);
                     }
                 }
             }
-            for (let c = 0; c < COLS; c++) {
-                for (let r = 0; r < ROWS - 2; r++) {
-                    let idx = r * COLS + c;
+            for (var c = 0; c < COLS; c++) {
+                for (var r = 0; r < ROWS - 2; r++) {
+                    var idx = r * COLS + c;
                     if (matchBoardData[idx] === matchBoardData[idx + COLS] && matchBoardData[idx] === matchBoardData[idx + COLS * 2]) {
                         toRemove.add(idx); toRemove.add(idx + COLS); toRemove.add(idx + COLS * 2);
                     }
@@ -791,36 +789,36 @@
             if (toRemove.size > 0) {
                 comboScore += 1;
                 document.getElementById('matchScore').innerText = `터뜨린 콤보: ${comboScore} 회`;
-                const tiles = document.querySelectorAll('.match-tile');
-                Array.from(toRemove).forEach(i => {
+                var tiles = document.querySelectorAll('.match-tile');
+                Array.from(toRemove).forEach(function(i) {
                     if (tiles[i]) tiles[i].classList.add('matched');
-                    matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)]);
+                    matchBoardData[i] = matchIcons[Math.floor(Math.random() * matchIcons.length)];
                 });
-                setTimeout(() => { renderMatchBoard(); checkAndClearMatches(); }, 350);
+                setTimeout(function() { renderMatchBoard(); checkAndClearMatches(); }, 350);
                 return true;
             }
             return false;
         }
 
-        const shareTitle = "🔥 [국민의 약속] 대한민국 시민 주권 프로젝트 & 국민 개헌";
-        const shareDesc = "일하라고 뽑은 국민의 대표! 특권은 내려놓고 국민의 명령에 동참합시다. 웹사이트에서 확인하고 전파해주세요!";
+        var shareTitle = "🔥 [국민의 약속] 대한민국 시민 주권 프로젝트 & 국민 개헌";
+        var shareDesc = "일하라고 뽑은 국민의 대표! 특권은 내려놓고 국민의 명령에 동참합시다. 웹사이트에서 확인하고 전파해주세요!";
 
         function initViralShareLinks() {
-            const currentUrl = window.location.href.split('?')[0];
-            const fullText = shareTitle + "\n" + shareDesc + "\n" + currentUrl;
-            const tgBtn = document.getElementById('telegramShareBtn');
+            var currentUrl = window.location.href.split('?')[0];
+            var fullText = shareTitle + "\n" + shareDesc + "\n" + currentUrl;
+            var tgBtn = document.getElementById('telegramShareBtn');
             if (tgBtn) tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareTitle + "\n" + shareDesc)}`;
-            const smsBtn = document.getElementById('smsShareBtn');
+            var smsBtn = document.getElementById('smsShareBtn');
             if (smsBtn) {
-                const delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
+                var delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
                 smsBtn.href = `sms:${delimiter}body=${encodeURIComponent(fullText)}`;
             }
         }
 
         function shareKakao() {
-            const currentUrl = window.location.href.split('?')[0];
+            var currentUrl = window.location.href.split('?')[0];
             if (navigator.share) {
-                navigator.share({ title: shareTitle, text: shareDesc, url: currentUrl }).catch(() => {});
+                navigator.share({ title: shareTitle, text: shareDesc, url: currentUrl }).catch(function() {});
             } else {
                 copyShareLink();
                 alert('💬 전파 링크가 복사되었습니다!');
@@ -828,10 +826,10 @@
         }
 
         function copyShareLink() {
-            const currentUrl = window.location.href.split('?')[0];
-            navigator.clipboard.writeText(currentUrl).then(() => {
+            var currentUrl = window.location.href.split('?')[0];
+            navigator.clipboard.writeText(currentUrl).then(function() {
                 alert('📋 웹앱 주소가 복사되었습니다!');
-            }).catch(err => { console.error('복사 실패:', err); });
+            }).catch(function(err) { console.error('복사 실패:', err); });
         }
     </script>
 </body>
