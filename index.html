@@ -317,7 +317,7 @@
         </div>
     </div>
 
-    <!-- [모달 1] 🏛️ 국회의원 Email 및 문자 원클릭 동의 인증 창 -->
+    <!-- [모달 1] 🏛️ 국회의원 Email 및 문자 원클릭 동의 인증 창 (일반 이메일 테스트 허용) -->
     <div id="deputyVerifyModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('deputyVerifyModal')">&times;</button>
@@ -328,10 +328,10 @@
                 <input type="text" id="deputyName" class="input-field" placeholder="예: 홍길동" style="cursor:text;">
             </div>
 
-            <!-- 국회 공식 이메일 입력란 -->
+            <!-- 국회 공식 이메일 입력란 (테스트용 일반 이메일 입력 허용) -->
             <div class="input-group">
-                <label>국회 공식 이메일 (@assembly.go.kr)</label>
-                <input type="email" id="deputyEmail" class="input-field" placeholder="예: member@assembly.go.kr" style="cursor:text;">
+                <label>이메일 주소 (테스트용 일반 이메일 입력 가능)</label>
+                <input type="email" id="deputyEmail" class="input-field" placeholder="예: kimhy9255@naver.com" style="cursor:text;">
             </div>
 
             <!-- 휴대전화 번호 입력란 -->
@@ -457,7 +457,7 @@
             initPuzzleGame();
             initMatchGame();
             initViralShareLinks(); 
-            checkUrlAutoVerify(); // 🚀 URL 링크로 의원이 접속했을 때 자동 인증 처리 체크
+            checkUrlAutoVerify(); 
         };
 
         function toggleLoginBox() {
@@ -581,7 +581,7 @@
             }
         }
 
-        /* 🚀 [추가 시스템 1] 국회의원 공식 이메일 및 문자 동의 요청 발송 기능 */
+        /* 🚀 [테스트 수정 완료] 국회의원 공식 이메일 및 문자 동의 요청 발송 기능 (일반 이메일 허용) */
         function sendDeputyInvitation() {
             const name = document.getElementById('deputyName').value.trim();
             const email = document.getElementById('deputyEmail').value.trim();
@@ -589,40 +589,35 @@
             const region = document.getElementById('deputyRegion').value.trim();
 
             if(!name || !email || !region) {
-                alert('의원 성명, 국회 공식 이메일, 소속 지역구를 모두 입력해 주세요.');
+                alert('의원 성명, 이메일 주소, 소속 지역구를 모두 입력해 주세요.');
                 return;
             }
 
-            if(!email.endsWith('@assembly.go.kr')) {
-                alert('⚠️ 국회 공식 이메일(@assembly.go.kr 주소)만 발송이 가능합니다.');
-                return;
-            }
-
-            // 고유 인증 링크 생성 (이 링크를 누르면 웹앱에서 [인증 완료]로 자동 반영됨)
+            // 고유 인증 링크 생성
             const currentBaseUrl = window.location.href.split('?')[0];
             const verifyLink = `${currentBaseUrl}?verify_name=${encodeURIComponent(name)}&verify_region=${encodeURIComponent(region)}`;
 
             // 메일 제목 및 본문 양식 세팅
             const mailSubject = `[국민의 약속] 3대 특권 폐지 및 시민 직접 개헌 동의 요청의 건`;
-            const mailBody = `안녕하십니까, ${name} 의원님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면 아래 링크를 눌러주십시오.\n\n👉 원클릭 동의 인증하기:\n${verifyLink}\n\n버튼을 누르시는 즉시 검열 불가능한 IPFS 영구 명단에 [인증 완료 ✅]로 자동 등재됩니다.`;
+            const mailBody = `안녕하십니까, ${name} 님.\n대한민국 주권자 국민들이 추진하는 [국민의 약속] 프로젝트입니다.\n\n불체포 특권 폐지, 일하는 국회, 의원 특권 내려놓기 3대 안건에 동의하신다면 아래 링크를 눌러주십시오.\n\n👉 원클릭 동의 인증하기:\n${verifyLink}\n\n버튼을 누르시는 즉시 영구 명단에 [인증 완료 ✅]로 자동 등재됩니다.`;
 
             // 1. 이메일 클라이언트(메일러) 자동 실행 연동
             window.location.href = `mailto:${email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
 
             // 2. 만약 전화번호가 입력되어 있다면 스마트폰 문자(SMS)로도 발송 준비
             if(phone.length >= 10) {
-                const smsText = `[국민의 약속] ${name} 의원님, 3대 특권 폐지 동의 인증 링크입니다: ${verifyLink}`;
+                const smsText = `[국민의 약속] ${name}님, 3대 특권 폐지 동의 인증 링크입니다: ${verifyLink}`;
                 const delimiter = navigator.userAgent.match(/iPhone|iPad|iPod/i) ? '&' : '?';
                 setTimeout(() => {
                     window.open(`sms:${phone}${delimiter}body=${encodeURIComponent(smsText)}`, '_blank');
                 }, 500);
             }
 
-            alert(`📩 [${name}] 의원님 앞 공식 동의 요청 이메일 및 문자 발송 창이 실행되었습니다!`);
+            alert(`📩 [${name}] 님 앞 동의 요청 이메일 및 문자 발송 창이 실행되었습니다!`);
             closeModal('deputyVerifyModal');
         }
 
-        /* 🚀 [추가 시스템 2] URL 링크 감지 및 웹앱 명단 [인증 완료 ✅] 자동 반영 */
+        /* 🚀 URL 링크 감지 및 웹앱 명단 [인증 완료 ✅] 자동 반영 */
         function checkUrlAutoVerify() {
             const urlParams = new URLSearchParams(window.location.search);
             const vName = urlParams.get('verify_name');
@@ -639,22 +634,18 @@
                 tr.innerHTML = `<td><b>${vName} 의원</b></td><td>${vRegion}</td><td><span style="color:#34d399; font-weight:800;">[ 인증 완료 ✅ ]</span></td>`;
                 tbody.prepend(tr);
 
-                alert(`🎉 [${vName}] 의원님의 원클릭 동의가 정상 확인되어 IPFS 영구 명단에 [인증 완료 ✅]로 등록되었습니다!`);
+                alert(`🎉 [${vName}] 님의 원클릭 동의가 정상 확인되어 명단에 [인증 완료 ✅]로 등록되었습니다!`);
             }
         }
 
+        /* 🚀 [테스트 수정 완료] 즉시 등재 기능 (일반 이메일 허용) */
         function submitDeputyVerification() {
             const name = document.getElementById('deputyName').value.trim();
             const email = document.getElementById('deputyEmail').value.trim();
             const region = document.getElementById('deputyRegion').value.trim();
 
             if(!name || !email || !region) {
-                alert('의원 성명, 국회 공식 이메일, 소속 지역구를 모두 입력해 주세요.');
-                return;
-            }
-
-            if(!email.endsWith('@assembly.go.kr')) {
-                alert('⚠️ 국회 공식 이메일(@assembly.go.kr 주소)만 인증이 가능합니다.');
+                alert('의원 성명, 이메일 주소, 소속 지역구를 모두 입력해 주세요.');
                 return;
             }
 
@@ -662,7 +653,7 @@
             const totalRows = tbody.querySelectorAll('tr:not(.empty-row)').length;
             
             if(totalRows >= DEPUTY_MAX_LIMIT) {
-                alert('국회의원 동의 명단이 최대 수량(500명)에 도달했습니다.');
+                alert('동의 명단이 최대 수량(500명)에 도달했습니다.');
                 return;
             }
 
@@ -675,10 +666,11 @@
             tr.innerHTML = `<td><b>${name} 의원</b></td><td>${region}</td><td><span style="color:#34d399; font-weight:800;">[ 인증 완료 ✅ ]</span></td>`;
             tbody.prepend(tr);
 
-            alert(`🎉 [${name}] 의원의 국회 공식 이메일 인증이 확인되어 명단에 즉시 자동 등재되었습니다!`);
+            alert(`🎉 [${name}] 님이 명단에 즉시 [인증 완료 ✅] 등재되었습니다!`);
             
             document.getElementById('deputyName').value = '';
             document.getElementById('deputyEmail').value = '';
+            document.getElementById('deputyPhoneNum').value = '';
             document.getElementById('deputyRegion').value = '';
             
             closeModal('deputyVerifyModal');
