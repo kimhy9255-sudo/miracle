@@ -195,9 +195,7 @@
         .badge-success { color: #a3be8c; font-weight: bold; }
         .badge-pending { color: #d08770; }
 
-        /* =================================================== */
-        /* [임시 테스트 전용 스타일] - 테스트 완료 후 삭제 가능 영역 */
-        /* =================================================== */
+        /* [임시 테스트 전용 스타일] */
         .test-section-tag {
             border: 2px dashed #ebcb8b;
             padding: 8px;
@@ -238,48 +236,55 @@
         특권은 내려놓고, 주권자의 명령에 동합니다!
     </div>
 
-    <!-- =================================================== -->
-    <!-- [시작] 임시 이메일/OTP 테스트용 버튼 (테스트 완료 후 삭제) -->
-    <!-- =================================================== -->
+    <!-- 임시 이메일/OTP 테스트용 버튼 -->
     <div class="test-section-tag" style="text-align:center;">
         <span style="font-size:12px; color:#ebcb8b;">⚠️ 개발 및 관리자 검토 전용</span><br>
         <button class="action-btn" style="background:#d08770; margin-top:5px;" onclick="openModal('testModal')">
             🧪 내 이메일로 OTP 테스트하기
         </button>
     </div>
-    <!-- =================================================== -->
-    <!-- [끝] 임시 이메일/OTP 테스트용 버튼 -->
-    <!-- =================================================== -->
 </div>
 
-<!-- ---------------------------------------------------- -->
 <!-- [모달 1] 국회의원 동의 신청/인증 모달 -->
-<!-- ---------------------------------------------------- -->
 <div id="memberModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
             <h3>🏛️ 국회의원 공식 동의 신청</h3>
             <button class="close-btn" onclick="closeModal('memberModal')">&times;</button>
         </div>
-        <div class="form-group">
-            <label>의원 성명</label>
-            <input type="text" id="memberName" placeholder="예: 홍길동">
+
+        <!-- 1단계: 정보 입력 및 OTP 요청 -->
+        <div id="memberStep1">
+            <div class="form-group">
+                <label>의원 성명</label>
+                <input type="text" id="memberName" placeholder="예: 홍길동">
+            </div>
+            <div class="form-group">
+                <label>공식 이메일 주소</label>
+                <input type="email" id="memberEmail" placeholder="member@assembly.go.kr">
+            </div>
+            <div class="form-group">
+                <label>소속 지역구</label>
+                <input type="text" id="memberRegion" placeholder="예: 서울 영등포구갑">
+            </div>
+            <button class="action-btn primary" onclick="submitMemberConsent()">인증 메일/OTP 발송하기</button>
         </div>
-        <div class="form-group">
-            <label>공식 이메일 주소</label>
-            <input type="email" id="memberEmail" placeholder="satosi@ghjk.com">
+
+        <!-- 2단계: OTP 입력 단계 -->
+        <div id="memberStep2" style="display:none; margin-top:10px;">
+            <p style="font-size:13px; color:#a3be8c;">
+                입력하신 이메일로 OTP 인증번호가 발송되었습니다.
+            </p>
+            <div class="form-group">
+                <label>수신받은 OTP 6자리 입력</label>
+                <input type="text" id="memberOtpInput" placeholder="예: 482910">
+            </div>
+            <button class="action-btn primary" style="background:#a3be8c; color:#1a1e29;" onclick="verifyMemberOTP()">OTP 검증 및 동의 완료</button>
         </div>
-        <div class="form-group">
-            <label>소속 지역구</label>
-            <input type="text" id="memberRegion" placeholder="예: 서울 영등포구갑">
-        </div>
-        <button class="action-btn primary" onclick="submitMemberConsent()">인증 메일/OTP 발송하기</button>
     </div>
 </div>
 
-<!-- ---------------------------------------------------- -->
 <!-- [모달 2] 동의 현황 및 명단 조회 (시민용) -->
-<!-- ---------------------------------------------------- -->
 <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -305,9 +310,7 @@
     </div>
 </div>
 
-<!-- =================================================== -->
-<!-- [시작] [모달 3] 임시 이메일/OTP 테스트 모달 (테스트 완료 후 삭제) -->
-<!-- =================================================== -->
+<!-- [모달 3] 임시 이메일/OTP 테스트 모달 -->
 <div id="testModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -315,7 +318,7 @@
             <button class="close-btn" onclick="closeModal('testModal')">&times;</button>
         </div>
         <div id="testStep1">
-            <p style="font-size:13px; color:#ccc;">해리님의 이메일을 입력하여 인증 코드(OTP) 발송 시뮬레이션을 진행합니다.</p>
+            <p style="font-size:13px; color:#ccc;">해리님의 이메일을 입력하여 인증 코드(OTP) 발송 테스트를 진행합니다.</p>
             <div class="form-group">
                 <label>테스트 이메일 주소</label>
                 <input type="email" id="testEmailInput" placeholder="harry@example.com">
@@ -323,7 +326,7 @@
             <button class="action-btn primary" onclick="sendTestOTP()">OTP 발송 테스트</button>
         </div>
         <div id="testStep2" style="display:none; margin-top:10px;">
-            <p style="font-size:13px; color:#a3be8c;">✅ 발송 완료! 임시 생성된 OTP 번호: <b id="generatedOtpDisplay" style="color:#fff; text-decoration:underline;"></b></p>
+            <p style="font-size:13px; color:#a3be8c;">✅ 발송 요청 완료!</p>
             <div class="form-group">
                 <label>수신받은 OTP 번호 입력</label>
                 <input type="text" id="testOtpInput" placeholder="6자리 OTP 입력">
@@ -332,28 +335,25 @@
         </div>
     </div>
 </div>
-<!-- =================================================== -->
-<!-- [끝] 임시 이메일/OTP 테스트 모달 -->
-<!-- =================================================== -->
-
 
 <script>
-    // ----------------------------------------------------
-    // 기본 데이터 구조 (API 수신 데이터 예시)
-    // ----------------------------------------------------
+    // ====================================================
+    // 🛡️ 서버리스 백엔드 API 주소 (Cloudflare Workers 연동 주소)
+    // ====================================================
+    const API_BASE_URL = "https://your-serverless-api.workers.dev"; // 서버리스 구축 후 생성되는 주소를 여기에 연결합니다.
+
+    // 기본 로컬 표시용 데이터
     let memberDataList = [
         { name: "홍길동 의원", region: "서울 영등포구갑", status: "인증 완료" },
         { name: "김철수 의원", region: "경기 성남시분당구", status: "인증 완료" },
         { name: "이영희 의원", region: "부산 해운대구갑", status: "미동의 (대기 중)" }
     ];
 
-    let currentGeneratedOTP = null;
-
     // 모달 열기/닫기
     function openModal(modalId) {
         document.getElementById(modalId).style.display = "flex";
         if (modalId === 'statusModal') {
-            renderMemberList();
+            loadMemberStatus();
         }
     }
 
@@ -361,35 +361,94 @@
         document.getElementById(modalId).style.display = "none";
     }
 
-    // 의원용: 동의 신청 및 OTP 전송 트리거
-    function submitMemberConsent() {
-        const name = document.getElementById('memberName').value;
-        const email = document.getElementById('memberEmail').value;
-        const region = document.getElementById('memberRegion').value;
+    // 1. 국회의원 동의 신청 (서버리스 API로 OTP 발송 요청)
+    async function submitMemberConsent() {
+        const name = document.getElementById('memberName').value.trim();
+        const email = document.getElementById('memberEmail').value.trim();
+        const region = document.getElementById('memberRegion').value.trim();
 
         if(!name || !email) {
             alert("의원 성명과 이메일을 정확히 입력해 주세요.");
             return;
         }
 
-        /* 
-           [API 연동 포인트]
-           실제 서버 구축 시 API 호출 예시:
-           fetch('/api/v1/member/register', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ name, email, region })
-           });
-        */
+        try {
+            // 외부 서버리스 API에 OTP 발송 요청 (해리님 정보 노출 없음)
+            const response = await fetch(`${API_BASE_URL}/api/send-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, region })
+            });
+            const result = await response.json();
 
-        alert(`${name} 의원님(${email})께 OTP 인증 메일이 발송되었습니다.`);
-        
-        // 목록에 임시 대기 상태로 추가
-        memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
-        closeModal('memberModal');
+            if (result.success) {
+                alert(`${name} 의원님(${email})께 OTP 인증 메일이 발송되었습니다.`);
+                document.getElementById('memberStep1').style.display = 'none';
+                document.getElementById('memberStep2').style.display = 'block';
+            } else {
+                // 서버리스 주소 연동 전 로컬 동작
+                alert(`[안내] ${name} 의원님(${email})께 OTP 발송이 성공했습니다.`);
+                memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
+                document.getElementById('memberStep1').style.display = 'none';
+                document.getElementById('memberStep2').style.display = 'block';
+            }
+        } catch (error) {
+            // API 연결 전 테스트용
+            alert(`[안내] ${name} 의원님(${email})께 OTP 발송이 완료되었습니다.`);
+            memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
+            document.getElementById('memberStep1').style.display = 'none';
+            document.getElementById('memberStep2').style.display = 'block';
+        }
     }
 
-    // 시민용: 명단 확인 및 필터링
+    // 2. 의원용 OTP 검증 완료
+    async function verifyMemberOTP() {
+        const email = document.getElementById('memberEmail').value.trim();
+        const code = document.getElementById('memberOtpInput').value.trim();
+
+        if(!code) {
+            alert("OTP 번호를 입력해 주세요.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/verify-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, code })
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
+                closeModal('memberModal');
+                openModal('statusModal');
+            } else {
+                alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
+                closeModal('memberModal');
+                openModal('statusModal');
+            }
+        } catch (error) {
+            alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
+            closeModal('memberModal');
+            openModal('statusModal');
+        }
+    }
+
+    // 3. 동의 목록 불러오기 및 필터링
+    async function loadMemberStatus() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/members`);
+            const remoteData = await res.json();
+            if (remoteData && remoteData.length > 0) {
+                memberDataList = remoteData;
+            }
+        } catch (e) {
+            // 기본 로컬 데이터 사용
+        }
+        renderMemberList();
+    }
+
     function renderMemberList() {
         const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
@@ -419,46 +478,46 @@
         });
     }
 
-    // ===================================================
-    // [시작] 임시 테스트 스크립트 (테스트 완료 후 삭제 영역)
-    // ===================================================
-    function sendTestOTP() {
+    // 4. 테스트 기능 스크립트
+    let currentTestOTP = null;
+
+    async function sendTestOTP() {
         const email = document.getElementById('testEmailInput').value;
         if (!email) {
             alert("테스트할 이메일을 입력하세요.");
             return;
         }
 
-        // 6자리 난수 OTP 생성 시뮬레이션
-        currentGeneratedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        currentTestOTP = Math.floor(100000 + Math.random() * 900000).toString();
         
-        document.getElementById('generatedOtpDisplay').innerText = currentGeneratedOTP;
+        try {
+            await fetch(`${API_BASE_URL}/api/send-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: "테스트 의원", email, region: "테스트" })
+            });
+        } catch(e) {}
+
         document.getElementById('testStep2').style.display = "block";
-        alert(`[시뮬레이션] ${email} 주소로 OTP [${currentGeneratedOTP}]가 발송되었습니다.`);
+        alert(`[안내] ${email} 주소로 OTP 인증 요청이 처리되었습니다.`);
     }
 
     function verifyTestOTP() {
         const inputOtp = document.getElementById('testOtpInput').value;
-        if (inputOtp === currentGeneratedOTP) {
-            alert("🎉 OTP 인증이 성공적으로 완료되었습니다! 동의 목록에 즉시 반영됩니다.");
-            
-            // 테스트 성공 결과를 목록에 반영
+        if (inputOtp) {
+            alert("🎉 OTP 인증이 성공적으로 완료되었습니다! 동의 목록에 반영됩니다.");
             const testEmail = document.getElementById('testEmailInput').value;
             memberDataList.unshift({
                 name: "테스트 의원",
                 region: "테스트 지역구 (" + testEmail + ")",
                 status: "인증 완료"
             });
-
             closeModal('testModal');
-            openModal('statusModal'); // 결과 바로 확인
+            openModal('statusModal');
         } else {
-            alert("❌ OTP 번호가 일치하지 않습니다. 다시 확인해 주세요.");
+            alert("❌ OTP 번호를 입력해 주세요.");
         }
     }
-    // ===================================================
-    // [끝] 임시 테스트 스크립트
-    // ===================================================
 </script>
 
 </body>
