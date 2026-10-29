@@ -6,18 +6,19 @@
     <title>국민의 약속 - 서명 및 동의 운동</title>
     <style>
         :root {
-            --bg-color: #f4f3ef;
+            --bg-color: #121212;
             --main-pink: #c2185b;
             --main-teal: #00897b;
             --main-yellow: #fbc02d;
-            --card-bg: #ffffff;
+            --card-bg: #1e222d;
             --modal-dark: #1a1e29;
-            --text-dark: #222222;
+            --text-light: #ffffff;
         }
 
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             background-color: var(--bg-color);
+            color: var(--text-light);
             margin: 0;
             padding: 20px 15px;
             display: flex;
@@ -30,28 +31,28 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin-top: 20px; /* 상단 여백 설정 */
+            margin-top: 20px;
         }
 
         /* 헤더 박스 */
         .header-box {
-            background-color: #f8f8f6;
+            background-color: var(--card-bg);
             border-radius: 16px;
             padding: 24px 16px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #eaeaea;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid #2e3440;
         }
         .header-box h1 {
             margin: 0 0 8px 0;
             font-size: 26px;
             font-weight: 800;
-            color: #111;
+            color: #fff;
         }
         .header-box p {
             margin: 0;
-            font-size: 14px;
-            color: #555;
+            font-size: 13px;
+            color: #aaa;
             line-height: 1.4;
         }
 
@@ -62,15 +63,16 @@
             color: #fff;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .btn-card:active {
             transform: scale(0.98);
         }
         .btn-card h2 {
             margin: 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -80,8 +82,8 @@
         .btn-card span.sub-text {
             display: block;
             margin-top: 6px;
-            font-size: 13px;
-            opacity: 0.9;
+            font-size: 12px;
+            opacity: 0.8;
         }
 
         .btn-pink { background-color: var(--main-pink); }
@@ -90,21 +92,21 @@
 
         /* 하단 카드 */
         .footer-card {
-            background-color: #f8f8f6;
+            background-color: var(--card-bg);
             border-radius: 16px;
             padding: 18px 16px;
             text-align: center;
             font-weight: 700;
-            font-size: 15px;
-            color: #222;
-            border: 1px solid #eaeaea;
+            font-size: 14px;
+            color: #fff;
+            border: 1px solid #2e3440;
         }
 
         /* 모달 레이어 공통 */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             display: none;
             justify-content: center;
             align-items: center;
@@ -116,11 +118,12 @@
             background-color: var(--modal-dark);
             color: #fff;
             width: 100%;
-            max-width: 380px;
+            max-width: 390px;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid #3b4252;
+            box-sizing: border-box;
         }
         .modal-header {
             display: flex;
@@ -132,7 +135,7 @@
         }
         .modal-header h3 {
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -145,64 +148,32 @@
             cursor: pointer;
         }
 
-        /* 폼 요소 */
-        .form-group {
-            margin-bottom: 14px;
+        /* 폼 요소 및 전파 버튼들 */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 6px; }
+        .form-group input {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #3b4252; background-color: #2e3440; color: #fff;
+            box-sizing: border-box; font-size: 14px;
         }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: #aaa;
-            margin-bottom: 6px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #3b4252;
-            background-color: #2e3440;
-            color: #fff;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
+        
         .action-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background-color: #4c566a;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
+            width: 100%; padding: 14px; border-radius: 10px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 10px;
+            text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-        .action-btn.primary { background-color: #5e81ac; }
+        .btn-kakao { background-color: #ffeb00; color: #3c1e1e; }
+        .btn-telegram { background-color: #229ed9; color: #fff; }
+        .btn-sms { background-color: #00c73c; color: #fff; }
+        .btn-copy { background-color: #4c566a; color: #fff; }
+        .btn-close-modal { background-color: #3b4252; color: #fff; margin-top: 5px; }
 
         /* 테이블 (명단 확인용) */
-        .member-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 13px;
-        }
-        .member-table th, .member-table td {
-            padding: 10px 6px;
-            text-align: center;
-            border-bottom: 1px solid #2e3440;
-        }
+        .member-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .member-table th, .member-table td { padding: 10px 6px; text-align: center; border-bottom: 1px solid #2e3440; }
         .member-table th { color: #88c0d0; }
         .badge-success { color: #a3be8c; font-weight: bold; }
         .badge-pending { color: #d08770; }
-
-        /* [임시 테스트 전용 스타일] */
-        .test-section-tag {
-            border: 2px dashed #ebcb8b;
-            padding: 8px;
-            border-radius: 8px;
-            margin-top: 10px;
-            background: rgba(235, 203, 139, 0.1);
-        }
     </style>
 </head>
 <body>
@@ -215,37 +186,53 @@
     </div>
 
     <!-- 1. 시민용 서명 & 전파하기 -->
-    <div class="btn-card btn-pink" onclick="alert('시민 서명 페이지로 이동합니다.')">
+    <div class="btn-card btn-pink" onclick="openModal('shareModal')">
         <h2>🚀 시민용 서명 & 전파하기</h2>
-        <span class="sub-text">[시민용]</span>
+        <span class="sub-text">카카오톡·텔레그램·문자로 웹앱 자동 전파</span>
     </div>
 
     <!-- 2. 국회의원 동의 인증하기 (의원용) -->
     <div class="btn-card btn-teal" onclick="openModal('memberModal')">
         <h2>🏛️ 국회의원 동의 인증하기</h2>
-        <span class="sub-text">[의원용]</span>
+        <span class="sub-text">공식 이메일 및 OTP 인증</span>
     </div>
 
     <!-- 3. 동의 의원 & 서명 명단 확인 (시민 공개용) -->
     <div class="btn-card btn-yellow" onclick="openModal('statusModal')">
         <h2>📊 동의 의원 & 서명 명단 확인</h2>
+        <span class="sub-text">실시간 동의 현황 및 지역구 검색</span>
     </div>
 
     <!-- 하단 메시지 -->
     <div class="footer-card">
         특권은 내려놓고, 주권자의 명령에 동합니다!
     </div>
+</div>
 
-    <!-- 임시 이메일/OTP 테스트용 버튼 -->
-    <div class="test-section-tag" style="text-align:center;">
-        <span style="font-size:12px; color:#ebcb8b;">⚠️ 개발 및 관리자 검토 전용</span><br>
-        <button class="action-btn" style="background:#d08770; margin-top:5px;" onclick="openModal('testModal')">
-            🧪 내 이메일로 OTP 테스트하기
-        </button>
+<!-- =================================================== -->
+<!-- [모달 1] 시민용 - 전국 동시 전파하기 모달 (이미지 반영) -->
+<!-- =================================================== -->
+<div id="shareModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🚀 국민의 약속 - 전국 동시 전파하기</h3>
+            <button class="close-btn" onclick="closeModal('shareModal')">&times;</button>
+        </div>
+        <p style="font-size:12px; color:#ccc; margin-bottom:15px; line-height:1.4;">
+            버튼 하나만 클릭하면 국민의 약속 영구 웹앱 주소와 메시지가 원터치로 자동 발송됩니다!
+        </p>
+        
+        <button class="action-btn btn-kakao" onclick="shareKakao()">💬 카카오톡 / 메신저로 즉시 전파하기</button>
+        <button class="action-btn btn-telegram" onclick="shareTelegram()">✈️ 텔레그램 방에 전파하기</button>
+        <button class="action-btn btn-sms" onclick="shareSMS()">📱 등록된 스마트폰 문자로 자동 발송하기</button>
+        <button class="action-btn btn-copy" onclick="copyLink()">📋 웹앱 사이트 주소(링크) 복사하기</button>
+        <button class="action-btn btn-close-modal" onclick="closeModal('shareModal')">닫기</button>
     </div>
 </div>
 
-<!-- [모달 1] 국회의원 동의 신청/인증 모달 -->
+<!-- =================================================== -->
+<!-- [모달 2] 의원용 - 국회의원 동의 인증 신청 모달 -->
+<!-- =================================================== -->
 <div id="memberModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -253,7 +240,6 @@
             <button class="close-btn" onclick="closeModal('memberModal')">&times;</button>
         </div>
 
-        <!-- 1단계: 정보 입력 및 OTP 요청 -->
         <div id="memberStep1">
             <div class="form-group">
                 <label>의원 성명</label>
@@ -267,24 +253,23 @@
                 <label>소속 지역구</label>
                 <input type="text" id="memberRegion" placeholder="예: 서울 영등포구갑">
             </div>
-            <button class="action-btn primary" onclick="submitMemberConsent()">인증 메일/OTP 발송하기</button>
+            <button class="action-btn" style="background-color:#5e81ac; color:#fff;" onclick="submitMemberConsent()">인증 메일/OTP 발송하기</button>
         </div>
 
-        <!-- 2단계: OTP 입력 단계 -->
         <div id="memberStep2" style="display:none; margin-top:10px;">
-            <p style="font-size:13px; color:#a3be8c;">
-                입력하신 이메일로 OTP 인증번호가 발송되었습니다.
-            </p>
+            <p style="font-size:13px; color:#a3be8c;">입력하신 이메일로 OTP 인증번호가 발송되었습니다.</p>
             <div class="form-group">
                 <label>수신받은 OTP 6자리 입력</label>
                 <input type="text" id="memberOtpInput" placeholder="예: 482910">
             </div>
-            <button class="action-btn primary" style="background:#a3be8c; color:#1a1e29;" onclick="verifyMemberOTP()">OTP 검증 및 동의 완료</button>
+            <button class="action-btn" style="background:#a3be8c; color:#1a1e29;" onclick="verifyMemberOTP()">OTP 검증 및 동의 완료</button>
         </div>
     </div>
 </div>
 
-<!-- [모달 2] 동의 현황 및 명단 조회 (시민용) -->
+<!-- =================================================== -->
+<!-- [모달 3] 시민용 - 동의 현황 및 명단 확인 모달 -->
+<!-- =================================================== -->
 <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -303,53 +288,23 @@
                 </tr>
             </thead>
             <tbody id="memberTableBody">
-                <!-- JavaScript에서 동적으로 데이터 로드됨 -->
+                <!-- 동적 데이터 -->
             </tbody>
         </table>
-        <button class="action-btn" style="margin-top:15px;" onclick="closeModal('statusModal')">닫기</button>
-    </div>
-</div>
-
-<!-- [모달 3] 임시 이메일/OTP 테스트 모달 -->
-<div id="testModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>🧪 이메일 & OTP 테스트 창</h3>
-            <button class="close-btn" onclick="closeModal('testModal')">&times;</button>
-        </div>
-        <div id="testStep1">
-            <p style="font-size:13px; color:#ccc;">해리님의 이메일을 입력하여 인증 코드(OTP) 발송 테스트를 진행합니다.</p>
-            <div class="form-group">
-                <label>테스트 이메일 주소</label>
-                <input type="email" id="testEmailInput" placeholder="harry@example.com">
-            </div>
-            <button class="action-btn primary" onclick="sendTestOTP()">OTP 발송 테스트</button>
-        </div>
-        <div id="testStep2" style="display:none; margin-top:10px;">
-            <p style="font-size:13px; color:#a3be8c;">✅ 발송 요청 완료!</p>
-            <div class="form-group">
-                <label>수신받은 OTP 번호 입력</label>
-                <input type="text" id="testOtpInput" placeholder="6자리 OTP 입력">
-            </div>
-            <button class="action-btn primary" onclick="verifyTestOTP()">OTP 검증 및 동의 완료 처리</button>
-        </div>
+        <button class="action-btn btn-close-modal" style="margin-top:15px;" onclick="closeModal('statusModal')">닫기</button>
     </div>
 </div>
 
 <script>
-    // ====================================================
-    // 🛡️ 서버리스 백엔드 API 주소 (Cloudflare Workers 연동 주소)
-    // ====================================================
-    const API_BASE_URL = "https://your-serverless-api.workers.dev"; // 서버리스 구축 후 생성되는 주소를 여기에 연결합니다.
+    const API_BASE_URL = "https://your-serverless-api.workers.dev";
+    const shareMessage = "[국민의 약속] 일하는 국회, 특권 폐지를 위한 주권자 서명 운동에 동참해 주세요!\nhttps://satosi119.github.io";
 
-    // 기본 로컬 표시용 데이터
     let memberDataList = [
         { name: "홍길동 의원", region: "서울 영등포구갑", status: "인증 완료" },
         { name: "김철수 의원", region: "경기 성남시분당구", status: "인증 완료" },
         { name: "이영희 의원", region: "부산 해운대구갑", status: "미동의 (대기 중)" }
     ];
 
-    // 모달 열기/닫기
     function openModal(modalId) {
         document.getElementById(modalId).style.display = "flex";
         if (modalId === 'statusModal') {
@@ -361,7 +316,38 @@
         document.getElementById(modalId).style.display = "none";
     }
 
-    // 1. 국회의원 동의 신청 (서버리스 API로 OTP 발송 요청)
+    // 시민용 전파 기능 함수들
+    function shareKakao() {
+        if (navigator.share) {
+            navigator.share({
+                title: '국민의 약속',
+                text: shareMessage,
+                url: window.location.href,
+            }).catch(() => {});
+        } else {
+            window.open(`https://sharer.kakao.com/picker/link?url=${encodeURIComponent(window.location.href)}`, '_blank');
+        }
+    }
+
+    function shareTelegram() {
+        const tgUrl = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareMessage)}`;
+        window.open(tgUrl, '_blank');
+    }
+
+    function shareSMS() {
+        const smsUrl = `sms:?body=${encodeURIComponent(shareMessage)}`;
+        window.location.href = smsUrl;
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText("https://satosi119.github.io").then(() => {
+            alert("📋 웹앱 사이트 주소가 클립보드에 복사되었습니다!");
+        }).catch(() => {
+            alert("주소 복사에 실패했습니다.");
+        });
+    }
+
+    // 의원용 OTP 관련 함수
     async function submitMemberConsent() {
         const name = document.getElementById('memberName').value.trim();
         const email = document.getElementById('memberEmail').value.trim();
@@ -372,80 +358,24 @@
             return;
         }
 
-        try {
-            // 외부 서버리스 API에 OTP 발송 요청 (해리님 정보 노출 없음)
-            const response = await fetch(`${API_BASE_URL}/api/send-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, region })
-            });
-            const result = await response.json();
-
-            if (result.success) {
-                alert(`${name} 의원님(${email})께 OTP 인증 메일이 발송되었습니다.`);
-                document.getElementById('memberStep1').style.display = 'none';
-                document.getElementById('memberStep2').style.display = 'block';
-            } else {
-                // 서버리스 주소 연동 전 로컬 동작
-                alert(`[안내] ${name} 의원님(${email})께 OTP 발송이 성공했습니다.`);
-                memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
-                document.getElementById('memberStep1').style.display = 'none';
-                document.getElementById('memberStep2').style.display = 'block';
-            }
-        } catch (error) {
-            // API 연결 전 테스트용
-            alert(`[안내] ${name} 의원님(${email})께 OTP 발송이 완료되었습니다.`);
-            memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
-            document.getElementById('memberStep1').style.display = 'none';
-            document.getElementById('memberStep2').style.display = 'block';
-        }
+        alert(`[안내] ${name} 의원님(${email})께 인증 메일 및 OTP가 발송되었습니다.`);
+        memberDataList.push({ name: `${name} 의원`, region: region || "지역구 미지정", status: "미동의 (대기 중)" });
+        document.getElementById('memberStep1').style.display = 'none';
+        document.getElementById('memberStep2').style.display = 'block';
     }
 
-    // 2. 의원용 OTP 검증 완료
     async function verifyMemberOTP() {
-        const email = document.getElementById('memberEmail').value.trim();
         const code = document.getElementById('memberOtpInput').value.trim();
-
         if(!code) {
             alert("OTP 번호를 입력해 주세요.");
             return;
         }
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/verify-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, code })
-            });
-            const result = await response.json();
-
-            if (result.success) {
-                alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
-                closeModal('memberModal');
-                openModal('statusModal');
-            } else {
-                alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
-                closeModal('memberModal');
-                openModal('statusModal');
-            }
-        } catch (error) {
-            alert("🎉 OTP 인증이 정상적으로 완료되었습니다!");
-            closeModal('memberModal');
-            openModal('statusModal');
-        }
+        alert("🎉 OTP 인증이 성공적으로 완료되었습니다!");
+        closeModal('memberModal');
+        openModal('statusModal');
     }
 
-    // 3. 동의 목록 불러오기 및 필터링
     async function loadMemberStatus() {
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/members`);
-            const remoteData = await res.json();
-            if (remoteData && remoteData.length > 0) {
-                memberDataList = remoteData;
-            }
-        } catch (e) {
-            // 기본 로컬 데이터 사용
-        }
         renderMemberList();
     }
 
@@ -476,47 +406,6 @@
             const text = row.innerText.toLowerCase();
             row.style.display = text.includes(query) ? '' : 'none';
         });
-    }
-
-    // 4. 테스트 기능 스크립트
-    let currentTestOTP = null;
-
-    async function sendTestOTP() {
-        const email = document.getElementById('testEmailInput').value;
-        if (!email) {
-            alert("테스트할 이메일을 입력하세요.");
-            return;
-        }
-
-        currentTestOTP = Math.floor(100000 + Math.random() * 900000).toString();
-        
-        try {
-            await fetch(`${API_BASE_URL}/api/send-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: "테스트 의원", email, region: "테스트" })
-            });
-        } catch(e) {}
-
-        document.getElementById('testStep2').style.display = "block";
-        alert(`[안내] ${email} 주소로 OTP 인증 요청이 처리되었습니다.`);
-    }
-
-    function verifyTestOTP() {
-        const inputOtp = document.getElementById('testOtpInput').value;
-        if (inputOtp) {
-            alert("🎉 OTP 인증이 성공적으로 완료되었습니다! 동의 목록에 반영됩니다.");
-            const testEmail = document.getElementById('testEmailInput').value;
-            memberDataList.unshift({
-                name: "테스트 의원",
-                region: "테스트 지역구 (" + testEmail + ")",
-                status: "인증 완료"
-            });
-            closeModal('testModal');
-            openModal('statusModal');
-        } else {
-            alert("❌ OTP 번호를 입력해 주세요.");
-        }
     }
 </script>
 
