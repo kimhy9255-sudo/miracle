@@ -31,7 +31,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin-top: 20px;
+            margin-top: 20px; /* 상단 여백 */
         }
 
         /* 헤더 박스 */
@@ -168,12 +168,38 @@
         .btn-copy { background-color: #4c566a; color: #fff; }
         .btn-close-modal { background-color: #3b4252; color: #fff; margin-top: 5px; }
 
-        /* 테이블 (명단 확인용) */
-        .member-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-        .member-table th, .member-table td { padding: 10px 6px; text-align: center; border-bottom: 1px solid #2e3440; }
-        .member-table th { color: #88c0d0; }
+        /* =================================================== */
+        /* [스크롤 가능한 명단 테이블 영역 및 하단 여백 설정] */
+        /* =================================================== */
+        .table-scroll-container {
+            max-height: 260px; /* 세로 높이를 제한하여 스크롤 생성 */
+            overflow-y: auto;  /* 위아래 드래그(스크롤) 가능 */
+            margin-top: 10px;
+            border: 1px solid #2e3440;
+            border-radius: 8px;
+        }
+        .member-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 13px; 
+        }
+        .member-table th {
+            position: sticky;
+            top: 0;
+            background-color: #1a1e29;
+            z-index: 10;
+            padding: 10px 6px;
+            border-bottom: 1px solid #3b4252;
+            color: #88c0d0;
+        }
+        .member-table td { 
+            padding: 12px 6px; 
+            text-align: center; 
+            border-bottom: 1px solid #2e3440; 
+        }
         .badge-success { color: #a3be8c; font-weight: bold; }
         .badge-pending { color: #d08770; }
+        .badge-empty { color: #555; }
     </style>
 </head>
 <body>
@@ -209,9 +235,7 @@
     </div>
 </div>
 
-<!-- =================================================== -->
-<!-- [모달 1] 시민용 - 전국 동시 전파하기 모달 (이미지 반영) -->
-<!-- =================================================== -->
+<!-- [모달 1] 시민용 - 전국 동시 전파하기 모달 -->
 <div id="shareModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -230,9 +254,7 @@
     </div>
 </div>
 
-<!-- =================================================== -->
 <!-- [모달 2] 의원용 - 국회의원 동의 인증 신청 모달 -->
-<!-- =================================================== -->
 <div id="memberModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -267,30 +289,33 @@
     </div>
 </div>
 
-<!-- =================================================== -->
-<!-- [모달 3] 시민용 - 동의 현황 및 명단 확인 모달 -->
-<!-- =================================================== -->
+<!-- [모달 3] 시민용 - 동의 현황 및 명단 확인 모달 (스크롤 + 하단 공백 3개 포함) -->
 <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
             <h3>🏛️ 국회의원 동의 현황 및 명단</h3>
             <button class="close-btn" onclick="closeModal('statusModal')">&times;</button>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 8px;">
             <input type="text" id="searchInput" onkeyup="filterMembers()" placeholder="🔍 지역구 또는 의원명을 입력하세요">
         </div>
-        <table class="member-table">
-            <thead>
-                <tr>
-                    <th>의원명</th>
-                    <th>지역구</th>
-                    <th>동의 상태</th>
-                </tr>
-            </thead>
-            <tbody id="memberTableBody">
-                <!-- 동적 데이터 -->
-            </tbody>
-        </table>
+        
+        <!-- 스크롤 가능한 테이블 컨테이너 -->
+        <div class="table-scroll-container">
+            <table class="member-table">
+                <thead>
+                    <tr>
+                        <th>의원명</th>
+                        <th>지역구</th>
+                        <th>동의 상태</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody">
+                    <!-- JavaScript에서 데이터 및 하단 공백 행이 동적으로 채워짐 -->
+                </tbody>
+            </table>
+        </div>
+
         <button class="action-btn btn-close-modal" style="margin-top:15px;" onclick="closeModal('statusModal')">닫기</button>
     </div>
 </div>
@@ -316,7 +341,7 @@
         document.getElementById(modalId).style.display = "none";
     }
 
-    // 시민용 전파 기능 함수들
+    // 시민용 전파 기능
     function shareKakao() {
         if (navigator.share) {
             navigator.share({
@@ -379,10 +404,12 @@
         renderMemberList();
     }
 
+    // 명단 렌더링 (하단 공백 3행 추가 및 스크롤 지원)
     function renderMemberList() {
         const tbody = document.getElementById('memberTableBody');
         tbody.innerHTML = '';
 
+        // 실제 등록된 의원 명단 출력
         memberDataList.forEach(member => {
             const tr = document.createElement('tr');
             const isSuccess = member.status.includes("완료");
@@ -396,6 +423,17 @@
             `;
             tbody.appendChild(tr);
         });
+
+        // 💡 하단에 여유 공간(공백란) 3개 강제 추가
+        for (let i = 0; i < 3; i++) {
+            const emptyTr = document.createElement('tr');
+            emptyTr.innerHTML = `
+                <td class="badge-empty">-</td>
+                <td class="badge-empty">작성 대기 중</td>
+                <td class="badge-empty">미동의 (대기 중)</td>
+            `;
+            tbody.appendChild(emptyTr);
+        }
     }
 
     function filterMembers() {
